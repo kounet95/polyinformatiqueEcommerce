@@ -3,6 +3,7 @@ package org.example.queryblog.web;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.polyinformatiquecoreapi.dto.EventDTO;
+
 import org.example.queryblog.query.GetAllEventQuery;
 import org.example.queryblog.query.GetEventByIdQuery;
 import org.springframework.web.bind.annotation.*;

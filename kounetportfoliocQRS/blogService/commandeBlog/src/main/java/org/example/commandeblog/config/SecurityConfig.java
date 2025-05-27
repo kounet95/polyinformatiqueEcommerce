@@ -28,24 +28,14 @@ public class SecurityConfig {
 
 
         return httpSecurity
-                .cors(Customizer.withDefaults())
-                .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/blog/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                        .requestMatchers("/category/commandes/**").permitAll()
-                        .requestMatchers("/comment/commandes/**").permitAll()
-                        .requestMatchers("/media/command/**").permitAll()
-                        .requestMatchers("/tag/command/**").permitAll()
-                        .requestMatchers("/blog/author/**").permitAll()
-
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)
-                        ))
-
-                .build();
+          .cors(Customizer.withDefaults())
+          .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+          .csrf(csrf->csrf.disable())
+          .headers(h->h.frameOptions(fo->fo.disable()))
+          .authorizeHttpRequests(ar->ar.requestMatchers("/h2-console/**","/swagger-ui.html","/v3/**","/swagger-ui/**").permitAll())
+          .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+          .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+          .build();
 
 
     }

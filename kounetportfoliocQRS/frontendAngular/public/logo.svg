@@ -1,0 +1,26 @@
+<svg width="160" height="170" viewBox="0 0 160 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cercle extérieur -->
+  <ellipse cx="80" cy="85" rx="74" ry="77" fill="#fff8f2" stroke="#e65100" stroke-width="4"/>
+  
+  <!-- Silhouette boubou/tunique stylisée -->
+  <path d="M80 41
+           Q74 55, 65 72
+           Q80 68, 95 72
+           Q86 55, 80 41Z"
+        fill="#ffb74d" stroke="#e65100" stroke-width="2"/>
+  <!-- Col du boubou -->
+  <circle cx="80" cy="50" r="7" fill="#fff" stroke="#e65100" stroke-width="1.5"/>
+  
+  <!-- Sandale stylisée (à droite du boubou) -->
+  <ellipse cx="105" cy="90" rx="10" ry="4" fill="#e65100" opacity="0.8" />
+  <rect x="100" y="87" width="10" height="4" rx="2" fill="#fff" opacity="0.7"/>
+  
+  <!-- Motif africain (en bas) -->
+  <circle cx="80" cy="125" r="14" fill="#ff7043" opacity="0.7"/>
+  <path d="M80 117 v16 M73 125 h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Texte AFRICANITE -->
+  <text x="80" y="158" text-anchor="middle" font-size="22" font-family="Poppins, Arial, sans-serif" font-weight="bold" fill="#e65100" letter-spacing="2">
+    AFRICANITE
+  </text>
+</svg>

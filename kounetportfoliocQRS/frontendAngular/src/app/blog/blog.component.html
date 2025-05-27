@@ -1,0 +1,45 @@
+<section class="blog-container">
+  <h1 class="blog-title">Blog</h1>
+  <p class="blog-desc">
+    Odio et unde deleniti. Deserunt numquam exercitationem. Officiis quo odio sint voluptas consequatur ut a odio voluptatem. Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.
+  </p>
+ <app-acceuil></app-acceuil>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer mode="over" class="mobile-sidenav">
+      <!-- Breadcrumb dynamique -->
+      <nav class="breadcrumb">
+        <ng-container *ngFor="let bc of breadcrumbs; let last = last">
+          <a *ngIf="!last" [routerLink]="bc.url" class="breadcrumb-link">{{ bc.label | titlecase }}</a>
+          <span *ngIf="last" class="breadcrumb-active"><b>{{ bc.label | titlecase }}</b></span>
+          <span *ngIf="!last"> / </span>
+        </ng-container>
+      </nav>
+      <!-- Menu de navigation -->
+      <nav>
+        <a mat-list-item routerLink="/news" routerLinkActive="active">Article</a>
+        <a mat-list-item routerLink="/news" routerLinkActive="active">News</a>
+        <a mat-list-item routerLink="/event" routerLinkActive="active">Event</a>
+        <button mat-list-item [matMenuTriggerFor]="dropdownMenu">Dropdown</button>
+        <a mat-list-item routerLink="/home" routerLinkActive="active">Home</a>
+
+        
+      </nav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <!-- le reste de ton contenu -->
+
+      <div class="blog-cards">
+        <mat-card class="blog-card mat-elevation-z2" *ngFor="let blog of blogs">
+          <img mat-card-image [src]="blog.image" [alt]="blog.alt">
+        </mat-card>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</section>
+
+<!-- Menu dropdown à ajouter dans le même template si besoin -->
+<mat-menu #dropdownMenu="matMenu" position="start" mode="side" opened="true">
+  <button mat-menu-item>Create New</button>
+  <button mat-menu-item>Create Event</button>
+  <button mat-menu-item>Create Article</button>
+</mat-menu>

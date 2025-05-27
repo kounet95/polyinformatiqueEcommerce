@@ -1,0 +1,61 @@
+<mat-toolbar color="white" class="main-toolbar mat-elevation-z2" style="padding: 0 32px;">
+  <!-- Logo -->
+  <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+    <mat-icon class="mat-icon-rtl-mirror">thumb_up</mat-icon>
+
+    <span style="font-weight: bold; font-size: 2rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
+      AFRICANITE <span style="color: #ff5252;">.</span>
+    </span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <nav class="nav-links">
+    <a mat-button routerLink="/services" >Services</a>
+    <a mat-button routerLink="/portfolio">Portfolio</a>
+    <a mat-button routerLink="/temoiage" >Temoiage</a>
+    <a mat-button routerLink="/team" >Team</a>
+    <a mat-button routerLink="/promos" >promos</a>
+    <a mat-button routerLink="/home" >La Boutique</a>
+    <a mat-button routerLink="/contact">Contact</a>
+
+    <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+      Blog <mat-icon>expand_more</mat-icon>
+    </button>
+  </nav>
+
+  <mat-menu #dropdownMenu="matMenu">
+    <button mat-menu-item routerLink="/articles">Article</button>
+    <button mat-menu-item routerLink="/dropdown/event">Event</button>
+    <button mat-menu-item routerLink=" /dropdown/news">News</button>
+  </mat-menu>
+
+  <span class="spacer"></span>
+
+  <!-- CTA -->
+  <a mat-raised-button color="accent" class="cta-btn" routerLink="/get-started" style="margin-left:16px;">
+    Salon-Virtuel
+  </a>
+
+  <!-- Mobile toggle -->
+  <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!-- Sidenav for mobile -->
+<mat-sidenav-container class="mobile-nav-container">
+  <mat-sidenav #drawer mode="over" class="mobile-sidenav">
+    <nav>
+     <a mat-button >Services</a>
+<a mat-button >Portfolio</a>
+<a mat-button >Équipe</a>
+<a mat-button >Contact</a>
+<a mat-button >Articles</a>
+
+      <button mat-list-item [matMenuTriggerFor]="dropdownMenu">Dropdown</button>
+      <a mat-raised-button color="accent" routerLink="/get-started" style="margin-top:12px;">Salon-Virtuel</a>
+    </nav>
+  </mat-sidenav>
+  <mat-sidenav-content></mat-sidenav-content>
+</mat-sidenav-container>

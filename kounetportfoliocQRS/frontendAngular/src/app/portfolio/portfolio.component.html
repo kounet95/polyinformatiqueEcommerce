@@ -1,0 +1,13 @@
+<section id="portfolio" class="section">
+  <div class="container">
+    <h2>Portfolio</h2>
+    <mat-grid-list cols="3" rowHeight="200px" gutterSize="16px">
+      <mat-grid-tile *ngFor="let item of portfolio" [colspan]="1" [rowspan]="1">
+        <img mat-card-image [src]="item.img" [alt]="item.title">
+        <mat-grid-tile-footer>
+          <h3>{{item.title}}</h3>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</section>

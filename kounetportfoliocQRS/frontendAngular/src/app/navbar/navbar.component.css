@@ -1,0 +1,71 @@
+.main-toolbar {
+  min-height: 80px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(30,33,44,0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo {
+  margin-right: 24px;
+  letter-spacing: -2px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+}
+.nav-links a, .nav-links button.dropdown-btn {
+  color: #222 !important;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-transform: none;
+  margin-right: 2px;
+}
+.cta-btn {
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: none !important;
+}
+.spacer {
+  flex: 1 1 0;
+}
+.mobile-toggle {
+  display: none;
+  margin-left: 10px;
+}
+.mobile-nav-container {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .nav-links {
+    gap: 0;
+  }
+  .main-toolbar {
+    padding: 0 12px;
+  }
+}
+@media (max-width: 900px) {
+  .nav-links,
+  .cta-btn {
+    display: none !important;
+  }
+  .mobile-toggle {
+    display: inline-flex;
+  }
+  .mobile-nav-container {
+    display: block;
+    position: fixed;
+    z-index: 200;
+    top: 80px;
+    left: 0;
+    width: 100vw;
+  }
+  .mobile-sidenav {
+    width: 250px;
+    padding-top: 24px;
+    background: #fff;
+    color: #222;
+  }
+}

@@ -12,13 +12,17 @@ import { BrowserRouter } from 'react-router-dom';
 import NavBarComponent from "./components/NavBarComponent";
 import FooterComponent from "./components/website/FooterComponent";
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+   
       <BrowserRouter>
           <Provider store={store}>
               <NavBarComponent/>
-              <App />
+           
+             <App />
+            
             </Provider>
           <FooterComponent/>
       </BrowserRouter>

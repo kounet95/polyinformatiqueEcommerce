@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.commandeblog.service.DomainCommandService;
 import org.example.polyinformatiquecoreapi.dto.DomainDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
+
 @RequestMapping("/category/command")
-@CrossOrigin
+
 public class CategoryController {
 
     private final DomainCommandService domainCommandService;
@@ -23,7 +25,7 @@ public class CategoryController {
         this.domainCommandService = domainCommandService;
         this.eventStore = eventStore;
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Void> create(@RequestBody @Valid DomainDTO dto) {
         if (dto.getId() == null || dto.getId().isEmpty()) {
@@ -32,7 +34,7 @@ public class CategoryController {
         domainCommandService.createDomain(dto);
         return ResponseEntity.ok().build();
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/events/{id}")
     public Stream<Object> getEvents(@PathVariable String id) {
         return eventStore.readEvents(id).asStream().map(e -> e.getPayload());
@@ -42,7 +44,7 @@ public class CategoryController {
     public ResponseEntity<String> handle(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
         domainCommandService.deleteDomain(id);
