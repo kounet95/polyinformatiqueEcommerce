@@ -93,7 +93,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateEventComponent,
     CreateNewsComponent,
     CreateEventComponent,
-    HomeComponent,
     DetaillProductComponent,
    
     
