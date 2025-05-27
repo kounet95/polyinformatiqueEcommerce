@@ -97,3 +97,17 @@ export interface TagModel {
   name: string;
   itemIds: string[];
 }
+
+// ===============================
+// ====== OrderStatusDTO =========
+// ===============================
+
+export interface OrderStatusDTO {
+  id: string;             // Identifiant unique (peut être null ou vide)
+  orderId: string;        // ID de la commande (obligatoire)
+  barcode: string;        // Code-barres (obligatoire)
+  status: string;         // Statut de la commande (obligatoire)
+  updatedAt: string;      // Dernière mise à jour (date-heure ISO, obligatoire)
+  customerId: string;     // ID du client (obligatoire)
+  customerName: string;   // Nom du client (obligatoire)
+}

@@ -47,6 +47,7 @@ import { CreateEventComponent } from './monBlog/create-event/create-event.compon
 import { CreateNewsComponent } from './monBlog/create-news/create-news.component';
 import { HomeComponent } from './Ecommerce/home/home.component';
 import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
+import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
 
 
 
@@ -94,6 +95,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateNewsComponent,
     CreateEventComponent,
     DetaillProductComponent,
+ 
    
     
   ],

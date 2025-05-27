@@ -1,0 +1,11 @@
+<input type="text" #orderIdInput placeholder="Numéro de commande">
+<button (click)="startTracking(orderIdInput.value)">Suivre</button>
+
+<div *ngIf="error" class="text-danger">{{ error }}</div>
+
+<ul>
+  <li *ngFor="let status of statusUpdates">
+    {{ status | json }}
+    <!-- Affichons ici joliment selon les champs de OrderStatusDTO -->
+  </li>
+</ul>
