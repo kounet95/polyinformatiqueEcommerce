@@ -1,3 +1,20 @@
+.top-bar .d-flex {
+  align-items: center !important;
+}
+
+.top-bar-item {
+  display: flex;
+  align-items: center;
+  height: 40px; /* adapte si besoin */
+}
+
+.top-bar-item button[mat-button],
+.top-bar-item a,
+.top-bar-item span {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
 
 @charset "UTF-8";
 /*!
