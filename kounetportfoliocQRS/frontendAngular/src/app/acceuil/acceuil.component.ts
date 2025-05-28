@@ -23,6 +23,22 @@ import { ArticleRecentComponent } from "../article-recent/article-recent.compone
   styleUrls: ['./acceuil.component.css'],
   standalone: true, 
   imports: [CommonModule,
-    RouterModule, AboutComponent]
+    RouterModule, AboutComponent,
+   MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
+    RouterModule,
+    CommonModule,         
+    MatCardModule,  ]
 })
-export class AcceuilComponent {}
+export class AcceuilComponent {
+services = [
+    { icon: 'build', title: 'Broderie', desc: 'Sites web modernes et performants', color: 'primary' },
+    { icon: 'brush', title: 'Design maison', desc: 'Design UI/UX créatif et sur-mesure', color: 'accent' },
+    { icon: 'security', title: 'Couture artisanal', desc: 'Protégez vos données et vos clients', color: 'warn' },
+  ];
+
+}

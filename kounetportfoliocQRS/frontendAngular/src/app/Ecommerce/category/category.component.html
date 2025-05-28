@@ -1,85 +1,56 @@
-<header id="header" class="header position-relative">
-  <!-- Top Bar -->
-  <div class="top-bar py-2 d-none d-lg-block">
-    <div class="container-fluid container-xl">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <div class="d-flex align-items-center">
-            <div class="top-bar-item me-4">
-              <i class="bi bi-telephone-fill me-2"></i>
-              <span>Customer Support: </span>
-              <a href="tel:+1234567890">+1 (234) 567-890</a>
-            </div>
-            <div class="top-bar-item">
-              <i class="bi bi-envelope-fill me-2"></i>
-              <a href="mailto:support@example.com">support&#64;example.com</a>
+ <header id="header" class="header position-relative">
+    <!-- Top Bar -->
+    <div class="top-bar py-2 d-none d-lg-block">
+      <div class="container-fluid container-xl">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="d-flex align-items-center">
+              <div class="top-bar-item me-4">
+                <i class="bi bi-telephone-fill me-2"></i>
+                <span>Customer Support: </span>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+              </div>
+              <div class="top-bar-item">
+                <i class="bi bi-envelope-fill me-2"></i>
+                <a href="mailto:support@example.com">support&#64;example.com</a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-6">
-          <div class="d-flex justify-content-end">
-            <div class="top-bar-item me-4">
-              <a routerLink="/track-order">
-                <i class="bi bi-truck me-2"></i>Track Order
-              </a>
+          <div class="col-lg-6">
+            <div class="d-flex justify-content-end">
+              <div class="top-bar-item me-4">
+                <a href="track-order.html">
+                  <i class="bi bi-truck me-2"></i>Track Order
+                </a>
+              </div>
+              <div class="top-bar-item dropdown me-4">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                  <i class="bi bi-translate me-2"></i>English
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>English</a></li>
+                  <li><a class="dropdown-item" href="#">Español</a></li>
+                  <li><a class="dropdown-item" href="#">Français</a></li>
+                  <li><a class="dropdown-item" href="#">Deutsch</a></li>
+                </ul>
+              </div>
+              <div class="top-bar-item dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                  <i class="bi bi-currency-dollar me-2"></i>USD
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
+                  <li><a class="dropdown-item" href="#">EUR</a></li>
+                  <li><a class="dropdown-item" href="#">GBP</a></li>
+                </ul>
+              </div>
             </div>
-
-            <!-- Language Selector -->
-           <div class="top-bar-item me-4">
-  <button mat-button [matMenuTriggerFor]="languageMenu">
-    <i class="bi bi-translate me-2"></i>
-    {{ selectedLanguage }}
-    <mat-icon>expand_more</mat-icon>
-  </button>
-  <mat-menu #languageMenu="matMenu">
-    <button mat-menu-item (click)="selectLanguage('English')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedLanguage==='English'"></i>English
-    </button>
-    <button mat-menu-item (click)="selectLanguage('Español')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedLanguage==='Español'"></i>Español
-    </button>
-    <button mat-menu-item (click)="selectLanguage('Français')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedLanguage==='Français'"></i>Français
-    </button>
-    <button mat-menu-item (click)="selectLanguage('Deutsch')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedLanguage==='Deutsch'"></i>Deutsch
-    </button>
-    <button mat-menu-item (click)="selectLanguage('Autres')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedLanguage==='Autres'"></i>Autres
-    </button>
-   </mat-menu>
-   </div>
-
-            <!-- Currency Selector (à convertir en mat-menu si besoin) -->
-           <div class="top-bar-item me-4">
-  <button mat-button [matMenuTriggerFor]="currencyMenu">
-    <i class="bi bi-currency-dollar me-2"></i>
-    {{ selectedCurrency }}
-    <mat-icon>expand_more</mat-icon>
-  </button>
-  <mat-menu #currencyMenu="matMenu">
-    <button mat-menu-item (click)="selectCurrency('USD')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedCurrency==='USD'"></i>USD
-    </button>
-    <button mat-menu-item (click)="selectCurrency('EUR')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedCurrency==='EUR'"></i>EUR
-    </button>
-    <button mat-menu-item (click)="selectCurrency('GBP')">
-      <i class="bi bi-check2 me-2 selected-icon" *ngIf="selectedCurrency==='GBP'"></i>GBP
-    </button>
-  </mat-menu>
-</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-
-
-  
     <!-- Main Header -->
     <div class="main-header">
       <div class="container-fluid container-xl">
@@ -89,7 +60,7 @@
           <a href="index.html" class="logo d-flex align-items-center">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.webp" alt=""> -->
-            <h1 class="sitename">Africanite<span>Store</span></h1>
+            <h1 class="sitename">Fashion<span>Store</span></h1>
           </a>
 
           <!-- Search -->
@@ -118,7 +89,7 @@
               </button>
               <div class="dropdown-menu">
                 <div class="dropdown-header">
-                  <h6>Welcome to <span class="sitename">AfricaniteStore</span></h6>
+                  <h6>Welcome to <span class="sitename">FashionStore</span></h6>
                   <p class="mb-0">Access account &amp; manage orders</p>
                 </div>
                 <div class="dropdown-body">
@@ -233,17 +204,16 @@
         </div>
       </div>
     </div>
-</header>
 
-<!-- Navigation -->
+    <!-- Navigation -->
     <div class="header-nav">
       <div class="container-fluid container-xl position-relative">
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a routerLink="/category">Category</a></li>
-            <li><a routerLink="/product">Product Details</a></li>
+            <li><a href="category.html" class="active">Category</a></li>
+            <li><a href="product-details.html">Product Details</a></li>
             <li><a href="cart.html">Cart</a></li>
             <li><a href="checkout.html">Checkout</a></li>
             <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -607,3 +577,222 @@
                   </ul>
                 </div>
 
+                <!-- Tabs Content -->
+                <div class="megamenu-content tab-content">
+
+                  <!-- Women Tab -->
+                  <div class="tab-pane fade show active" id="womens-content-1883" role="tabpanel" aria-labelledby="womens-tab">
+                    <div class="category-layout">
+                      <div class="categories-section">
+                        <div class="category-headers">
+                          <h4>Clothing</h4>
+                          <h4>Shoes</h4>
+                          <h4>Accessories</h4>
+                          <h4>Specialty Sizes</h4>
+                        </div>
+
+                        <div class="category-links">
+                          <div class="link-row">
+                            <a href="#">Shirts &amp; Tops</a>
+                            <a href="#">Boots</a>
+                            <a href="#">Handbags</a>
+                            <a href="#">Plus Size</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Coats &amp; Outerwear</a>
+                            <a href="#">Sandals</a>
+                            <a href="#">Eyewear</a>
+                            <a href="#">Petite</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Underwear</a>
+                            <a href="#">Heels</a>
+                            <a href="#">Hats</a>
+                            <a href="#">Wide Shoes</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Sweatshirts</a>
+                            <a href="#">Loafers</a>
+                            <a href="#">Watches</a>
+                            <a href="#">Narrow Shoes</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Dresses</a>
+                            <a href="#">Slippers</a>
+                            <a href="#">Jewelry</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Swimwear</a>
+                            <a href="#">Oxfords</a>
+                            <a href="#">Belts</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#"></a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="featured-section">
+                        <div class="featured-image">
+                          <img src="assets/img/product/product-f-1.webp" alt="Women's Heels Collection">
+                          <div class="featured-content">
+                            <h3>Women's<br>Bags<br>Collection</h3>
+                            <a href="#" class="btn-shop">Shop now</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Men Tab -->
+                  <div class="tab-pane fade" id="mens-content-1883" role="tabpanel" aria-labelledby="mens-tab">
+                    <div class="category-layout">
+                      <div class="categories-section">
+                        <div class="category-headers">
+                          <h4>Clothing</h4>
+                          <h4>Shoes</h4>
+                          <h4>Accessories</h4>
+                          <h4>Specialty Sizes</h4>
+                        </div>
+
+                        <div class="category-links">
+                          <div class="link-row">
+                            <a href="#">Shirts &amp; Polos</a>
+                            <a href="#">Sneakers</a>
+                            <a href="#">Watches</a>
+                            <a href="#">Big &amp; Tall</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Jackets &amp; Coats</a>
+                            <a href="#">Boots</a>
+                            <a href="#">Belts</a>
+                            <a href="#">Slim Fit</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Underwear</a>
+                            <a href="#">Loafers</a>
+                            <a href="#">Ties</a>
+                            <a href="#">Wide Shoes</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Hoodies</a>
+                            <a href="#">Dress Shoes</a>
+                            <a href="#">Wallets</a>
+                            <a href="#">Extended Sizes</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Suits</a>
+                            <a href="#">Sandals</a>
+                            <a href="#">Sunglasses</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Activewear</a>
+                            <a href="#">Slippers</a>
+                            <a href="#">Hats</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#"></a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="featured-section">
+                        <div class="featured-image">
+                          <img src="assets/img/product/product-m-4.webp" alt="Men's Footwear Collection">
+                          <div class="featured-content">
+                            <h3>Men's<br>Footwear<br>Collection</h3>
+                            <a href="#" class="btn-shop">Shop now</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Kids Tab -->
+                  <div class="tab-pane fade" id="kids-content-1883" role="tabpanel" aria-labelledby="kids-tab">
+                    <div class="category-layout">
+                      <div class="categories-section">
+                        <div class="category-headers">
+                          <h4>Clothing</h4>
+                          <h4>Shoes</h4>
+                          <h4>Accessories</h4>
+                          <h4>By Age</h4>
+                        </div>
+
+                        <div class="category-links">
+                          <div class="link-row">
+                            <a href="#">T-shirts &amp; Tops</a>
+                            <a href="#">Sneakers</a>
+                            <a href="#">Backpacks</a>
+                            <a href="#">Babies (0-24 months)</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Outerwear</a>
+                            <a href="#">Boots</a>
+                            <a href="#">Hats &amp; Caps</a>
+                            <a href="#">Toddlers (2-4 years)</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Pajamas</a>
+                            <a href="#">Sandals</a>
+                            <a href="#">Socks</a>
+                            <a href="#">Kids (4-7 years)</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Sweatshirts</a>
+                            <a href="#">Slippers</a>
+                            <a href="#">Gloves</a>
+                            <a href="#">Older Kids (8-14 years)</a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Dresses</a>
+                            <a href="#">School Shoes</a>
+                            <a href="#">Scarves</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">Swimwear</a>
+                            <a href="#">Sports Shoes</a>
+                            <a href="#">Hair Accessories</a>
+                            <a href="#"></a>
+                          </div>
+                          <div class="link-row">
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#">View all</a>
+                            <a href="#"></a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="featured-section">
+                        <div class="featured-image">
+                          <img src="assets/img/product/product-9.webp" alt="Kids' New Arrivals">
+                          <div class="featured-content">
+                            <h3>Kids<br>New<br>Arrivals</h3>
+                            <a href="#" class="btn-shop">Shop now</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div><!-- End Products Mega Menu 2 Desktop View -->
+
+            </li><!-- End Products Mega Menu 2 -->
+
+            <li><a href="contact.html">Contact</a></li>
+
+          </ul>
+        </nav>
+      </div>
+    </div>
