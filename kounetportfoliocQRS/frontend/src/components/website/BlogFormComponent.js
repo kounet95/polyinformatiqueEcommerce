@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -9,21 +9,35 @@ import {
     Stack
 } from '@mui/material';
 import { createArticle, updateArticle } from '../../api/blog/command';
+import { getAllDomains } from '../../api/domain/query';
+import { Autocomplete, Chip } from '@mui/material';
+
 
 const ArticleSchema = Yup.object().shape({
     title: Yup.string().min(5).max(100).required('Title is required'),
     content: Yup.string().min(10).max(1000).required('Content is required'),
     urlMedia: Yup.string().required('Media URL is required'),
-    createdAt: Yup.string().required('Date is required'),
     authorId: Yup.string().min(1).max(50).required('Author ID is required'),
     domainId: Yup.string().min(1).max(50).required('Domain ID is required'),
-    tagIds: Yup.string().required('At least one tag is required'),
+    tagIds: Yup.array().of(Yup.string().required()).min(1, 'At least one tag is required'),
     commentIds: Yup.string().required('At least one comment is required'),
 });
 
 const BlogFormComponent = ({ articleId, initialData }) => {
     const [previewUrl, setPreviewUrl] = useState(initialData?.urlMedia || '');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [domains, setDomains] = useState([]);
+    useEffect(() => {
+        const fetchDomains = async () => {
+            try {
+                const data = await getAllDomains();
+                setDomains(data);
+            } catch (error) {
+                console.error('Erreur lors du chargement des domaines:', error);
+            }
+        };
+        fetchDomains();
+    }, []);
 
     const defaultInitialValues = {
         title: '',
@@ -32,17 +46,16 @@ const BlogFormComponent = ({ articleId, initialData }) => {
         createdAt: new Date().toISOString().split('T')[0], // "YYYY-MM-DD"
         authorId: '',
         domainId: '',
-        tagIds: '',
+        tagIds: [],
         commentIds: ''
     };
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         // Prepare tagIds and commentIds as arrays
         const tagArray = values.tagIds.split(',').map(t => t.trim()).filter(Boolean);
-        const commentArray = values.commentIds.split(',').map(c => c.trim()).filter(Boolean);
-
+        console.log(values, tagArray);
         // If you manage file uploads and want to convert to url:
-        let urlMediaValue = values.urlMedia;
+       /* let urlMediaValue = values.urlMedia;
         if (selectedFile) {
             // Here, upload the file and get the URL, then:
             // urlMediaValue = await uploadFileAndGetUrl(selectedFile);
@@ -52,10 +65,9 @@ const BlogFormComponent = ({ articleId, initialData }) => {
 
         const articleData = {
             ...values,
-            createdAt: values.createdAt, // keep as string, backend should parse
+            createdAt: new Date().toISOString(), // keep as string, backend should parse
             urlMedia: urlMediaValue,
-            tagIds: tagArray,
-            commentIds: commentArray,
+            tagIds: values.tagIds,
         };
 
         try {
@@ -63,8 +75,9 @@ const BlogFormComponent = ({ articleId, initialData }) => {
                 await updateArticle(articleId, articleData);
                 alert('Article updated successfully!');
             } else {
-                await createArticle(articleData);
-                alert('Article created successfully!');
+              //  await createArticle(articleData);
+                console.log(articleData);
+              //  alert('Article created successfully!');
                 resetForm();
                 setPreviewUrl('');
                 setSelectedFile(null);
@@ -74,7 +87,7 @@ const BlogFormComponent = ({ articleId, initialData }) => {
             alert('Error saving article.');
         } finally {
             setSubmitting(false);
-        }
+        }*/
     };
 
     const handleFileChange = (e, setFieldValue) => {
@@ -98,7 +111,7 @@ const BlogFormComponent = ({ articleId, initialData }) => {
                 onSubmit={handleSubmit}
             >
                 {({ values, errors, touched, handleChange, setFieldValue, isSubmitting }) => (
-                    <Form>
+                    <Form   onSubmit={handleSubmit} >
                         <Stack spacing={2}>
                             <TextField
                                 label="Title"
@@ -148,48 +161,49 @@ const BlogFormComponent = ({ articleId, initialData }) => {
                                     />
                                 </Box>
                             )}
+                            
+                            
                             <TextField
-                                label="Created At"
-                                name="createdAt"
-                                type="date"
-                                value={values.createdAt}
-                                onChange={handleChange}
-                                error={touched.createdAt && Boolean(errors.createdAt)}
-                                helperText={touched.createdAt && errors.createdAt}
-                                InputLabelProps={{ shrink: true }}
-                            />
-                            <TextField
-                                label="Author ID"
-                                name="authorId"
-                                value={values.authorId}
-                                onChange={handleChange}
-                                error={touched.authorId && Boolean(errors.authorId)}
-                                helperText={touched.authorId && errors.authorId}
-                            />
-                            <TextField
-                                label="Domain ID"
+                                select
                                 name="domainId"
                                 value={values.domainId}
                                 onChange={handleChange}
                                 error={touched.domainId && Boolean(errors.domainId)}
                                 helperText={touched.domainId && errors.domainId}
-                            />
-                            <TextField
-                                label="Tag IDs (comma separated)"
-                                name="tagIds"
+                                SelectProps={{ native: true }}
+                            >
+                                <option value="">Sélectionnez un domaine</option>
+                                {domains.map(domain => (
+                                    <option key={domain.id} value={domain.id}>
+                                        {domain.name}
+                                    </option>
+                                ))}
+                            </TextField>
+
+                            <Autocomplete
+                                multiple
+                                freeSolo
+                                options={[]} // Liste suggérée de tags si tu en as, ex: ['react', 'js']
                                 value={values.tagIds}
-                                onChange={handleChange}
-                                error={touched.tagIds && Boolean(errors.tagIds)}
-                                helperText={touched.tagIds && errors.tagIds}
+                                onChange={(event, newValue) => setFieldValue('tagIds', newValue)}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip variant="outlined"  key={index} {...getTagProps({ index })} label={option}  />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        label="Tags"
+                                        placeholder="Ajouter des tags"
+                                        error={touched.tagIds && Boolean(errors.tagIds)}
+                                        helperText={touched.tagIds && errors.tagIds}
+                                    />
+                                )}
                             />
-                            <TextField
-                                label="Comment IDs (comma separated)"
-                                name="commentIds"
-                                value={values.commentIds}
-                                onChange={handleChange}
-                                error={touched.commentIds && Boolean(errors.commentIds)}
-                                helperText={touched.commentIds && errors.commentIds}
-                            />
+
+                           
                             <Button variant="contained" type="submit" disabled={isSubmitting}>
                                 {articleId ? 'Update' : 'Create'} Article
                             </Button>

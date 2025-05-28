@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/media/command/**").permitAll()
                         .requestMatchers("/tag/command/**").permitAll()
                         .requestMatchers("/blog/author/**").permitAll()
-
+                        .requestMatchers("/domain/command/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
