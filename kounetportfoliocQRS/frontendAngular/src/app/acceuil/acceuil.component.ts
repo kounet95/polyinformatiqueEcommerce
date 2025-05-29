@@ -36,9 +36,10 @@ import { ArticleRecentComponent } from "../article-recent/article-recent.compone
 })
 export class AcceuilComponent {
 services = [
-    { icon: 'build', title: 'Broderie', desc: 'Sites web modernes et performants', color: 'primary' },
-    { icon: 'brush', title: 'Design maison', desc: 'Design UI/UX créatif et sur-mesure', color: 'accent' },
-    { icon: 'security', title: 'Couture artisanal', desc: 'Protégez vos données et vos clients', color: 'warn' },
+    { icon: 'build', title: 'Conception de sites web', desc: 'Sites web modernes et performants', color: 'primary' },
+    { icon: 'build', title: 'Conception d\'applications web', desc: 'Applications web modernes et performants', color: 'primary' },
+    { icon: 'security', title: '', desc: 'Preparations aux certifications professionnelles informatiques(CCNA, CCNP, AWS, AZURE)', color: 'primary' },
+    { icon: 'brush', title: 'Commerce vestimentaire', desc: 'Vetements culturels', color: 'warn' },
   ];
 
 }

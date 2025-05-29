@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Annotation profile for kounetportfoliocQRS" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+        </processorPath>
+        <module name="polyinformatique-core-API" />
+        <module name="commandeBlog" />
+        <module name="ecPolyQuery" />
+        <module name="ecPolyCommand" />
+        <module name="queryBlog" />
+      </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="discoveryservice" />
+        <module name="getwayservice" />
+        <module name="configservice" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="blogService" options="-parameters" />
+      <module name="commandeBlog" options="-parameters" />
+      <module name="configservice" options="-parameters" />
+      <module name="discoveryservice" options="-parameters" />
+      <module name="ecPolyCommand" options="-parameters" />
+      <module name="ecPolyQuery" options="-parameters" />
+      <module name="ecommercePolyinformatique" options="-parameters" />
+      <module name="getwayservice" options="-parameters" />
+      <module name="polyinformatique" options="-parameters" />
+      <module name="polyinformatique-core-API" options="-parameters" />
+      <module name="queryBlog" options="-parameters" />
+    </option>
+  </component>
+</project>

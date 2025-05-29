@@ -40,8 +40,8 @@ import { KeycloakAngularModule } from 'keycloak-angular';
 })
 export class PortfolioComponent {
   portfolio = [
-    { img: 'assets/img/portfolio1.jpg', title: 'Projet 1' },
-    { img: 'assets/img/portfolio2.jpg', title: 'Projet 2' },
-    { img: 'assets/img/portfolio3.jpg', title: 'Projet 3' },
+    { img: 'assets/img/01_Home.png', title: 'Liveeducation' },
+    { img: 'assets/img/Epharmacy_logo.png', title: ' Medicare ' },
+    { img: 'assets/img/le_continent.png', title: 'Lecontinent' },
   ];
 }
