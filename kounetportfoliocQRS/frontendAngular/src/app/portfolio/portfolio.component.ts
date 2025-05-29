@@ -40,8 +40,8 @@ import { KeycloakAngularModule } from 'keycloak-angular';
 })
 export class PortfolioComponent {
   portfolio = [
-    { img: 'assets/img/01_Home.png', title: 'Liveeducation' },
-    { img: 'assets/img/Epharmacy_logo.png', title: ' Medicare ' },
-    { img: 'assets/img/le_continent.png', title: 'Lecontinent' },
+    { img: 'assets/img/01_Home.png', title: 'Liveeducation' , url : 'https://isbbethesda.com/'},
+    { img: 'assets/img/Epharmacy_logo.png', title: ' Medicare ', url : 'https://servicesproviders.org/Cinsol/index.php' },
+    { img: 'assets/img/le_continent.png', title: 'Lecontinent' , url : 'http://localhost:4200/home'},
   ];
 }
