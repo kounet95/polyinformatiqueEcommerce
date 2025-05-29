@@ -17,7 +17,7 @@ export class CategoryService {
    */
   createCategory(category: CategoryDTO): Observable<void> {
     return this.http.post<void>(
-      `${commandbolg.backend}/category/command/create`, category
+      `${commandbolg.backend}/category/create`, category
     );
   }
 
