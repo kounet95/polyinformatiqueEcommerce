@@ -18,17 +18,12 @@
     <a mat-button routerLink="/promos" >Promotion</a>
     <a mat-button routerLink="/home" > Boutique</a>
     <a mat-button routerLink="/contact">Contact</a>
+    <a class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')"></a>
 
-    <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
-      Blog <mat-icon>expand_more</mat-icon>
+    <button mat-button class="dropdown-btn">
+     <a mat-button routerLink="/blog">Blog </a>
     </button>
   </nav>
-
-  <mat-menu #dropdownMenu="matMenu">
-    <button mat-menu-item routerLink="/articles">Article</button>
-    <button mat-menu-item routerLink="/dropdown/event">Event</button>
-    <button mat-menu-item routerLink=" /dropdown/news">News</button>
-  </mat-menu>
 
   <span class="spacer"></span>
 
@@ -36,6 +31,24 @@
   <a mat-raised-button color="accent" class="cta-btn" routerLink="/get-started" style="margin-left:16px;">
     Salon-Virtuel
   </a>
+
+
+ <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+       <span *ngIf="profile;else login_template">{{profile.username}}</span>
+            <ng-template #login_template>
+              <button class="btn btn-success" (click)="handleLogin()">Login</button>
+            </ng-template><mat-icon>expand_more</mat-icon>
+    </button>
+
+
+  <mat-menu #dropdownMenu="matMenu">
+    <button mat-menu-item  (click)="handleLogin()">Login</button>
+    <button mat-menu-item (click)="handleLogout()">Logoout</button>
+
+  </mat-menu>
+
+
+
 
   <!-- Mobile toggle -->
   <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()">

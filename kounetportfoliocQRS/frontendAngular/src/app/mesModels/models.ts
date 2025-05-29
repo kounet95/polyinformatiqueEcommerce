@@ -111,3 +111,13 @@ export interface OrderStatusDTO {
   customerId: string;     // ID du client (obligatoire)
   customerName: string;   // Nom du client (obligatoire)
 }
+
+
+// ===============================
+// ========== CategoryDTO =========
+// ===============================
+
+export interface CategoryDTO {
+  id: string;         // Identifiant unique de la catégorie
+  name: string;       // Nom de la catégorie (entre 2 et 100 caractères, requis)
+}

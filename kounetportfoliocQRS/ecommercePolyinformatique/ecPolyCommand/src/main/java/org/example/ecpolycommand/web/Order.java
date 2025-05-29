@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/order/command")
-@CrossOrigin
+
 public class Order {
 
     private final CommandGateway commandGateway;

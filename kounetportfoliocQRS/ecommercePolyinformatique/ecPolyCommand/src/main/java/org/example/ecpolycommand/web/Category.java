@@ -7,16 +7,17 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCategoryComman
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CategoryDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid; // <-- Ajoute cette import
+import jakarta.validation.Valid;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/category/command")
-@CrossOrigin
+@RequestMapping("/category")
+
 public class Category {
 
     private final CommandGateway commandGateway;
@@ -28,6 +29,7 @@ public class Category {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createCategory(@Valid @RequestBody CategoryDTO category) {
         String categoryId = UUID.randomUUID().toString();
         CategoryDTO categoryDTO = new CategoryDTO(
@@ -44,6 +46,7 @@ public class Category {
     }
 
     @DeleteMapping("/delete/{categoryId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> deleteCategory(@PathVariable String categoryId) {
         return commandGateway.send(new DeleteCategoryCommand(categoryId));
     }

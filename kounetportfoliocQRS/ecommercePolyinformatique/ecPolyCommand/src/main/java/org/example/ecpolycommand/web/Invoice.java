@@ -6,6 +6,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.GenerateInvoiceComma
 import org.example.polyinformatiquecoreapi.dtoEcommerce.InvoiceDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/invoice/command")
-@CrossOrigin
+
 public class Invoice {
 
     private final CommandGateway commandGateway;
@@ -27,6 +28,7 @@ public class Invoice {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createInvoice(@Valid @RequestBody InvoiceDTO invoice) {
         String invoiceId = UUID.randomUUID().toString();
         InvoiceDTO invoiceDTO = new InvoiceDTO(
