@@ -27,48 +27,41 @@ public class SecurityConfig {
 
 
         return httpSecurity
-                .cors(Customizer.withDefaults())
-                .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/categorie/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/customer/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/invoice/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/order/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/order-line/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/product/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/product-size/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/purchase/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/shipping/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/social-group/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/stock/command/**").hasAnyAuthority("ADMIN")
-                                .requestMatchers("/supplier/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/subcategory/command/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/swagger-ui/**").hasAnyAuthority("USER")
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)
-                        ))
-
-                .build();
+          .cors(Customizer.withDefaults())
+          .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+          .csrf(csrf->csrf.disable())
+          .headers(h->h.frameOptions(fo->fo.disable()))
+          .authorizeHttpRequests(ar->ar.requestMatchers("/h2-console/**","/swagger-ui.html","/v3/**","/swagger-ui/**").permitAll())
+          .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+          .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+          .build();
 
 
     }
 
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("*"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//
+//    }
 
-    }
-
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // PAS "*"
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
 }

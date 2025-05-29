@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/order-line/command")
-@CrossOrigin
 public class OrderLine {
 
     private final CommandGateway commandGateway;

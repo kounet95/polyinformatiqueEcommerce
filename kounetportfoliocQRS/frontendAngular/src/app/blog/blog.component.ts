@@ -8,7 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
-import { AcceuilComponent } from "../acceuil/acceuil.component";
+
 
 interface Breadcrumb {
   label: string;
@@ -30,7 +30,6 @@ interface Breadcrumb {
     RouterModule,
     CommonModule,
     MatCardModule,
-    AcceuilComponent
 ]
 })
 export class BlogComponent implements OnInit {

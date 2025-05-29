@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/media/command")
-@CrossOrigin
+
 public class MediaController {
 
     private final MediaCommandService mediaCommandService;

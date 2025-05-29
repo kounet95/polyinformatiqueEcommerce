@@ -50,6 +50,7 @@ import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-pro
 import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
 import { ProductsComponent } from './Ecommerce/products/products.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
+import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
 
 
 
@@ -99,6 +100,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     DetaillProductComponent,
     ProductsComponent,
     CategoryComponent,
+    CategoryCreateComponent,
  
    
     

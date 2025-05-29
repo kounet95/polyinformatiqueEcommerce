@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/supplier/command")
-@CrossOrigin
 public class Supplier {
 
     private final CommandGateway commandGateway;

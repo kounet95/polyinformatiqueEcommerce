@@ -6,6 +6,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.CreateSocialGroupCom
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SocialGroupDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/social-group/command")
-@CrossOrigin
+
 public class SocialGroup {
 
     private final CommandGateway commandGateway;
@@ -27,6 +28,7 @@ public class SocialGroup {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createSocialGroup(@Valid @RequestBody SocialGroupDTO socialGroup) {
         String socialGroupId = UUID.randomUUID().toString();
         SocialGroupDTO socialGroupDTO = new SocialGroupDTO(

@@ -6,6 +6,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductSizeCom
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/product-size/command")
-@CrossOrigin
+
 public class ProductSize {
 
     private final CommandGateway commandGateway;
@@ -27,6 +28,7 @@ public class ProductSize {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createProductSize(@Valid @RequestBody ProductSizeDTO productSize) {
         String productSizeId = UUID.randomUUID().toString();
         ProductSizeDTO productSizeDTO = new ProductSizeDTO(

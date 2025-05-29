@@ -7,6 +7,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/product/command")
-@CrossOrigin
+
 public class Product {
 
     private final CommandGateway commandGateway;
@@ -33,6 +34,7 @@ public class Product {
     }
 
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createProduct(
             @RequestPart("product") @Valid ProductDTO product,
             @RequestPart(value = "media", required = false) MultipartFile mediaFile
