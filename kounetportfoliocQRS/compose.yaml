@@ -62,6 +62,8 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
     command: start-dev
     restart: always
@@ -128,6 +130,7 @@ services:
       - DISCOVERY_SERVICE_URL=http://discoveryservice:8761/eureka
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 10s
@@ -157,6 +160,7 @@ services:
       - DISCOVERY_SERVICE_URL=http://discoveryservice:8761/eureka
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
       interval: 10s
@@ -186,6 +190,7 @@ services:
       - DISCOVERY_SERVICE_URL=http://discoveryservice:8761/eureka
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
       interval: 10s
@@ -213,6 +218,7 @@ services:
       - DISCOVERY_SERVICE_URL=http://discoveryservice:8761/eureka
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 10s
@@ -242,6 +248,7 @@ services:
       - DISCOVERY_SERVICE_URL=http://discoveryservice:8761/eureka
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
       interval: 10s
@@ -258,6 +265,16 @@ services:
     networks:
       - polyinfDb-net
     restart: always
+#  angular-front:
+#    build: ./frontendAngular
+#    container_name: angular-front
+#    ports:
+#      - '8085:80'
+#    expose:
+#      - '8085'
+#    networks:
+#      - polyinfDb-net
+#    restart: always
 
 volumes:
   polyinfDb_data:
