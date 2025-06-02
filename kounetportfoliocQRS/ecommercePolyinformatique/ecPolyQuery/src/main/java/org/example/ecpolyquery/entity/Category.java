@@ -12,12 +12,13 @@ import java.util.List;
 @Getter @Setter
 @Builder
 public class Category {
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String name;
-
+  @Version
+  private Long version;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Subcategory> subcategories;
 }

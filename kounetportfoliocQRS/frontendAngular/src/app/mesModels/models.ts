@@ -118,6 +118,6 @@ export interface OrderStatusDTO {
 // ===============================
 
 export interface CategoryDTO {
-  id: string;         // Identifiant unique de la catégorie
-  name: string;       // Nom de la catégorie (entre 2 et 100 caractères, requis)
+  id: string;        
+  name: string; 
 }

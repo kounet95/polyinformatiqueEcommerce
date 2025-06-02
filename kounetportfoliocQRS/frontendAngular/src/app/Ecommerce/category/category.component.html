@@ -796,3 +796,17 @@
         </nav>
       </div>
     </div>
+    <div *ngIf="loading">Chargement...</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<ul>
+  <li *ngFor="let cat of categories" (click)="selectCategory(cat.id)">
+    {{ cat.name }}
+  </li>
+</ul>
+
+<div *ngIf="selectedCategory">
+  <h3>Détail de la catégorie</h3>
+  <p><strong>Nom :</strong> {{ selectedCategory.name}}</p>
+</div>

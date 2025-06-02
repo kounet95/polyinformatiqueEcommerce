@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CategoryDTO } from '../../mesModels/models';
-import { commandbolg } from '../../../mesApi/commandeBlog';
+import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
+import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class CategoryService {
    */
   createCategory(category: CategoryDTO): Observable<void> {
     return this.http.post<void>(
-      `${commandbolg.backend}/category/create`, category
+      `${ecpolyCommand.backend}/category/create`, category
     );
   }
 
@@ -27,7 +28,26 @@ export class CategoryService {
    */
   deleteCategory(categoryId: string): Observable<void> {
     return this.http.delete<void>(
-      `${commandbolg.backend}/category/command/delete/${categoryId}`
+      `${ecpolyCommand.backend}/category/command/delete/${categoryId}`
+    );
+  }
+
+  /**
+   * Récupérer toutes les catégories (Query)
+   */
+  getAllCategories(): Observable<CategoryDTO[]> {
+    return this.http.get<CategoryDTO[]>(
+      `${ecpolyQuery.backend}/api/categories`
+    );
+  }
+
+  /**
+   * Récupérer une catégorie par son ID (Query)
+   * @param categoryId string
+   */
+  getCategoryById(categoryId: string): Observable<CategoryDTO> {
+    return this.http.get<CategoryDTO>(
+      `${ecpolyQuery.backend}/api/categories/${categoryId}`
     );
   }
 }

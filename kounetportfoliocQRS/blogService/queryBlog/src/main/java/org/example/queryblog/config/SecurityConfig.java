@@ -29,6 +29,7 @@ public class SecurityConfig {
     return http
       .cors(Customizer.withDefaults())
       .authorizeHttpRequests(ar->ar.requestMatchers("/products/**").permitAll())
+      .authorizeHttpRequests(ar->ar.requestMatchers("/h2-console/**","/swagger-ui.html","/v3/**","/swagger-ui/**").permitAll())
       .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
       .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
       .headers(h->h.frameOptions(fo->fo.disable()))
@@ -36,16 +37,6 @@ public class SecurityConfig {
       .build();
   }
 
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("*"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
 
 
 }

@@ -31,8 +31,11 @@ public class CategoryService {
                 .subcategories(new ArrayList<>())
                 .build();
 
+      if (!categoryRepository.existsById(event.getId())) {
         categoryRepository.save(category);
-        log.info("Category created with ID: {}", category.getId());
+      } else {
+        log.warn("Category with ID {} already exists in projection! Ignoring.", event.getId());
+      }
     }
 
     @EventHandler
