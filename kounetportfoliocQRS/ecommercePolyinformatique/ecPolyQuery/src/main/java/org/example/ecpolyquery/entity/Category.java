@@ -1,5 +1,6 @@
 package org.example.ecpolyquery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -17,9 +18,8 @@ public class Category {
   @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String name;
-  @Version
-  private Long version;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Subcategory> subcategories;
+  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonIgnore
+  private List<Subcategory> subcategories;
 }
 

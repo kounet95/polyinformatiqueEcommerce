@@ -16,7 +16,9 @@ public class AxonConfig {
         xStream.allowTypesByWildcard(new String[] {
                 "org.example.polyinformatiquecoreapi.commandEcommerce.**",
                 "org.example.polyinformatiquecoreapi.eventEcommerce.**",
-                "org.example.polyinformatiquecoreapi.dtoEcommerce.**"
+                "org.example.polyinformatiquecoreapi.dtoEcommerce.**",
+          "org.example.ecpolyquery.query.**",
+          "org.example.ecpolyquery.entity.**"
         });
         return xStream;
     }

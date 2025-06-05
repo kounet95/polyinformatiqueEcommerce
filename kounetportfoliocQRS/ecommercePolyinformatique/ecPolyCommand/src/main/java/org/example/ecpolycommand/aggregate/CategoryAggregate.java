@@ -49,7 +49,6 @@ public class CategoryAggregate {
 
      @EventSourcingHandler
      public void on(CategoryDeletedEvent event) {
-         // Mark the category as deleted or perform any necessary cleanup
          this.name = "[deleted]";
      }
  }

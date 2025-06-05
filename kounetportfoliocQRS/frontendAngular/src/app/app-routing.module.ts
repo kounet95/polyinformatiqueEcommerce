@@ -46,6 +46,7 @@ const routes: Routes = [
   { path: 'product', component: DetaillProductComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'category', component: CategoryComponent },
+  { path: 'product-details', component: DetaillProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
 ];
