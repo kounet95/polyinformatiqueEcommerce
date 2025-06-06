@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AcceuilComponent } from './acceuil/acceuil.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -47,15 +47,14 @@ import { CreateTagComponent } from './monBlog/create-tag/create-tag.component';
 import { CreateDomainComponent } from './monBlog/create-domain/create-domain.component';
 import { CreateEventComponent } from './monBlog/create-event/create-event.component';
 import { CreateNewsComponent } from './monBlog/create-news/create-news.component';
-import { HomeComponent } from './Ecommerce/home/home.component';
 import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
-import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
 import { ProductsComponent } from './Ecommerce/products/products.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -81,16 +80,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
 
   declarations: [
     AppComponent,
-
     HeaderComponent,
-
-
     PrincingComponent,
-    
-    
     BoutiqueComponent,
- 
-    
+    AnnouncementBarComponent,
     NewsComponent,
     EventsComponent,
     CommentaireComponent,
@@ -106,11 +99,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ProductsComponent,
     CategoryComponent,
     CategoryCreateComponent,
-  
-  
- 
-   
-    
   ],
   imports: [
   
@@ -144,18 +132,16 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatSidenavModule,
     MatPaginatorModule,
     MatSortModule,
-    CommonModule,
-    CommonModule,
     MatCardModule,
     MatCardModule,
     ArticleComponent,
     KeycloakAngularModule,
     FooterComponent,
     MatListModule,
-  MatDividerModule,
-  MatExpansionModule,
-  MatProgressBarModule,
-  
+    MatDividerModule,
+    MatExpansionModule,
+    MatProgressBarModule,
+    ReactiveFormsModule
 ],
 
  providers: [

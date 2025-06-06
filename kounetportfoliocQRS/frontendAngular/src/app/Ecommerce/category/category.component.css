@@ -167,3 +167,27 @@
     transform: translateX(-50%);
   }
 }
+.announcement-bar {
+  width: 100vw;
+  overflow: hidden;
+  height: 48px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+.announcement-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.announcement-item {
+  flex: 0 0 100%;
+  text-align: center;
+  font-weight: 500;
+  line-height: 48px;
+  color: #4a0c4c;
+  white-space: nowrap;
+}

@@ -1,26 +1,33 @@
-import { Component } from '@angular/core';
-import { SwiperConfigInterface, SwiperModule } from 'ngx-swiper-wrapper';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-announcement-bar',
-  standalone: true,
-  imports: [SwiperModule],
   templateUrl: './announcement-bar.component.html',
-  styleUrls: ['./announcement-bar.component.css']
+  styleUrls: ['./announcement-bar.component.css'],
+  standalone: false,
+   
 })
-export class AnnouncementBarComponent {
+export class AnnouncementBarComponent implements OnInit, OnDestroy {
   announcements = [
-    "🚚 Free shipping on orders over $50",
-    "💰 30 days money back guarantee",
-    "🎁 20% off on your first order - Use code: FIRST20",
-    "⚡ Flash Sale! Up to 70% off on selected items"
+    "🚚 Livraison gratuite dès 50€",
+    "🎁 -20% sur votre première commande",
+    "💰 30 jours satisfait ou remboursé",
+    "⚡ Ventes flash jusqu'à -70% !"
   ];
 
-  config: SwiperConfigInterface = {
-    loop: true,
-    autoplay: {
-      delay: 4000,
-      disableOnInteraction: false
-    }
-  };
+  currentIndex = 0;
+  intervalId: any;
+
+  ngOnInit() {
+    this.intervalId = setInterval(() => {
+      this.currentIndex = (this.currentIndex + 1) % this.announcements.length;
+    }, 4000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
+  }
 }

@@ -1,7 +1,7 @@
 <div class="announcement-bar">
-  <swiper [config]="config" class="announcement-swiper">
-    <div *ngFor="let ann of announcements" class="swiper-slide">
-      <div class="announcement-item">{{ ann }}</div>
+  <div class="announcement-container" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+    <div class="announcement-item" *ngFor="let ann of announcements">
+      {{ ann }}
     </div>
-  </swiper>
+  </div>
 </div>
