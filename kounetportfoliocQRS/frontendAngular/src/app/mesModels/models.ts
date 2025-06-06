@@ -21,7 +21,7 @@ export interface ArticleModel {
 export interface CommentModel {
   id: string;
   contenu: string;
-  createdAt: string; // LocalDate -> string (ISO date)
+  createdAt: string; 
   authorId: string;
   itemId: string;
 }
@@ -33,7 +33,7 @@ export interface CommentModel {
 export interface DomainModel {
   id: string;
   name: string;
-  articles: string[]; // List<String>
+  articles: string[]; 
 }
 
 // ===============================
@@ -43,12 +43,12 @@ export interface DomainModel {
 export interface EventModel {
   id: string;
   location: string;
-  begin: string;      // LocalDateTime -> string (ISO date-time)
-  end: string;        // LocalDateTime -> string (ISO date-time)
+  begin: string;      
+  end: string;        
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;  // LocalDate -> string (ISO date)
+  createdAt: string;  
   authorId: string;
   domainId: string;
   tagIds: string[];
@@ -64,11 +64,11 @@ export interface ItemModel {
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;      // LocalDate -> string (ISO date)
+  createdAt: string;      
   authorId: string;
-  mediaIds: string[];     // List<String>
-  commentIds: string[];   // List<String>
-  tagIds: string[];       // List<String>
+  mediaIds: string[];    
+  commentIds: string[];   
+  tagIds: string[];       
 }
 
 // ===============================
@@ -81,7 +81,7 @@ export interface NewsModel {
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;    // LocalDate -> string (ISO)
+  createdAt: string;   
   authorId: string;
   domainId: string;
   tagIds: string[];
@@ -103,13 +103,13 @@ export interface TagModel {
 // ===============================
 
 export interface OrderStatusDTO {
-  id: string;             // Identifiant unique (peut être null ou vide)
-  orderId: string;        // ID de la commande (obligatoire)
-  barcode: string;        // Code-barres (obligatoire)
-  status: string;         // Statut de la commande (obligatoire)
-  updatedAt: string;      // Dernière mise à jour (date-heure ISO, obligatoire)
-  customerId: string;     // ID du client (obligatoire)
-  customerName: string;   // Nom du client (obligatoire)
+  id: string;           
+  orderId: string;       
+  barcode: string;       
+  status: string;         
+  updatedAt: string;     
+  customerId: string;     
+  customerName: string;   
 }
 
 
@@ -118,6 +118,10 @@ export interface OrderStatusDTO {
 // ===============================
 
 export interface CategoryDTO {
-  id: string;        
-  name: string; 
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  parentId?: number;
+  children?: CategoryDTO[];
 }

@@ -1,0 +1,25 @@
+.announcement-bar {
+  width: 100vw;
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  font-size: 1.08rem;
+  color: #4a0c4c;
+  overflow: hidden;
+}
+.announcement-swiper {
+  width: 100vw;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+.announcement-item {
+  width: 100vw;
+  text-align: center;
+  font-weight: 500;
+  line-height: 48px;
+  white-space: nowrap;
+  overflow: hidden;
+}

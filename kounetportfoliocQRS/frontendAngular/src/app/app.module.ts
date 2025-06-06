@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav'; 
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
@@ -38,6 +38,8 @@ import { CommentaireComponent } from './monBlog/commentaire/commentaire.componen
 import { DomainComponent } from './monBlog/domain/domain.component';
 import { TagComponent } from './monBlog/tag/tag.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ArticleComponent } from "./monBlog/article/article.component";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import { NewsArticleComponent } from './monBlog/news-article/news-article.component';
@@ -51,6 +53,9 @@ import { TrackOrderComponent } from './Ecommerce/track-order/track-order.compone
 import { ProductsComponent } from './Ecommerce/products/products.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
 
 
 
@@ -101,6 +106,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ProductsComponent,
     CategoryComponent,
     CategoryCreateComponent,
+  
+  
  
    
     
@@ -144,6 +151,11 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ArticleComponent,
     KeycloakAngularModule,
     FooterComponent,
+    MatListModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatProgressBarModule,
+  
 ],
 
  providers: [

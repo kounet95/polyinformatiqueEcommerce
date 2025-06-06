@@ -1,0 +1,7 @@
+<div class="announcement-bar">
+  <swiper [config]="config" class="announcement-swiper">
+    <div *ngFor="let ann of announcements" class="swiper-slide">
+      <div class="announcement-item">{{ ann }}</div>
+    </div>
+  </swiper>
+</div>
