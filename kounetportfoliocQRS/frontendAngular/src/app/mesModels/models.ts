@@ -125,3 +125,167 @@ export interface CategoryDTO {
   parentId?: number;
   children?: CategoryDTO[];
 }
+
+// ===============================
+// ========== ProductDTO =========
+// ===============================
+
+export interface ProductDTO {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  createdAt: string;
+  closedAt?: string;
+  subcategoryId: string;
+  socialGroupId: string;
+  imageUrl: string;
+  isActive: boolean;
+  couleurs?: string; 
+}
+
+// ===============================
+// ========== ProductSizeDTO =====
+// ===============================
+
+export interface ProductSizeDTO {
+  id: string;
+  size: string;
+  productId: string;
+}
+
+// ===============================
+// ========== PurchaseDTO =========
+// ===============================
+
+export interface PurchaseDTO {
+  id: string;
+  supplierId: string;
+  createdAt: string;
+  status: string;
+  total: number;
+}
+
+// ===============================
+// ======== PurchaseItemDTO =======
+// ===============================
+
+export interface PurchaseItemDTO {
+  id: string;
+  purchaseId: string;
+  productId: string;
+  qty: number;
+  unitPrice: number;
+}
+
+// ===============================
+// ========== ShippingDTO =========
+// ===============================
+
+export interface ShippingDTO {
+  id: string;
+  orderId: string;
+  deliveryStatus: string;
+  estimatedDeliveryDate: string;
+  shippingDate: string;
+  shippingAddress: string;
+}
+
+// ===============================
+// ========== SocialGroupDTO ======
+// ===============================
+
+export interface SocialGroupDTO {
+  id: string;
+  name: string;
+  region: string;
+  country: string;
+}
+
+// ===============================
+// =========== StockDTO ===========
+// ===============================
+
+export interface StockDTO {
+  id: string;
+  productSizeId: string;
+  supplierId: string;
+  purchasePrice: number;
+  promoPrice: number;
+  salePrice: number;
+  stockAvailable: number;
+  quantity: number;
+}
+
+// ===============================
+// ========== SubcategoryDTO ======
+// ===============================
+
+export interface SubcategoryDTO {
+  id: string;
+  name: string;
+  categoryId: string;
+}
+
+// ===============================
+// ========== SupplierDTO =========
+// ===============================
+
+export interface SupplierDTO {
+  id: string;
+  fullname: string;
+  city: string;
+  email: string;
+  personToContact: string;
+}
+
+// ===============================
+// ========== OrderLineDTO ========
+// ===============================
+
+export interface OrderLineDTO {
+  id: string;
+  orderId: string;
+  productSizeId: string;
+  qty: number;
+}
+
+// ===============================
+// ============ OrderDTO ==========
+// ===============================
+
+export interface OrderDTO {
+  id: string;
+  customerId: string;
+  createdAt: string;
+  orderStatus: string;
+  paymentMethod: string;
+  total: number;
+  barcode: string;
+}
+
+// ===============================
+// =========== InvoiceDTO =========
+// ===============================
+
+export interface InvoiceDTO {
+  invoiceId: string;
+  orderId: string;
+  amount: number;
+  paymentStatus: string;
+}
+
+// ===============================
+// ===== CustomerEcommerceDTO =====
+// ===============================
+
+export interface CustomerEcommerceDTO {
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  shippingAddress: string;
+  billingAddress: string;
+  createdAt: string; // ISO 8601 string (LocalDateTime in Java)
+}

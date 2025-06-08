@@ -16,7 +16,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AcceuilComponent } from './acceuil/acceuil.component';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -48,13 +49,14 @@ import { CreateDomainComponent } from './monBlog/create-domain/create-domain.com
 import { CreateEventComponent } from './monBlog/create-event/create-event.component';
 import { CreateNewsComponent } from './monBlog/create-news/create-news.component';
 import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
-import { ProductsComponent } from './Ecommerce/products/products.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
+import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 
 
 
@@ -96,9 +98,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateNewsComponent,
     CreateEventComponent,
     DetaillProductComponent,
-    ProductsComponent,
+  
     CategoryComponent,
     CategoryCreateComponent,
+    CreateProductComponent,
+    SousCategoryCreateComponent
+    
   ],
   imports: [
   
@@ -141,7 +146,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatDividerModule,
     MatExpansionModule,
     MatProgressBarModule,
-    ReactiveFormsModule
+  MatFormFieldModule,
+    MatSortModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatOptionModule,
 ],
 
  providers: [

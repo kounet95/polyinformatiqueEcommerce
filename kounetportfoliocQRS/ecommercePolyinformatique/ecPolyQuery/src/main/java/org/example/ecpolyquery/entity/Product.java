@@ -24,7 +24,7 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime closedAt;
     private boolean isActive;
-
+    private String couleurs;
     @ManyToOne
     @JoinColumn(name = "subcategory_id")
     private Subcategory subcategory;

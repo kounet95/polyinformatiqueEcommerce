@@ -18,6 +18,8 @@ import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-pro
 import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
+import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
+import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
@@ -44,9 +46,11 @@ const routes: Routes = [
   { path: 'articles', component: ArticleComponent },
   { path: 'home', component: HomeComponent },
   { path: 'product', component: DetaillProductComponent },
+  { path: 'souscategorie', component: SousCategoryCreateComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'category', component: CategoryComponent },
   { path: 'product-details', component: DetaillProductComponent },
+  { path: 'productcreate', component: CreateProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
 ];

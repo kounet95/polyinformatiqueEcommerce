@@ -1,0 +1,49 @@
+<h2>Créer un produit</h2>
+<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nom du produit*</label>
+    <input type="text" class="form-control" id="name" name="name" ngModel required>
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" ngModel></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="price" class="form-label">Prix*</label>
+    <input type="number" class="form-control" id="price" name="price" ngModel required min="0">
+  </div>
+
+  <div class="mb-3">
+    <label for="imageUrl" class="form-label">Image (URL)</label>
+    <input type="text" class="form-control" id="imageUrl" name="imageUrl" ngModel>
+  </div>
+
+  <div class="mb-3">
+    <label for="media" class="form-label">Image locale (fichier)</label>
+    <input type="file" class="form-control" id="media" name="media" (change)="onFileSelected($event)" #mediaFileInput>
+  </div>
+
+  <div class="mb-3">
+    <label for="couleurs" class="form-label">Couleurs (séparées par une virgule)</label>
+    <input type="text" class="form-control" id="couleurs" name="couleurs" ngModel>
+  </div>
+
+  <div class="mb-3">
+    <label for="subcategoryId" class="form-label">Sous-catégorie*</label>
+    <input type="text" class="form-control" id="subcategoryId" name="subcategoryId" ngModel required>
+  </div>
+
+  <div class="mb-3">
+    <label for="socialGroupId" class="form-label">Groupe social*</label>
+    <input type="text" class="form-control" id="socialGroupId" name="socialGroupId" ngModel required>
+  </div>
+
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="isActive" name="isActive" ngModel>
+    <label class="form-check-label" for="isActive">Actif</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Créer le produit</button>
+</form>
