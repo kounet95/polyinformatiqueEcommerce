@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comment/command")
-@CrossOrigin
 public class CommentController {
 
     private final CommentCommandService commentCommandService;

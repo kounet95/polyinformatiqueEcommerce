@@ -1,0 +1,20 @@
+<section class="cta-container mat-elevation-z4">
+  <h2>✨ Transforme ton style dès maintenant !</h2>
+  <p>
+    Découvre une collection unique de tenues africaines modernes à tester en salon virtuel.
+  </p>
+
+  
+  <div class="carousel-container">
+    <div class="carousel-track">
+      <div class="carousel-item" *ngFor="let example of examples">
+        <img [src]="example.image" [alt]="example.label" />
+        <p>{{ example.label }}</p>
+      </div>
+    </div>
+  </div>
+
+  <button mat-raised-button color="primary">
+    🚀 Accéder au salon virtuel
+  </button>
+</section>

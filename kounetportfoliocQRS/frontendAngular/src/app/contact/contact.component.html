@@ -1,0 +1,52 @@
+<section class="contact-container">
+  <div class="contact-grid">
+    <div class="contact-infos">
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">location_on</mat-icon>
+        <div>
+          
+          <h2>Address</h2>
+          <p>50 lisgar<br> SUDBURY, Ontario, P3E 3L8</p>
+        </div>
+      </mat-card>
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">call</mat-icon>
+        <div>
+          <h2>Call CA</h2>
+          <p>+1 514 999 0594<br>+1 450 626 7192</p>
+        </div>
+      </mat-card>
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">mail</mat-icon>
+        <div>
+          <h2>Email CA</h2>
+          <p>polyinformatique&#64;gmail.com<br>kounetdiallo95&#64;gmail.com</p>
+        </div>
+      </mat-card>
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">schedule</mat-icon>
+        <div>
+          <h2>Open Hours</h2>
+          <p>Monday - Friday<br>9:00AM - 05:00PM</p>
+        </div>
+      </mat-card>
+    </div>
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form" autocomplete="off">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <input matInput placeholder="Your Name" formControlName="name" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <input matInput placeholder="Your Email" formControlName="email" required>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput placeholder="Subject" formControlName="subject" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <textarea matInput placeholder="Message" formControlName="message" rows="5" required></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="warn" class="send-btn" type="submit" [disabled]="!contactForm.valid">Send Message</button>
+    </form>
+  </div>
+</section>

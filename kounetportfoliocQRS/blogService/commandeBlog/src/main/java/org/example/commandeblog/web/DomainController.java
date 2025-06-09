@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.commandeblog.service.DomainCommandService;
 import org.example.polyinformatiquecoreapi.dto.DomainDTO;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,16 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
+<<<<<<< HEAD:kounetportfoliocQRS/blogService/commandeBlog/src/main/java/org/example/commandeblog/web/DomainController.java
 @RequestMapping("/domain/command")
 @CrossOrigin
 public class DomainController {
+=======
+
+@RequestMapping("/category/command")
+
+public class CategoryController {
+>>>>>>> cb015458f76953e53f2ff14fd3746048c3b44e27:kounetportfoliocQRS/blogService/commandeBlog/src/main/java/org/example/commandeblog/web/CategoryController.java
 
     private final DomainCommandService domainCommandService;
     private final EventStore eventStore;
@@ -23,7 +31,7 @@ public class DomainController {
         this.domainCommandService = domainCommandService;
         this.eventStore = eventStore;
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Void> create(@RequestBody @Valid DomainDTO dto) {
         if (dto.getId() == null || dto.getId().isEmpty()) {
@@ -32,7 +40,7 @@ public class DomainController {
         domainCommandService.createDomain(dto);
         return ResponseEntity.ok().build();
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/events/{id}")
     public Stream<Object> getEvents(@PathVariable String id) {
         return eventStore.readEvents(id).asStream().map(e -> e.getPayload());
@@ -42,7 +50,7 @@ public class DomainController {
     public ResponseEntity<String> handle(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
         domainCommandService.deleteDomain(id);

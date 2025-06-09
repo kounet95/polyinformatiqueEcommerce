@@ -1,0 +1,95 @@
+.hero-section {
+  width: 100%;
+  min-height: 350px;
+  background: linear-gradient(90deg, #f8fafc 60%, #fff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-content {
+  text-align: center;
+  padding: 60px 20px 40px 20px;
+}
+.hero-content h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.hero-content p {
+  font-size: 1.15rem;
+  margin-bottom: 24px;
+  color: #555;
+}
+.section {
+  width: 100%;
+  padding: 64px 0 48px 0;
+  background: #f9f9f9;
+}
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 24px;
+}
+h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 36px;
+  text-align: left;
+}
+.services-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+}
+.service-card {
+  flex: 1 1 260px;
+  max-width: 320px;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  padding: 24px 18px;
+  text-align: center;
+}
+.service-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+.team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  justify-content: center;
+}
+.team-card {
+  flex: 1 1 230px;
+  max-width: 280px;
+  min-width: 190px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  padding: 20px 14px;
+  text-align: center;
+}
+.contact-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 30px 20px;
+}
+@media (max-width: 900px) {
+  .services-grid, .team-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .container {
+    padding: 0 8px;
+  }
+}

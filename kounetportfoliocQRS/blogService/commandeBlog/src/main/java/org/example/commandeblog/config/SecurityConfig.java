@@ -28,6 +28,7 @@ public class SecurityConfig {
 
 
         return httpSecurity
+<<<<<<< HEAD
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
@@ -46,6 +47,16 @@ public class SecurityConfig {
                         ))
 
                 .build();
+=======
+          .cors(Customizer.withDefaults())
+          .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+          .csrf(csrf->csrf.disable())
+          .headers(h->h.frameOptions(fo->fo.disable()))
+          .authorizeHttpRequests(ar->ar.requestMatchers("/h2-console/**","/swagger-ui.html","/v3/**","/swagger-ui/**").permitAll())
+          .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+          .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+          .build();
+>>>>>>> cb015458f76953e53f2ff14fd3746048c3b44e27
 
 
     }

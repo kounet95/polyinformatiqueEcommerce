@@ -7,7 +7,7 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.axonframework.queryhandling.SubscriptionQueryResult;
 import org.example.polyinformatiquecoreapi.dto.ArticleDTO;
 import org.example.polyinformatiquecoreapi.query.WatchArticleQuery;
-import org.example.queryblog.entite.Article;
+
 import org.example.queryblog.query.GetAllArticlesQuery;
 import org.example.queryblog.query.GetArticleByIdQuery;
 import org.springframework.http.MediaType;

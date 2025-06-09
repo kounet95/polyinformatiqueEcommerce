@@ -11,6 +11,7 @@ import org.example.polyinformatiquecoreapi.dto.EventDTO;
 import org.example.polyinformatiquecoreapi.dto.NewsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
+
 @RequestMapping("/blog/command")
 @CrossOrigin
 public class BlogController {
@@ -45,6 +47,7 @@ public class BlogController {
     }
 
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> createArticle(
             @RequestPart("article") @Valid ArticleDTO article,
             @RequestPart(value = "media", required = false) MultipartFile mediaFile
@@ -70,6 +73,7 @@ public class BlogController {
 
 
     @PostMapping(value = "/create-news", consumes = {"multipart/form-data"})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> createNews(
             @RequestPart("news") @Valid NewsDTO news,
             @RequestPart(value = "media", required = false) MultipartFile mediaFile
@@ -90,6 +94,7 @@ public class BlogController {
     }
 
     @PostMapping(value = "/create-event", consumes = {"multipart/form-data"})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> createEvent(
             @RequestPart("event") @Valid EventDTO event,
             @RequestPart(value = "media", required = false) MultipartFile mediaFile
@@ -110,46 +115,54 @@ public class BlogController {
     }
 
     @PutMapping("/update-article/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> updateArticle(@PathVariable String id, @Valid @RequestBody ArticleDTO article) {
         articleCommandService.updateArticle(id, article);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update-news/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> updateNews(@PathVariable String id, @Valid @RequestBody NewsDTO news) {
         newsCommandService.updateNews(id, news);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update-event/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> updateEvent(@PathVariable String id, @Valid @RequestBody EventDTO event) {
         eventCommandService.updateEvent(id, event);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete-article/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteArticle(@PathVariable String id) {
         articleCommandService.deleteArticle(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete-news/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteNews(@PathVariable String id) {
         newsCommandService.deleteNews(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete-event/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
         eventCommandService.deleteEvent(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/events/{aggregateId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Stream<?> eventsStream(@PathVariable String aggregateId) {
         return eventStore.readEvents(aggregateId).asStream();
     }
     @PostMapping("/upload-image")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = imageStorageService.uploadImage(file);

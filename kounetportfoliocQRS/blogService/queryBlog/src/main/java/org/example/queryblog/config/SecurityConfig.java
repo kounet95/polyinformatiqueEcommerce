@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/query/**").hasAnyAuthority("ADMIN","TAILLEUR")
+                                .requestMatchers("/query/**").permitAll()
                                 .requestMatchers("/comments/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
                                 .requestMatchers("/utilisateurs/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
                                 .requestMatchers("/domains/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
@@ -52,16 +52,17 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Pour Spring 5.3+
+    configuration.setAllowedMethods(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(false);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
 
 }

@@ -1,0 +1,14 @@
+<section class="blog-container">
+  <h1 class="blog-title">Blog</h1>
+  <p class="blog-desc">
+    Odio et unde deleniti. Deserunt numquam exercitationem. Officiis quo odio sint voluptas consequatur ut a odio voluptatem. Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.
+  </p>
+  <nav class="breadcrumbs">
+    <span class="breadcrumb-active">Home</span> / <span><b>Blog</b></span>
+  </nav>
+  <div class="blog-cards">
+    <mat-card class="blog-card mat-elevation-z2" *ngFor="let blog of blogs">
+      <img mat-card-image [src]="blog.image" [alt]="blog.alt">
+    </mat-card>
+  </div>
+</section>
