@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .top-bar .d-flex {
   align-items: center !important;
 }
@@ -12082,7 +12083,7 @@ textarea.form-control-lg {
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
+:root {
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #3e0925; /* Color for headings, subheadings and title throughout the website */
