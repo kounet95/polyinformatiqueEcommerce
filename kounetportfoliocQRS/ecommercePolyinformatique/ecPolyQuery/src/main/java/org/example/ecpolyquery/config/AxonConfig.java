@@ -9,24 +9,25 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class AxonConfig {
 
-    @Bean
-    public XStream xStream() {
-        XStream xStream = new XStream();
-        // Autorise les classe
-        xStream.allowTypesByWildcard(new String[] {
-                "org.example.polyinformatiquecoreapi.commandEcommerce.**",
-                "org.example.polyinformatiquecoreapi.eventEcommerce.**",
-                "org.example.polyinformatiquecoreapi.dtoEcommerce.**",
-                "org.example.ecpolyquery.query.**"
-        });
-        return xStream;
-    }
+  @Bean
+  public XStream xStream() {
+    XStream xStream = new XStream();
+    // Autorisation pour tous les types nécessaires
+    xStream.allowTypesByWildcard(new String[] {
+      "org.example.polyinformatiquecoreapi.commandEcommerce.**",
+      "org.example.polyinformatiquecoreapi.eventEcommerce.**",
+      "org.example.polyinformatiquecoreapi.dtoEcommerce.**",
+      "org.example.ecpolyquery.query.**",
+      "org.example.ecpolyquery.entity.**"
+    });
+    return xStream;
+  }
 
-    @Bean
-    @Primary
-    public XStreamSerializer defaultSerializer(XStream xStream) {
-        return XStreamSerializer.builder()
-                .xStream(xStream)
-                .build();
-    }
+  @Bean
+  @Primary
+  public XStreamSerializer defaultSerializer(XStream xStream) {
+    return XStreamSerializer.builder()
+      .xStream(xStream)
+      .build();
+  }
 }

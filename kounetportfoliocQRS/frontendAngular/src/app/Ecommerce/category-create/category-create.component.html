@@ -1,0 +1,24 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
+  <div class="mb-3">
+    <label for="name" class="form-label">Nom de la catégorie</label>
+    <input
+      type="text"
+      id="name"
+      class="form-control"
+      formControlName="name"
+      [class.is-invalid]="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+      placeholder="Saisir un nom (2 à 100 caractères)"
+      autocomplete="off"
+    >
+    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="invalid-feedback">
+      <span *ngIf="categoryForm.get('name')?.errors?.['required']">Le nom est requis.</span>
+      <span *ngIf="categoryForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
+      <span *ngIf="categoryForm.get('name')?.errors?.['maxlength']">Maximum 100 caractères.</span>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+</form>

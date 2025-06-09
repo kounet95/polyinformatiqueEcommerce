@@ -16,8 +16,12 @@ public class GetAllOrderLinesQuery {
 }
 
 public class GetAllProductsQuery(
-    var page: Int = 0,
-    var size: Int = 10
+  var page: Int = 0,
+  var size: Int = 10,
+  categoryId: String,
+  couleurs: String,
+  socialGroupId: String,
+  productSize: String
 )
 
 public class GetAllProductSizesQuery {

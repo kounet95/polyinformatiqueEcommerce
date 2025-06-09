@@ -4,7 +4,7 @@
     <mat-icon class="mat-icon-rtl-mirror">thumb_up</mat-icon>
 
     <span style="font-weight: bold; font-size: 2rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
-      AFRICANITE <span style="color: #ff5252;">.</span>
+      Polyinformatique <span style="color: #ff5252;">.</span>
     </span>
   </a>
 
@@ -13,22 +13,18 @@
   <nav class="nav-links">
     <a mat-button href="#services" >Services</a>
     <a mat-button routerLink="/portfolio">Portfolio</a>
-    <a mat-button routerLink="/temoiage" >Temoiage</a>
+    <a mat-button routerLink="/temoiage" >Temoignage</a>
     <a mat-button routerLink="/team" >Team</a>
-    <a mat-button routerLink="/promos" >promos</a>
-    <a mat-button routerLink="/home" >La Boutique</a>
+    <a mat-button routerLink="/souscategorie" >sous categorie</a>
+    <a mat-button routerLink="/promos" >Promotion</a>
+    <a mat-button routerLink="/home" > Boutique</a>
     <a mat-button routerLink="/contact">Contact</a>
+    <a class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')"></a>
 
-    <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
-      Blog <mat-icon>expand_more</mat-icon>
+    <button mat-button class="dropdown-btn">
+     <a mat-button routerLink="/blog">Blog </a>
     </button>
   </nav>
-
-  <mat-menu #dropdownMenu="matMenu">
-    <button mat-menu-item routerLink="/articles">Article</button>
-    <button mat-menu-item routerLink="/dropdown/event">Event</button>
-    <button mat-menu-item routerLink=" /dropdown/news">News</button>
-  </mat-menu>
 
   <span class="spacer"></span>
 
@@ -36,6 +32,24 @@
   <a mat-raised-button color="accent" class="cta-btn" routerLink="/get-started" style="margin-left:16px;">
     Salon-Virtuel
   </a>
+
+
+ <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+       <span *ngIf="profile;else login_template">{{profile.username}}</span>
+            <ng-template #login_template>
+              <button class="btn btn-success" (click)="handleLogin()">Login</button>
+            </ng-template><mat-icon>expand_more</mat-icon>
+    </button>
+
+
+  <mat-menu #dropdownMenu="matMenu">
+    <button mat-menu-item  (click)="handleLogin()">Login</button>
+    <button mat-menu-item (click)="handleLogout()">Logoout</button>
+
+  </mat-menu>
+
+
+
 
   <!-- Mobile toggle -->
   <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()">

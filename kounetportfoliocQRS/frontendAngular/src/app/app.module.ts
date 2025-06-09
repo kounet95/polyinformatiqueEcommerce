@@ -11,12 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav'; 
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AcceuilComponent } from './acceuil/acceuil.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -38,6 +39,8 @@ import { CommentaireComponent } from './monBlog/commentaire/commentaire.componen
 import { DomainComponent } from './monBlog/domain/domain.component';
 import { TagComponent } from './monBlog/tag/tag.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ArticleComponent } from "./monBlog/article/article.component";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import { NewsArticleComponent } from './monBlog/news-article/news-article.component';
@@ -45,11 +48,15 @@ import { CreateTagComponent } from './monBlog/create-tag/create-tag.component';
 import { CreateDomainComponent } from './monBlog/create-domain/create-domain.component';
 import { CreateEventComponent } from './monBlog/create-event/create-event.component';
 import { CreateNewsComponent } from './monBlog/create-news/create-news.component';
-import { HomeComponent } from './Ecommerce/home/home.component';
 import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
-import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
-import { ProductsComponent } from './Ecommerce/products/products.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
+import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
+import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 
 
 
@@ -57,7 +64,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://localhost:8080',
+        url: 'http://keycloak:8080',
         realm: 'polyinformatiqueEcommerce',
         clientId: 'frontend'
       },
@@ -75,16 +82,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
 
   declarations: [
     AppComponent,
-
     HeaderComponent,
-
-
     PrincingComponent,
-    
-    
     BoutiqueComponent,
- 
-    
+    AnnouncementBarComponent,
     NewsComponent,
     EventsComponent,
     CommentaireComponent,
@@ -97,10 +98,11 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateNewsComponent,
     CreateEventComponent,
     DetaillProductComponent,
-    ProductsComponent,
+  
     CategoryComponent,
- 
-   
+    CategoryCreateComponent,
+    CreateProductComponent,
+    SousCategoryCreateComponent
     
   ],
   imports: [
@@ -135,13 +137,21 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatSidenavModule,
     MatPaginatorModule,
     MatSortModule,
-    CommonModule,
-    CommonModule,
     MatCardModule,
     MatCardModule,
     ArticleComponent,
     KeycloakAngularModule,
     FooterComponent,
+    MatListModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatProgressBarModule,
+  MatFormFieldModule,
+    MatSortModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatOptionModule,
 ],
 
  providers: [

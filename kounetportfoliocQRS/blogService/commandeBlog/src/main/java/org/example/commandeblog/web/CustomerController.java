@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/blog/author")
-@CrossOrigin
+
 public class CustomerController {
 
     private final AuthorCommandService authorCommandService;

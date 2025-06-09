@@ -16,11 +16,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { KeycloakAngularModule } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { Router, RouterModule } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
+import { KeycloakProfile } from 'keycloak-js';
 
 @Component({
   selector: 'app-navbar',
@@ -48,7 +49,27 @@ import { AppRoutingModule } from '../app-routing.module';
   RouterModule, 
 ]
 })
-export class NavbarComponent  {
-  
+export class NavbarComponent  implements OnInit{
+  title = 'ecom-app-angular';
+  public profile! : KeycloakProfile;
+  constructor(public keycloakService : KeycloakService) {
+  }
 
+  ngOnInit() {
+    if(this.keycloakService.isLoggedIn()){
+      this.keycloakService.loadUserProfile().then(profile=>{
+        this.profile=profile;
+      });
+    }
+  }
+
+  async handleLogin() {
+    await this.keycloakService.login({
+      redirectUri: window.location.origin
+    });
+  }
+
+  handleLogout(){
+    this.keycloakService.logout(window.location.origin);
+  }
 }

@@ -29,8 +29,7 @@ import { RouterModule } from '@angular/router';
 })
 export class TeamComponent {
 team = [
-    { img: 'assets/img/team1.jpg', name: 'Alice', role: 'CEO', desc: 'Expert en stratégie digitale.' },
-    { img: 'assets/img/team2.jpg', name: 'Bob', role: 'Lead Dev', desc: 'Codeur fullstack passionné.' },
-    { img: 'assets/img/team3.jpg', name: 'Clara', role: 'UI/UX', desc: 'Créative et innovante.' },
+    { img: 'assets/img/person-m-1.webp', name: 'Arsene', role: 'Dev , Formateur TI', desc: 'CCNA, AZ900.' },
+    { img: 'assets/img/person-m-9.webp', name: 'Oumar', role: ' Dev, FOrmateur TI', desc: 'LIPC.' },
   ];
 }

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/tag/command")
-@CrossOrigin
+
 public class TagController {
 
     private final TagCommandService tagCommandService;

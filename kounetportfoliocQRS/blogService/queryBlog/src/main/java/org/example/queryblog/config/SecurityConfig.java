@@ -1,11 +1,12 @@
 package org.example.queryblog.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -15,54 +16,28 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    private JwtAuthConverter jwtAuthConverter;
+  private JwtAuthConverter jwtAuthConverter;
 
-    public SecurityConfig(JwtAuthConverter jwtAuthConverter) {
-        this.jwtAuthConverter = jwtAuthConverter;
-    }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-
-        return httpSecurity
-                .cors(Customizer.withDefaults())
-                .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/query/**").permitAll()
-                                .requestMatchers("/comments/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/utilisateurs/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/domains/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/event/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/news/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/tag/**").hasAnyAuthority("ADMIN", "USER","TAILLEUR")
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)
-                        ))
-
-                .build();
-
-
-    }
-
+  public SecurityConfig(JwtAuthConverter jwtAuthConverter) {
+    this.jwtAuthConverter = jwtAuthConverter;
+  }
 
   @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Pour Spring 5.3+
-    configuration.setAllowedMethods(Arrays.asList("*"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.setAllowCredentials(false);
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    return http
+      .cors(Customizer.withDefaults())
+      .authorizeHttpRequests(ar->ar.requestMatchers("/products/**").permitAll())
+      .authorizeHttpRequests(ar->ar.requestMatchers("/h2-console/**","/swagger-ui.html","/v3/**","/swagger-ui/**").permitAll())
+      .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+      .oauth2ResourceServer(o2->o2.jwt(jwt->jwt.jwtAuthenticationConverter(jwtAuthConverter)))
+      .headers(h->h.frameOptions(fo->fo.disable()))
+      .csrf(csrf->csrf.ignoringRequestMatchers("/h2-console/**"))
+      .build();
   }
 
 
+
 }
+

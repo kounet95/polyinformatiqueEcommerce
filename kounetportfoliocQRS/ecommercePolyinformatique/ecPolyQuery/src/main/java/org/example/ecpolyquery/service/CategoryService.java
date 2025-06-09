@@ -20,20 +20,22 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @EventHandler
-    public void on(CategoryCreatedEvent event) {
-        log.debug("Handling CategoryCreatedEvent: {}", event.getId());
-        CategoryDTO categoryDTO = event.getCategoryDTO();
+  @EventHandler
+  public void on(CategoryCreatedEvent event) {
+    log.debug("Handling CategoryCreatedEvent: {}", event.getId());
+    CategoryDTO categoryDTO = event.getCategoryDTO();
 
-        Category category = Category.builder()
-                .id(event.getId())
-                .name(categoryDTO.getName())
-                .subcategories(new ArrayList<>())
-                .build();
-
-        categoryRepository.save(category);
-        log.info("Category created with ID: {}", category.getId());
+    if (!categoryRepository.existsById(event.getId())) {
+      Category category = Category.builder()
+        .id(event.getId())
+        .name(categoryDTO.getName())
+        .subcategories(new ArrayList<>())
+        .build();
+      categoryRepository.save(category);
+    } else {
+      log.warn("Category with ID {} already exists in projection! Ignoring.", event.getId());
     }
+  }
 
     @EventHandler
     public void on(CategoryDeletedEvent event) {

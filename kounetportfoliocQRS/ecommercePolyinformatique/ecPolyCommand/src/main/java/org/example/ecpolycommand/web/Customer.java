@@ -7,6 +7,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCustomerComman
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/customer/command")
-@CrossOrigin
+
 public class Customer {
 
     private final CommandGateway commandGateway;
@@ -28,6 +29,7 @@ public class Customer {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createCustomer(@Valid @RequestBody CustomerEcommerceDTO author) {
         String authorId = UUID.randomUUID().toString();
         CustomerEcommerceDTO authorDTO = new CustomerEcommerceDTO(
@@ -50,6 +52,7 @@ public class Customer {
     }
 
     @DeleteMapping("/delete/{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> deleteCustomer(@PathVariable String customerId) {
         return commandGateway.send(new DeleteCustomerCommand(customerId));
     }

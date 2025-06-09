@@ -6,6 +6,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.AddStockCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/stock/command")
-@CrossOrigin
+
 public class Stock {
 
     private final CommandGateway commandGateway;
@@ -27,6 +28,7 @@ public class Stock {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> addStock(@Valid @RequestBody StockDTO stock) {
         String stockId = UUID.randomUUID().toString();
         StockDTO stockDTO = new StockDTO(

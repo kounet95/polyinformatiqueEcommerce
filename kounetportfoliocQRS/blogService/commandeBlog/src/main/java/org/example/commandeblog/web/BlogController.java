@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 @RestController
 
 @RequestMapping("/blog/command")
-@CrossOrigin
+
 public class BlogController {
 
     private final ArticleCommandService articleCommandService;

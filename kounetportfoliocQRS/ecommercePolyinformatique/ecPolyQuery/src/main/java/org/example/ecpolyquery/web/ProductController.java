@@ -8,8 +8,6 @@ import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 import org.example.ecpolyquery.query.GetProductByIdQuery;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -22,15 +20,21 @@ public class ProductController {
     @GetMapping
     public CompletableFuture<PageResponse<Product>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return queryGateway.query(new GetAllProductsQuery(page, size), 
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String categoryId,
+            @RequestParam(required = false) String couleurs,
+            @RequestParam(required = false) String socialGroupId,
+            @RequestParam(required = false) String productSize) {
+        return queryGateway.query(new GetAllProductsQuery(page, size, categoryId, couleurs, socialGroupId, productSize),
                 ResponseTypes.instanceOf(PageResponse.class))
                 .thenApply(response -> (PageResponse<Product>) response);
     }
 
     @GetMapping("/{id}")
     public CompletableFuture<Product> getProductById(@PathVariable String id) {
-        return queryGateway.query(new GetProductByIdQuery(id), 
+        return queryGateway.query(new GetProductByIdQuery(id),
                 ResponseTypes.instanceOf(Product.class));
     }
+
+
 }
