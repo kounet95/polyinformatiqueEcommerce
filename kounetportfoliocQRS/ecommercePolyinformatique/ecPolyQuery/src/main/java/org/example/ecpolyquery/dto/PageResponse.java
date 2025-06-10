@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 /**
@@ -16,29 +15,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageResponse<T> {
-    private List<T> content;
-    private int pageNumber;
-    private int pageSize;
-    private long totalElements;
-    private int totalPages;
-    private boolean first;
-    private boolean last;
+  private List<T> content;
+  private int pageNumber;
+  private int pageSize;
+  private long totalElements;
+  private int totalPages;
+  private boolean first;
+  private boolean last;
 
-    /**
-     * Creates a PageResponse from a Spring Data Page.
-     * @param page the Spring Data Page
-     * @param <T> the type of the content
-     * @return a PageResponse
-     */
-    public static <T> PageResponse<T> from(Page<T> page) {
-        return new PageResponse<>(
-                page.getContent(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages(),
-                page.isFirst(),
-                page.isLast()
-        );
-    }
+  /**
+   * Creates a PageResponse from a Spring Data Page.
+   * @param page the Spring Data Page
+   * @param <T> the type of the content
+   * @return a PageResponse
+   */
+  public static <T> PageResponse<T> from(Page<T> page) {
+    return new PageResponse<>(
+      page.getContent(),
+      page.getNumber(),
+      page.getSize(),
+      page.getTotalElements(),
+      page.getTotalPages(),
+      page.isFirst(),
+      page.isLast()
+    );
+  }
 }

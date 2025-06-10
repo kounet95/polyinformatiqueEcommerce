@@ -15,13 +15,13 @@ public class GetAllOrdersQuery {
 public class GetAllOrderLinesQuery {
 }
 
-public class GetAllProductsQuery(
-  var page: Int = 0,
-  var size: Int = 10,
-  categoryId: String,
-  couleurs: String,
-  socialGroupId: String,
-  productSize: String
+data class GetAllProductsQuery(
+  val page: Int = 0,
+  val size: Int = 10,
+  val categoryId: String? = null,
+  val couleurs: String? = null,
+  val socialGroupId: String? = null,
+  val productSize: String? = null
 )
 
 public class GetAllProductSizesQuery {
