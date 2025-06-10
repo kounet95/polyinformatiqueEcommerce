@@ -1,7 +1,18 @@
 <app-announcement-bar></app-announcement-bar>
 
-<!-- Mobile Search Form -->
+<!-- BOUTON MOBILE SEARCH -->
+<button
+  class="btn btn-link d-md-none"
+  (click)="toggleMobileSearch()"
+  style="position: absolute; right: 1rem; top: 1rem; z-index: 1000; background: none; border: none;">
+  <mat-icon>search</mat-icon>
+</button>
+
+<!-- BARRE DE RECHERCHE MOBILE -->
 <div class="mobile-search-bar" *ngIf="showMobileSearch">
+  <button mat-icon-button (click)="toggleMobileSearch()" style="float:right;">
+    <mat-icon>close</mat-icon>
+  </button>
   <form class="search-form" (ngSubmit)="onMobileSearch()">
     <mat-form-field appearance="outline" class="mobile-search-field">
       <input matInput placeholder="Search for products..." [(ngModel)]="mobileSearch" name="mobileSearch" />
