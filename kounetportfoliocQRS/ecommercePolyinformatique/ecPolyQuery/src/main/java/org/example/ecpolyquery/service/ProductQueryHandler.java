@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,20 +19,20 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProductQueryHandler {
 
-    private final ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
-    @QueryHandler
-    public PageResponse<Product> on(GetAllProductsQuery query) {
-        log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}", query.getPage(), query.getSize());
-        Page<Product> productPage = productRepository.findAll(PageRequest.of(query.getPage(), query.getSize()));
-        return PageResponse.from(productPage);
-    }
+  @QueryHandler
+  public PageResponse<Product> on(GetAllProductsQuery query) {
+    log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}", query.getPage(), query.getSize());
+    Page<Product> productPage = productRepository.findAll(PageRequest.of(query.getPage(), query.getSize()));
+    return PageResponse.from(productPage);
+  }
 
-    @QueryHandler
-    public Product on(GetProductByIdQuery query) {
-        log.debug("Handling GetProductByIdQuery: {}", query.getId());
-        Optional<Product> optionalProduct = productRepository.findById(query.getId());
-        return optionalProduct
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
-    }
+  @QueryHandler
+  public Product on(GetProductByIdQuery query) {
+    log.debug("Handling GetProductByIdQuery: {}", query.getId());
+    Optional<Product> optionalProduct = productRepository.findById(query.getId());
+    return optionalProduct
+      .orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
+  }
 }

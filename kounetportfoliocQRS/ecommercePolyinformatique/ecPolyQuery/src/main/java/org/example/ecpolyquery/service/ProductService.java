@@ -98,8 +98,6 @@ public class ProductService {
           product.setSocialGroup(socialGroup);
         }
 
-
-
         // Update other fields
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());

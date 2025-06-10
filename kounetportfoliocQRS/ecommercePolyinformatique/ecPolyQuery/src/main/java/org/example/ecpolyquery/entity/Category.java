@@ -14,8 +14,6 @@ import java.util.List;
 @Builder
 public class Category {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     @Version
     private Long version;
