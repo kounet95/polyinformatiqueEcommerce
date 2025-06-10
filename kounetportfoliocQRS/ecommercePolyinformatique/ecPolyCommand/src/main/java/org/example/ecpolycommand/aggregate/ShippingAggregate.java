@@ -11,6 +11,8 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.CreateShippingComman
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ShippingDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingCreatedEvent;
 
+import java.time.LocalDateTime;
+
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 /**
@@ -22,30 +24,32 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Setter
 public class ShippingAggregate {
 
-    @AggregateIdentifier
-    private String shippingId;
-    private String orderId;
-    private String address;
-    private String status;
-    private String trackingNumber;
-    private String carrier;
+  @AggregateIdentifier
 
-    public ShippingAggregate() {}
+  private String shippingId;
+  private String orderId;
+  private String address;
+  private String status;
+  private LocalDateTime estimatedDeliveryDate;
+  private LocalDateTime shippingDate;
+  private LocalDateTime createdAt;
 
+  public ShippingAggregate() {}
 
-     @CommandHandler
-     public ShippingAggregate(CreateShippingCommand cmd) {
-         apply(new ShippingCreatedEvent(cmd.getId(), cmd.getShippingDTO()));
-     }
+  @CommandHandler
+  public ShippingAggregate(CreateShippingCommand cmd) {
+    apply(new ShippingCreatedEvent(cmd.getId(), cmd.getShippingDTO()));
+  }
 
-
-     @EventSourcingHandler
-     public void on(ShippingCreatedEvent event) {
-         this.shippingId = event.getId();
-         this.orderId = event.getShippingDTO().getOrderId();
-         this.address = event.getShippingDTO().getShippingAddress();
-         this.status = event.getShippingDTO().getDeliveryStatus();
-         this.trackingNumber = event.getShippingDTO().getEstimatedDeliveryDate();
-         this.carrier = event.getShippingDTO().getShippingDate();
-     }
+  @EventSourcingHandler
+  public void on(ShippingCreatedEvent event) {
+    ShippingDTO dto = event.getShippingDTO();
+    this.shippingId = event.getId();
+    this.orderId = dto.getOrderId();
+    this.address = dto.getShippingAddress();
+    this.status = dto.getDeliveryStatus();
+    this.estimatedDeliveryDate = dto.getEstimatedDeliveryDate();
+    this.shippingDate = dto.getShippingDate();
+    this.createdAt = dto.getCreatedAt();
+  }
 }

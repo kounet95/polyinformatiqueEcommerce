@@ -13,13 +13,15 @@ import java.util.List;
 @Getter @Setter
 @Builder
 public class Category {
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
+    @Version
+    private Long version;
     private String name;
-  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JsonIgnore
-  private List<Subcategory> subcategories;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Subcategory> subcategories;
 }
 

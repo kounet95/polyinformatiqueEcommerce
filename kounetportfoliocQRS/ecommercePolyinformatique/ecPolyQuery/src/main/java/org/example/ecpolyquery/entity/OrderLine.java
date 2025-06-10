@@ -23,6 +23,6 @@ public class OrderLine {
     private Orderecommerce orderecommerce;
 
     @ManyToOne
-    @JoinColumn(name = "product_size_id")
-    private ProductSize productSize;
+    @JoinColumn(name = "product_id")
+    private Product productId;
 }

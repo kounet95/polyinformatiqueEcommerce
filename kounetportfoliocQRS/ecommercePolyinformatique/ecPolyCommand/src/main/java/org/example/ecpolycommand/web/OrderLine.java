@@ -31,7 +31,7 @@ public class OrderLine {
         OrderLineDTO orderLineDTO = new OrderLineDTO(
                 orderLineId,
                 orderLine.getOrderId(),
-                orderLine.getProductSizeId(),
+                orderLine.getProductId(),
                 orderLine.getQty()
         );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderLineId, orderLineDTO);

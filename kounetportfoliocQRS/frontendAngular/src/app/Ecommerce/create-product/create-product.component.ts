@@ -14,7 +14,7 @@ export class CreateProductComponent {
 
   constructor(private productService: ProductService) {}
 
-  // Pour le <input type="file">
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {

@@ -8,7 +8,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateOrderLineCommand;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
+
 import org.example.polyinformatiquecoreapi.eventEcommerce.OrderLineCreatedEvent;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
@@ -26,7 +26,7 @@ public class OrderLineAggregate {
     @AggregateIdentifier
     private String orderLineId;
     private String orderId;
-    private String productSizeId;
+    private String productId;
     private int qty;
 
     public OrderLineAggregate() {}
@@ -42,7 +42,7 @@ public class OrderLineAggregate {
      public void on(OrderLineCreatedEvent event) {
          this.orderLineId = event.getId();
          this.orderId = event.getOrderLineDTO().getOrderId();
-         this.productSizeId = event.getOrderLineDTO().getProductSizeId();
+         this.productId = event.getOrderLineDTO().getProductId();
          this.qty = event.getOrderLineDTO().getQty();
      }
 }

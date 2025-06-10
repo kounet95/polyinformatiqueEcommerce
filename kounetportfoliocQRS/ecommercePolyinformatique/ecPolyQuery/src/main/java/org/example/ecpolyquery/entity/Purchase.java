@@ -18,15 +18,12 @@ public class Purchase {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-
     private LocalDateTime createdAt;
     private String status;
     private double total;
-
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
     private List<PurchaseItem> items;
 }

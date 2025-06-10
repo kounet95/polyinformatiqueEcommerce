@@ -21,8 +21,6 @@ public class Stock {
     private double salePrice;
     private int stockAvailable;
 
-    @ManyToOne
-    @JoinColumn(name = "product_size_id")
     private ProductSize productSize;
 
     @ManyToOne

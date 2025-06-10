@@ -10,6 +10,7 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteProductCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductDeletedEvent;
 
@@ -29,6 +30,7 @@ public class ProductAggregate {
     private String name;
     private String description;
     private double price;
+    private ProductSizeDTO size;
     private String subcategoryId;
     private String imageUrl;
 
@@ -45,6 +47,7 @@ public class ProductAggregate {
         this.name = event.getProductDTO().getName();
         this.description = event.getProductDTO().getDescription();
         this.price = event.getProductDTO().getPrice();
+        this.size=event.getProductDTO().getProductSize();
         this.subcategoryId = event.getProductDTO().getSubcategoryId();
         this.imageUrl = event.getProductDTO().getImageUrl();
     }
@@ -56,9 +59,11 @@ public class ProductAggregate {
 
     @EventSourcingHandler
     public void on(ProductDeletedEvent event) {
-        // Mark the product as deleted or perform any necessary cleanup
+
         this.name = "[deleted]";
         this.description = "[deleted]";
+        this.subcategoryId = "[deleted]";
+        this.productId="[deleted]";
         this.imageUrl = null;
     }
 }

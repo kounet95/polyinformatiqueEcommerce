@@ -22,13 +22,6 @@ export class CategoryComponent implements OnInit {
   selectedCouleurs: string[] = [];
   selectedSocialGroup: string | null = null;
   selectedProductSize: string | null = null;
-
-  announcements: string[] = [
-    "🚚 Free shipping on orders over $50",
-    "💰 30 days money back guarantee",
-    "🎁 20% off on your first order - Use code: FIRST20",
-    "⚡ Flash Sale! Up to 70% off on selected items"
-  ];
   currentIndex: number = 0;
   intervalId: any;
 

@@ -47,12 +47,12 @@ public class Order {
     @PostMapping("/{orderId}/add-product")
     public CompletableFuture<String> addProductToOrder(@PathVariable String orderId, @Valid @RequestBody OrderLineDTO orderLine) {
         String orderLineId = UUID.randomUUID().toString();
-        OrderLineDTO orderLineDTO = new OrderLineDTO(
-                orderLineId,
-                orderId,
-                orderLine.getProductSizeId(),
-                orderLine.getQty()
-        );
+      OrderLineDTO orderLineDTO = new OrderLineDTO(
+        orderLineId,
+        orderId,
+        orderLine.getProductId(),
+        orderLine.getQty()
+      );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderId, orderLineDTO);
         return commandGateway.send(command);
     }
