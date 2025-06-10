@@ -3,7 +3,6 @@ package org.example.ecpolyquery.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
-import org.example.ecpolyquery.dto.PageResponse;
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 import org.example.ecpolyquery.query.GetProductByIdQuery;
@@ -12,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,10 +22,10 @@ public class ProductQueryHandler {
   private final ProductRepository productRepository;
 
   @QueryHandler
-  public PageResponse<Product> on(GetAllProductsQuery query) {
+  public List<Product> on(GetAllProductsQuery query) {
     log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}", query.getPage(), query.getSize());
     Page<Product> productPage = productRepository.findAll(PageRequest.of(query.getPage(), query.getSize()));
-    return PageResponse.from(productPage);
+    return productPage.getContent();
   }
 
   @QueryHandler
