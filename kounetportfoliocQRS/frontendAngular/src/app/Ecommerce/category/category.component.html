@@ -46,30 +46,7 @@
 
 <div *ngIf="error" class="error-text">{{ error }}</div>
 
-<!-- Affichage Catégories (si pas de mat-accordion) -->
-<ul class="category-list list-unstyled">
-  <li *ngFor="let category of categories" class="category-item">
-    <div 
-      class="d-flex justify-content-between align-items-center category-header" 
-      [class.collapsed]="selectedCategoryId !== category.id"
-      (click)="onCategorySelect(category.id)">
-      <a href="javascript:void(0)" class="category-link">{{ category.name }}</a>
-      <span class="category-toggle" *ngIf="category.children?.length">
-        <i class="bi bi-chevron-down" *ngIf="selectedCategoryId !== category.id"></i>
-        <i class="bi bi-chevron-up" *ngIf="selectedCategoryId === category.id"></i>
-      </span>
-    </div>
-    <ul 
-      *ngIf="category.children?.length"
-      [id]="'categories-' + category.id + '-subcategories'" 
-      class="subcategory-list list-unstyled collapse ps-3 mt-2"
-      [class.show]="selectedCategoryId === category.id">
-      <li *ngFor="let sub of category.children">
-        <a href="javascript:void(0)" class="subcategory-link">{{ sub.name }}</a>
-      </li>
-    </ul>
-  </li>
-</ul>
+
 
 <!-- Filtres par couleur -->
 <div class="color-filter-widget widget-item">
