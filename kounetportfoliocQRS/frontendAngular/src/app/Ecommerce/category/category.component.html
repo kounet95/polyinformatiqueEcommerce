@@ -22,9 +22,9 @@
     </mat-form-field>
   </form>
 </div>
-
 <div class="main-layout">
-  <div class="category-card">
+  <div class="sidebar">
+    <!-- Bloc Catégories -->
     <div class="category-card" *ngIf="!loading && !error">
       <h3 class="widget-title mat-headline">Categories</h3>
       <mat-accordion displayMode="flat" class="category-accordion">
@@ -45,36 +45,31 @@
         </ng-container>
       </mat-accordion>
     </div>
-  </div>
-  <div class="main-content">
-    <!-- Loading & Error states -->
-    <mat-card *ngIf="loading" class="loader-card">
-      <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-      <div class="loader-text">Chargement des catégories…</div>
-    </mat-card>
-  </div>
-</div>
 
-<div *ngIf="error" class="error-text">{{ error }}</div>
-
-
-
-<!-- Filtres par couleur -->
-<div class="color-filter-widget widget-item">
-  <h3 class="widget-title">Filter by Color</h3>
-  <div class="color-filter-content">
-    <div class="color-options">
-      <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
-        <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
-         (change)="onCouleurCheckboxChange(color, $event)">
-        <label class="form-check-label" [for]="'color-' + color">
-          <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
-        </label>
+    <!-- Bloc Couleurs (pareil qu'une carte) -->
+    <div class="couleur-card">
+      <div class="color-filter-widget widget-item">
+        <h3 class="widget-title">Filter by Color</h3>
+        <div class="color-filter-content">
+          <div class="color-options">
+            <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
+              <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
+                [checked]="selectedCouleurs.includes(color)"
+                (change)="onCouleurCheckboxChange(color, $event)">
+              <label class="form-check-label" [for]="'color-' + color">
+                <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
+              </label>
+            </div>
+          </div>
+          <!-- Boutons Clear All et Appliquer le filtre -->
+          <div class="color-filter-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Clear All</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Appliquer le filtre</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 <!-- Affichage produits filtrés -->
 <div class="row gy-4 mt-4">
   <div class="col-lg-6" *ngFor="let product of products">

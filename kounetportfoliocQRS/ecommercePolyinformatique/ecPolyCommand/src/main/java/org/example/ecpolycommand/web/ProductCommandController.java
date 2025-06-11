@@ -25,12 +25,20 @@ public class ProductCommandController {
   private final EventStore eventStore;
   private final ImageStorageService imageStorageService;
 
-  public ProductCommandController(CommandGateway commandGateway, EventStore eventStore, ImageStorageService imageStorageService) {
+  public ProductCommandController(
+    CommandGateway commandGateway,
+    EventStore eventStore,
+    ImageStorageService imageStorageService
+  ) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
     this.imageStorageService = imageStorageService;
   }
 
+  /**
+   * Crée un produit avec ou sans upload d'image.
+   * Reçoit le produit et le fichier image dans le même POST multipart.
+   */
   @PostMapping(value = "/create", consumes = {"multipart/form-data"})
   @PreAuthorize("hasAuthority('ADMIN')")
   public CompletableFuture<String> createProduct(
@@ -39,7 +47,7 @@ public class ProductCommandController {
   ) {
     String productId = UUID.randomUUID().toString();
 
-    // Upload de média si présent
+    // Upload l'image si présente
     if (mediaFile != null && !mediaFile.isEmpty()) {
       try {
         String imageUrl = imageStorageService.uploadImage(mediaFile);
@@ -52,6 +60,7 @@ public class ProductCommandController {
         return failed;
       }
     }
+
     ProductDTO productDTO = new ProductDTO(
       productId,
       product.getName(),
@@ -62,32 +71,41 @@ public class ProductCommandController {
       product.getSubcategoryId(),
       product.getSocialGroupId(),
       product.getImageUrl(),
-      product.getActive() // Correction getter
+      product.getIsActive()
     );
 
     CreateProductCommand command = new CreateProductCommand(productId, productDTO);
     return commandGateway.send(command);
   }
 
+  /**
+   * Récupère les événements d'un agrégat produit.
+   */
   @GetMapping("/events/{aggregateId}")
   public Stream<?> eventsStream(@PathVariable String aggregateId) {
     return eventStore.readEvents(aggregateId).asStream();
   }
 
-  @PostMapping("/upload-image")
-  public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-    try {
-      String imageUrl = imageStorageService.uploadImage(file);
-      return ResponseEntity.ok(imageUrl);
-    } catch (IOException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body("Image upload failed: " + e.getMessage());
-    }
-  }
+//  /**
+//   * Upload d'une image seule (retourne directement l'URL Drive).
+//   */
+//  @PostMapping("/upload-image")
+//  public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+//    try {
+//      String imageUrl = imageStorageService.uploadImage(file);
+//      return ResponseEntity.ok(imageUrl);
+//    } catch (IOException e) {
+//      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//        .body("Image upload failed: " + e.getMessage());
+//    }
+//  }
 
+  /**
+   * Gestion centralisée des exceptions.
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<String> exceptionHandler(Exception exception) {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-      .body(" Error: " + exception.getMessage());
+      .body("Error: " + exception.getMessage());
   }
 }

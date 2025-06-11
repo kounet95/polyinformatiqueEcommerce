@@ -7,7 +7,7 @@
 
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3" ngModel></textarea>
+    <textarea class="form-control" id="description" name="description" rows="3" ngModel required></textarea>
   </div>
 
   <div class="mb-3">
@@ -16,18 +16,15 @@
   </div>
 
   <div class="mb-3">
-    <label for="imageUrl" class="form-label">Image (URL)</label>
-    <input type="text" class="form-control" id="imageUrl" name="imageUrl" ngModel>
+    <label for="media" class="form-label">Image (fichier)</label>
+    <input type="file" class="form-control" id="media" name="media" (change)="onFileSelected($event)">
   </div>
 
   <div class="mb-3">
-    <label for="media" class="form-label">Image locale (fichier)</label>
-    <input type="file" class="form-control" id="media" name="media" (change)="onFileSelected($event)" #mediaFileInput>
-  </div>
-
-  <div class="mb-3">
-    <label for="couleurs" class="form-label">Couleurs (séparées par une virgule)</label>
-    <input type="text" class="form-control" id="couleurs" name="couleurs" ngModel>
+    <label for="productSize" class="form-label">Taille du produit*</label>
+    <select class="form-control" id="productSize" name="productSize" [(ngModel)]="selectedSize" required>
+      <option *ngFor="let size of sizeOptions" [value]="size">{{ size }}</option>
+    </select>
   </div>
 
   <div class="mb-3">

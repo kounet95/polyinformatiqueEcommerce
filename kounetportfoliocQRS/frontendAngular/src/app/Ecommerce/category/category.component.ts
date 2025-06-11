@@ -86,13 +86,23 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  // Méthode appelée depuis le template, évite le cast dans le HTML
+clearAllColors(): void {
+  
+  this.selectedCouleurs = [];
+  this.fetchProducts();
+
+  
+}
+
+applyColorFilters(): void {
+  this.fetchProducts();
+}
+  
   onCouleurCheckboxChange(couleur: string, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.onCouleurChange(couleur, checked);
   }
 
-  // Logique de gestion du tableau de couleurs sélectionnées
   onCouleurChange(couleur: string, checked: boolean): void {
     if (checked && !this.selectedCouleurs.includes(couleur)) {
       this.selectedCouleurs.push(couleur);

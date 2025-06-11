@@ -135,23 +135,25 @@ export interface ProductDTO {
   name: string;
   description: string;
   price: number;
-  createdAt: string;
+  createdAt: string;  
   closedAt?: string;
   subcategoryId: string;
   socialGroupId: string;
   imageUrl: string;
   isActive: boolean;
   couleurs?: string; 
+ productSize: ProductSize;
 }
 
 // ===============================
 // ========== ProductSizeDTO =====
 // ===============================
-
-export interface ProductSizeDTO {
-  id: string;
-  size: string;
-  productId: string;
+export enum ProductSize {
+  SMALL = "SMALL",
+  MEDIUM = "MEDIUM",
+  LARGE = "LARGE",
+  XL = "XL",
+  XXL = "XXL"
 }
 
 // ===============================

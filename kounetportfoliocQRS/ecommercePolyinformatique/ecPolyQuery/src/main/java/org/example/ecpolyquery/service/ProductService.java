@@ -56,7 +56,7 @@ public class ProductService {
       .name(productDTO.getName())
       .description(productDTO.getDescription())
       .createdAt(createdAt)
-      .isActive(productDTO.getActive())
+      .isActive(productDTO.getIsActive())
       .subcategory(subcategory)
       .socialGroup(socialGroup)
       .sizes(mapProductSize(productDTO.getProductSize()))
@@ -101,7 +101,7 @@ public class ProductService {
         // Update other fields
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
-        product.setActive(productDTO.getActive());
+        product.setActive(productDTO.getIsActive());
         product.setSizes(mapProductSize(productDTO.getProductSize()));
 
         productRepository.save(product);

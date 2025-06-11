@@ -10,31 +10,50 @@
   position: relative;
 
 }
+ .main-layout {
+  display: flex;
+  align-items: flex-start;
+}
 
-/* Ajoute ce conteneur autour de ta structure */
+.sidebar {
+  width: 350px;
+  min-width: 250px;
+  max-width: 400px;
+  margin-right: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
 .main-layout {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
 
+.sidebar {
+  width: 350px;
+  min-width: 250px;
+  max-width: 400px;
+  margin-right: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-.category-card {
+.couleur-card {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 2rem 1.5rem;
   background: #fff;
-  max-width: 350px;
-  margin: 2rem 1.5rem 1rem 0; /* marge à droite */
   box-shadow: 0 4px 16px 0 rgb(80 0 128 / 8%);
-  position: relative;
+  margin-bottom: 1.5rem;
 }
-
 
 .main-content {
   flex: 1;
 }
-
 .widget-title {
   color: #6b003e;
   font-weight: 700;

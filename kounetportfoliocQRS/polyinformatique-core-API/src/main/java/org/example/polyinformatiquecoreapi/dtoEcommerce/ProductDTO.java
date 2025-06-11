@@ -15,61 +15,31 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 public class ProductDTO {
-    private String id;
+  private String id;
 
-    @NotBlank(message = "Product name cannot be blank")
-    private String name;
+  @NotBlank(message = "Product name cannot be blank")
+  private String name;
 
-    @NotBlank(message = "Description cannot be blank")
-    private String description;
+  @NotBlank(message = "Description cannot be blank")
+  private String description;
 
-    @Min(value = 0, message = "Price must be positive")
-    private double price;
+  @Min(value = 0, message = "Price must be positive")
+  private double price;
 
-    @Min(value = 0, message = "Price must be positive")
-    private ProductSizeDTO productSize;
-    @NotBlank(message = "CreatedAt cannot be blank")
-    private LocalDateTime createdAt;
-    @NotBlank(message = "Subcategory ID cannot be blank")
-    private String subcategoryId;
-    @NotBlank(message = "Social group ID cannot be blank")
-    private String socialGroupId;
-    @NotBlank(message = "Image URL cannot be blank")
-    private String imageUrl;
+  @NotNull(message = "ProductSize cannot be null")
+  private ProductSizeDTO productSize;
 
-    public Boolean getActive() {
-        return isActive;
-    }
-    public String getImageUrl() {
-        return imageUrl;
-    }
+  @NotNull(message = "CreatedAt cannot be null")
+  private LocalDateTime createdAt;
 
-    public String getSocialGroupId() {
-        return socialGroupId;
-    }
+  @NotBlank(message = "Subcategory ID cannot be blank")
+  private String subcategoryId;
 
-    public String getSubcategoryId() {
-        return subcategoryId;
-    }
+  @NotBlank(message = "Social group ID cannot be blank")
+  private String socialGroupId;
 
+  private String imageUrl;
 
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    @NotNull(message = "isActive cannot be null")
-    private Boolean isActive;
+  @NotNull(message = "isActive cannot be null")
+  private Boolean isActive;
 }
