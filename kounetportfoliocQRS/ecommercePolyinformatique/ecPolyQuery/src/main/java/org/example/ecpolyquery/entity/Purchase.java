@@ -15,8 +15,7 @@ import java.util.List;
 @Builder
 public class Purchase {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
     private LocalDateTime createdAt;
     private String status;

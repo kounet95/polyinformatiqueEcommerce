@@ -12,8 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Builder
 public class OrderLine {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
 
     private int qty;

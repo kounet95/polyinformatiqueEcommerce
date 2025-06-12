@@ -289,5 +289,5 @@ export interface CustomerEcommerceDTO {
   phone: string;
   shippingAddress: string;
   billingAddress: string;
-  createdAt: string; // ISO 8601 string (LocalDateTime in Java)
+  createdAt: string; 
 }

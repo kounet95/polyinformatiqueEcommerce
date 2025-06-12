@@ -15,7 +15,7 @@ public class StockDTO {
     private String id;
 
     @NotBlank(message = "Product size ID cannot be blank")
-    private String productSizeId;
+    private ProductSizeDTO productSizeId;
 
     @NotBlank(message = "Supplier ID cannot be blank")
     private String supplierId;

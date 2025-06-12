@@ -15,8 +15,7 @@ import java.util.List;
 @Builder
 public class Product {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
     private String name;
     private String description;

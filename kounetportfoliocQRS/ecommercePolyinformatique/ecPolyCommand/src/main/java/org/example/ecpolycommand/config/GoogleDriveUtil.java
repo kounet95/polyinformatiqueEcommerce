@@ -15,7 +15,7 @@ public class GoogleDriveUtil {
   private static final String APPLICATION_NAME = "polyinformatiqueEcommerce";
   // Mets ici le chemin exact de ton fichier credentials.json
   private static final String SERVICE_ACCOUNT_JSON_PATH =
-    "C:/Users/koune/Documents/polyinformatiqueEcommerce/kounetportfoliocQRS/ecommercePolyinformatique/ecPolyCommand/credentials/credentials.json";
+    "/credentials/credentials.json";
   public static Drive getDriveService() throws IOException, GeneralSecurityException {
     GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream(SERVICE_ACCOUNT_JSON_PATH))
       .createScoped(Collections.singleton(DriveScopes.DRIVE_FILE));

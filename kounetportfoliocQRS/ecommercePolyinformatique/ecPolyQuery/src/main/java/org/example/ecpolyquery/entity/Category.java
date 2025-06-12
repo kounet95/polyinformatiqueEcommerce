@@ -15,8 +15,6 @@ import java.util.List;
 public class Category {
     @Id
     private String id;
-    @Version
-    private Long version;
     private String name;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore

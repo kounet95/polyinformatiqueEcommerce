@@ -1,46 +1,93 @@
-<h2>Créer un produit</h2>
-<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate>
   <div class="mb-3">
-    <label for="name" class="form-label">Nom du produit*</label>
-    <input type="text" class="form-control" id="name" name="name" ngModel required>
+    <label for="name" class="form-label">Nom du produit</label>
+    <input type="text" id="name" class="form-control" formControlName="name" autocomplete="off"
+      [class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+    <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="invalid-feedback">
+      <span *ngIf="productForm.get('name')?.errors?.['required']">Nom requis.</span>
+      <span *ngIf="productForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
+    </div>
   </div>
-
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3" ngModel required></textarea>
+    <textarea id="description" class="form-control" formControlName="description"
+      [class.is-invalid]="productForm.get('description')?.invalid && productForm.get('description')?.touched"></textarea>
+    <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="invalid-feedback">
+      <span>Description requise.</span>
+    </div>
   </div>
-
   <div class="mb-3">
-    <label for="price" class="form-label">Prix*</label>
-    <input type="number" class="form-control" id="price" name="price" ngModel required min="0">
+    <label for="price" class="form-label">Prix</label>
+    <input type="number" id="price" class="form-control" formControlName="price"
+      [class.is-invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+    <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="invalid-feedback">
+      <span>Prix requis et positif.</span>
+    </div>
   </div>
-
   <div class="mb-3">
-    <label for="media" class="form-label">Image (fichier)</label>
-    <input type="file" class="form-control" id="media" name="media" (change)="onFileSelected($event)">
+    <label for="categoryId" class="form-label">Catégorie</label>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Catégorie</mat-label>
+      <mat-select formControlName="categoryId" required>
+        <mat-option *ngFor="let cat of categories" [value]="cat.id">
+          {{ cat.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="invalid-feedback">
+      Catégorie requise.
+    </div>
   </div>
-
   <div class="mb-3">
-    <label for="productSize" class="form-label">Taille du produit*</label>
-    <select class="form-control" id="productSize" name="productSize" [(ngModel)]="selectedSize" required>
-      <option *ngFor="let size of sizeOptions" [value]="size">{{ size }}</option>
-    </select>
+    <label for="subcategoryId" class="form-label">Sous-catégorie</label>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Sous-catégorie</mat-label>
+      <mat-select formControlName="subcategoryId" required>
+        <mat-option *ngFor="let sc of sousCategories" [value]="sc.id">
+          {{ sc.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="productForm.get('subcategoryId')?.invalid && productForm.get('subcategoryId')?.touched" class="invalid-feedback">
+      Sous-catégorie requise.
+    </div>
   </div>
-
   <div class="mb-3">
-    <label for="subcategoryId" class="form-label">Sous-catégorie*</label>
-    <input type="text" class="form-control" id="subcategoryId" name="subcategoryId" ngModel required>
+    <label for="socialGroupId" class="form-label">Groupe social</label>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Groupe social</mat-label>
+      <mat-select formControlName="socialGroupId" required>
+        <mat-option *ngFor="let sg of categoriesSociales" [value]="sg.id">
+          {{ sg.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="productForm.get('socialGroupId')?.invalid && productForm.get('socialGroupId')?.touched" class="invalid-feedback">
+      Groupe social requis.
+    </div>
   </div>
-
   <div class="mb-3">
-    <label for="socialGroupId" class="form-label">Groupe social*</label>
-    <input type="text" class="form-control" id="socialGroupId" name="socialGroupId" ngModel required>
+    <label for="productSize" class="form-label">Taille</label>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Taille</mat-label>
+      <mat-select formControlName="productSize">
+        <mat-option *ngFor="let size of sizeOptions" [value]="size">{{ size }}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="isActive" name="isActive" ngModel>
-    <label class="form-check-label" for="isActive">Actif</label>
+  <div class="mb-3">
+    <label for="couleurs" class="form-label">Couleurs</label>
+    <input type="text" id="couleurs" class="form-control" formControlName="couleurs">
   </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Créer le produit</button>
+  <div class="mb-3">
+    <label for="isActive" class="form-label">Actif ?</label>
+    <input type="checkbox" id="isActive" formControlName="isActive">
+  </div>
+  <div class="mb-3">
+    <label for="file" class="form-label">Image produit</label>
+    <input type="file" id="file" (change)="onFileSelected($event)">
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
 </form>

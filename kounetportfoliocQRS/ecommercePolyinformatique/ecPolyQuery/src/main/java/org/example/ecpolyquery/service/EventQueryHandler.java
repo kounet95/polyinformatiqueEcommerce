@@ -16,7 +16,7 @@ public class EventQueryHandler {
         log.debug("Handling WatchEventQuery: {}", query.getId());
         // Implementation depends on what WatchEventQuery is supposed to do
         // and what entity or repository it should interact with
-        
+
         // This is a placeholder implementation
         return "Event watched with id: " + query.getId();
     }

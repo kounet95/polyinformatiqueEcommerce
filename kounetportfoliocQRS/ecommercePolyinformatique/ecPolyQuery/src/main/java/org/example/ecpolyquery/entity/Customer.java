@@ -15,8 +15,7 @@ import java.util.List;
 @Builder
 public class Customer {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
     // Champs e-commerce
     private String firstname;

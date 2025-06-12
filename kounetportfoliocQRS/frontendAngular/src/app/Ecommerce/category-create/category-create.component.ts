@@ -34,7 +34,7 @@ export class CategoryCreateComponent {
     }
 
     const category: CategoryDTO = {
-      id: '', // laissé vide, généré côté backend normalement
+      id: '', 
       name: this.categoryForm.value.name
     };
 
