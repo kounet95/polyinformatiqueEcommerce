@@ -57,6 +57,7 @@ import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcem
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
+import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
 
 
 
@@ -102,7 +103,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CategoryComponent,
     CategoryCreateComponent,
     CreateProductComponent,
-    SousCategoryCreateComponent
+    SousCategoryCreateComponent,
+    CreatGroupeSocialComponent
     
   ],
   imports: [

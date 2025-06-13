@@ -21,6 +21,7 @@ import { CategoryCreateComponent } from './Ecommerce/category-create/category-cr
 import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 import { ProductComponent } from './Ecommerce/products/products.component';
+import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'product', component: DetaillProductComponent },
   { path: 'souscategorie', component: SousCategoryCreateComponent },
+  { path: 'socialgroupe', component: CreatGroupeSocialComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'product', component: ProductComponent },
   { path: 'category', component: CategoryComponent },

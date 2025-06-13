@@ -60,6 +60,7 @@ public class ProductService {
       .subcategory(subcategory)
       .socialGroup(socialGroup)
       .sizes(mapProductSize(productDTO.getProductSize()))
+      .image(productDTO.getImageUrl())
       .build();
 
     productRepository.save(product);
@@ -103,6 +104,7 @@ public class ProductService {
         product.setDescription(productDTO.getDescription());
         product.setActive(productDTO.getIsActive());
         product.setSizes(mapProductSize(productDTO.getProductSize()));
+        product.setImage(productDTO.getImageUrl());
 
         productRepository.save(product);
         log.info("Product updated with ID: {}", product.getId());

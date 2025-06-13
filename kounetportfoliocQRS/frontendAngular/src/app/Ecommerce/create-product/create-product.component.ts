@@ -68,23 +68,6 @@ export class CreateProductComponent implements OnInit {
       });
     });
 
-    // Si tu veux filtrer les groupes sociaux selon la sous-catégorie, décommente ce bloc et adapte selon ta logique
-    /*
-    this.productForm.get('subcategoryId')?.valueChanges.subscribe(subcategoryId => {
-      if (!subcategoryId) {
-        this.productForm.patchValue({ socialGroupId: null });
-        return;
-      }
-      this.categoriesocialesService.getAllSocialGroups().subscribe({
-        next: data => {
-          // Exemple: filtre les groupes sociaux liés à cette sous-catégorie
-          this.categoriesSociales = data.filter(sg => sg.subcategoryIds?.includes(subcategoryId));
-          this.productForm.patchValue({ socialGroupId: null });
-        },
-        error: () => this.errorMessage = "Impossible de charger les groupes sociaux."
-      });
-    });
-    */
   }
 
   loadCategories(): void {

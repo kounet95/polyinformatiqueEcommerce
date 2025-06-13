@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 public class Product {
     @Id
-
     private String id;
     private String name;
     private String description;
@@ -31,6 +30,6 @@ public class Product {
     private ProductSize sizes;
     @OneToMany(mappedBy = "productId")
     private List<OrderLine> orderLines;
-
+    private String image;
 }
 

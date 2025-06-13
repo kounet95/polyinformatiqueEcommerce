@@ -136,7 +136,6 @@ export interface ProductDTO {
   description: string;
   price: number;
   createdAt: string;  
-  closedAt?: string;
   subcategoryId: string;
   socialGroupId: string;
   imageUrl: string;
