@@ -1,39 +1,57 @@
-<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
-  <div class="mb-3">
-    <label for="name" class="form-label">Nom de la Sous-Catégorie</label>
-    <input
-      type="text"
-      id="name"
-      class="form-control"
-      formControlName="name"
-      [class.is-invalid]="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
-      placeholder="Saisir un nom (2 à 100 caractères)"
-      autocomplete="off"
-    >
-    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="invalid-feedback">
-      <span *ngIf="categoryForm.get('name')?.errors?.['required']">Le nom est requis.</span>
-      <span *ngIf="categoryForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
-      <span *ngIf="categoryForm.get('name')?.errors?.['maxlength']">Maximum 100 caractères.</span>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3 mx-auto">
+      <div class="card shadow p-4">  <h4 class="mb-4 text-primary">Créer une Sous-Catégorie</h4>
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
+
+    <!-- Nom de la sous-catégorie -->
+    <div class="mb-4">
+      <label for="name" class="form-label fw-semibold">Nom de la Sous-Catégorie</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        formControlName="name"
+        [class.is-invalid]="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+        placeholder="Ex. : Accessoires électroniques"
+        autocomplete="off"
+      >
+      <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="invalid-feedback">
+        <span *ngIf="categoryForm.get('name')?.errors?.['required']">Le nom est requis.</span>
+        <span *ngIf="categoryForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
+        <span *ngIf="categoryForm.get('name')?.errors?.['maxlength']">Maximum 100 caractères.</span>
+      </div>
+    </div>
+
+    <!-- Catégorie parente -->
+    <div class="mb-4">
+      <label for="categoryId" class="form-label fw-semibold">Catégorie parente</label>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="categoryId" required>
+          <mat-option *ngFor="let cat of categories" [value]="cat.id">
+            {{ cat.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="categoryForm.get('categoryId')?.invalid && categoryForm.get('categoryId')?.touched" class="text-danger small mt-1">
+        La catégorie est requise.
+      </div>
+    </div>
+
+    <!-- Bouton submit -->
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading || categoryForm.invalid">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Créer
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  </form>
+</div>
     </div>
   </div>
-
-  <div class="mb-3">
-    <label for="categoryId" class="form-label">Catégorie parente</label>
-    <mat-form-field appearance="fill" style="width: 100%;">
-      <mat-label>Catégorie</mat-label>
-       <mat-select formControlName="categoryId" required>
-       <mat-option *ngFor="let cat of categories" [value]="cat.id">
-      {{ cat.name }}
-    </mat-option>
-  </mat-select>
-    </mat-form-field>
-    <div *ngIf="categoryForm.get('categoryId')?.invalid && categoryForm.get('categoryId')?.touched" class="invalid-feedback">
-      <span>La catégorie est requise.</span>
-    </div>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
-
-  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
-</form>
+</div>

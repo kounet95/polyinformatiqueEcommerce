@@ -21,7 +21,7 @@ import { ArticleRecentComponent } from "../article-recent/article-recent.compone
   selector: 'app-acceuil',
   templateUrl: './acceuil.component.html',
   styleUrls: ['./acceuil.component.css'],
-  standalone: true, 
+  standalone: true,
   imports: [CommonModule,
     RouterModule, AboutComponent,
    MatToolbarModule,
@@ -31,15 +31,15 @@ import { ArticleRecentComponent } from "../article-recent/article-recent.compone
     MatSidenavModule,
     MatListModule,
     RouterModule,
-    CommonModule,         
+    CommonModule,
     MatCardModule,  ]
 })
 export class AcceuilComponent {
 services = [
-    { icon: 'build', title: 'Conception de sites web', desc: 'Sites web modernes et performants', color: 'primary' },
-    { icon: 'build', title: 'Conception d\'applications web', desc: 'Applications web modernes et performants', color: 'primary' },
-    { icon: 'security', title: '', desc: 'Preparations aux certifications professionnelles informatiques(CCNA, CCNP, AWS, AZURE)', color: 'primary' },
-    { icon: 'brush', title: 'Commerce vestimentaire', desc: 'Vetements culturels', color: 'warn' },
+    { icon: 'build', title: 'Conception de sites web', desc: 'Sites web modernes et performants', color: 'primary', image:'websitebuilders.png' },
+    { icon: 'build', title: 'Conception d\'applications web et mobiles', desc: 'Applications web modernes et performants', color: 'primary', image:'webapps.jpg' },
+    { icon: 'security', title: 'Prepa', desc: 'Preparations aux certifications professionnelles informatiques(CCNA, CCNP, AWS, AZURE)', color: 'primary', image:'ccna.png' },
+    { icon: 'brush', title: 'Commerce vestimentaire', desc: 'Vetements culturels', color: 'warn' , image:'clothes.jpeg'},
   ];
 
 }
