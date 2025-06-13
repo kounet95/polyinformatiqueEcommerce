@@ -36,15 +36,15 @@ export class BlogComponent implements OnInit {
   breadcrumbs: Breadcrumb[] = [];
   blogs = [
     {
-      image: 'assets/images/blog1.jpg',
+      image: 'assets/img/blog/blog-1.jpg',
       alt: 'Personne travaillant sur ordinateur dans un bureau'
     },
     {
-      image: 'assets/images/blog2.jpg',
+      image: 'assets/img/blog/blog-2.jpg',
       alt: 'Personne utilisant un ordinateur portable'
     },
     {
-      image: 'assets/images/blog3.jpg',
+      image: 'assets/img/blog/blog-3.jpg',
       alt: 'Collaboration autour de table avec ordinateurs'
     }
   ];
