@@ -2,35 +2,37 @@ package org.example.ecpolyquery.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity(name = "eco_product")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Product {
-    @Id
-    private String id;
-    private String name;
-    private Double price;
-    private String description;
-    private LocalDateTime createdAt;
-    private boolean isActive;
-    private String couleurs;
-    @ManyToOne
-    @JoinColumn(name = "subcategory_id")
-    private Subcategory subcategory;
-    @ManyToOne
-    @JoinColumn(name = "social_group_id")
-    private SocialGroup socialGroup;
-    private ProductSize sizes;
-    @OneToMany(mappedBy = "productId")
-    private List<OrderLine> orderLines;
-    private String urlimage;
-}
+  @Id
+  private String id;
+  private String name;
+  private Double price;
+  private String description;
+  private LocalDateTime createdAt;
+  private boolean isActive;
+  private String couleurs;
+  private String urlimage;
 
+  @ManyToOne
+  @JoinColumn(name = "subcategory_id")
+  private Subcategory subcategory;
+
+  @ManyToOne
+  @JoinColumn(name = "social_group_id")
+  private SocialGroup socialGroup;
+
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+  private List<ProductSize> sizes;
+
+  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+  private List<OrderLine> orderLines;
+}

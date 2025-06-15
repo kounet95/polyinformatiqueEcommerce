@@ -15,7 +15,7 @@ public class StockDTO {
     private String id;
 
     @NotBlank(message = "Product size ID cannot be blank")
-    private ProductSizeDTO productSizeId;
+    private String productSizeId;
 
     @NotBlank(message = "Supplier ID cannot be blank")
     private String supplierId;
@@ -28,9 +28,6 @@ public class StockDTO {
 
     @Min(value = 0, message = "Sale price must be positive")
     private double salePrice;
-
-    @Min(value = 0, message = "Stock available must be zero or positive")
-    private int stockAvailable;
 
     @Min(value = 0, message = "Quantity must be zero or positive")
     private double quantity;

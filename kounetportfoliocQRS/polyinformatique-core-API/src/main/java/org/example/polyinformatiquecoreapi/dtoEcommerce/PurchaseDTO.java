@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
-
+@NoArgsConstructor
 @Setter
 public class PurchaseDTO {
     private String id;

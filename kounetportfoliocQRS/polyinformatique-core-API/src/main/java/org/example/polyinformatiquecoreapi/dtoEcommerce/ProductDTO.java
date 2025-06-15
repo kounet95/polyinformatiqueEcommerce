@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -27,11 +28,12 @@ public class ProductDTO {
   private double price;
 
   @NotNull(message = "ProductSize cannot be null")
-  private ProductSizeDTO productSize;
+  private String productSize;
 
   @NotNull(message = "CreatedAt cannot be null")
   private LocalDateTime createdAt;
-
+  @NotBlank(message = "Subcategory ID cannot be blank")
+  private String models;
   @NotBlank(message = "Subcategory ID cannot be blank")
   private String subcategoryId;
 

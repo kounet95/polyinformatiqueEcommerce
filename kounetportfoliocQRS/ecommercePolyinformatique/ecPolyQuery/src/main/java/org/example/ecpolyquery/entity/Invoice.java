@@ -2,21 +2,30 @@ package org.example.ecpolyquery.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-@Entity(name = "eco_invoice_category")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Invoice {
-    @Id
+  @Id
+  private String id;
+  private double amount;
+  private double restPayment;
+  private String paymentStatus;
+  private String paymentMethod;
 
-    private String id;
-    private double amount;
-    private String paymentStatus;
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Orderecommerce orderecommerce;
+  @OneToOne
+  @JoinColumn(name = "order_id")
+  private Orderecommerce orderecommerce;
+
+  @ManyToOne
+  @JoinColumn(name = "customer_id")
+  private Customer customer;
+
+  @ManyToOne
+  @JoinColumn(name = "supplier_id")
+  private Supplier supplier;
 }

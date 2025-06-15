@@ -1,33 +1,27 @@
 package org.example.ecpolyquery.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
 import java.util.List;
 
-@Entity(name = "eco_supplier")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Supplier {
-    @Id
-    private String id;
+  @Id
+  private String id;
 
-    private String fullname;
-    private String city;
-    private String email;
-    private String personToContact;
+  private String fullname;
+  private String city;
+  private String email;
+  private String personToContact;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<Stock> stocks;
+  @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+  private List<Stock> stocks;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<Purchase> purchases;
+  @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+  private List<Purchase> purchases;
 }
-

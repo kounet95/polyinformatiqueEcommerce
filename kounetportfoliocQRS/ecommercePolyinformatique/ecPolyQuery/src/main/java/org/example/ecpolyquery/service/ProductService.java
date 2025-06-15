@@ -8,6 +8,8 @@ import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.entity.SocialGroup;
 import org.example.ecpolyquery.entity.Subcategory;
 import org.example.ecpolyquery.repos.ProductRepository;
+
+import org.example.ecpolyquery.repos.ProductSizeRepository;
 import org.example.ecpolyquery.repos.SocialGroupRepository;
 import org.example.ecpolyquery.repos.SubcategoryRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
@@ -18,6 +20,8 @@ import org.example.polyinformatiquecoreapi.eventEcommerce.ProductUpdatedEvent;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -27,10 +31,9 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final SubcategoryRepository subcategoryRepository;
   private final SocialGroupRepository socialGroupRepository;
+  private final ProductSizeRepository productSizeRepository;
 
-  private ProductSize mapProductSize(ProductSizeDTO dto) {
-    return dto != null ? ProductSize.valueOf(dto.name()) : null;
-  }
+
 
   @EventHandler
   public void on(ProductCreatedEvent event) {
@@ -60,11 +63,20 @@ public class ProductService {
       .isActive(productDTO.getIsActive())
       .subcategory(subcategory)
       .socialGroup(socialGroup)
-      .sizes(mapProductSize(productDTO.getProductSize()))
       .urlimage(productDTO.getImageUrl())
       .build();
 
+    // D'abord on sauvegarde le produit pour générer la relation
     productRepository.save(product);
+
+    // Puis on mappe et sauvegarde les tailles
+    List<ProductSize> sizes = mapProductSizes(productDTO.getProductSizes(), product);
+    if (!sizes.isEmpty()) {
+      productSizeRepository.saveAll(sizes);
+      product.setSizes(sizes);
+      productRepository.save(product);
+    }
+
     log.info("Product created with ID: {}", product.getId());
   }
 
@@ -93,7 +105,6 @@ public class ProductService {
           product.setSubcategory(subcategory);
         }
 
-
         if (productDTO.getSocialGroupId() != null && !productDTO.getSocialGroupId().isEmpty()) {
           SocialGroup socialGroup = socialGroupRepository.findById(productDTO.getSocialGroupId())
             .orElseThrow(() -> new RuntimeException("SocialGroup not found with id: " + productDTO.getSocialGroupId()));
@@ -105,8 +116,15 @@ public class ProductService {
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setActive(productDTO.getIsActive());
-        product.setSizes(mapProductSize(productDTO.getProductSize()));
         product.setUrlimage(productDTO.getImageUrl());
+
+        // Optionally update sizes: (attention, ici, stratégie simple : on supprime et recrée tout)
+        if (productDTO.getProductSizes() != null) {
+          productSizeRepository.deleteAll(product.getSizes());
+          List<ProductSize> newSizes = mapProductSizes(productDTO.getProductSizes(), product);
+          productSizeRepository.saveAll(newSizes);
+          product.setSizes(newSizes);
+        }
 
         productRepository.save(product);
         log.info("Product updated with ID: {}", product.getId());

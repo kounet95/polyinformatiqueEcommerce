@@ -2,28 +2,27 @@ package org.example.ecpolyquery.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-@Entity(name = "eco_stock")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Stock {
-    @Id
+  @Id
+  private String id;
 
-    private String id;
+  private double purchasePrice;
+  private double promoPrice;
+  private double salePrice;
+  private int stockAvailable;
 
-    private double purchasePrice;
-    private double promoPrice;
-    private double salePrice;
-    private int stockAvailable;
+  @ManyToOne
+  @JoinColumn(name = "product_size_id")
+  private ProductSize productSize;
 
-    private ProductSize productSize;
-
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+  @ManyToOne
+  @JoinColumn(name = "supplier_id")
+  private Supplier supplier;
 }
-

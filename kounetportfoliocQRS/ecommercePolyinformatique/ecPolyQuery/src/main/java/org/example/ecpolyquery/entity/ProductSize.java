@@ -1,16 +1,26 @@
 package org.example.ecpolyquery.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import lombok.*;
+import jakarta.persistence.*;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public enum ProductSize {
+@Setter
+@Builder
+public class ProductSize {
+  @Id
+  private String id;
 
-  SMALL,
-  MEDIUM,
-  LARGE,
-  XL ,
-  XXL
+  private SizeProduct size;
+  private Double price;
+  private Double promoPrice;
+  private Integer stockAvailable;
 
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private Product product;
 }
 
