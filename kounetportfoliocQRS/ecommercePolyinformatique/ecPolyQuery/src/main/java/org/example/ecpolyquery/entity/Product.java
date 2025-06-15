@@ -17,6 +17,7 @@ public class Product {
     @Id
     private String id;
     private String name;
+    private Double price;
     private String description;
     private LocalDateTime createdAt;
     private boolean isActive;
@@ -30,6 +31,6 @@ public class Product {
     private ProductSize sizes;
     @OneToMany(mappedBy = "productId")
     private List<OrderLine> orderLines;
-    private String image;
+    private String urlimage;
 }
 

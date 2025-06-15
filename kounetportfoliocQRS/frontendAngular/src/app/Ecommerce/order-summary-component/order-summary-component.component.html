@@ -1,0 +1,35 @@
+<mat-card>
+  <div class="totals-section">
+    <table class="totals-table">
+      <tr>
+        <td>Subtotal:</td>
+        <td class="number">${{ subtotal | number:'1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Shipping:</td>
+        <td class="number">${{ shipping | number:'1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Tax:</td>
+        <td class="number">${{ tax | number:'1.2-2' }}</td>
+      </tr>
+      <tr class="total-row">
+        <td><b>Total:</b></td>
+        <td class="number total"><b>${{ total | number:'1.2-2' }}</b></td>
+      </tr>
+    </table>
+  </div>
+  <div class="addresses">
+    <div class="address-col">
+      <h3>Shipping Address</h3>
+      <div>{{ shippingAddress?.street }}</div>
+      <div>{{ shippingAddress?.suite }}</div>
+      <div>{{ shippingAddress?.city }}</div>
+      <div>{{ shippingAddress?.country }}</div>
+    </div>
+    <div class="address-col">
+      <h3>Shipping Method</h3>
+      <div>{{ shippingMethod }}</div>
+    </div>
+  </div>
+</mat-card>

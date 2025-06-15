@@ -14,7 +14,7 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TeamComponent } from './team/team.component';
 import { ServicesComponent } from './services/services.component';
 import { HomeComponent } from './Ecommerce/home/home.component';
-import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
+import { ProductDetailsComponent } from './Ecommerce/detaill-product/detaill-product.component';
 import { TrackOrderComponent } from './Ecommerce/track-order/track-order.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
@@ -22,6 +22,13 @@ import { CreateProductComponent } from './Ecommerce/create-product/create-produc
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 import { ProductComponent } from './Ecommerce/products/products.component';
 import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
+import { AccountComponent } from './Ecommerce/account/account.component';
+import { OrderSummaryComponentComponent } from './Ecommerce/order-summary-component/order-summary-component.component';
+import { CartComponent } from './Ecommerce/cart/cart.component';
+import { OrderComponent } from './Ecommerce/order/order.component';
+import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
+import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
+import { CreatePurchaseComponent } from './Ecommerce/create-purchase/create-purchase.component';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
@@ -47,13 +54,19 @@ const routes: Routes = [
   { path: 'contact', loadComponent: () => import('./contact/contact.component').then(m => m.ContactComponent) },
   { path: 'articles', component: ArticleComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'product', component: DetaillProductComponent },
+  { path: 'product', component: ProductDetailsComponent },
   { path: 'souscategorie', component: SousCategoryCreateComponent },
   { path: 'socialgroupe', component: CreatGroupeSocialComponent },
+  { path: 'account', component: AccountComponent },
+  { path: 'ordersummary', component: OrderSummaryComponentComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'product', component: ProductComponent },
   { path: 'category', component: CategoryComponent },
-  { path: 'product-details', component: DetaillProductComponent },
+  { path: 'createsupplier', component: CreateSupplierComponent },
+  { path: 'createpurchase', component: CreatePurchaseComponent },
+  { path: 'product-details', component: ProductDetailsComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'order', component: OrderCreateComponent },
   { path: 'productcreate', component: CreateProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 

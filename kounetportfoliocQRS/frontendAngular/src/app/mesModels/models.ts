@@ -144,6 +144,10 @@ export interface ProductDTO {
  productSize: ProductSize;
 }
 
+export interface CartItem extends ProductDTO {
+  qty: number;
+}
+
 // ===============================
 // ========== ProductSizeDTO =====
 // ===============================

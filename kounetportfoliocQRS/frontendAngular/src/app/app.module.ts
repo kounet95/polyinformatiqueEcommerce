@@ -24,6 +24,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
 import { ServicesComponent } from './services/services.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
+import { MatTableModule } from '@angular/material/table';
 import { PrincingComponent } from './princing/princing.component';
 import { TeamComponent } from './team/team.component';
 import { BlogComponent } from './blog/blog.component';
@@ -39,7 +40,7 @@ import { CommentaireComponent } from './monBlog/commentaire/commentaire.componen
 import { DomainComponent } from './monBlog/domain/domain.component';
 import { TagComponent } from './monBlog/tag/tag.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
-
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ArticleComponent } from "./monBlog/article/article.component";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
@@ -48,7 +49,7 @@ import { CreateTagComponent } from './monBlog/create-tag/create-tag.component';
 import { CreateDomainComponent } from './monBlog/create-domain/create-domain.component';
 import { CreateEventComponent } from './monBlog/create-event/create-event.component';
 import { CreateNewsComponent } from './monBlog/create-news/create-news.component';
-import { DetaillProductComponent } from './Ecommerce/detaill-product/detaill-product.component';
+import {  ProductDetailsComponent } from './Ecommerce/detaill-product/detaill-product.component';
 import { CategoryComponent } from './Ecommerce/category/category.component';
 import { CategoryCreateComponent } from './Ecommerce/category-create/category-create.component';
 import { MatListModule } from '@angular/material/list';
@@ -58,6 +59,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
+import { AccountComponent } from './Ecommerce/account/account.component';
+import { OrderSummaryComponentComponent } from './Ecommerce/order-summary-component/order-summary-component.component';
+import { OrderLineComponent } from './Ecommerce/order-line/order-line.component';
+import { OrderComponent } from './Ecommerce/order/order.component';
+import { OrderStatusComponent } from './Ecommerce/order-status/order-status.component';
+import { CartComponent } from './Ecommerce/cart/cart.component';
+import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
+import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
+import { CreatePurchaseComponent } from './Ecommerce/create-purchase/create-purchase.component';
 
 
 
@@ -98,13 +108,22 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateEventComponent,
     CreateNewsComponent,
     CreateEventComponent,
-    DetaillProductComponent,
+    ProductDetailsComponent,
   
     CategoryComponent,
     CategoryCreateComponent,
     CreateProductComponent,
     SousCategoryCreateComponent,
-    CreatGroupeSocialComponent
+    CreatGroupeSocialComponent,
+    AccountComponent,
+    OrderSummaryComponentComponent,
+    OrderLineComponent,
+    OrderComponent,
+    OrderStatusComponent,
+    CartComponent,
+    OrderCreateComponent,
+    CreateSupplierComponent,
+    CreatePurchaseComponent
     
   ],
   imports: [
@@ -154,6 +173,15 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ReactiveFormsModule,
     MatSelectModule,
     MatOptionModule,
+  
+    MatCardModule,
+    
+ 
+    MatTabsModule,
+    MatCardModule,
+   MatTableModule,
+   MatBadgeModule
+   
 ],
 
  providers: [

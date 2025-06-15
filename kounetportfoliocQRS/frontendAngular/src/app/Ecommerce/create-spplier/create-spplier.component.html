@@ -1,0 +1,39 @@
+<div class="create-supplier-container">
+  <h2>Créer un fournisseur</h2>
+  <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="fullname">Nom complet :</label>
+      <input id="fullname" formControlName="fullname" type="text" />
+      <div class="error" *ngIf="supplierForm.get('fullname')?.invalid && supplierForm.get('fullname')?.touched">
+        Nom requis
+      </div>
+    </div>
+    <div>
+      <label for="city">Ville :</label>
+      <input id="city" formControlName="city" type="text" />
+      <div class="error" *ngIf="supplierForm.get('city')?.invalid && supplierForm.get('city')?.touched">
+        Ville requise
+      </div>
+    </div>
+    <div>
+      <label for="email">Email :</label>
+      <input id="email" formControlName="email" type="email" />
+      <div class="error" *ngIf="supplierForm.get('email')?.invalid && supplierForm.get('email')?.touched">
+        Email valide requis
+      </div>
+    </div>
+    <div>
+      <label for="personToContact">Personne à contacter :</label>
+      <input id="personToContact" formControlName="personToContact" type="text" />
+      <div class="error" *ngIf="supplierForm.get('personToContact')?.invalid && supplierForm.get('personToContact')?.touched">
+        Contact requis
+      </div>
+    </div>
+    <div>
+      <button type="submit" [disabled]="isLoading">Créer</button>
+      <span *ngIf="isLoading">Création en cours...</span>
+    </div>
+    <div class="success" *ngIf="successMsg">{{ successMsg }}</div>
+    <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  </form>
+</div>

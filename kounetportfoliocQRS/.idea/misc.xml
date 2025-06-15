@@ -1,0 +1,43 @@
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/BlogService/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/blogService/commandeBlog/pom.xml" />
+        <option value="$PROJECT_DIR$/blogService/queryBlog/pom.xml" />
+        <option value="$PROJECT_DIR$/discoveryservice/pom.xml" />
+        <option value="$PROJECT_DIR$/getwayservice/pom.xml" />
+        <option value="$PROJECT_DIR$/configservice/pom.xml" />
+        <option value="$PROJECT_DIR$/blogService/blogCommon/pom.xml" />
+        <option value="$PROJECT_DIR$/customerService/pom.xml" />
+        <option value="$PROJECT_DIR$/customerService/customerCommands/pom.xml" />
+        <option value="$PROJECT_DIR$/customerService/customerQuery/pom.xml" />
+        <option value="$PROJECT_DIR$/customerService/customer-common/pom.xml" />
+        <option value="$PROJECT_DIR$/polyinformatique-core-API/pom.xml" />
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/polyinformatique-core-API/pom.xml" />
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/blogService/pom.xml" />
+        <option value="$PROJECT_DIR$/ecommercePolyinformatique/pom.xml" />
+        <option value="$PROJECT_DIR$/ecommercePolyinformatique/ecPolyQuery/pom.xml" />
+        <option value="$PROJECT_DIR$/ecommercePolyinformatique/ecPolyCommand/pom.xml" />
+        <option value="$PROJECT_DIR$/serviceSuivieNotification/pom.xml" />
+        <option value="$PROJECT_DIR$/polyinformatique-common/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/blogService/commandeBlog/pom.xml" />
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/blogService/pom.xml" />
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/blogService/queryBlog/pom.xml" />
+        <option value="$PROJECT_DIR$/../../RIF-react/kounetportfoliocQRS/polyinformatique-core-API/pom.xml" />
+        <option value="$PROJECT_DIR$/blogService/blogCommon/pom.xml" />
+        <option value="$PROJECT_DIR$/customerService/pom.xml" />
+        <option value="$PROJECT_DIR$/serviceSuivieNotification/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

@@ -55,12 +55,13 @@ public class ProductService {
       .id(event.getId())
       .name(productDTO.getName())
       .description(productDTO.getDescription())
+      .price(productDTO.getPrice())
       .createdAt(createdAt)
       .isActive(productDTO.getIsActive())
       .subcategory(subcategory)
       .socialGroup(socialGroup)
       .sizes(mapProductSize(productDTO.getProductSize()))
-      .image(productDTO.getImageUrl())
+      .urlimage(productDTO.getImageUrl())
       .build();
 
     productRepository.save(product);
@@ -92,7 +93,7 @@ public class ProductService {
           product.setSubcategory(subcategory);
         }
 
-        // Update social group if provided
+
         if (productDTO.getSocialGroupId() != null && !productDTO.getSocialGroupId().isEmpty()) {
           SocialGroup socialGroup = socialGroupRepository.findById(productDTO.getSocialGroupId())
             .orElseThrow(() -> new RuntimeException("SocialGroup not found with id: " + productDTO.getSocialGroupId()));
@@ -100,11 +101,12 @@ public class ProductService {
         }
 
         // Update other fields
+        product.setPrice(productDTO.getPrice());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setActive(productDTO.getIsActive());
         product.setSizes(mapProductSize(productDTO.getProductSize()));
-        product.setImage(productDTO.getImageUrl());
+        product.setUrlimage(productDTO.getImageUrl());
 
         productRepository.save(product);
         log.info("Product updated with ID: {}", product.getId());
