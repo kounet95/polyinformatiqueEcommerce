@@ -20,28 +20,18 @@ public class ProductDTO {
 
   @NotBlank(message = "Product name cannot be blank")
   private String name;
-
   @NotBlank(message = "Description cannot be blank")
   private String description;
-
-  @Min(value = 0, message = "Price must be positive")
-  private double price;
-
-  @NotNull(message = "ProductSize cannot be null")
-  private String productSize;
-
+  @NotNull(message = "ProductSizes cannot be null")
+  private List<ProductSizeDTO> productSizes;
   @NotNull(message = "CreatedAt cannot be null")
   private LocalDateTime createdAt;
-  @NotBlank(message = "Subcategory ID cannot be blank")
+  @NotBlank(message = "Models cannot be blank")
   private String models;
   @NotBlank(message = "Subcategory ID cannot be blank")
   private String subcategoryId;
-
   @NotBlank(message = "Social group ID cannot be blank")
   private String socialGroupId;
-
-  private String imageUrl;
-
   @NotNull(message = "isActive cannot be null")
   private Boolean isActive;
 }

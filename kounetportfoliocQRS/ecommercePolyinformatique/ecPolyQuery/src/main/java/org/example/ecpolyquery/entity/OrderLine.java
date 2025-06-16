@@ -12,16 +12,12 @@ import org.hibernate.annotations.GenericGenerator;
 @Builder
 public class OrderLine {
     @Id
-
     private String id;
-
     private int qty;
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orderecommerce orderecommerce;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product productId;
+    private Stock stockId;
 }

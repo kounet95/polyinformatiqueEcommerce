@@ -1,7 +1,5 @@
 package org.example.polyinformatiquecoreapi.commandEcommerce;
 
-import org.example.polyinformatiquecoreapi.dtoEcommerce.PurchaseDTO;
-
 public class ReceivePurchaseCommand extends BaseCommand<String> {
     private final PurchaseDTO purchaseDTO;
 

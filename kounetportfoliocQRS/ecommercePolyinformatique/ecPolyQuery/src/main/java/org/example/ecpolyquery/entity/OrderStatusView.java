@@ -23,7 +23,4 @@ public class OrderStatusView {
     private String status;
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
 }

@@ -17,8 +17,6 @@ public class ShippingDTO {
   private String id;
   @NotBlank
   private String orderId;
-  @NotBlank
-  private String deliveryStatus;
   @NotNull
   private LocalDateTime estimatedDeliveryDate;
   @NotNull

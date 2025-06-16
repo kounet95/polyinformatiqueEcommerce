@@ -2,6 +2,7 @@ package org.example.ecpolyquery.mapper;
 
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
+
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 
 import java.util.ArrayList;
@@ -9,8 +10,7 @@ import java.util.List;
 
 public class MapperProductSize {
 
-  // Map ProductSizeDTOs to ProductSize entities (for creation)
-  private List<ProductSize> mapProductSizes(List<ProductSizeDTO> dtos, Product product) {
+  public static List<ProductSize> mapProductSizes(List<ProductSizeDTO> dtos, Product product) {
     List<ProductSize> sizes = new ArrayList<>();
     if (dtos != null) {
       for (ProductSizeDTO dto : dtos) {

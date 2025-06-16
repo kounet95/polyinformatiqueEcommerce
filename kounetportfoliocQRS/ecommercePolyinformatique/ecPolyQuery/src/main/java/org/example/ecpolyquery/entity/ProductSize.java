@@ -1,8 +1,8 @@
 package org.example.ecpolyquery.entity;
 
-import jakarta.persistence.Entity;
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.*;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd;
 
 @Entity
 @AllArgsConstructor
@@ -13,14 +13,11 @@ import jakarta.persistence.*;
 public class ProductSize {
   @Id
   private String id;
-
-  private SizeProduct size;
+  @Enumerated(EnumType.STRING)
+  private SizeProd size;
   private Double price;
   private Double promoPrice;
-  private Integer stockAvailable;
-
   @ManyToOne
   @JoinColumn(name = "product_id")
-  private Product product;
+  private Product productId;
 }
-

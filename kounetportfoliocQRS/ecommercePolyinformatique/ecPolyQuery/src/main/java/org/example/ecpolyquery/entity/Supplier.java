@@ -18,10 +18,8 @@ public class Supplier {
   private String city;
   private String email;
   private String personToContact;
+  @ManyToOne
+  @JoinColumn(name = "supplierId")
+  private Address address;
 
-  @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
-  private List<Stock> stocks;
-
-  @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
-  private List<Purchase> purchases;
 }

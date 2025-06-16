@@ -1,10 +1,11 @@
 package org.example.polyinformatiquecoreapi.dtoEcommerce;
 
-public enum sizeProd {
 
+
+public enum SizeProd {
   SMALL,
   MEDIUM,
   LARGE,
-  XL ,
+  XL,
   XXL
 }

@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.ecpolyquery.mapper.MapperProductSize.mapProductSizes;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -66,10 +68,10 @@ public class ProductService {
       .urlimage(productDTO.getImageUrl())
       .build();
 
-    // D'abord on sauvegarde le produit pour générer la relation
+    // D'abord on va sauvegarde le produit pour générer la relation
     productRepository.save(product);
 
-    // Puis on mappe et sauvegarde les tailles
+    // on va mappe et sauvegarde les tailles
     List<ProductSize> sizes = mapProductSizes(productDTO.getProductSizes(), product);
     if (!sizes.isEmpty()) {
       productSizeRepository.saveAll(sizes);
@@ -118,7 +120,7 @@ public class ProductService {
         product.setActive(productDTO.getIsActive());
         product.setUrlimage(productDTO.getImageUrl());
 
-        // Optionally update sizes: (attention, ici, stratégie simple : on supprime et recrée tout)
+
         if (productDTO.getProductSizes() != null) {
           productSizeRepository.deleteAll(product.getSizes());
           List<ProductSize> newSizes = mapProductSizes(productDTO.getProductSizes(), product);

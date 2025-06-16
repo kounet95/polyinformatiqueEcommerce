@@ -20,73 +20,73 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderStatusViewEventHandler {
 
-    private final OrderStatusViewRepository orderStatusViewRepository;
-    private final OrderecommerceRepository orderecommerceRepository;
-    private final CustomerRepository customerRepository;
+  private final OrderStatusViewRepository orderStatusViewRepository;
+  private final OrderecommerceRepository orderecommerceRepository;
+  private final CustomerRepository customerRepository;
 
-    @EventHandler
-    public void on(OrderStatusUpdatedEvent event) {
-        log.debug("Handling OrderStatusUpdatedEvent: {}", event.getId());
+  @EventHandler
+  public void on(OrderStatusUpdatedEvent event) {
+    log.debug("Handling OrderStatusUpdatedEvent: {}", event.getId());
 
-        Orderecommerce order = orderecommerceRepository.findById(event.getId())
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
+    Orderecommerce order = orderecommerceRepository.findById(event.getId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
-        // Update the order status
-        order.setOrderStatus(event.getNewStatus());
-        order.setBarcode(event.getBarcode());
-        orderecommerceRepository.save(order);
+    // Met à jour le statut et le code-barres dans la commande
+    order.setOrderStatus(event.getNewStatus());
+    order.setBarcode(event.getBarcode());
+    orderecommerceRepository.save(order);
 
-        // Update or create the order status view
-        Optional<OrderStatusView> optionalOrderStatus = orderStatusViewRepository.findByOrderId(event.getId());
-        OrderStatusView orderStatusView;
+    // Met à jour ou crée la vue de statut
+    Optional<OrderStatusView> optionalOrderStatus = orderStatusViewRepository.findByOrderId(event.getId());
+    OrderStatusView orderStatusView;
 
-        if (optionalOrderStatus.isPresent()) {
-            orderStatusView = optionalOrderStatus.get();
-            orderStatusView.setStatus(event.getNewStatus());
-            orderStatusView.setBarcode(event.getBarcode());
-            orderStatusView.setUpdatedAt(LocalDateTime.now());
-        } else {
-            orderStatusView = OrderStatusView.builder()
-                    .orderId(event.getId())
-                    .barcode(event.getBarcode())
-                    .status(event.getNewStatus())
-                    .updatedAt(LocalDateTime.now())
-                    .customer(order.getCustomer())
-                    .build();
-        }
-
-        orderStatusViewRepository.save(orderStatusView);
+    if (optionalOrderStatus.isPresent()) {
+      orderStatusView = optionalOrderStatus.get();
+      orderStatusView.setStatus(event.getNewStatus());
+      orderStatusView.setBarcode(event.getBarcode());
+      orderStatusView.setUpdatedAt(LocalDateTime.now());
+    } else {
+      orderStatusView = OrderStatusView.builder()
+        .orderId(event.getId())
+        .barcode(event.getBarcode())
+        .status(event.getNewStatus())
+        .updatedAt(LocalDateTime.now())
+        .customer(order.getCustomer())
+        .build();
     }
 
-    @EventHandler
-    public void on(OrderScannedEvent event) {
-        log.debug("Handling OrderScannedEvent: {}", event.getId());
+    orderStatusViewRepository.save(orderStatusView);
+  }
 
-        Orderecommerce order = orderecommerceRepository.findById(event.getId())
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
+  @EventHandler
+  public void on(OrderScannedEvent event) {
+    log.debug("Handling OrderScannedEvent: {}", event.getId());
 
-        // Update the order barcode
-        order.setBarcode(event.getBarcode());
-        orderecommerceRepository.save(order);
+    Orderecommerce order = orderecommerceRepository.findById(event.getId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
-        // Update or create the order status view
-        Optional<OrderStatusView> optionalOrderStatus = orderStatusViewRepository.findByOrderId(event.getId());
-        OrderStatusView orderStatusView;
+    //on met à jour le code-barres dans la commande
+    order.setBarcode(event.getBarcode());
+    orderecommerceRepository.save(order);
 
-        if (optionalOrderStatus.isPresent()) {
-            orderStatusView = optionalOrderStatus.get();
-            orderStatusView.setBarcode(event.getBarcode());
-            orderStatusView.setUpdatedAt(LocalDateTime.now());
-        } else {
-            orderStatusView = OrderStatusView.builder()
-                    .orderId(event.getId())
-                    .barcode(event.getBarcode())
-                    .status(order.getOrderStatus())
-                    .updatedAt(LocalDateTime.now())
-                    .customer(order.getCustomer())
-                    .build();
-        }
+    // Met à jour ou crée la vue de statut
+    Optional<OrderStatusView> optionalOrderStatus = orderStatusViewRepository.findByOrderId(event.getId());
+    OrderStatusView orderStatusView;
 
-        orderStatusViewRepository.save(orderStatusView);
+    if (optionalOrderStatus.isPresent()) {
+      orderStatusView = optionalOrderStatus.get();
+      orderStatusView.setBarcode(event.getBarcode());
+      orderStatusView.setUpdatedAt(LocalDateTime.now());
+    } else {
+      orderStatusView = OrderStatusView.builder()
+        .orderId(event.getId())
+        .barcode(event.getBarcode())
+        .status(order.getOrderStatus())
+        .updatedAt(LocalDateTime.now())
+        .customer(order.getCustomer())
+        .build();
     }
+
+    orderStatusViewRepository.save(orderStatusView);
+  }
 }

@@ -3,7 +3,6 @@ package org.example.ecpolyquery.web;
 import lombok.AllArgsConstructor;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
-import org.example.ecpolyquery.entity.Purchase;
 import org.example.ecpolyquery.query.GetAllPurchasesQuery;
 import org.example.ecpolyquery.query.GetPurchaseByIdQuery;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +19,13 @@ public class PurchaseController {
 
     @GetMapping
     public CompletableFuture<List<Purchase>> getAllPurchases() {
-        return queryGateway.query(new GetAllPurchasesQuery(), 
+        return queryGateway.query(new GetAllPurchasesQuery(),
                 ResponseTypes.multipleInstancesOf(Purchase.class));
     }
 
     @GetMapping("/{id}")
     public CompletableFuture<Purchase> getPurchaseById(@PathVariable String id) {
-        return queryGateway.query(new GetPurchaseByIdQuery(id), 
+        return queryGateway.query(new GetPurchaseByIdQuery(id),
                 ResponseTypes.instanceOf(Purchase.class));
     }
 }

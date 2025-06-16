@@ -13,13 +13,10 @@ import lombok.Setter;
 @Setter
 public class OrderLineDTO {
     private String id;
-
     @NotBlank(message = "Order ID cannot be blank")
     private String orderId;
-
     @NotBlank(message = "Product size ID cannot be blank")
-    private String productId;
-
+    private String stockId;
     @Min(value = 1, message = "Quantity must be at least 1")
     private int qty;
 }

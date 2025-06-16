@@ -15,6 +15,7 @@ import org.example.polyinformatiquecoreapi.eventEcommerce.ProductCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductDeletedEvent;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -33,9 +34,11 @@ public class ProductAggregate {
     private String description;
     private LocalDateTime createdAt;
     private double price;
-    private ProductSizeDTO size;
+    private List size;
     private String subcategoryId;
     private String imageUrl;
+    private String models;
+    private Boolean isActive;
 
     public ProductAggregate() {}
 
@@ -51,7 +54,7 @@ public class ProductAggregate {
         this.description = event.getProductDTO().getDescription();
         this.createdAt = event.getProductDTO().getCreatedAt();
         this.price = event.getProductDTO().getPrice();
-        this.size=event.getProductDTO().getProductSize();
+        this.size=event.getProductDTO().getProductSizes();
         this.subcategoryId = event.getProductDTO().getSubcategoryId();
         this.imageUrl = event.getProductDTO().getImageUrl();
     }

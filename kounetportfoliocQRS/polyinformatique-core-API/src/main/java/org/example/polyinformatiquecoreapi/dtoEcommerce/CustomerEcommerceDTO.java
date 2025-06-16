@@ -34,44 +34,8 @@ public class CustomerEcommerceDTO {
     @Size(min = 5, max = 20, message = "Phone must be between 5 and 20 characters")
     private String phone;
 
-    @NotBlank(message = "Shipping address cannot be blank")
-    private String shippingAddress;
-
     @NotBlank(message = "Billing address cannot be blank")
-    private String billingAddress;
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getBillingAddress() {
-        return billingAddress;
-    }
-
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public String getId() {
-        return id;
-    }
-
+    private String addressId;
     @NotNull(message = "CreatedAt cannot be null")
     private LocalDateTime createdAt;
 }

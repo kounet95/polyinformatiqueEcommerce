@@ -14,50 +14,21 @@ import lombok.Setter;
 @Setter
 public class OrderDTO {
     private String id;
-
     @NotBlank(message = "Customer ID cannot be blank")
     private String customerId;
-
+    @NotBlank(message = " supplierId ID cannot be blank")
+    private String supplierId;
     @NotBlank(message = "CreatedAt cannot be blank")
     private String createdAt;
-
     @NotBlank(message = "Order status cannot be blank")
-    private String orderStatus;
-
+    private OrderStatus orderStatus;
     @NotBlank(message = "Payment method cannot be blank")
     private String paymentMethod;
-
     @Min(value = 0, message = "Total must be positive")
     private double total;
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
     @NotBlank(message = "Barcode cannot be blank")
     private String barcode;
+  @NotBlank(message = "shipping cannot be blank")
+    private String shippingId;
+
 }

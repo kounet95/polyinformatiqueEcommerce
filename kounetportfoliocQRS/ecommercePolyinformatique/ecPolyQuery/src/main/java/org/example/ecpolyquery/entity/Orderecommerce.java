@@ -14,23 +14,17 @@ import java.util.List;
 public class Orderecommerce {
   @Id
   private String id;
-
   private LocalDateTime createdAt;
-  private String orderStatus;
-  private String paymentMethod;
-  private double total;
+  private OrderStatus orderStatus;
   private String barcode;
-
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private Customer customer;
-
-  @OneToMany(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<OrderLine> lines;
-
+  @ManyToOne
+  @JoinColumn(name = "supplierId")
+  private Supplier supplierId;
   @OneToOne(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Invoice invoice;
-
   @OneToOne(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Shipping shipping;
 }

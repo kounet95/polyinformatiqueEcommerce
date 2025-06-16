@@ -1,6 +1,5 @@
 package org.example.polyinformatiquecoreapi.eventEcommerce;
 
-import org.example.polyinformatiquecoreapi.dtoEcommerce.PurchaseItemDTO;
 import org.example.polyinformatiquecoreapi.event.BaseEvent;
 
 import java.io.Serializable;

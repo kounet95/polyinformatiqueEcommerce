@@ -3,7 +3,6 @@ package org.example.ecpolyquery.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
-import org.example.ecpolyquery.entity.Purchase;
 import org.example.ecpolyquery.query.GetAllPurchasesQuery;
 import org.example.ecpolyquery.query.GetPurchaseByIdQuery;
 import org.example.ecpolyquery.repos.PurchaseRepository;

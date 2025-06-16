@@ -34,6 +34,7 @@ public class Order {
         OrderDTO orderDTO = new OrderDTO(
                 orderId,
                 order.getCustomerId(),
+                order.getSupplierId(),
                 order.getCreatedAt(),
                 order.getOrderStatus(),
                 order.getPaymentMethod(),
@@ -97,4 +98,14 @@ public class Order {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("️ Error: " + exception.getMessage());
     }
+
+    @DeleteMapping("/{orderId}")
+    public CompletableFuture<String> cancelOrder(
+    @PathVariable String orderId,
+    @RequestParam(defaultValue = "Cancelled by user") String reason) {
+    CancelOrderCommand command = new CancelOrderCommand(orderId, reason);
+    return commandGateway.send(command);
+  }
+
+
 }

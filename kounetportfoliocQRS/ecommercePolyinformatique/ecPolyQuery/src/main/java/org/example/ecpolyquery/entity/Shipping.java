@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @Builder
 public class Shipping {
     @Id
-
     private String id;
-
-    private String deliveryStatus;
+    private OrderStatus deliveryStatus;
     private LocalDateTime estimatedDeliveryDate;
     private LocalDateTime shippingDate;
-    private String shippingAddress;
+    @ManyToOne
+    @JoinColumn(name = "shippingId")
+    private Address addressId;
 
     @OneToOne
     @JoinColumn(name = "order_id")

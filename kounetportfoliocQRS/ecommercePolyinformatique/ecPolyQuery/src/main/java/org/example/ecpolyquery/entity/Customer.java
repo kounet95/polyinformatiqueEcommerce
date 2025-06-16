@@ -13,14 +13,10 @@ import java.util.List;
 public class Customer {
   @Id
   private String id;
-
   private String firstname;
   private String lastname;
-  private String shippingAddress;
-  private String billingAddress;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Address billingAddress;
   private String email;
   private String phone;
-
-  @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-  private List<Orderecommerce> orders;
 }

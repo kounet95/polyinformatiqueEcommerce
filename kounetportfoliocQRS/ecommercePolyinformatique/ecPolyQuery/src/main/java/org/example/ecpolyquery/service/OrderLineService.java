@@ -7,6 +7,7 @@ import org.example.ecpolyquery.entity.OrderLine;
 import org.example.ecpolyquery.entity.Orderecommerce;
 import org.example.ecpolyquery.repos.OrderLineRepository;
 import org.example.ecpolyquery.repos.OrderecommerceRepository;
+import org.example.ecpolyquery.repos.ProductRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductAddedToOrderEvent;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class OrderLineService {
 
     private final OrderLineRepository orderLineRepository;
     private final OrderecommerceRepository orderecommerceRepository;
-
+    private final ProductRepository productRepository;
 
     @EventHandler
     public void on(ProductAddedToOrderEvent event) {
@@ -33,8 +34,12 @@ public class OrderLineService {
                 .id(orderLineDTO.getId())
                 .qty(orderLineDTO.getQty())
                 .orderecommerce(order)
+               .productId(orderLineDTO.getProductId()!= null
+                 ? productRepository.findById(orderLineDTO.getProductId()).orElse(null)
+                 : null)
 
-                .build();
+
+                 .build();
 
         orderLineRepository.save(orderLine);
         log.info("OrderLine created with ID: {}", orderLine.getId());

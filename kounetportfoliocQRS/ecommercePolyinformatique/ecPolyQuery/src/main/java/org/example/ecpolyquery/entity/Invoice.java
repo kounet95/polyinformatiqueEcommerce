@@ -20,12 +20,4 @@ public class Invoice {
   @OneToOne
   @JoinColumn(name = "order_id")
   private Orderecommerce orderecommerce;
-
-  @ManyToOne
-  @JoinColumn(name = "customer_id")
-  private Customer customer;
-
-  @ManyToOne
-  @JoinColumn(name = "supplier_id")
-  private Supplier supplier;
 }

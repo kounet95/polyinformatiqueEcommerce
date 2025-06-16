@@ -15,24 +15,15 @@ public class Product {
   @Id
   private String id;
   private String name;
-  private Double price;
   private String description;
   private LocalDateTime createdAt;
   private boolean isActive;
-  private String couleurs;
-  private String urlimage;
-
+  private String models;
   @ManyToOne
   @JoinColumn(name = "subcategory_id")
   private Subcategory subcategory;
-
   @ManyToOne
   @JoinColumn(name = "social_group_id")
   private SocialGroup socialGroup;
 
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-  private List<ProductSize> sizes;
-
-  @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-  private List<OrderLine> orderLines;
 }

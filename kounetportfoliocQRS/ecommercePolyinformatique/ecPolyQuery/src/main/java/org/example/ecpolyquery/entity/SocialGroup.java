@@ -23,7 +23,4 @@ public class SocialGroup {
     private String name;
     private String region;
     private String country;
-
-    @OneToMany(mappedBy = "socialGroup")
-    private List<Product> products;
 }

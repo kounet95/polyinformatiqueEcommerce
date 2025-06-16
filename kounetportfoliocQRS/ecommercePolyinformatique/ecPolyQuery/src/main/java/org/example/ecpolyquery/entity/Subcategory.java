@@ -22,7 +22,5 @@ public class Subcategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "subcategory")
-    private List<Product> products;
 }
 
