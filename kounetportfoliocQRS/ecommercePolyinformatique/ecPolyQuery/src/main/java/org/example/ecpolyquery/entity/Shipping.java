@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "eco_shopping_purchase")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

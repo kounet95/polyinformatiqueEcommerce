@@ -21,8 +21,6 @@ public class ProductSizeDTO {
   @NotBlank(message = "prodId cannot be blank")
   private Double price;
   @NotBlank(message = "prodId cannot be blank")
-  private int stock_available;
-  @NotBlank(message = "prodId cannot be blank")
   private Double pricePromo;
   @NotBlank(message = "prodId cannot be blank")
   private String imageUrl;

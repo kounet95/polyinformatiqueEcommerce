@@ -7,7 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
-
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter

@@ -19,8 +19,7 @@ public class MapperProductSize {
           .size(dto.getSizeProd())
           .price(dto.getPrice())
           .promoPrice(dto.getPricePromo())
-          .stockAvailable(dto.getStock_available())
-          .product(product)
+          .productId(product)
           .build();
         sizes.add(size);
       }

@@ -3,6 +3,8 @@ package org.example.ecpolyquery.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,8 +19,8 @@ public class Address {
   private String zip;
   private String country;
   private int appartment;
-  @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)
-  private Customer customer;
+  @OneToMany(mappedBy = "billingAddress", cascade = CascadeType.ALL)
+  private List<Customer> customers;
   @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)
   private Stock store;
   @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)

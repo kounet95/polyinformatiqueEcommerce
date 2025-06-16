@@ -18,7 +18,7 @@ public class Product {
   private String description;
   private LocalDateTime createdAt;
   private boolean isActive;
-  private String models;
+  private String urlModels;
   @ManyToOne
   @JoinColumn(name = "subcategory_id")
   private Subcategory subcategory;

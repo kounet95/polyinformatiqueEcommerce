@@ -15,7 +15,6 @@ import lombok.Setter;
 public class InvoiceDTO {
     @NotBlank(message = "Invoice ID cannot be blank")
     private String id;
-
     @NotBlank(message = "Order ID cannot be blank")
     private String orderId;
     @NotBlank(message = "Order ID cannot be blank")

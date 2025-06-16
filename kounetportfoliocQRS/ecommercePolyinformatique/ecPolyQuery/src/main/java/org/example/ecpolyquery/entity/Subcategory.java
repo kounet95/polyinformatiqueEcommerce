@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
-@Entity(name = "eco_subcategory")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

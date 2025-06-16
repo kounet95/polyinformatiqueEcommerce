@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity(name = "eco_orderline")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

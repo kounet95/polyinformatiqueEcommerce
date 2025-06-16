@@ -27,7 +27,7 @@ public class OrderAggregate {
   private String customerId;
   private String supplierId;
   private String createdAt;
-  private String orderStatus;
+  private OrderStatus orderStatus;
   private String paymentMethod;
   private double total;
   private String barcode;
@@ -43,12 +43,16 @@ public class OrderAggregate {
 
   @CommandHandler
   public OrderAggregate(CreateOrderCommand cmd) {
-    apply(new OrderCreatedEvent(cmd.getId(), cmd.getOrderDTO()));
+    apply(
+      new OrderCreatedEvent(
+        cmd.getId(), cmd.getOrderDTO()));
   }
 
   @CommandHandler
   public void handle(AddProductToOrderCommand cmd) {
-    apply(new ProductAddedToOrderEvent(cmd.getId(), cmd.getOrderLineDTO()));
+    apply(
+      new ProductAddedToOrderEvent(cmd.getId(),
+      cmd.getOrderLineDTO()));
   }
 
   @CommandHandler
@@ -155,6 +159,6 @@ public class OrderAggregate {
 
   @EventSourcingHandler
   public void on(OrderCancelledEvent event) {
-    this.orderStatus = "CANCELLED";
+    this.orderStatus = OrderStatus.Cancelled;
   }
 }

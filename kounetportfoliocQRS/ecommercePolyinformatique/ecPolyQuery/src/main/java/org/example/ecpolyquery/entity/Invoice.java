@@ -16,7 +16,6 @@ public class Invoice {
   private double restPayment;
   private String paymentStatus;
   private String paymentMethod;
-
   @OneToOne
   @JoinColumn(name = "order_id")
   private Orderecommerce orderecommerce;

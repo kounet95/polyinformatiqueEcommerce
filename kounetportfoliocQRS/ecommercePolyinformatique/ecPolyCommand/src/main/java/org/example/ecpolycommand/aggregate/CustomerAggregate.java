@@ -28,10 +28,8 @@ public class CustomerAggregate {
     private String firstName;
     private String lastName;
     private String email;
-    private String address;
     private String phone;
-    private String shippingAddress;
-    private String billingAddress;
+    private String addressId;
 
     public CustomerAggregate() {}
 
@@ -48,10 +46,9 @@ public class CustomerAggregate {
          this.firstName = event.getAuthor().getFirstname();
          this.lastName = event.getAuthor().getLastname();
          this.email = event.getAuthor().getEmail();
-         this.address = event.getAuthor().getShippingAddress();
+         this.addressId = event.getAuthor().getAddressId();
          this.phone = event.getAuthor().getPhone();
-         this.shippingAddress = event.getAuthor().getShippingAddress();
-         this.billingAddress = event.getAuthor().getBillingAddress();
+
      }
 
      @CommandHandler
@@ -65,9 +62,8 @@ public class CustomerAggregate {
          this.firstName = "[deleted]";
          this.lastName = "[deleted]";
          this.email = null;
-         this.address = null;
+         this.addressId = null;
          this.phone = null;
-         this.shippingAddress = null;
-         this.billingAddress = null;
+
      }
 }
