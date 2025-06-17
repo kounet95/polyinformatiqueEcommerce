@@ -15,10 +15,10 @@ public class Stock {
   @Id
   private String id;
   private double purchasePrice;
+  private String designation;
   private double promoPrice;
   private LocalDateTime createdDate;
   private LocalDateTime closedDate;
-  private int stockAvailable;
   @ManyToOne
   @JoinColumn(name = "product_size_id")
   private ProductSize productSize;

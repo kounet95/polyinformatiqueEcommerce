@@ -15,7 +15,7 @@ public class Supplier {
   private String id;
 
   private String fullname;
-  private String city;
+
   private String email;
   private String personToContact;
   @ManyToOne

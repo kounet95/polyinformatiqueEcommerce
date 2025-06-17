@@ -3,11 +3,15 @@ package org.example.ecpolyquery.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
+import org.example.ecpolyquery.entity.Address;
+import org.example.ecpolyquery.entity.OrderStatus;
 import org.example.ecpolyquery.entity.Orderecommerce;
 import org.example.ecpolyquery.entity.Shipping;
+import org.example.ecpolyquery.repos.AddressRepository;
 import org.example.ecpolyquery.repos.OrderecommerceRepository;
 import org.example.ecpolyquery.repos.ShippingRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ShippingDTO;
+import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingStartedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingUpdatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingDeletedEvent;
@@ -22,17 +26,18 @@ public class ShippingService {
 
   private final ShippingRepository shippingRepository;
   private final OrderecommerceRepository orderecommerceRepository;
+  private final AddressRepository addressRepository;
 
   @EventHandler
-  public void on(ShippingStartedEvent event) {
+  public void on(ShippingCreatedEvent event) {
     log.debug("Handling ShippingStartedEvent: {}", event.getId());
 
-    Orderecommerce order = orderecommerceRepository.findById(event.getId())
-      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
-
-    String shippingAddress = (order.getCustomer() != null && order.getCustomer().getBillingAddress() != null)
-      ? order.getCustomer().getBillingAddress()
-      : "UNKNOWN_ADDRESS";
+    Orderecommerce order = orderecommerceRepository.findById(event.getShippingDTO().getOrderId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: "
+        + event.getShippingDTO().getOrderId()));
+    Address address = addressRepository.findById(event.getShippingDTO().getShippingAddressId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: "
+        + event.getShippingDTO().getShippingAddressId()));
 
     // Check if shipping already exists for this order
     if (shippingRepository.existsById(event.getId())) {
@@ -42,11 +47,11 @@ public class ShippingService {
 
     Shipping shipping = Shipping.builder()
       .id(event.getId())
-      .deliveryStatus("SHIPPED")
+      .deliveryStatus(OrderStatus.Inprogress)
       .shippingDate(LocalDateTime.now())
       .estimatedDeliveryDate(LocalDateTime.now().plusDays(5))
-      .shippingAddress(shippingAddress)
       .orderecommerce(order)
+      .addressId(address)
       .build();
 
     shippingRepository.save(shipping);
@@ -57,16 +62,22 @@ public class ShippingService {
   public void on(ShippingUpdatedEvent event) {
     log.debug("Handling ShippingUpdatedEvent: {}", event.getId());
     ShippingDTO shippingDTO = event.getShippingDTO();
+    Orderecommerce order = orderecommerceRepository.findById(event.getShippingDTO().getOrderId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: "
+        + event.getShippingDTO().getOrderId()));
+    Address address = addressRepository.findById(event.getShippingDTO().getShippingAddressId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: "
+        + event.getShippingDTO().getShippingAddressId()));
+
     Shipping shipping = shippingRepository.findById(event.getId())
       .orElseThrow(() -> new RuntimeException("Shipping not found with id: " + event.getId()));
 
     // Update fields - adapte selon tes champs
-    shipping.setDeliveryStatus(shippingDTO.getDeliveryStatus());
+    shipping.setDeliveryStatus(OrderStatus.Cancelled);
     shipping.setShippingDate(shippingDTO.getShippingDate());
     shipping.setEstimatedDeliveryDate(shippingDTO.getEstimatedDeliveryDate());
-    shipping.setShippingAddress(shippingDTO.getShippingAddress());
-    // ... ajoute d'autres champs si besoin
-
+    shipping.setOrderecommerce(order);
+    shipping.setAddressId(address);
     shippingRepository.save(shipping);
     log.info("Shipping updated for ID: {}", shipping.getId());
   }

@@ -21,6 +21,7 @@ public class StockDTO {
     private String supplierId;
     @Min(value = 0, message = "Purchase price must be positive")
     private double purchasePrice;
+    private double promoPrice;
     @Min(value = 0, message = "Quantity must be zero or positive")
     private double quantity;
     @NotBlank(message = "Product size ID cannot be blank")

@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
+import org.example.ecpolyquery.entity.Address;
 import org.example.ecpolyquery.entity.Supplier;
+import org.example.ecpolyquery.repos.AddressRepository;
 import org.example.ecpolyquery.repos.SupplierRepository;
 import org.example.ecpolyquery.query.GetAllSuppliersQuery;
 import org.example.ecpolyquery.query.GetSupplierByIdQuery;
@@ -23,17 +25,17 @@ import java.util.List;
 public class SupplierService {
 
   private final SupplierRepository supplierRepository;
-
+ private final AddressRepository addressRepository;
   @EventHandler
   public void on(SupplierCreatedEvent event) {
     log.debug("Handling SupplierCreatedEvent: {}", event.getId());
     SupplierDTO dto = event.getSupplierDTO();
-
+    Address address = addressRepository.findById(event.getSupplierDTO().getAddressId()).orElse(null);
     if (!supplierRepository.existsById(event.getId())) {
       Supplier supplier = Supplier.builder()
         .id(event.getId())
         .fullname(dto.getFullname())
-        .city(dto.getCity())
+        .address(address)
         .email(dto.getEmail())
         .personToContact(dto.getPersonToContact())
         .build();
@@ -57,9 +59,10 @@ public class SupplierService {
   public void on(SupplierUpdatedEvent event) {
     log.debug("Handling SupplierUpdatedEvent: {}", event.getId());
     SupplierDTO dto = event.getDto();
+    Address address = addressRepository.findById(dto.getAddressId()).orElse(null);
     supplierRepository.findById(event.getId()).ifPresent(supplier -> {
       supplier.setFullname(dto.getFullname());
-      supplier.setCity(dto.getCity());
+      supplier.setAddress(address);
       supplier.setEmail(dto.getEmail());
       supplier.setPersonToContact(dto.getPersonToContact());
       supplierRepository.save(supplier);
