@@ -29,8 +29,9 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final SupplierRepository supplierRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    @EventHandler
+  @EventHandler
     public void on(OrderCreatedEvent event) {
         log.debug("Handling OrderCreatedEvent: {}", event.getId());
         OrderDTO orderDTO = event.getOrderDTO();
@@ -40,16 +41,16 @@ public class OrderService {
            Supplier supplier = supplierRepository.findById(orderDTO.getSupplierId())
                 .orElseThrow(() -> new RuntimeException("supplier not found with id: " + orderDTO.getSupplierId()));
 
-        Orderecommerce order = Orderecommerce.builder()
+
+           Orderecommerce order = Orderecommerce.builder()
           .id(orderDTO.getId())
           .createdAt(LocalDateTime.parse(orderDTO.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME))
-          .orderStatus(orderDTO.getOrderStatus())
-          .paymentMethod(orderDTO.getPaymentMethod())
-          .total(orderDTO.getTotal())
+             .paymentMethod(orderDTO.getPaymentMethod())
+          .orderStatus(OrderStatus.Inprogress)
           .barcode(orderDTO.getBarcode())
           .customer(customer)
           .supplierId(supplier)
-          .lines(new ArrayList<>())
+
           .build();
 
         orderecommerceRepository.save(order);
@@ -62,7 +63,7 @@ public class OrderService {
         Orderecommerce order = orderecommerceRepository.findById(event.getId())
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
-        order.setOrderStatus("CONFIRMED");
+        order.setOrderStatus(OrderStatus.Delivered);
         orderecommerceRepository.save(order);
     }
 
@@ -73,37 +74,42 @@ public class OrderService {
         Orderecommerce order = orderecommerceRepository.findById(event.getId())
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
-        order.setOrderStatus("DELIVERED");
+        order.setOrderStatus(OrderStatus.Delivered);
         orderecommerceRepository.save(order);
     }
 
-  @EventHandler
-  public void on(ProductAddedToOrderEvent event) {
-    log.debug("Handling ProductAddedToOrderEvent: {}", event.getId());
-
-    // 1. Récuperation de la commande
-    Orderecommerce order = orderecommerceRepository.findById(event.getOrderLineDTO().getOrderId())
-      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getOrderLineDTO().getOrderId()));
-
-    // 2.Récuperation du produit
-    Product product = productRepository.findById(event.getOrderLineDTO().getProductId())
-      .orElseThrow(() -> new RuntimeException("Product not found with id: " + event.getOrderLineDTO().getProductId()));
-
-    // 3. Créons la nouvelle ligne de commande
-    OrderLine orderLine = OrderLine.builder()
-      .id(UUID.randomUUID().toString())
-      .orderecommerce(order)
-      .productId(product)
-      .qty(event.getOrderLineDTO().getQty())
-      .build();
-
-    // 4. Ajoutons à la commande et sauvegardons le
-    order.getLines().add(orderLine);
-    orderLineRepository.save(orderLine);
-    orderecommerceRepository.save(order);
-
-    log.info("Product {} (qty: {}) added to order {}", event.getOrderLineDTO().getProductId(), event.getOrderLineDTO().getQty(), event.getOrderLineDTO().getOrderId());
-  }
+//  @EventHandler
+//  public void on(ProductAddedToOrderEvent event) {
+//    log.debug("Handling ProductAddedToOrderEvent: {}", event.getId());
+//
+//    // 1. Récuperation de la commande
+//    Orderecommerce order = orderecommerceRepository.findById(event.getOrderLineDTO().getOrderId())
+//      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getOrderLineDTO().getOrderId()));
+//
+//    // 2. Vérifier le statut de la commande
+//    if (order.getOrderStatus() == OrderStatus.Delivered || order.getOrderStatus() == OrderStatus.Cancelled) {
+//      throw new IllegalStateException("Cannot add product: order already " + order.getOrderStatus());
+//    }
+//
+//    // 3. Récuperation du produit
+//    Product product = productRepository.findById(event.getOrderLineDTO().getStockId())
+//      .orElseThrow(() -> new RuntimeException("Product not found with id: " + event.getOrderLineDTO().getStockId()));
+//
+//    // 4. Créons la nouvelle ligne de commande
+//    OrderLine orderLine = OrderLine.builder()
+//      .id(UUID.randomUUID().toString())
+//      .orderecommerce(order)
+//      .stockId(event.getOrderLineDTO().getStockId())
+//      .qty(event.getOrderLineDTO().getQty())
+//      .build();
+//
+//    // 5. Ajoutons à la commande et sauvegardons le
+//    order.getLines().add(orderLine);
+//    orderLineRepository.save(orderLine);
+//    orderecommerceRepository.save(order);
+//
+//    log.info("Product {} (qty: {}) added to order {}", event.getOrderLineDTO().getProductId(), event.getOrderLineDTO().getQty(), event.getOrderLineDTO().getOrderId());
+//  }
 
     @EventHandler
     public void on(OrderCancelledEvent event) {
@@ -112,7 +118,7 @@ public class OrderService {
         Orderecommerce order = orderecommerceRepository.findById(event.getId())
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
-        order.setOrderStatus("CANCELLED");
+        order.setOrderStatus(OrderStatus.Cancelled);
         orderecommerceRepository.save(order);
         log.info("Order cancelled with ID: {}, reason: {}", event.getId(), event.getReason());
     }

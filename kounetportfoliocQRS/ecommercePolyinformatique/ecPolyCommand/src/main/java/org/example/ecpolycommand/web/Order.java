@@ -39,7 +39,8 @@ public class Order {
                 order.getOrderStatus(),
                 order.getPaymentMethod(),
                 order.getTotal(),
-                order.getBarcode()
+                order.getBarcode(),
+                order.getShippingId()
         );
         CreateOrderCommand command = new CreateOrderCommand(orderId, orderDTO);
         return commandGateway.send(command);
@@ -51,7 +52,7 @@ public class Order {
       OrderLineDTO orderLineDTO = new OrderLineDTO(
         orderLineId,
         orderId,
-        orderLine.getProductId(),
+        orderLine.getStockId(),
         orderLine.getQty()
       );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderId, orderLineDTO);

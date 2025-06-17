@@ -17,14 +17,13 @@ public class Orderecommerce {
   private LocalDateTime createdAt;
   private OrderStatus orderStatus;
   private String barcode;
+  private String paymentMethod;
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private Customer customer;
   @ManyToOne
   @JoinColumn(name = "supplierId")
   private Supplier supplierId;
-  @OneToOne(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Invoice invoice;
   @OneToOne(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Shipping shipping;
 }

@@ -60,24 +60,14 @@ public class ProductService {
       .id(event.getId())
       .name(productDTO.getName())
       .description(productDTO.getDescription())
-      .price(productDTO.getPrice())
       .createdAt(createdAt)
       .isActive(productDTO.getIsActive())
       .subcategory(subcategory)
       .socialGroup(socialGroup)
-      .urlimage(productDTO.getImageUrl())
+      .urlModels(productDTO.getModels())
       .build();
 
-    // D'abord on va sauvegarde le produit pour générer la relation
     productRepository.save(product);
-
-    // on va mappe et sauvegarde les tailles
-    List<ProductSize> sizes = mapProductSizes(productDTO.getProductSizes(), product);
-    if (!sizes.isEmpty()) {
-      productSizeRepository.saveAll(sizes);
-      product.setSizes(sizes);
-      productRepository.save(product);
-    }
 
     log.info("Product created with ID: {}", product.getId());
   }
@@ -114,20 +104,10 @@ public class ProductService {
         }
 
         // Update other fields
-        product.setPrice(productDTO.getPrice());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setActive(productDTO.getIsActive());
-        product.setUrlimage(productDTO.getImageUrl());
-
-
-        if (productDTO.getProductSizes() != null) {
-          productSizeRepository.deleteAll(product.getSizes());
-          List<ProductSize> newSizes = mapProductSizes(productDTO.getProductSizes(), product);
-          productSizeRepository.saveAll(newSizes);
-          product.setSizes(newSizes);
-        }
-
+        product.setUrlModels(productDTO.getModels());
         productRepository.save(product);
         log.info("Product updated with ID: {}", product.getId());
       });

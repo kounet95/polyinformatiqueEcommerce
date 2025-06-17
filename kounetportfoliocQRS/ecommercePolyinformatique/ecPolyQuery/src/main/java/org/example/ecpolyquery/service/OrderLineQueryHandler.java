@@ -2,11 +2,14 @@ package org.example.ecpolyquery.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.OrderLine;
 import org.example.ecpolyquery.query.GetAllOrderLinesQuery;
 import org.example.ecpolyquery.query.GetOrderLineByIdQuery;
 import org.example.ecpolyquery.repos.OrderLineRepository;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
+import org.example.polyinformatiquecoreapi.eventEcommerce.OrderLineDeletedEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,4 +35,7 @@ public class OrderLineQueryHandler {
         return optionalOrderLine
                 .orElseThrow(() -> new RuntimeException("OrderLine not found with id: " + query.getId()));
     }
+
+
+
 }

@@ -22,10 +22,10 @@ public class Address {
   @OneToMany(mappedBy = "billingAddress", cascade = CascadeType.ALL)
   private List<Customer> customers;
   @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)
-  private Stock store;
+  private List<Stock> store;
   @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)
-  private Supplier supplier;
+  private List<Supplier> supplier;
   @OneToMany(mappedBy = "addressId",cascade = CascadeType.ALL)
-  private Shipping shipping;
+  private List<Shipping> shipping;
 
 }

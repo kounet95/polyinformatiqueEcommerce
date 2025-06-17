@@ -8,16 +8,15 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateShippingCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteShippingCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ShippingDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingCreatedEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingDeletedEvent;
 
 import java.time.LocalDateTime;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-/**
- * Shipping Aggregate for handling shipping-related commands
- */
 @Aggregate
 @Slf4j
 @Getter
@@ -25,14 +24,13 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 public class ShippingAggregate {
 
   @AggregateIdentifier
-
   private String shippingId;
   private String orderId;
   private String address;
-  private String status;
   private LocalDateTime estimatedDeliveryDate;
   private LocalDateTime shippingDate;
   private LocalDateTime createdAt;
+  private boolean deleted;
 
   public ShippingAggregate() {}
 
@@ -41,15 +39,28 @@ public class ShippingAggregate {
     apply(new ShippingCreatedEvent(cmd.getId(), cmd.getShippingDTO()));
   }
 
+  @CommandHandler
+  public void handle(DeleteShippingCommand cmd) {
+    if (this.deleted) {
+      throw new IllegalStateException("Shipping already deleted.");
+    }
+    apply(new ShippingDeletedEvent(cmd.getId()));
+  }
+
   @EventSourcingHandler
   public void on(ShippingCreatedEvent event) {
     ShippingDTO dto = event.getShippingDTO();
     this.shippingId = event.getId();
     this.orderId = dto.getOrderId();
-    this.address = dto.getShippingAddress();
-    this.status = dto.getDeliveryStatus();
+    this.address = dto.getShippingAddressId();
     this.estimatedDeliveryDate = dto.getEstimatedDeliveryDate();
     this.shippingDate = dto.getShippingDate();
     this.createdAt = dto.getCreatedAt();
+    this.deleted = false;
+  }
+
+  @EventSourcingHandler
+  public void on(ShippingDeletedEvent event) {
+    this.deleted = true;
   }
 }

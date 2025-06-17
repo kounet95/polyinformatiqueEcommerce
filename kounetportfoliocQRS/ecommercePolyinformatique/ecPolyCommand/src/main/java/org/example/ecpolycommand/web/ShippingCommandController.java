@@ -3,6 +3,7 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateShippingCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteShippingCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ShippingDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,18 @@ public class ShippingCommandController {
     ShippingDTO shippingDTO = new ShippingDTO(
       shippingId,
       shipping.getOrderId(),
-      shipping.getDeliveryStatus(),
       shipping.getEstimatedDeliveryDate(),
       shipping.getShippingDate(),
       shipping.getCreatedAt(),
-      shipping.getShippingAddress()
+      shipping.getShippingAddressId()
     );
     CreateShippingCommand command = new CreateShippingCommand(shippingId, shippingDTO);
+    return commandGateway.send(command);
+  }
+
+  @DeleteMapping("/{shippingId}")
+  public CompletableFuture<String> deleteShipping(@PathVariable String shippingId) {
+    DeleteShippingCommand command = new DeleteShippingCommand(shippingId);
     return commandGateway.send(command);
   }
 

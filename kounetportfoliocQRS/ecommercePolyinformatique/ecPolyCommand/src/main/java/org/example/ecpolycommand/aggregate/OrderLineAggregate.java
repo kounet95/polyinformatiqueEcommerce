@@ -51,7 +51,7 @@ public class OrderLineAggregate {
     OrderLineDTO dto = event.getOrderLineDTO();
     this.orderLineId = dto.getId();
     this.orderId = dto.getOrderId();
-    this.productId = dto.getProductId();
+    this.productId = dto.getStockId();
     this.qty = dto.getQty();
     this.deleted = false;
   }

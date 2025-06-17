@@ -20,7 +20,6 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final OrderecommerceRepository orderecommerceRepository;
-    private final SupplierRepository supplierRepository;
 
     @EventHandler
     public void on(InvoiceGeneratedEvent event) {
@@ -37,10 +36,6 @@ public class InvoiceService {
           .paymentStatus(invoiceDTO.getPaymentStatus())
           .paymentMethod(invoiceDTO.getMethodePayment())
           .orderecommerce(order)
-          .customer(order.getCustomer())
-          .supplier(invoiceDTO.getSupplierId() != null
-            ? supplierRepository.findById(invoiceDTO.getSupplierId()).orElse(null)
-            : null)
           .build();
         invoiceRepository.save(invoice);
         log.info("Invoice generated with ID: {}", invoice.getId());

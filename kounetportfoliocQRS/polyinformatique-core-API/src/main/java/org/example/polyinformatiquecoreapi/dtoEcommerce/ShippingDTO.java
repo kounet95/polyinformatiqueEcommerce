@@ -24,5 +24,5 @@ public class ShippingDTO {
   @NotNull
   private LocalDateTime createdAt;
   @NotBlank
-  private String shippingAddress;
+  private String shippingAddressId;
 }

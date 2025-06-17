@@ -3,7 +3,9 @@ package org.example.ecpolyquery.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
+import org.example.ecpolyquery.entity.Address;
 import org.example.ecpolyquery.entity.Customer;
+import org.example.ecpolyquery.repos.AddressRepository;
 import org.example.ecpolyquery.repos.CustomerRepository;
 
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
@@ -18,11 +20,18 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final AddressRepository addressRepository;
 
     @EventHandler
     public void on(CustomerCreatedEvent event) {
-        log.debug("Handling CustomerCreatedEvent: {}", event.getId());
+
+
+
+      log.debug("Handling CustomerCreatedEvent: {}", event.getId());
         CustomerEcommerceDTO customerDTO = event.getAuthor();
+
+      Address address = addressRepository.findById(customerDTO.getAddressId())
+        .orElseThrow(() -> new RuntimeException("Order not found with id: " + customerDTO.getAddressId()));
 
         Customer customer = Customer.builder()
                 .id(event.getId())
@@ -30,8 +39,7 @@ public class CustomerService {
                 .lastname(customerDTO.getLastname())
                 .email(customerDTO.getEmail())
                 .phone(customerDTO.getPhone())
-                .shippingAddress(customerDTO.getShippingAddress())
-                .billingAddress(customerDTO.getBillingAddress())
+                .billingAddress(address)
                 .build();
 
         customerRepository.save(customer);
@@ -53,6 +61,8 @@ public class CustomerService {
     public void on(CustomerUpdatedEvent event) {
         log.debug("Handling CustomerUpdatedEvent: {}", event.getId());
         CustomerEcommerceDTO customerDTO = event.getCustomerDTO();
+      Address address = addressRepository.findById(customerDTO.getAddressId())
+        .orElseThrow(() -> new RuntimeException("Order not found with id: " + customerDTO.getAddressId()));
 
         customerRepository.findById(event.getId())
                 .ifPresent(customer -> {
@@ -60,9 +70,7 @@ public class CustomerService {
                     customer.setLastname(customerDTO.getLastname());
                     customer.setEmail(customerDTO.getEmail());
                     customer.setPhone(customerDTO.getPhone());
-                    customer.setShippingAddress(customerDTO.getShippingAddress());
-                    customer.setBillingAddress(customerDTO.getBillingAddress());
-
+                    customer.setBillingAddress(address);
                     customerRepository.save(customer);
                     log.info("Customer updated with ID: {}", customer.getId());
                 });

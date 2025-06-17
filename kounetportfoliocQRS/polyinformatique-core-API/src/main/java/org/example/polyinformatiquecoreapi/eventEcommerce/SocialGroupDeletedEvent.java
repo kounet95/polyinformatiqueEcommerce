@@ -10,7 +10,7 @@ import org.example.polyinformatiquecoreapi.event.BaseEvent;
 @Getter
 public class SocialGroupDeletedEvent extends BaseEvent<String> {
 
-  protected SocialGroupDeletedEvent(String id) {
+  public SocialGroupDeletedEvent(String id) {
     super(id);
   }
 }

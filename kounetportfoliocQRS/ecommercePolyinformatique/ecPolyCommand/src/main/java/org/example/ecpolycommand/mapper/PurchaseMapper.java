@@ -1,6 +1,5 @@
 package org.example.ecpolycommand.mapper;
 
-import org.example.ecpolycommand.aggregate.PurchaseAggregate;
 import org.springframework.stereotype.Component;
 
 @Component

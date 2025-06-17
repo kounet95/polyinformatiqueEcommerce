@@ -9,7 +9,7 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteProductCommand;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
+
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductDeletedEvent;
@@ -33,11 +33,10 @@ public class ProductAggregate {
     private String name;
     private String description;
     private LocalDateTime createdAt;
-    private double price;
-    private List size;
+    private List<ProductSizeDTO> productSize;
     private String subcategoryId;
-    private String imageUrl;
-    private String models;
+    private String socialGroupeId;
+    private String modelsUrl;
     private Boolean isActive;
 
     public ProductAggregate() {}
@@ -53,10 +52,9 @@ public class ProductAggregate {
         this.name = event.getProductDTO().getName();
         this.description = event.getProductDTO().getDescription();
         this.createdAt = event.getProductDTO().getCreatedAt();
-        this.price = event.getProductDTO().getPrice();
-        this.size=event.getProductDTO().getProductSizes();
+        this.productSize=event.getProductDTO().getProductSizes();
         this.subcategoryId = event.getProductDTO().getSubcategoryId();
-        this.imageUrl = event.getProductDTO().getImageUrl();
+        this.modelsUrl = event.getProductDTO().getModels();
     }
 
     @CommandHandler
@@ -71,6 +69,10 @@ public class ProductAggregate {
         this.description = "[deleted]";
         this.subcategoryId = "[deleted]";
         this.productId="[deleted]";
-        this.imageUrl = null;
+        this.modelsUrl = null;
+        this.productSize=null;
+        this.socialGroupeId="[deleted]";
+        this.description = "[deleted]";
+        this.createdAt = LocalDateTime.now();
     }
 }
