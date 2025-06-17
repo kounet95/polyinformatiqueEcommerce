@@ -1,17 +1,19 @@
 package org.example.ecpolycommand.web;
 
+import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.ecpolycommand.service.ImageStorageService;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductSizeCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteInvoiceCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteProductSizeCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
-import org.example.polyinformatiquecoreapi.eventEcommerce.ProductDeletedEvent;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,14 +22,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/product/command")
-public class ProductCommandController {
-
+@RequestMapping("/productsize/command")
+public class ProductSizeController {
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
   private final ImageStorageService imageStorageService;
 
-  public ProductCommandController(
+  public ProductSizeController(
     CommandGateway commandGateway,
     EventStore eventStore,
     ImageStorageService imageStorageService
@@ -38,13 +39,13 @@ public class ProductCommandController {
   }
 
   /**
-   * Création un produit avec ou sans upload d'image.
+   * Création d'un produitSize avec ou sans upload d'image.
    * on reçoit le produit et le fichier image dans le même POST multipart.
    */
   @PostMapping(value = "/create", consumes = {"multipart/form-data"})
   @PreAuthorize("hasAuthority('ADMIN')")
-  public CompletableFuture<String> createProduct(
-    @RequestPart("product") @Valid ProductDTO product,
+  public CompletableFuture<String> createProductSize(
+    @RequestPart("productSize") @Valid ProductSizeDTO product,
     @RequestPart(value = "media", required = false) MultipartFile mediaFile
   ) {
     String productId = UUID.randomUUID().toString();
@@ -53,7 +54,7 @@ public class ProductCommandController {
     if (mediaFile != null && !mediaFile.isEmpty()) {
       try {
         String imageUrl = imageStorageService.uploadImage(mediaFile);
-        product.setModels(imageUrl);
+        product.setImageUrl(imageUrl);
       } catch (IOException e) {
         CompletableFuture<String> failed = new CompletableFuture<>();
         failed.completeExceptionally(
@@ -63,43 +64,23 @@ public class ProductCommandController {
       }
     }
 
-    ProductDTO productDTO = new ProductDTO(
+    ProductSizeDTO productDTO = new ProductSizeDTO(
       productId,
-      product.getName(),
-      product.getDescription(),
-      product.getProductSizes(),
-      product.getCreatedAt(),
-      product.getModels(),
-      product.getSubcategoryId(),
-      product.getSocialGroupId(),
-      product.getIsActive()
+      product.getSizeProd(),
+      product.getProdId(),
+      product.getPrice(),
+      product.getPricePromo(),
+      product.getImageUrl()
     );
 
-    CreateProductCommand command = new CreateProductCommand(productId, productDTO);
+    CreateProductSizeCommand command = new CreateProductSizeCommand(productId, productDTO);
     return commandGateway.send(command);
   }
 
-  /**
-   * Récupère les événements d'un agrégat produit.
-   */
   @GetMapping("/events/{aggregateId}")
   public Stream<?> eventsStream(@PathVariable String aggregateId) {
     return eventStore.readEvents(aggregateId).asStream();
   }
-
-//  /**
-//   * Upload d'une image seule (retourne directement l'URL Drive).
-//   */
-//  @PostMapping("/upload-image")
-//  public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-//    try {
-//      String imageUrl = imageStorageService.uploadImage(file);
-//      return ResponseEntity.ok(imageUrl);
-//    } catch (IOException e) {
-//      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//        .body("Image upload failed: " + e.getMessage());
-//    }
-//  }
 
   /**
    * Gestion centralisée des exceptions.
@@ -109,10 +90,10 @@ public class ProductCommandController {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
       .body("Error: " + exception.getMessage());
   }
-
   @DeleteMapping("/delete/{id}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public CompletableFuture<String> deleteCustomer(@PathVariable String id) {
-    return commandGateway.send(new ProductDeletedEvent(id));
+    return commandGateway.send(new DeleteProductSizeCommand(id));
   }
 }
+

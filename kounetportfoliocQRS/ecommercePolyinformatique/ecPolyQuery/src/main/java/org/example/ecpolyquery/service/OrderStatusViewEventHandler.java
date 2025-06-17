@@ -3,6 +3,7 @@ package org.example.ecpolyquery.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
+import org.example.ecpolyquery.entity.OrderStatus;
 import org.example.ecpolyquery.entity.OrderStatusView;
 import org.example.ecpolyquery.entity.Orderecommerce;
 import org.example.ecpolyquery.repos.CustomerRepository;
@@ -32,7 +33,7 @@ public class OrderStatusViewEventHandler {
       .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getId()));
 
     // Met à jour le statut et le code-barres dans la commande
-    order.setOrderStatus(event.getNewStatus());
+    order.setOrderStatus(OrderStatus.Cancelled);
     order.setBarcode(event.getBarcode());
     orderecommerceRepository.save(order);
 
@@ -42,16 +43,15 @@ public class OrderStatusViewEventHandler {
 
     if (optionalOrderStatus.isPresent()) {
       orderStatusView = optionalOrderStatus.get();
-      orderStatusView.setStatus(event.getNewStatus());
+      orderStatusView.setStatus(optionalOrderStatus.get().getStatus());
       orderStatusView.setBarcode(event.getBarcode());
       orderStatusView.setUpdatedAt(LocalDateTime.now());
     } else {
       orderStatusView = OrderStatusView.builder()
         .orderId(event.getId())
         .barcode(event.getBarcode())
-        .status(event.getNewStatus())
+        .status(optionalOrderStatus.get().getStatus())
         .updatedAt(LocalDateTime.now())
-        .customer(order.getCustomer())
         .build();
     }
 
@@ -81,9 +81,8 @@ public class OrderStatusViewEventHandler {
       orderStatusView = OrderStatusView.builder()
         .orderId(event.getId())
         .barcode(event.getBarcode())
-        .status(order.getOrderStatus())
+        .status(optionalOrderStatus.get().getStatus())
         .updatedAt(LocalDateTime.now())
-        .customer(order.getCustomer())
         .build();
     }
 

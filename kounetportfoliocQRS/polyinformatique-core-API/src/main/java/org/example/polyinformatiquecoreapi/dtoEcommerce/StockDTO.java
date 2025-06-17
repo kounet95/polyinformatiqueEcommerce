@@ -12,18 +12,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 public class StockDTO {
-    private String id;
-    @NotBlank(message = "Product size ID cannot be blank")
-    private String disignation;
-    @NotBlank(message = "Product size ID cannot be blank")
-    private String productSizeId;
-    @NotBlank(message = "Supplier ID cannot be blank")
-    private String supplierId;
-    @Min(value = 0, message = "Purchase price must be positive")
-    private double purchasePrice;
-    private double promoPrice;
-    @Min(value = 0, message = "Quantity must be zero or positive")
-    private double quantity;
-    @NotBlank(message = "Product size ID cannot be blank")
-    private String addressId;
+  private String id;
+  @NotBlank(message = "Designation cannot be blank")
+  private String designation;
+  @NotBlank(message = "Product size ID cannot be blank")
+  private String productSizeId;
+  @NotBlank(message = "Supplier ID cannot be blank")
+  private String supplierId;
+  @Min(value = 0, message = "Purchase price must be positive")
+  private double purchasePrice;
+  private double promoPrice;
+  @Min(value = 0, message = "Quantity must be zero or positive")
+  private double quantity;
+  @NotBlank(message = "Address ID cannot be blank")
+  private String addressId;
 }

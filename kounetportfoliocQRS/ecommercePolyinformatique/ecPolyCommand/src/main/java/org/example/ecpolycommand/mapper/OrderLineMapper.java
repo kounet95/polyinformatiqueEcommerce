@@ -11,7 +11,7 @@ public class OrderLineMapper {
         OrderLineAggregate agg = new OrderLineAggregate();
         agg.setOrderLineId(dto.getId());
         agg.setOrderId(dto.getOrderId());
-        agg.setProductId(dto.getProductId());
+        agg.setStockId(dto.getStockId());
         agg.setQty(dto.getQty());
         return agg;
     }
@@ -20,7 +20,7 @@ public class OrderLineMapper {
         return new OrderLineDTO(
             agg.getOrderLineId(),
             agg.getOrderId(),
-            agg.getProductId(),
+            agg.getStockId(),
             agg.getQty()
         );
     }

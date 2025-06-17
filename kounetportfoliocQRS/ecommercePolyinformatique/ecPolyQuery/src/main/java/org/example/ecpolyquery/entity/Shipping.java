@@ -21,7 +21,6 @@ public class Shipping {
     @ManyToOne
     @JoinColumn(name = "shippingId")
     private Address addressId;
-
     @OneToOne
     @JoinColumn(name = "order_id")
     private Orderecommerce orderecommerce;

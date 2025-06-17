@@ -19,40 +19,37 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Setter
 public class StockAggregate {
 
-    @AggregateIdentifier
-    private String id;
-    private String designation;
-    private String productSizeId;
-     private String supplierId;
-     private Double purchasePrice;
-    private int quantity;
-    private String addressId;
+  @AggregateIdentifier
+  private String id;
+  private String designation;
+  private String productSizeId;
+  private String supplierId;
+  private Double purchasePrice;
+  private Double promoPrice;
+  private double quantity;
+  private String addressId;
 
-    public StockAggregate() {}
+  public StockAggregate() {}
 
-    @CommandHandler
-    public StockAggregate(AddStockCommand cmd) {
+  @CommandHandler
+  public StockAggregate(AddStockCommand cmd) {
+    apply(new StockIncreasedEvent(cmd.getId(), cmd.getStockDTO()));
+  }
 
-      apply(new StockIncreasedEvent(cmd.getId(), cmd.getStockDTO()));
-    }
+  @EventSourcingHandler
+  public void on(StockIncreasedEvent event) {
+    this.id = event.getId();
+    this.designation = event.getStockDTO().getDesignation();
+    this.productSizeId = event.getStockDTO().getProductSizeId();
+    this.supplierId = event.getStockDTO().getSupplierId();
+    this.purchasePrice = event.getStockDTO().getPurchasePrice();
+    this.promoPrice = event.getStockDTO().getPromoPrice();
+    this.quantity += event.getStockDTO().getQuantity();
+    this.addressId = event.getStockDTO().getAddressId();
+  }
 
-    @EventSourcingHandler
-    public void on(StockIncreasedEvent event) {
-        this.id = event.getId();
-        this.designation=event.getStockDTO().getDisignation();
-        this.productSizeId=event.getStockDTO().getProductSizeId();
-        this.supplierId=event.getStockDTO().getSupplierId();
-        this.purchasePrice=event.getStockDTO().getPurchasePrice();
-        this.quantity += event.getStockDTO().getQuantity();
-        this.addressId=event.getStockDTO().getAddressId();
-    }
-
-    @EventSourcingHandler
-    public void on(StockDecreasedEvent event) {
-
-      this.quantity -= event.getStockDTO().getQuantity();
-    }
+  @EventSourcingHandler
+  public void on(StockDecreasedEvent event) {
+    this.quantity -= event.getStockDTO().getQuantity();
+  }
 }
-
-
-

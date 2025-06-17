@@ -27,7 +27,7 @@ public class OrderLineAggregate {
   @AggregateIdentifier
   private String orderLineId;
   private String orderId;
-  private String productId;
+  private String StockId;
   private int qty;
   private boolean deleted = false;
 
@@ -51,7 +51,7 @@ public class OrderLineAggregate {
     OrderLineDTO dto = event.getOrderLineDTO();
     this.orderLineId = dto.getId();
     this.orderId = dto.getOrderId();
-    this.productId = dto.getStockId();
+    this.StockId = dto.getStockId();
     this.qty = dto.getQty();
     this.deleted = false;
   }

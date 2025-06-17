@@ -44,7 +44,7 @@ private final AddressRepository addressRepository;
       Stock stock = Stock.builder()
         .id(event.getId())
         .purchasePrice(dto.getPurchasePrice())
-        .designation(dto.getDisignation())
+        .designation(dto.getDesignation())
         .promoPrice(dto.getPromoPrice())
         .store(address)
         .productSize(productSize)

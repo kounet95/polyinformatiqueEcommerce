@@ -32,7 +32,7 @@ public class OrderLine {
         OrderLineDTO orderLineDTO = new OrderLineDTO(
                 orderLineId,
                 orderLine.getOrderId(),
-                orderLine.getProductId(),
+                orderLine.getStockId(),
                 orderLine.getQty()
         );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderLineId, orderLineDTO);

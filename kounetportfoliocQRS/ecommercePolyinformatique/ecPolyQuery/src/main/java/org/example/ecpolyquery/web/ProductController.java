@@ -51,16 +51,10 @@ public class ProductController {
     dto.setId(entity.getId());
     dto.setName(entity.getName());
     dto.setDescription(entity.getDescription());
-    dto.setPrice(entity.getPrice() != null ? entity.getPrice() : 0.0); // gestion du null
-    if (entity.getSizes() != null) {
-      dto.setProductSize(ProductSizeDTO.valueOf(entity.getSizes().name()));
-    } else {
-      dto.setProductSize(null);
-    }
     dto.setCreatedAt(entity.getCreatedAt());
     dto.setSubcategoryId(entity.getSubcategory() != null ? entity.getSubcategory().getId() : null);
     dto.setSocialGroupId(entity.getSocialGroup() != null ? entity.getSocialGroup().getId() : null);
-    dto.setImageUrl(entity.getUrlimage());
+    dto.setModels(entity.getUrlModels());
     dto.setIsActive(entity.isActive());
     return dto;
   }

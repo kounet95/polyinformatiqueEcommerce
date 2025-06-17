@@ -9,6 +9,7 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateShippingCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteShippingCommand;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderStatus;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ShippingDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ShippingDeletedEvent;
@@ -27,6 +28,7 @@ public class ShippingAggregate {
   private String shippingId;
   private String orderId;
   private String address;
+  private OrderStatus orderStatus;
   private LocalDateTime estimatedDeliveryDate;
   private LocalDateTime shippingDate;
   private LocalDateTime createdAt;
@@ -53,6 +55,7 @@ public class ShippingAggregate {
     this.shippingId = event.getId();
     this.orderId = dto.getOrderId();
     this.address = dto.getShippingAddressId();
+    this.orderStatus = dto.getOrderStatus();
     this.estimatedDeliveryDate = dto.getEstimatedDeliveryDate();
     this.shippingDate = dto.getShippingDate();
     this.createdAt = dto.getCreatedAt();

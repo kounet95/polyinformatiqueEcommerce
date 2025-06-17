@@ -2,6 +2,8 @@ package org.example.ecpolycommand.web;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCustomerCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteInvoiceCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.GenerateInvoiceCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.InvoiceDTO;
 import org.springframework.http.HttpStatus;
@@ -54,5 +56,10 @@ public class InvoiceController {
   public ResponseEntity<String> exceptionHandler(Exception exception) {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
       .body("Error: " + exception.getMessage());
+  }
+  @DeleteMapping("/delete/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> deleteCustomer(@PathVariable String id) {
+    return commandGateway.send(new DeleteInvoiceCommand(id));
   }
 }

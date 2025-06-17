@@ -21,7 +21,8 @@ public class SocialGroupMapper {
             agg.getSocialGroupId(),
             agg.getName(),
             agg.getRegion(),
-            agg.getCountry()
+            agg.getCountry(),
+            agg.getPays()
         );
     }
 }
