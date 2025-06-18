@@ -1,14 +1,18 @@
-<section id="portfolio" class="section">
+<section id="portfolio" class="section bg-light py-5">
   <div class="container">
-    <h2>Portfolio</h2>
-    <mat-grid-list cols="3" rowHeight="200px" gutterSize="16px">
-      <mat-grid-tile *ngFor="let item of portfolio" [colspan]="1" [rowspan]="1">
-        <a [href]="item.url"> <img mat-card-image [src]="item.img" [alt]="item.title"></a>
-       
-        <mat-grid-tile-footer>
-          <h3>{{item.title}}</h3>
-        </mat-grid-tile-footer>
-      </mat-grid-tile>
-    </mat-grid-list>
+    <h2 class="text-center mb-5">Nos Réalisations</h2>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" *ngFor="let item of portfolio">
+        <div class="card shadow-sm border-0 portfolio-card h-100">
+          <a [href]="item.url" target="_blank" rel="noopener">
+            <img [src]="item.img" [alt]="item.title" class="card-img-top img-fluid portfolio-img">
+          </a>
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">{{ item.title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

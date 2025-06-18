@@ -1,39 +1,72 @@
-<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
-  <div class="mb-3">
-    <label for="name" class="form-label">Nom de la Sous-Catégorie</label>
-    <input
-      type="text"
-      id="name"
-      class="form-control"
-      formControlName="name"
-      [class.is-invalid]="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
-      placeholder="Saisir un nom (2 à 100 caractères)"
-      autocomplete="off"
-    >
-    <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="invalid-feedback">
-      <span *ngIf="categoryForm.get('name')?.errors?.['required']">Le nom est requis.</span>
-      <span *ngIf="categoryForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
-      <span *ngIf="categoryForm.get('name')?.errors?.['maxlength']">Maximum 100 caractères.</span>
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+
+          <div class="section-header mb-4 text-center">
+            <h3>Créer une sous-catégorie</h3>
+            <p>Ajoutez une nouvelle sous-catégorie à votre catalogue</p>
+          </div>
+
+          <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- Champ : Nom -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom de la Sous-Catégorie</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                formControlName="name"
+                [class.is-invalid]="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+                placeholder="Saisir un nom (2 à 100 caractères)"
+                autocomplete="off"
+              >
+              <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched" class="invalid-feedback">
+                <span *ngIf="categoryForm.get('name')?.errors?.['required']">Le nom est requis.</span>
+                <span *ngIf="categoryForm.get('name')?.errors?.['minlength']">Au moins 2 caractères.</span>
+                <span *ngIf="categoryForm.get('name')?.errors?.['maxlength']">Maximum 100 caractères.</span>
+              </div>
+            </div>
+
+            <!-- Champ : Catégorie parente -->
+            <div class="mb-4">
+              <label for="categoryId" class="form-label">Catégorie parente</label>
+              <select
+                id="categoryId"
+                class="form-select"
+                formControlName="categoryId"
+                [class.is-invalid]="categoryForm.get('categoryId')?.invalid && categoryForm.get('categoryId')?.touched"
+              >
+                <option value="" disabled selected>Choisissez une catégorie</option>
+                <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+              </select>
+              <div *ngIf="categoryForm.get('categoryId')?.invalid && categoryForm.get('categoryId')?.touched" class="invalid-feedback">
+                La catégorie est requise.
+              </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+                Créer
+              </button>
+            </div>
+
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+
+          </form>
+
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="mb-3">
-    <label for="categoryId" class="form-label">Catégorie parente</label>
-    <mat-form-field appearance="fill" style="width: 100%;">
-      <mat-label>Catégorie</mat-label>
-       <mat-select formControlName="categoryId" required>
-       <mat-option *ngFor="let cat of categories" [value]="cat.id">
-      {{ cat.name }}
-    </mat-option>
-  </mat-select>
-    </mat-form-field>
-    <div *ngIf="categoryForm.get('categoryId')?.invalid && categoryForm.get('categoryId')?.touched" class="invalid-feedback">
-      <span>La catégorie est requise.</span>
-    </div>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
-
-  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
-</form>
+</section>
