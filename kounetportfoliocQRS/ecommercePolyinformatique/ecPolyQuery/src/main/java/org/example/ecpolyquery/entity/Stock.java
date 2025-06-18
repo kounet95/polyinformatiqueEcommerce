@@ -19,15 +19,19 @@ public class Stock {
   private double promoPrice;
   private LocalDateTime createdDate;
   private LocalDateTime closedDate;
+
   @ManyToOne
   @JoinColumn(name = "product_size_id")
   private ProductSize productSize;
+
   @ManyToOne
   @JoinColumn(name = "supplier_id")
   private Supplier supplier;
+
   @ManyToOne
   @JoinColumn(name = "orderecommerceId")
   private Orderecommerce orderecommerceId;
+
   @ManyToOne
   @JoinColumn(name = "addressId")
   private Address store;

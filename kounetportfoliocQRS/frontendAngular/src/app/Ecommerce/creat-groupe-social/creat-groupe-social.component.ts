@@ -41,10 +41,11 @@ export class CreatGroupeSocialComponent implements OnInit {
     }
 
     const socialGroup: SocialGroupDTO = {
-      id: '', // Généré côté backend
+      id: '', 
       name: this.socialgroupeForm.value.name,
       region: this.socialgroupeForm.value.region,
-      country: this.socialgroupeForm.value.country
+      country: this.socialgroupeForm.value.country,
+      pays: this.socialgroupeForm.value.pays
     };
 
     this.loading = true;

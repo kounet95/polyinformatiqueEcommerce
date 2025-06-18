@@ -1,14 +1,30 @@
 <div class="product-details-card" *ngIf="product">
   <div class="product-image">
-    <img [src]="product.imageUrl" alt="{{product.name}}" />
+    <img [src]="product.productSizes[0]?.imageUrl" alt="{{product.name}}" />
   </div>
   <div class="product-info">
     <h2>{{ product.name }}</h2>
     <div class="product-meta">
-      <span>Couleur : <b>{{ product.couleurs || '—' }}</b></span>
-      <span>Taille : <b>{{ product.productSize || '—' }}</b></span>
+      <span>
+        Taille :
+        <b>
+          <ng-container *ngIf="product.productSizes.length > 0">
+            {{ product.productSizes[0].sizeProd }}
+          </ng-container>
+          <ng-container *ngIf="product.productSizes.length === 0">
+            —
+          </ng-container>
+        </b>
+      </span>
     </div>
-    <div class="product-price">\${{ product.price.toFixed(2) }}</div>
+    <div class="product-price" *ngIf="product.productSizes.length > 0">
+      <span *ngIf="product.productSizes[0].pricePromo && product.productSizes[0].pricePromo > 0" class="promo-price">
+        ${{ product.productSizes[0].pricePromo.toFixed(2) }}
+      </span>
+      <span [class.line-through]="product.productSizes[0].pricePromo && product.productSizes[0].pricePromo > 0">
+        ${{ product.productSizes[0].price.toFixed(2) }}
+      </span>
+    </div>
     <div class="product-description">{{ product.description }}</div>
     <div class="qty-add-row">
       <div class="qty-controls">

@@ -11,26 +11,26 @@
 
       <div class="cart-item" *ngFor="let item of cartItems">
         <div class="product-col">
-          <img [src]="item.imageUrl" alt="" class="cart-img" />
+          <img [src]="item.models" alt="" class="cart-img" />
           <div class="cart-product-info">
             <div class="cart-product-title">{{ item.name }}</div>
             <div class="cart-product-meta">
-              Color: {{ item.couleurs || '—' }} &nbsp; Size: {{ item.productSize || '—' }}
+              Size: {{ item.productSize || '—' }}
             </div>
             <div class="cart-product-actions">
-              <span class="remove-btn" (click)="removeFromCart(item.id)">
+              <span class="remove-btn" (click)="removeFromCart(item.id, item.productSizeId)">
                 <i class="material-icons">delete</i> Remove
               </span>
             </div>
           </div>
         </div>
-        <span class="price-col">\${{ item.price.toFixed(2) }}</span>
+        <span class="price-col">\${{ item.productSizePrice ? item.productSizePrice.toFixed(2) : '0.00' }}</span>
         <div class="qty-col">
           <button (click)="decrementQty(item)" class="qty-btn">-</button>
           <span class="qty-val">{{ item.qty }}</span>
           <button (click)="incrementQty(item)" class="qty-btn">+</button>
         </div>
-        <span class="total-col">\${{ (item.price * item.qty).toFixed(2) }}</span>
+        
       </div>
     </div>
 
@@ -53,15 +53,15 @@
       <div class="shipping-options">
         <div>
           <input type="radio" id="standard" name="shipping" [(ngModel)]="shippingOption" value="standard">
-          <label for="standard">Standard Delivery - \$4.99</label>
+          <label for="standard">Standard Delivery - $4.99</label>
         </div>
         <div>
           <input type="radio" id="express" name="shipping" [(ngModel)]="shippingOption" value="express">
-          <label for="express">Express Delivery - \$12.99</label>
+          <label for="express">Express Delivery - $12.99</label>
         </div>
         <div>
           <input type="radio" id="free" name="shipping" [(ngModel)]="shippingOption" value="free">
-          <label for="free">Free Shipping (Orders over \$300)</label>
+          <label for="free">Free Shipping (Orders over $300)</label>
         </div>
       </div>
     </div>

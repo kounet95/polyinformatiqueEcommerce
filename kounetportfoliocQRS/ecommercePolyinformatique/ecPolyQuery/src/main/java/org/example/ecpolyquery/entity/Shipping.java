@@ -19,7 +19,7 @@ public class Shipping {
     private LocalDateTime estimatedDeliveryDate;
     private LocalDateTime shippingDate;
     @ManyToOne
-    @JoinColumn(name = "shippingId")
+    @JoinColumn(name = "addressId")
     private Address addressId;
     @OneToOne
     @JoinColumn(name = "order_id")

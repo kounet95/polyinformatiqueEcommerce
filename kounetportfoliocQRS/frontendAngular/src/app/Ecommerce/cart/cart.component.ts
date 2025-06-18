@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  standalone:false,
+  standalone: false,
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
@@ -27,21 +27,37 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Je veux cherher les infos produits depuis mon backend pour obtenir les informations actuel de mes produit
     const cart = this.cartService.getCart();
     if (cart.length > 0) {
       const requests = cart.map(item =>
         this.productService.getProductById(item.id).pipe(
-          map(freshProduct => ({
-            ...freshProduct,
-            qty: item.qty
-          }))
+          map(freshProduct => {
+            let chosenSize = null;
+            if (item.productSizeId) {
+              chosenSize = freshProduct.productSizes?.find(
+                (size: any) => size.id === item.productSizeId
+              );
+            } else if (item.productSize) {
+              chosenSize = freshProduct.productSizes?.find(
+                (size: any) => size.sizeProd === item.productSize
+              );
+            }
+            if (!chosenSize && freshProduct.productSizes?.length) {
+              chosenSize = freshProduct.productSizes[0];
+            }
+            return {
+              ...freshProduct,
+              qty: item.qty,
+              productSizeId: chosenSize?.id ?? item.productSizeId,
+              productSize: chosenSize?.sizeProd ?? item.productSize,
+              productSizePrice: chosenSize?.price ?? 0, // <-- LA BONNE PROPRIÉTÉ
+            };
+          })
         )
       );
       forkJoin(requests).subscribe(freshCartItems => {
         this.cartItems = freshCartItems;
         this.recalculate();
-        //remettre le panier à jour dans le service :
         this.cartService.setCart(this.cartItems);
       });
     } else {
@@ -62,8 +78,8 @@ export class CartComponent implements OnInit {
     }
   }
 
-  removeFromCart(productId: string) {
-    this.cartService.removeFromCart(productId);
+  removeFromCart(productId: string, productSizeId?: string) {
+    this.cartService.removeFromCart(productId, productSizeId);
     this.cartItems = this.cartService.getCart();
     this.recalculate();
   }
@@ -80,7 +96,6 @@ export class CartComponent implements OnInit {
   }
 
   applyCoupon() {
-    // regle pour mes promos : -$10 si le code est "PROMO10"
     if (this.couponCode === 'PROMO10') {
       this.discount = 10;
     } else {
@@ -90,15 +105,14 @@ export class CartComponent implements OnInit {
   }
 
   recalculate() {
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price || 0) * item.qty, 0);
-    // Calcul shipping
+    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.productSizePrice || 0) * item.qty, 0);
     let shipping = 0;
     if (this.shippingOption === 'standard') shipping = 4.99;
     else if (this.shippingOption === 'express') shipping = 12.99;
     else if (this.shippingOption === 'free' && this.subtotal >= 300) shipping = 0;
-    else if (this.shippingOption === 'free' && this.subtotal < 300) shipping = 15; // fallback
+    else if (this.shippingOption === 'free' && this.subtotal < 300) shipping = 15;
 
-    this.tax = this.subtotal * 0.1; // exemple : 10%
+    this.tax = this.subtotal * 0.1;
     this.total = this.subtotal + shipping + this.tax - this.discount;
   }
 

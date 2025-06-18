@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoryDTO, SubcategoryDTO, SocialGroupDTO, ProductDTO, ProductSize } from '../../mesModels/models';
+import { CategoryDTO, SubcategoryDTO, SocialGroupDTO, ProductDTO, ProductSizeDTO } from '../../mesModels/models';
 import { CategoryService } from '../services/category.service';
 import { SouscategoriesService } from '../services/souscategories.service';
 import { CategoriesocialesService } from '../services/categoriesociales.service';
 import { ProductService } from '../services/produit.service';
+import { ProductSizeService } from '../services/product-size.service';
 
 @Component({
   selector: 'app-create-product',
@@ -18,7 +19,7 @@ export class CreateProductComponent implements OnInit {
   sousCategories: SubcategoryDTO[] = [];
   categoriesSociales: SocialGroupDTO[] = [];
   selectedFile: File | null = null;
-  sizeOptions = Object.values(ProductSize);
+  productSizes: ProductSizeDTO[] = [];
   loading = false;
   successMessage?: string;
   errorMessage?: string;
@@ -28,16 +29,16 @@ export class CreateProductComponent implements OnInit {
     private categoryService: CategoryService,
     private souscategoriesService: SouscategoriesService,
     private categoriesocialesService: CategoriesocialesService,
-    private productService: ProductService
+    private productService: ProductService,
+    private productSizeService: ProductSizeService
   ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required]],
-      price: [null, [Validators.required, Validators.min(0)]],
-      categoryId: [null, Validators.required],
-      subcategoryId: [null, Validators.required],
-      socialGroupId: [null, Validators.required],
-      productSize: [ProductSize.MEDIUM, Validators.required],
+      categoryId: ['', Validators.required],
+      subcategoryId: ['', Validators.required],
+      socialGroupId: ['', Validators.required],
+      productSizes: [[], Validators.required], 
       isActive: [true],
       couleurs: ['']
     });
@@ -52,22 +53,27 @@ export class CreateProductComponent implements OnInit {
       error: () => this.errorMessage = "Impossible de charger les groupes sociaux."
     });
 
-    // Quand la catégorie change, charger les sous-catégories correspondantes
+    // la logique quand la catégorie change, charger les sous-catégories correspondantes
     this.productForm.get('categoryId')?.valueChanges.subscribe(categoryId => {
       if (!categoryId) {
         this.sousCategories = [];
-        this.productForm.patchValue({ subcategoryId: null });
+        this.productForm.patchValue({ subcategoryId: '' });
         return;
       }
       this.souscategoriesService.getAllSubcategories().subscribe({
         next: subs => {
           this.sousCategories = subs.filter(sc => sc.categoryId === categoryId);
-          this.productForm.patchValue({ subcategoryId: null });
+          this.productForm.patchValue({ subcategoryId: '' });
         },
         error: () => this.errorMessage = "Impossible de charger les sous-catégories."
       });
     });
 
+    // Chargement des tailles de produit avec à la sélection
+    this.productSizeService.getAllProductSizes().subscribe({
+      next: sizes => this.productSizes = sizes,
+      error: () => {/* silencieux ou message */}
+    });
   }
 
   loadCategories(): void {
@@ -98,21 +104,25 @@ export class CreateProductComponent implements OnInit {
       id: '',
       name: raw.name,
       description: raw.description,
-      price: Number(raw.price),
       createdAt: new Date().toISOString(),
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
-      imageUrl: '',
+      models: '', // mon model a remplir si besoin
       isActive: !!raw.isActive,
-      couleurs: raw.couleurs,
-      productSize: raw.productSize
+      productSizes: raw.productSizes //le tableau de ProductSizeDTO
     };
     this.loading = true;
     this.productService.createProduct(product, this.selectedFile ?? undefined).subscribe({
       next: () => {
         this.successMessage = 'Produit créé avec succès !';
         this.loading = false;
-        this.productForm.reset({ productSize: ProductSize.MEDIUM, isActive: true });
+        this.productForm.reset({
+          productSizes: [],
+          isActive: true,
+          categoryId: '',
+          subcategoryId: '',
+          socialGroupId: ''
+        });
         this.selectedFile = null;
       },
       error: () => {

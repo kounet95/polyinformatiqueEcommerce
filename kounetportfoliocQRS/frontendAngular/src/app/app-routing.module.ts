@@ -28,7 +28,7 @@ import { CartComponent } from './Ecommerce/cart/cart.component';
 import { OrderComponent } from './Ecommerce/order/order.component';
 import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
-import { CreatePurchaseComponent } from './Ecommerce/create-purchase/create-purchase.component';
+
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
@@ -63,7 +63,7 @@ const routes: Routes = [
   { path: 'product', component: ProductComponent },
   { path: 'category', component: CategoryComponent },
   { path: 'createsupplier', component: CreateSupplierComponent },
-  { path: 'createpurchase', component: CreatePurchaseComponent },
+
   { path: 'product-details', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
   { path: 'order', component: OrderCreateComponent },

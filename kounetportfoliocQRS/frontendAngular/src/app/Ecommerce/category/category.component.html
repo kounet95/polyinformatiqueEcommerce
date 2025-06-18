@@ -46,7 +46,7 @@
       </mat-accordion>
     </div>
 
-    <!-- Bloc Couleurs (pareil qu'une carte) -->
+    <!-- Bloc Couleurs -->
     <div class="couleur-card">
       <div class="color-filter-widget widget-item">
         <h3 class="widget-title">Filter by Color</h3>
@@ -61,7 +61,6 @@
               </label>
             </div>
           </div>
-          <!-- Boutons Clear All et Appliquer le filtre -->
           <div class="color-filter-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
             <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Clear All</button>
             <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Appliquer le filtre</button>
@@ -70,25 +69,24 @@
       </div>
     </div>
   </div>
-<!-- Affichage produits filtrés -->
-<div class="row gy-4 mt-4">
-  <div class="col-lg-6" *ngFor="let product of products">
-    <div class="product-box">
-      <div class="product-thumb">
-        <img [src]="product.imageUrl || 'assets/img/placeholder.png'" [alt]="product.name" class="main-img" loading="lazy">
-      </div>
-      <div class="product-content">
-        <div class="product-details">
-          <h3 class="product-title">{{ product.name }}</h3>
-          <div class="product-price">
-            <span>{{ product.price | currency }}</span>
-          </div>
+  <!-- Affichage produits filtrés -->
+  <div class="row gy-4 mt-4">
+    <div class="col-lg-6" *ngFor="let product of products">
+      <div class="product-box">
+        <div class="product-thumb">
+          <img [src]="product.models || 'assets/img/placeholder.png'" [alt]="product.name" class="main-img" loading="lazy">
         </div>
-        <!-- Affichage couleurs du produit -->
-        <div class="product-color-options" *ngIf="product.couleurs">
-          <span class="color-option" 
-                *ngFor="let c of product.couleurs?.split(',')" 
-                [style.background-color]="c"></span>
+        <div class="product-content">
+          <div class="product-details">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <div class="product-price" *ngIf="product.productSizes && product.productSizes.length > 0">
+              <span>{{ product.productSizes[0].price | currency }}</span>
+            </div>
+            <div class="product-price" *ngIf="!product.productSizes || product.productSizes.length === 0">
+              <span>Prix indisponible</span>
+            </div>
+          </div>
+      
         </div>
       </div>
     </div>

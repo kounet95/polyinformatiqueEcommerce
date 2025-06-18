@@ -24,14 +24,16 @@ data class GetAllProductsQuery(
   val productSize: String? = null
 )
 
-public class GetAllProductSizesQuery {
-}
+data class GetAllProductSizesQuery (
+  val page: Int = 0,
+  val size: Int = 10,
+  val price: String? = null,
+  val pricePromo: String? = null,
+)
 
-public class GetAllPurchasesQuery {
-}
-
-public class GetAllPurchaseItemsQuery {
-}
+data class GetAllProductSizesByQuery(
+  val id: String,
+)
 
 public class GetAllShippingsQuery {
 }

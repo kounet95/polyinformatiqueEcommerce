@@ -15,7 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
-import { AcceuilComponent } from './acceuil/acceuil.component';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { FooterComponent } from './footer/footer.component';
@@ -67,7 +67,8 @@ import { OrderStatusComponent } from './Ecommerce/order-status/order-status.comp
 import { CartComponent } from './Ecommerce/cart/cart.component';
 import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
-import { CreatePurchaseComponent } from './Ecommerce/create-purchase/create-purchase.component';
+import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
+import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 
 
 
@@ -109,7 +110,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateNewsComponent,
     CreateEventComponent,
     ProductDetailsComponent,
-  
     CategoryComponent,
     CategoryCreateComponent,
     CreateProductComponent,
@@ -123,7 +123,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CartComponent,
     OrderCreateComponent,
     CreateSupplierComponent,
-    CreatePurchaseComponent
+    CreateProductSizeComponent,
+    ProductSizeComponent,
+   
     
   ],
   imports: [
@@ -173,10 +175,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ReactiveFormsModule,
     MatSelectModule,
     MatOptionModule,
-  
     MatCardModule,
-    
- 
+    MatChipsModule,
     MatTabsModule,
     MatCardModule,
    MatTableModule,

@@ -99,59 +99,135 @@ export interface TagModel {
 }
 
 // ===============================
-// ====== OrderStatusDTO =========
+// ========== AddressDTO ==========
 // ===============================
-
-export interface OrderStatusDTO {
-  id: string;           
-  orderId: string;       
-  barcode: string;       
-  status: string;         
-  updatedAt: string;     
-  customerId: string;     
-  customerName: string;   
+export interface AddressDTO {
+  id: number;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  appartment: number;
+  customer: string;
+  store: string;
+  supplier: string;
+  shipping: string;
 }
-
 
 // ===============================
 // ========== CategoryDTO =========
 // ===============================
-
 export interface CategoryDTO {
   id: string;
   name: string;
-  description?: string;
-  imageUrl?: string;
-  parentId?: number;
-  children?: CategoryDTO[];
 }
 
 // ===============================
-// ========== ProductDTO =========
+// ========== CustomerEcommerceDTO ==========
 // ===============================
-
-export interface ProductDTO {
+export interface CustomerEcommerceDTO {
   id: string;
-  name: string;
-  description: string;
-  price: number;
-  createdAt: string;  
-  subcategoryId: string;
-  socialGroupId: string;
-  imageUrl: string;
-  isActive: boolean;
-  couleurs?: string; 
- productSize: ProductSize;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  addressId: string;
+  createdAt: string; 
 }
 
-export interface CartItem extends ProductDTO {
+// ===============================
+// ========== InvoiceDTO ==========
+// ===============================
+export interface InvoiceDTO {
+  id: string;
+  orderId: string;
+  customerId: string;
+  amount: number;
+  paymentMethod: string;
+  restMonthlyPayment: number;
+  paymentStatus: string;
+  supplierId: string;
+}
+
+// ===============================
+// ========== OrderDTO ==========
+// ===============================
+export interface OrderDTO {
+  id: string;
+  customerId: string;
+  supplierId: string;
+  createdAt: string; 
+  orderStatus: OrderStatus;
+  paymentMethod: string;
+  total: number;
+  barcode: string;
+  shippingId: string;
+}
+
+// ===============================
+// ========== OrderLineDTO ==========
+// ===============================
+export interface OrderLineDTO {
+  id: string;
+  orderId: string;
+  stockId: string;
   qty: number;
 }
 
 // ===============================
-// ========== ProductSizeDTO =====
+// ========== OrderStatus ==========
 // ===============================
-export enum ProductSize {
+export enum OrderStatus {
+  Inprogress = "Inprogress",
+  Delivered = "Delivered",
+  Cancelled = "Cancelled"
+}
+
+// ===============================
+// ========== OrderStatusDTO ==========
+// ===============================
+export interface OrderStatusDTO {
+  id: string;
+  orderId: string;
+  barcode: string;
+  status: string;
+  updatedAt: string;
+  customerId: string;
+  customerName: string;
+}
+
+// ===============================
+// ========== ProductDTO ==========
+// ===============================
+export interface ProductDTO {
+  id: string;
+  name: string;
+  description: string;
+  productSizes: ProductSizeDTO[];
+  createdAt: string;
+  models: string;
+  subcategoryId: string;
+  socialGroupId: string;
+  isActive: boolean;
+}
+
+// ===============================
+// ========== ProductSizeDTO ==========
+// ===============================
+export interface ProductSizeDTO {
+  id: string;
+  sizeProd: SizeProd;
+  prodId: string;
+  price: number;
+  pricePromo: number;
+  imageUrl: string;
+}
+
+// ===============================
+// ========== SizeProd (enum) ==========
+// ===============================
+export enum SizeProd {
   SMALL = "SMALL",
   MEDIUM = "MEDIUM",
   LARGE = "LARGE",
@@ -160,72 +236,46 @@ export enum ProductSize {
 }
 
 // ===============================
-// ========== PurchaseDTO =========
+// ========== ShippingDTO ==========
 // ===============================
-
-export interface PurchaseDTO {
-  id: string;
-  supplierId: string;
-  createdAt: string;
-  status: string;
-  total: number;
-}
-
-// ===============================
-// ======== PurchaseItemDTO =======
-// ===============================
-
-export interface PurchaseItemDTO {
-  id: string;
-  purchaseId: string;
-  productId: string;
-  qty: number;
-  unitPrice: number;
-}
-
-// ===============================
-// ========== ShippingDTO =========
-// ===============================
-
 export interface ShippingDTO {
   id: string;
   orderId: string;
-  deliveryStatus: string;
   estimatedDeliveryDate: string;
   shippingDate: string;
-  shippingAddress: string;
+  createdAt: string;
+  shippingAddressId: string;
+  orderStatus: OrderStatus;
 }
 
 // ===============================
-// ========== SocialGroupDTO ======
+// ========== SocialGroupDTO ==========
 // ===============================
-
 export interface SocialGroupDTO {
   id: string;
   name: string;
   region: string;
   country: string;
+  pays: string;
 }
 
 // ===============================
-// =========== StockDTO ===========
+// ========== StockDTO ==========
 // ===============================
-
 export interface StockDTO {
   id: string;
+  designation: string;
   productSizeId: string;
   supplierId: string;
   purchasePrice: number;
   promoPrice: number;
-  salePrice: number;
-  stockAvailable: number;
   quantity: number;
+  addressId: string;
 }
 
 // ===============================
-// ========== SubcategoryDTO ======
+// ========== SubcategoryDTO ==========
 // ===============================
-
 export interface SubcategoryDTO {
   id: string;
   name: string;
@@ -233,64 +283,12 @@ export interface SubcategoryDTO {
 }
 
 // ===============================
-// ========== SupplierDTO =========
+// ========== SupplierDTO ==========
 // ===============================
-
 export interface SupplierDTO {
   id: string;
   fullname: string;
-  city: string;
+  addressId: string;
   email: string;
   personToContact: string;
-}
-
-// ===============================
-// ========== OrderLineDTO ========
-// ===============================
-
-export interface OrderLineDTO {
-  id: string;
-  orderId: string;
-  productSizeId: string;
-  qty: number;
-}
-
-// ===============================
-// ============ OrderDTO ==========
-// ===============================
-
-export interface OrderDTO {
-  id: string;
-  customerId: string;
-  createdAt: string;
-  orderStatus: string;
-  paymentMethod: string;
-  total: number;
-  barcode: string;
-}
-
-// ===============================
-// =========== InvoiceDTO =========
-// ===============================
-
-export interface InvoiceDTO {
-  invoiceId: string;
-  orderId: string;
-  amount: number;
-  paymentStatus: string;
-}
-
-// ===============================
-// ===== CustomerEcommerceDTO =====
-// ===============================
-
-export interface CustomerEcommerceDTO {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  shippingAddress: string;
-  billingAddress: string;
-  createdAt: string; 
 }

@@ -23,11 +23,12 @@ public class ProductQueryHandler {
 
   @QueryHandler
   public List<Product> on(GetAllProductsQuery query) {
-    log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}", query.getPage(), query.getSize());
-    Page<Product> productPage = productRepository.findAll(PageRequest.of(query.getPage(), query.getSize()));
+    log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}",
+      query.getPage(), query.getSize());
+    Page<Product> productPage = productRepository.findAll(
+      PageRequest.of(query.getPage(), query.getSize()));
     return productPage.getContent();
   }
-
   @QueryHandler
   public Product on(GetProductByIdQuery query) {
     log.debug("Handling GetProductByIdQuery: {}", query.getId());
