@@ -22,11 +22,10 @@ public class ProductDTO {
   private String name;
   @NotBlank(message = "Description cannot be blank")
   private String description;
-  @NotNull(message = "ProductSizes cannot be null")
   private List<ProductSizeDTO> productSizes;
   @NotNull(message = "CreatedAt cannot be null")
   private LocalDateTime createdAt;
-  @NotBlank(message = "Models cannot be blank")
+
   private String models;
   @NotBlank(message = "Subcategory ID cannot be blank")
   private String subcategoryId;

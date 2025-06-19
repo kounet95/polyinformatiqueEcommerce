@@ -22,7 +22,6 @@ public class SocialGroupAggregate {
   private String socialGroupId;
   private String name;
   private String region;
-  private String country;
   private String pays;
   private boolean deleted;
 
@@ -46,7 +45,6 @@ public class SocialGroupAggregate {
     this.socialGroupId = event.getId();
     this.name = event.getSocialGroupDTO().getName();
     this.region = event.getSocialGroupDTO().getRegion();
-    this.country = event.getSocialGroupDTO().getCountry();
     this.pays = event.getSocialGroupDTO().getPays();
     this.deleted = false;
   }

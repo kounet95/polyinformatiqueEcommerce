@@ -52,8 +52,8 @@ public class ProductCommandController {
     // Upload l'image si présente
     if (mediaFile != null && !mediaFile.isEmpty()) {
       try {
-        String imageUrl = imageStorageService.uploadImage(mediaFile);
-        product.setModels(imageUrl);
+        String models = imageStorageService.uploadImage(mediaFile);
+        product.setModels(models);
       } catch (IOException e) {
         CompletableFuture<String> failed = new CompletableFuture<>();
         failed.completeExceptionally(

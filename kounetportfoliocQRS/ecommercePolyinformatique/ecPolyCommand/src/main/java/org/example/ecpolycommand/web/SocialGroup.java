@@ -35,7 +35,6 @@ public class SocialGroup {
       socialGroupId,
       socialGroup.getName(),
       socialGroup.getRegion(),
-      socialGroup.getCountry(),
       socialGroup.getPays()
     );
     CreateSocialGroupCommand command = new CreateSocialGroupCommand(socialGroupId, socialGroupDTO);

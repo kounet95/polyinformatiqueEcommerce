@@ -33,7 +33,7 @@ public class SocialGroupService {
         .id(event.getId())
         .name(dto.getName())
         .region(dto.getRegion())
-        .country(dto.getCountry())
+        .country(dto.getPays())
         .build();
       socialGroupRepository.save(socialGroup);
       log.info("SocialGroup created with ID: {}", event.getId());
@@ -58,7 +58,7 @@ public class SocialGroupService {
     socialGroupRepository.findById(event.getId()).ifPresent(socialGroup -> {
       socialGroup.setName(dto.getName());
       socialGroup.setRegion(dto.getRegion());
-      socialGroup.setCountry(dto.getCountry());
+      socialGroup.setCountry(dto.getPays());
       socialGroupRepository.save(socialGroup);
       log.info("SocialGroup updated with ID: {}", event.getId());
     });

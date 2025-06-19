@@ -12,7 +12,7 @@ public class SocialGroupMapper {
         agg.setSocialGroupId(dto.getId());
         agg.setName(dto.getName());
         agg.setRegion(dto.getRegion());
-        agg.setCountry(dto.getCountry());
+        agg.setPays(dto.getPays());
         return agg;
     }
 
@@ -21,7 +21,6 @@ public class SocialGroupMapper {
             agg.getSocialGroupId(),
             agg.getName(),
             agg.getRegion(),
-            agg.getCountry(),
             agg.getPays()
         );
     }

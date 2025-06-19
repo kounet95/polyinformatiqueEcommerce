@@ -22,13 +22,12 @@ export class CreatGroupeSocialComponent implements OnInit {
     this.socialgroupeForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       region: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      country: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]]
+      pays: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]]
     });
   }
 
   ngOnInit(): void {
-    // Ici tu pourrais charger la liste des groupes sociaux si besoin
-    // this.loadSocialGroups();
+   
   }
 
   onSubmit() {
@@ -44,7 +43,6 @@ export class CreatGroupeSocialComponent implements OnInit {
       id: '', 
       name: this.socialgroupeForm.value.name,
       region: this.socialgroupeForm.value.region,
-      country: this.socialgroupeForm.value.country,
       pays: this.socialgroupeForm.value.pays
     };
 

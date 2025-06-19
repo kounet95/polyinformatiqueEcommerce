@@ -32,7 +32,6 @@ public class SocialGroupController {
     dto.setId(entity.getId());
     dto.setName(entity.getName());
     dto.setRegion(entity.getRegion());
-    dto.setCountry(entity.getCountry());
     return dto;
   }
 }

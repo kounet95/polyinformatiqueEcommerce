@@ -2,32 +2,29 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8">
-
         <div class="registration-form-wrapper p-4 shadow rounded bg-white">
-
           <div class="section-header mb-4 text-center">
             <h2>Créer un produit</h2>
             <p>Remplissez les champs pour enregistrer un nouveau produit</p>
           </div>
-
           <form [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate>
-
             <div class="row">
+              <!-- Nom -->
               <div class="col-md-6 mb-3">
                 <label for="name" class="form-label">Nom du produit</label>
                 <input type="text" id="name" class="form-control" formControlName="name" placeholder="Ex: Chemise wax">
-                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('required')">
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('required') && productForm.get('name')?.touched">
                   Nom requis.
                 </div>
-                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('minlength')">
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('minlength') && productForm.get('name')?.touched">
                   Minimum 2 caractères.
                 </div>
               </div>
-
+              <!-- Catégorie -->
               <div class="col-md-6 mb-3">
                 <label for="category" class="form-label">Catégorie</label>
                 <select class="form-select" formControlName="categoryId">
-                  <option value="" disabled selected>Choisir...</option>
+                  <option value="" disabled>Choisir...</option>
                   <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
                 </select>
                 <div class="text-danger small" *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
@@ -35,23 +32,23 @@
                 </div>
               </div>
             </div>
-
             <div class="row">
+              <!-- Sous-catégorie -->
               <div class="col-md-6 mb-3">
                 <label for="subcategory" class="form-label">Sous-catégorie</label>
                 <select class="form-select" formControlName="subcategoryId">
-                  <option value="" disabled selected>Choisir...</option>
+                  <option value="" disabled>Choisir...</option>
                   <option *ngFor="let sc of sousCategories" [value]="sc.id">{{ sc.name }}</option>
                 </select>
                 <div class="text-danger small" *ngIf="productForm.get('subcategoryId')?.invalid && productForm.get('subcategoryId')?.touched">
                   Sous-catégorie requise.
                 </div>
               </div>
-
+              <!-- Groupe social -->
               <div class="col-md-6 mb-3">
                 <label for="socialGroup" class="form-label">Groupe social</label>
                 <select class="form-select" formControlName="socialGroupId">
-                  <option value="" disabled selected>Choisir...</option>
+                  <option value="" disabled>Choisir...</option>
                   <option *ngFor="let sg of categoriesSociales" [value]="sg.id">{{ sg.name }}</option>
                 </select>
                 <div class="text-danger small" *ngIf="productForm.get('socialGroupId')?.invalid && productForm.get('socialGroupId')?.touched">
@@ -59,55 +56,53 @@
                 </div>
               </div>
             </div>
-
+            <!-- Description -->
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
               <textarea rows="3" class="form-control" formControlName="description" placeholder="Décrire le produit..."></textarea>
-              <div class="text-danger small" *ngIf="productForm.get('description')?.hasError('required')">
+              <div class="text-danger small" *ngIf="productForm.get('description')?.hasError('required') && productForm.get('description')?.touched">
                 Description requise.
               </div>
             </div>
-
+  
+            <!-- Tailles disponibles -->
             <div class="mb-3">
               <label for="productSizes" class="form-label">Tailles disponibles</label>
               <select multiple class="form-select" formControlName="productSizes">
-                <option *ngFor="let size of productSizes" [value]="size">
+                <option *ngFor="let size of productSizes" [ngValue]="size">
                   {{ size.sizeProd }} — {{ size.price | number:'1.2-2' }} €
                 </option>
               </select>
               <small class="form-text text-muted">Vous pouvez choisir plusieurs tailles.</small>
+              <div class="text-danger small" *ngIf="productForm.get('productSizes')?.invalid && productForm.get('productSizes')?.touched">
+                Choisissez au moins une taille.
+              </div>
             </div>
-
+            <!-- Actif -->
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" formControlName="isActive" id="isActive">
               <label class="form-check-label" for="isActive">
                 Produit actif
               </label>
             </div>
-
-            <div class="mb-3">
-              <label for="couleurs" class="form-label">Couleurs</label>
-              <input type="text" class="form-control" formControlName="couleurs" placeholder="ex: Rouge, Bleu">
-            </div>
-
+            <!-- Image -->
             <div class="mb-4">
-              <label for="file" class="form-label">Image du produit</label>
-              <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
-            </div>
-
+  <label for="file" class="form-label">Image du produit</label>
+  <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
+</div>
+            <!-- Bouton -->
             <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary" [disabled]="loading">
-                Créer le produit
+                {{ loading ? 'Création en cours...' : 'Créer le produit' }}
               </button>
             </div>
-
+            <!-- Messages -->
             <div *ngIf="successMessage" class="alert alert-success text-center">
               {{ successMessage }}
             </div>
             <div *ngIf="errorMessage" class="alert alert-danger text-center">
               {{ errorMessage }}
             </div>
-
           </form>
         </div>
       </div>

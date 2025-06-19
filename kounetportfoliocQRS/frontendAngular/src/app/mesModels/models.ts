@@ -255,7 +255,6 @@ export interface SocialGroupDTO {
   id: string;
   name: string;
   region: string;
-  country: string;
   pays: string;
 }
 

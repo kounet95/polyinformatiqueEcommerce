@@ -13,7 +13,8 @@ public class ProductMapper {
         agg.setName(dto.getName());
         agg.setDescription(dto.getDescription());
         agg.setSubcategoryId(dto.getSubcategoryId());
-        agg.setModelsUrl(dto.getModels());
+        agg.setSocialGroupId(dto.getSocialGroupId());
+        agg.setModels(dto.getModels());
 
         return agg;
     }
@@ -27,8 +28,8 @@ public class ProductMapper {
             null,
             null,
             agg.getSubcategoryId(),
-            null,
-            agg.getModelsUrl(),
+            agg.getSocialGroupId(),
+            agg.getModels(),
             null
         );
     }

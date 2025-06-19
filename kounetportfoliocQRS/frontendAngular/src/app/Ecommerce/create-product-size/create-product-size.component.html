@@ -1,1 +1,76 @@
-<p>create-product-size works!</p>
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+          <div class="section-header mb-4 text-center">
+            <h2>Ajouter une taille à un produit</h2>
+            <p>Associez une taille, un prix et une image à un produit</p>
+          </div>
+          <form [formGroup]="productSizeFrom" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+              <!-- Produit -->
+              <div class="col-md-6 mb-3">
+                <label for="product" class="form-label">Produit</label>
+                <select class="form-select" formControlName="product">
+                  <option value="" disabled selected>Choisir...</option>
+                  <option *ngFor="let p of product" [value]="p.id">{{ p.name }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productSizeFrom.get('product')?.invalid && productSizeFrom.get('product')?.touched">
+                  Produit requis.
+                </div>
+              </div>
+              <!-- Taille -->
+              <div class="col-md-6 mb-3">
+                <label for="SizeProd" class="form-label">Taille</label>
+                <select class="form-select" formControlName="SizeProd">
+                  <option value="" disabled selected>Choisir...</option>
+                  <option *ngFor="let s of sizeEnumValues" [value]="s">{{ s }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productSizeFrom.get('SizeProd')?.invalid && productSizeFrom.get('SizeProd')?.touched">
+                  Taille requise.
+                </div>
+              </div>
+            </div>
+            <!-- Prix -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="price" class="form-label">Prix (€)</label>
+                <input type="number" id="price" class="form-control" formControlName="price" placeholder="Ex: 25">
+                <div class="text-danger small" *ngIf="productSizeFrom.get('price')?.invalid && productSizeFrom.get('price')?.touched">
+                  Prix requis.
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="pricePromo" class="form-label">Prix promo (€)</label>
+                <input type="number" id="pricePromo" class="form-control" formControlName="pricePromo" placeholder="Ex: 20">
+                <div class="text-danger small" *ngIf="productSizeFrom.get('pricePromo')?.invalid && productSizeFrom.get('pricePromo')?.touched">
+                  Prix promo requis.
+                </div>
+              </div>
+            </div>
+            <!-- Image -->
+            <div class="mb-4">
+              <label for="imageUrl" class="form-label">Image</label>
+              <input type="file" class="form-control" id="imageUrl" (change)="onFileSelected($event)">
+              <div class="text-danger small" *ngIf="productSizeFrom.get('imageUrl')?.invalid && productSizeFrom.get('imageUrl')?.touched">
+                Image requise.
+              </div>
+            </div>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                {{ loading ? 'Création en cours...' : 'Ajouter la taille' }}
+              </button>
+            </div>
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -38,22 +38,20 @@ export class CreateProductComponent implements OnInit {
       categoryId: ['', Validators.required],
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
-      productSizes: [[], Validators.required], 
-      isActive: [true],
-      couleurs: ['']
+      productSizes: [[]], // Ajoute Validators.required si tu veux forcer une taille
+      isActive: [true]
+      // PAS de 'models' dans le form
     });
   }
 
   ngOnInit(): void {
     this.loadCategories();
 
-    // Charger tous les groupes sociaux au lancement
     this.categoriesocialesService.getAllSocialGroups().subscribe({
       next: data => this.categoriesSociales = data,
-      error: () => this.errorMessage = "Impossible de charger les groupes sociaux."
+      error: () => this.errorMessage = 'Impossible de charger les groupes sociaux.',
     });
 
-    // la logique quand la catégorie change, charger les sous-catégories correspondantes
     this.productForm.get('categoryId')?.valueChanges.subscribe(categoryId => {
       if (!categoryId) {
         this.sousCategories = [];
@@ -65,21 +63,20 @@ export class CreateProductComponent implements OnInit {
           this.sousCategories = subs.filter(sc => sc.categoryId === categoryId);
           this.productForm.patchValue({ subcategoryId: '' });
         },
-        error: () => this.errorMessage = "Impossible de charger les sous-catégories."
+        error: () => this.errorMessage = 'Impossible de charger les sous-catégories.',
       });
     });
 
-    // Chargement des tailles de produit avec à la sélection
     this.productSizeService.getAllProductSizes().subscribe({
       next: sizes => this.productSizes = sizes,
-      error: () => {/* silencieux ou message */}
+      error: () => { /* gérer l'erreur si besoin */ }
     });
   }
 
   loadCategories(): void {
     this.categoryService.getAllCategories().subscribe({
       next: cats => this.categories = cats,
-      error: () => this.errorMessage = "Impossible de charger les catégories."
+      error: () => this.errorMessage = 'Impossible de charger les catégories.',
     });
   }
 
@@ -107,9 +104,9 @@ export class CreateProductComponent implements OnInit {
       createdAt: new Date().toISOString(),
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
-      models: '', // mon model a remplir si besoin
+      models: '', 
       isActive: !!raw.isActive,
-      productSizes: raw.productSizes //le tableau de ProductSizeDTO
+      productSizes: raw.productSizes
     };
     this.loading = true;
     this.productService.createProduct(product, this.selectedFile ?? undefined).subscribe({
@@ -117,11 +114,13 @@ export class CreateProductComponent implements OnInit {
         this.successMessage = 'Produit créé avec succès !';
         this.loading = false;
         this.productForm.reset({
-          productSizes: [],
-          isActive: true,
+          name: '',
+          description: '',
           categoryId: '',
           subcategoryId: '',
-          socialGroupId: ''
+          socialGroupId: '',
+          productSizes: [],
+          isActive: true
         });
         this.selectedFile = null;
       },

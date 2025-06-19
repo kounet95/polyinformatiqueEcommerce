@@ -16,8 +16,6 @@ public class SocialGroupDTO {
     private String name;
     @NotBlank(message = "Region cannot be blank")
     private String region;
-    @NotBlank(message = "Country cannot be blank")
-    private String country;
    @NotBlank(message = "Country cannot be blank")
    private String pays;
 }
