@@ -1,121 +1,98 @@
-<app-announcement-bar></app-announcement-bar>
+<section id="shop" class="section bg-light py-5">
+  <div class="container">
 
-<!-- Mobile Search Form -->
-<div class="mobile-search-bar" *ngIf="showMobileSearch">
-  <form class="search-form" (ngSubmit)="onMobileSearch()">
-    <mat-form-field appearance="outline" class="mobile-search-field">
-      <input matInput placeholder="Search for products..." [(ngModel)]="mobileSearch" name="mobileSearch" />
-      <button mat-icon-button matSuffix type="submit">
+    <!-- Barre de recherche mobile -->
+    <div class="d-flex justify-content-end d-md-none mb-3">
+      <button class="btn btn-outline-secondary" (click)="toggleMobileSearch()">
         <mat-icon>search</mat-icon>
       </button>
-    </mat-form-field>
-  </form>
-</div>
+    </div>
 
-<div class="main-layout">
-  <div class="category-card">
-    <div class="category-card" *ngIf="!loading && !error">
-      <h3 class="widget-title mat-headline">Categories</h3>
-      <mat-accordion displayMode="flat" class="category-accordion">
-        <ng-container *ngFor="let category of categories">
-          <mat-expansion-panel [hideToggle]="!category.children?.length" class="category-panel">
-            <mat-expansion-panel-header>
-              <span class="category-title"><b>{{ category.name }}</b></span>
-            </mat-expansion-panel-header>
-            <ng-template matExpansionPanelContent>
+    <div class="mobile-search-bar mb-4" *ngIf="showMobileSearch">
+      <form class="search-form d-flex gap-2 align-items-center" (ngSubmit)="onMobileSearch()">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Rechercher un produit</mat-label>
+          <input matInput [(ngModel)]="mobileSearch" name="mobileSearch" placeholder="Tapez un mot-clé..." />
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleMobileSearch()" aria-label="Fermer la recherche">
+          <mat-icon>close</mat-icon>
+        </button>
+      </form>
+    </div>
+
+    <div class="row">
+      <!-- Filtres (Sidebar) -->
+      <div class="col-lg-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm">
+          <h4 class="mb-3">Catégories</h4>
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let category of categories" [hideToggle]="!category.children?.length">
+              <mat-expansion-panel-header>
+                <span class="fw-semibold">{{ category.name }}</span>
+              </mat-expansion-panel-header>
               <mat-nav-list *ngIf="category.children?.length">
-                <mat-list-item *ngFor="let sub of category.children" class="subcategory-item">
-                  <mat-icon matListIcon color="accent" class="subcategory-dot">fiber_manual_record</mat-icon>
-                  <span>{{ sub.name }}</span>
+                <mat-list-item *ngFor="let sub of category.children">
+                  <mat-icon class="text-muted me-2" fontIcon="fiber_manual_record" style="font-size: 0.75rem;"></mat-icon>
+                  {{ sub.name }}
                 </mat-list-item>
               </mat-nav-list>
-            </ng-template>
-          </mat-expansion-panel>
-        </ng-container>
-      </mat-accordion>
-    </div>
-  </div>
-  <div class="main-content">
-    <!-- Loading & Error states -->
-    <mat-card *ngIf="loading" class="loader-card">
-      <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-      <div class="loader-text">Chargement des catégories…</div>
-    </mat-card>
-  </div>
-</div>
+            </mat-expansion-panel>
+          </mat-accordion>
 
-<div *ngIf="error" class="error-text">{{ error }}</div>
+          <hr class="my-4">
 
-<!-- Affichage Catégories (si pas de mat-accordion) -->
-<ul class="category-list list-unstyled">
-  <li *ngFor="let category of categories" class="category-item">
-    <div 
-      class="d-flex justify-content-between align-items-center category-header" 
-      [class.collapsed]="selectedCategoryId !== category.id"
-      (click)="onCategorySelect(category.id)">
-      <a href="javascript:void(0)" class="category-link">{{ category.name }}</a>
-      <span class="category-toggle" *ngIf="category.children?.length">
-        <i class="bi bi-chevron-down" *ngIf="selectedCategoryId !== category.id"></i>
-        <i class="bi bi-chevron-up" *ngIf="selectedCategoryId === category.id"></i>
-      </span>
-    </div>
-    <ul 
-      *ngIf="category.children?.length"
-      [id]="'categories-' + category.id + '-subcategories'" 
-      class="subcategory-list list-unstyled collapse ps-3 mt-2"
-      [class.show]="selectedCategoryId === category.id">
-      <li *ngFor="let sub of category.children">
-        <a href="javascript:void(0)" class="subcategory-link">{{ sub.name }}</a>
-      </li>
-    </ul>
-  </li>
-</ul>
+          <h4 class="mb-3">Couleurs</h4>
+          <div class="d-flex flex-wrap gap-2">
+            <div *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']" class="form-check color-option">
+              <input class="form-check-input" type="checkbox" [id]="'color-' + color"
+                     [value]="color"
+                     [checked]="selectedCouleurs.includes(color)"
+                     (change)="onCouleurCheckboxChange(color, $event)">
+              <label class="form-check-label" [for]="'color-' + color">
+                <span class="color-swatch" [style.backgroundColor]="color" title="{{ color | titlecase }}"></span>
+              </label>
+            </div>
+          </div>
 
-<!-- Filtres par couleur -->
-<div class="color-filter-widget widget-item">
-  <h3 class="widget-title">Filter by Color</h3>
-  <div class="color-filter-content">
-    <div class="color-options">
-      <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
-        <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
-         (change)="onCouleurCheckboxChange(color, $event)">
-        <label class="form-check-label" [for]="'color-' + color">
-          <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Affichage produits filtrés -->
-<div class="row gy-4 mt-4">
-  <div class="col-lg-6" *ngFor="let product of products">
-    <div class="product-box">
-      <div class="product-thumb">
-        <img [src]="product.imageUrl || 'assets/img/placeholder.png'" [alt]="product.name" class="main-img" loading="lazy">
-      </div>
-      <div class="product-content">
-        <div class="product-details">
-          <h3 class="product-title">{{ product.name }}</h3>
-          <div class="product-price">
-            <span>{{ product.price | currency }}</span>
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-sm btn-outline-secondary" (click)="clearAllColors()">Effacer</button>
+            <button class="btn btn-sm btn-primary" (click)="applyColorFilters()">Appliquer</button>
           </div>
         </div>
-        <!-- Affichage couleurs du produit -->
-        <div class="product-color-options" *ngIf="product.couleurs">
-          <span class="color-option" 
-                *ngFor="let c of product.couleurs?.split(',')" 
-                [style.background-color]="c"></span>
+      </div>
+
+      <!-- Produits -->
+      <div class="col-lg-8">
+        <div class="row g-4">
+          <div class="col-md-6" *ngFor="let product of products">
+            <div class="card h-100 shadow-sm border-0 product-box">
+              <img [src]="product.models || 'assets/img/placeholder.png'" class="card-img-top" [alt]="product.name">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-primary fw-semibold" *ngIf="product.productSizes?.length">
+                  {{ product.productSizes[0].price | currency }}
+                </p>
+                <p class="card-text text-muted" *ngIf="!product.productSizes?.length">
+                  Prix indisponible
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loader et messages -->
+        <div *ngIf="loading" class="text-center my-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+          </div>
+        </div>
+        <div *ngIf="error" class="alert alert-danger mt-3">
+          {{ error }}
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Loader et erreur -->
-<div *ngIf="loading" class="text-center my-4">
-  <span class="spinner-border"></span> Chargement...
-</div>
-<div *ngIf="error" class="alert alert-danger">
-  {{ error }}
-</div>
+</section>

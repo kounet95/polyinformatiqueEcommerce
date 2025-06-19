@@ -11,8 +11,8 @@ public class SocialGroupMapper {
         SocialGroupAggregate agg = new SocialGroupAggregate();
         agg.setSocialGroupId(dto.getId());
         agg.setName(dto.getName());
-        agg.setDescription(dto.getRegion()); // region du DTO → description de l'aggregate
-        agg.setType(dto.getCountry());       // country du DTO → type de l'aggregate
+        agg.setRegion(dto.getRegion());
+        agg.setPays(dto.getPays());
         return agg;
     }
 
@@ -20,8 +20,8 @@ public class SocialGroupMapper {
         return new SocialGroupDTO(
             agg.getSocialGroupId(),
             agg.getName(),
-            agg.getDescription(), // description de l'aggregate → region du DTO
-            agg.getType()         // type de l'aggregate → country du DTO
+            agg.getRegion(),
+            agg.getPays()
         );
     }
 }

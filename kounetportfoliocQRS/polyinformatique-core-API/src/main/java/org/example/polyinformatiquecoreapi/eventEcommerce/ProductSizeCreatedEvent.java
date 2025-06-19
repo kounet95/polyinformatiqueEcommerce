@@ -1,18 +1,15 @@
 package org.example.polyinformatiquecoreapi.eventEcommerce;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
-
-/**
- * Event emitted when a product size is created
- */
-@Getter
+@Getter @Setter
 public class ProductSizeCreatedEvent {
-    private final String id;
-    private final ProductSizeDTO productSizeDTO;
+  public String id;
+  private ProductSizeDTO productSizeDTO;
+  public ProductSizeCreatedEvent(String id, ProductSizeDTO productSizeDTO) {
+    this.id = id;
+    this.productSizeDTO = productSizeDTO;
+  }
 
-    public ProductSizeCreatedEvent(String id, ProductSizeDTO productSizeDTO) {
-        this.id = id;
-        this.productSizeDTO = productSizeDTO;
-    }
 }

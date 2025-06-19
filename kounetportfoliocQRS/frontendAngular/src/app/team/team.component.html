@@ -1,15 +1,29 @@
-<section id="team" class="section">
+<section id="team" class="section py-5 bg-light">
   <div class="container">
-    <h2>L'équipe</h2>
-    <div class="team-grid">
-      <mat-card *ngFor="let member of team" class="team-card">
-        <img mat-card-image [src]="member.img" [alt]="member.name">
-        <mat-card-title>{{member.name}}</mat-card-title>
-        <mat-card-subtitle>{{member.role}}</mat-card-subtitle>
-        <mat-card-content>
-          <p>{{member.desc}}</p>
-        </mat-card-content>
-      </mat-card>
+
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Notre Équipe</h2>
+      <p class="text-muted">Rencontrez les talents qui construisent notre vision</p>
     </div>
+
+    <div class="row g-4">
+      <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let member of team">
+        <mat-card class="h-100 team-card shadow-sm border-0 text-center p-3">
+          <img
+            mat-card-image
+            [src]="member.img"
+            [alt]="member.name"
+            class="rounded-circle mx-auto d-block mb-3"
+            style="width: 120px; height: 120px; object-fit: cover;"
+          >
+          <mat-card-title class="fw-semibold">{{ member.name }}</mat-card-title>
+          <mat-card-subtitle class="text-primary mb-2">{{ member.role }}</mat-card-subtitle>
+          <mat-card-content>
+            <p class="text-muted small">{{ member.desc }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
   </div>
 </section>

@@ -9,7 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
-@Entity(name = "eco_social_group")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,14 +17,10 @@ import java.util.List;
 @Builder
 public class SocialGroup {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
 
     private String name;
     private String region;
     private String country;
-
-    @OneToMany(mappedBy = "socialGroup")
-    private List<Product> products;
 }

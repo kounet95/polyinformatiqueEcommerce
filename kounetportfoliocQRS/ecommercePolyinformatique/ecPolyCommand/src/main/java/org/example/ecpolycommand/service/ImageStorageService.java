@@ -1,46 +1,57 @@
 package org.example.ecpolycommand.service;
 
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
+import com.google.api.client.http.FileContent;
+import org.example.ecpolycommand.config.GoogleDriveUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.net.URI;
+import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 @Service
 public class ImageStorageService {
 
-    private final S3Client s3Client;
+  /**
+   * Upload l'image sur Google Drive et retourne un lien partageable.
+   */
+  public String uploadImage(MultipartFile multipartFile) throws IOException {
+    try {
+      // 1. Enregistre temporairement le fichier sur le disque
+      java.io.File tempFile = java.io.File.createTempFile("upload-", multipartFile.getOriginalFilename());
+      multipartFile.transferTo(tempFile);
 
-    public ImageStorageService() {
-        AwsBasicCredentials credentials = AwsBasicCredentials.create(
-                "YOUR_ACCESS_KEY", "YOUR_SECRET_KEY"
-        );
+      // 2. Récupère le service Drive
+      Drive driveService = GoogleDriveUtil.getDriveService();
 
-        this.s3Client = S3Client.builder()
-                .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .endpointOverride(URI.create("https://s3.us-west-1.idrivee2-28.com"))
-                .region(Region.US_WEST_1)
-                .build();
+      // 3. Prépare les métadonnées
+      File fileMetadata = new File();
+      fileMetadata.setName(UUID.randomUUID() + "-" + multipartFile.getOriginalFilename());
+
+      FileContent mediaContent = new FileContent(multipartFile.getContentType(), tempFile);
+
+      // 4. Upload sur Drive
+      File uploadedFile = driveService.files().create(fileMetadata, mediaContent)
+        .setFields("id, webViewLink")
+        .execute();
+
+      // 5. Rends le fichier accessible en lecture à toute personne disposant du lien
+      Permission permission = new Permission();
+      permission.setType("anyone");
+      permission.setRole("reader");
+      driveService.permissions().create(uploadedFile.getId(), permission).execute();
+
+      // 6. Supprime le fichier temporaire
+      tempFile.delete();
+
+      // 7. Retourne le lien partageable
+      return uploadedFile.getWebViewLink();
+
+    } catch (GeneralSecurityException e) {
+      throw new IOException("Erreur d'authentification Google Drive : " + e.getMessage(), e);
     }
-
-    public String uploadImage(MultipartFile file) throws IOException {
-        String uniqueFileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
-
-        PutObjectRequest putRequest = PutObjectRequest.builder()
-                .bucket("polyinformatique")
-                .key(uniqueFileName)
-                .acl("public-read")
-                .build();
-
-        s3Client.putObject(putRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-
-        return "https://s3.us-west-1.idrivee2-28.com/polyinformatique/" + uniqueFileName;
-    }
+  }
 }

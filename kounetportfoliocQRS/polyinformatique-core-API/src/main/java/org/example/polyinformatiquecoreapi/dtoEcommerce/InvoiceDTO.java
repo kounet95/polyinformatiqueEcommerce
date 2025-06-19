@@ -14,14 +14,19 @@ import lombok.Setter;
 @Setter
 public class InvoiceDTO {
     @NotBlank(message = "Invoice ID cannot be blank")
-    private String invoiceId;
-
+    private String id;
     @NotBlank(message = "Order ID cannot be blank")
     private String orderId;
-
+    @NotBlank(message = "Order ID cannot be blank")
+    private String custumerId;
     @Min(value = 0, message = "Amount must be positive")
     private double amount;
-
+    @NotBlank(message = "Payment status cannot be blank")
+    private String methodePayment;
+    @NotBlank(message = "Payment status cannot be blank")
+    private Double restMonthlyPayment;
     @NotBlank(message = "Payment status cannot be blank")
     private String paymentStatus;
+   @NotBlank(message = "Payment status cannot be blank")
+   private String supplierId;
 }

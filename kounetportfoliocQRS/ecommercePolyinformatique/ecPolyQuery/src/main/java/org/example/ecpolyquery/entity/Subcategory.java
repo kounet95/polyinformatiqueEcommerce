@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
-@Entity(name = "eco_subcategory")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,8 +14,7 @@ import java.util.List;
 @Builder
 public class Subcategory {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+
     private String id;
     private String name;
 
@@ -23,7 +22,5 @@ public class Subcategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "subcategory")
-    private List<Product> products;
 }
 

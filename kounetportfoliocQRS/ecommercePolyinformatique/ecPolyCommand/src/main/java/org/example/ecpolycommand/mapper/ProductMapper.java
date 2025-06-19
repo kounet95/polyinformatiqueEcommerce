@@ -12,10 +12,10 @@ public class ProductMapper {
         agg.setProductId(dto.getId());
         agg.setName(dto.getName());
         agg.setDescription(dto.getDescription());
-        agg.setPrice(dto.getPrice());
         agg.setSubcategoryId(dto.getSubcategoryId());
-        agg.setImageUrl(dto.getImageUrl());
-        // Les champs socialGroupId, createdAt, closedAt, isActive ne sont pas présents dans l'aggregate
+        agg.setSocialGroupId(dto.getSocialGroupId());
+        agg.setModels(dto.getModels());
+
         return agg;
     }
 
@@ -24,13 +24,13 @@ public class ProductMapper {
             agg.getProductId(),
             agg.getName(),
             agg.getDescription(),
-            agg.getPrice(),
-            null, // createdAt non présent dans l'aggregate
-            null, // closedAt non présent dans l'aggregate
+
+            null,
+            null,
             agg.getSubcategoryId(),
-            null, // socialGroupId non présent dans l'aggregate
-            agg.getImageUrl(),
-            null  // isActive non présent dans l'aggregate
+            agg.getSocialGroupId(),
+            agg.getModels(),
+            null
         );
     }
 }

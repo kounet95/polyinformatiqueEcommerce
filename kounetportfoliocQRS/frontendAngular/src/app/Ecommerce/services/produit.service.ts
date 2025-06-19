@@ -13,6 +13,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+   
   /**
    * Création d'un produit (Aggregate : ProductAggregate, Command : CreateProductCommand)
    * @param product ProductDTO
@@ -108,4 +109,5 @@ export class ProductService {
       `${ecpolyCommand.backend}/product/command/events/${aggregateId}`
     );
   }
+
 }

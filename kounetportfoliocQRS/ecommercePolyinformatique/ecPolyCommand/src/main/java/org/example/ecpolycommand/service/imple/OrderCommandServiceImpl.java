@@ -15,12 +15,14 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     private final CommandGateway commandGateway;
 
     public OrderCommandServiceImpl(CommandGateway commandGateway) {
-        this.commandGateway = commandGateway;
+
+      this.commandGateway = commandGateway;
     }
 
     @Override
     public void createOrder(OrderDTO dto) {
-        commandGateway.sendAndWait(new CreateOrderCommand(dto.getId(), dto));
+        commandGateway.sendAndWait(
+          new CreateOrderCommand(dto.getId(), dto));
     }
 
     @Override
@@ -30,6 +32,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
 
     @Override
     public void deleteOrder(String id) {
-        commandGateway.sendAndWait(new DeleteOrderCommand(id));
+
+      commandGateway.sendAndWait(new DeleteOrderCommand(id));
     }
 }

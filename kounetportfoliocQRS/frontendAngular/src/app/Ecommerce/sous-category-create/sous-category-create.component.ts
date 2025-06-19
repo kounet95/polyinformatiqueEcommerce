@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from '../services/category.service'; // adapte le chemin si besoin
 import { CategoryDTO, SubcategoryDTO } from '../../mesModels/models'; // adapte le chemin si besoin
-import { CategoryCreateComponent } from '../category-create/category-create.component';
+import { SouscategoriesService } from '../services/souscategories.service';
 
 @Component({
   selector: 'app-category-create',
@@ -19,7 +19,8 @@ export class SousCategoryCreateComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private souscategoriesService: SouscategoriesService,
   ) {
     this.categoryForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
@@ -54,7 +55,8 @@ export class SousCategoryCreateComponent implements OnInit {
     };
 
     this.loading = true;
-    this.categoryService.createCategory(subcategory).subscribe({
+    // CORRECTION : on utilise le bon service pour créer une sous-catégorie
+    this.souscategoriesService.createSubcategory(subcategory).subscribe({
       next: () => {
         this.successMessage = 'Sous-catégorie créée avec succès !';
         this.loading = false;

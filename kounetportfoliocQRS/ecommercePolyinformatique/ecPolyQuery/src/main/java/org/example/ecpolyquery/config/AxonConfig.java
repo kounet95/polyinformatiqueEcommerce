@@ -12,13 +12,15 @@ public class AxonConfig {
   @Bean
   public XStream xStream() {
     XStream xStream = new XStream();
-    // Autorisation pour tous les types nécessaires
+
+    
     xStream.allowTypesByWildcard(new String[] {
       "org.example.polyinformatiquecoreapi.commandEcommerce.**",
       "org.example.polyinformatiquecoreapi.eventEcommerce.**",
       "org.example.polyinformatiquecoreapi.dtoEcommerce.**",
       "org.example.ecpolyquery.query.**",
-      "org.example.ecpolyquery.entity.**"
+      "org.example.ecpolyquery.entity.**",
+      "org.example.ecpolyquery.dto.**"
     });
     return xStream;
   }

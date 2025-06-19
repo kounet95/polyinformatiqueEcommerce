@@ -34,11 +34,13 @@ public class Order {
         OrderDTO orderDTO = new OrderDTO(
                 orderId,
                 order.getCustomerId(),
+                order.getSupplierId(),
                 order.getCreatedAt(),
                 order.getOrderStatus(),
                 order.getPaymentMethod(),
                 order.getTotal(),
-                order.getBarcode()
+                order.getBarcode(),
+                order.getShippingId()
         );
         CreateOrderCommand command = new CreateOrderCommand(orderId, orderDTO);
         return commandGateway.send(command);
@@ -47,12 +49,12 @@ public class Order {
     @PostMapping("/{orderId}/add-product")
     public CompletableFuture<String> addProductToOrder(@PathVariable String orderId, @Valid @RequestBody OrderLineDTO orderLine) {
         String orderLineId = UUID.randomUUID().toString();
-        OrderLineDTO orderLineDTO = new OrderLineDTO(
-                orderLineId,
-                orderId,
-                orderLine.getProductSizeId(),
-                orderLine.getQty()
-        );
+      OrderLineDTO orderLineDTO = new OrderLineDTO(
+        orderLineId,
+        orderId,
+        orderLine.getStockId(),
+        orderLine.getQty()
+      );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderId, orderLineDTO);
         return commandGateway.send(command);
     }
@@ -97,4 +99,14 @@ public class Order {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("️ Error: " + exception.getMessage());
     }
+
+    @DeleteMapping("/{orderId}")
+    public CompletableFuture<String> cancelOrder(
+    @PathVariable String orderId,
+    @RequestParam(defaultValue = "Cancelled by user") String reason) {
+    CancelOrderCommand command = new CancelOrderCommand(orderId, reason);
+    return commandGateway.send(command);
+  }
+
+
 }

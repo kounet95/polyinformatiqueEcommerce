@@ -2,31 +2,37 @@ package org.example.ecpolyquery.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-@Entity(name = "eco_stock")
+import java.time.LocalDateTime;
+
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Stock {
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+  @Id
+  private String id;
+  private double purchasePrice;
+  private String designation;
+  private double promoPrice;
+  private LocalDateTime createdDate;
+  private LocalDateTime closedDate;
 
-    private double purchasePrice;
-    private double promoPrice;
-    private double salePrice;
-    private int stockAvailable;
+  @ManyToOne
+  @JoinColumn(name = "product_size_id")
+  private ProductSize productSize;
 
-    @ManyToOne
-    @JoinColumn(name = "product_size_id")
-    private ProductSize productSize;
+  @ManyToOne
+  @JoinColumn(name = "supplier_id")
+  private Supplier supplier;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+  @ManyToOne
+  @JoinColumn(name = "orderecommerceId")
+  private Orderecommerce orderecommerceId;
+
+  @ManyToOne
+  @JoinColumn(name = "addressId")
+  private Address store;
 }
-

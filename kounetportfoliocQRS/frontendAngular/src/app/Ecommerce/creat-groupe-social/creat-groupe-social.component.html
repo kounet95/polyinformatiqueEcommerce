@@ -1,0 +1,85 @@
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+
+          <div class="section-header mb-4 text-center">
+            <h3>Créer un groupe social</h3>
+            <p>Ajoutez un nouveau groupe social à votre base de données</p>
+          </div>
+
+          <form [formGroup]="socialgroupeForm" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- Nom -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom du groupe social</label>
+              <input
+                id="name"
+                type="text"
+                class="form-control"
+                formControlName="name"
+                [class.is-invalid]="socialgroupeForm.get('name')?.invalid && socialgroupeForm.get('name')?.touched"
+                placeholder="Ex : Groupe Bamileké"
+              >
+              <div *ngIf="socialgroupeForm.get('name')?.invalid && socialgroupeForm.get('name')?.touched" class="invalid-feedback">
+                Le nom est requis (2 à 100 caractères).
+              </div>
+            </div>
+
+            <!-- Région -->
+            <div class="mb-3">
+              <label for="region" class="form-label">Région</label>
+              <input
+                id="region"
+                type="text"
+                class="form-control"
+                formControlName="region"
+                [class.is-invalid]="socialgroupeForm.get('region')?.invalid && socialgroupeForm.get('region')?.touched"
+                placeholder="Ex : Ouest"
+              >
+              <div *ngIf="socialgroupeForm.get('region')?.invalid && socialgroupeForm.get('region')?.touched" class="invalid-feedback">
+                La région est requise (2 à 100 caractères).
+              </div>
+            </div>
+
+            <!-- Pays -->
+            <div class="mb-4">
+              <label for="pays" class="form-label">Pays</label>
+              <input
+                id="pays"
+                type="text"
+                class="form-control"
+                formControlName="pays"
+                [class.is-invalid]="socialgroupeForm.get('pays')?.invalid && socialgroupeForm.get('pays')?.touched"
+                placeholder="Ex : Cameroun"
+              >
+              <div *ngIf="socialgroupeForm.get('pays')?.invalid && socialgroupeForm.get('pays')?.touched" class="invalid-feedback">
+                Le pays est requis (2 à 100 caractères).
+              </div>
+            </div>
+
+            <!-- Bouton -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+                {{ loading ? 'Création en cours...' : 'Créer le groupe social' }}
+              </button>
+            </div>
+
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

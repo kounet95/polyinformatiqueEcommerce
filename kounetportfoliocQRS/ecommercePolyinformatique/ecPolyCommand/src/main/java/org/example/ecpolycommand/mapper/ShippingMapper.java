@@ -6,26 +6,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ShippingMapper {
+  public ShippingAggregate toAggregate(ShippingDTO dto) {
+    ShippingAggregate agg = new ShippingAggregate();
+    agg.setShippingId(dto.getId());
+    agg.setOrderId(dto.getOrderId());
+    agg.setAddress(dto.getShippingAddressId());
+    agg.setOrderStatus(dto.getOrderStatus());
+    agg.setEstimatedDeliveryDate(dto.getEstimatedDeliveryDate());
+    agg.setShippingDate(dto.getShippingDate());
+    agg.setCreatedAt(dto.getCreatedAt());
+    return agg;
+  }
 
-    public ShippingAggregate toAggregate(ShippingDTO dto) {
-        ShippingAggregate agg = new ShippingAggregate();
-        agg.setShippingId(dto.getId());
-        agg.setOrderId(dto.getOrderId());
-        agg.setAddress(dto.getShippingAddress());
-        agg.setStatus(dto.getDeliveryStatus());
-        agg.setTrackingNumber(dto.getEstimatedDeliveryDate());
-        agg.setCarrier(dto.getShippingDate());
-        return agg;
-    }
-
-    public ShippingDTO toDTO(ShippingAggregate agg) {
-        return new ShippingDTO(
-            agg.getShippingId(),
-            agg.getOrderId(),
-            agg.getAddress(),
-            agg.getStatus(),
-            agg.getTrackingNumber(),
-            agg.getCarrier()
-        );
-    }
+  public ShippingDTO toDTO(ShippingAggregate agg) {
+    return new ShippingDTO(
+      agg.getShippingId(),
+      agg.getOrderId(),
+      agg.getEstimatedDeliveryDate(),
+      agg.getShippingDate(),
+      agg.getCreatedAt(),
+      agg.getAddress(),
+      agg.getOrderStatus()
+    );
+  }
 }

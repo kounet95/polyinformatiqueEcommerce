@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/blogService/blogCommon/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/commandeBlog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/commandeBlog/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/queryBlog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/queryBlog/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/blogService/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/configservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customerService/customer-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customerService/customerCommands/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customerService/customerQuery/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customerService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/customerService/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/discoveryservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/ecPolyCommand/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/ecPolyCommand/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/ecPolyQuery/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/ecPolyQuery/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ecommercePolyinformatique/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/getwayservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/polyinformatique-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/polyinformatique-core-API/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/polyinformatique-core-API/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/serviceSuivieNotification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

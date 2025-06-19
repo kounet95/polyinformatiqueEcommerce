@@ -7,19 +7,17 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
-@Entity(name = "eco_category")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
 @Builder
 public class Category {
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Id
     private String id;
     private String name;
-  @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JsonIgnore
-  private List<Subcategory> subcategories;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Subcategory> subcategories;
 }
 

@@ -3,6 +3,7 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.AddProductToOrderCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteOrderLineCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class OrderLine {
         OrderLineDTO orderLineDTO = new OrderLineDTO(
                 orderLineId,
                 orderLine.getOrderId(),
-                orderLine.getProductSizeId(),
+                orderLine.getStockId(),
                 orderLine.getQty()
         );
         AddProductToOrderCommand command = new AddProductToOrderCommand(orderLineId, orderLineDTO);
@@ -43,6 +44,11 @@ public class OrderLine {
         return eventStore.readEvents(aggregateId).asStream();
     }
 
+  @DeleteMapping("/{orderLineId}")
+  public CompletableFuture<String> deleteOrderLine(@PathVariable String orderLineId) {
+    DeleteOrderLineCommand command = new DeleteOrderLineCommand(orderLineId);
+    return commandGateway.send(command);
+  }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> exceptionHandler(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

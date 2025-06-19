@@ -39,4 +39,6 @@ public class CategoryController {
         return queryGateway.query(new GetCategoryByIdQuery(id),
                 ResponseTypes.instanceOf(Category.class));
     }
+
+
 }

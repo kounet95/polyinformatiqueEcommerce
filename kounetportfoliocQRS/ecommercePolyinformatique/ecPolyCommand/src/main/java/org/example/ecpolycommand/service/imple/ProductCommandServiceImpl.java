@@ -14,21 +14,25 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     private final CommandGateway commandGateway;
 
     public ProductCommandServiceImpl(CommandGateway commandGateway) {
-        this.commandGateway = commandGateway;
+
+      this.commandGateway = commandGateway;
     }
 
     @Override
     public void createProduct(ProductDTO dto) {
-        commandGateway.sendAndWait(new CreateProductCommand(dto.getId(), dto));
+        commandGateway.sendAndWait(
+          new CreateProductCommand(dto.getId(), dto));
     }
 
     @Override
     public void updateProduct(String id, ProductDTO dto) {
-        commandGateway.sendAndWait(new UpdateProductCommand(id, dto));
+        commandGateway.sendAndWait(
+          new UpdateProductCommand(id, dto));
     }
 
     @Override
     public void deleteProduct(String id) {
-        commandGateway.sendAndWait(new DeleteProductCommand(id));
+
+      commandGateway.sendAndWait(new DeleteProductCommand(id));
     }
 }

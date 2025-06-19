@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service'; 
 import { ProductService } from '../services/produit.service';
 import { CategoryDTO, ProductDTO } from '../../mesModels/models';
+import { ProductSizeService } from '../services/product-size.service';
+
+type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
 @Component({
   selector: 'app-category',
@@ -10,31 +13,25 @@ import { CategoryDTO, ProductDTO } from '../../mesModels/models';
   standalone: false
 })
 export class CategoryComponent implements OnInit {
-  categories: CategoryDTO[] = [];
+  categories: CategoryWithChildren[] = [];
   products: ProductDTO[] = [];
   loading: boolean = true;
   error: string | null = null;
   showMobileSearch: boolean = false;
   mobileSearch: string = '';
-
+ 
   // Filtres
   selectedCategoryId: string | null = null;
   selectedCouleurs: string[] = [];
   selectedSocialGroup: string | null = null;
   selectedProductSize: string | null = null;
-
-  announcements: string[] = [
-    "🚚 Free shipping on orders over $50",
-    "💰 30 days money back guarantee",
-    "🎁 20% off on your first order - Use code: FIRST20",
-    "⚡ Flash Sale! Up to 70% off on selected items"
-  ];
   currentIndex: number = 0;
   intervalId: any;
 
   constructor(
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private productSizeService: ProductSizeService
   ) {}
 
   ngOnInit(): void {
@@ -93,13 +90,20 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  // Méthode appelée depuis le template, évite le cast dans le HTML
+  clearAllColors(): void {
+    this.selectedCouleurs = [];
+    this.fetchProducts();
+  }
+
+  applyColorFilters(): void {
+    this.fetchProducts();
+  }
+
   onCouleurCheckboxChange(couleur: string, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.onCouleurChange(couleur, checked);
   }
 
-  // Logique de gestion du tableau de couleurs sélectionnées
   onCouleurChange(couleur: string, checked: boolean): void {
     if (checked && !this.selectedCouleurs.includes(couleur)) {
       this.selectedCouleurs.push(couleur);
@@ -126,5 +130,16 @@ export class CategoryComponent implements OnInit {
 
   toggleMobileSearch(): void {
     this.showMobileSearch = !this.showMobileSearch;
+  }
+
+  /**
+   * Retourne le prix principal d'un produit (prix de la première taille).
+   * Si aucune taille, retourne null.
+   */
+  getMainPrice(product: ProductDTO): number | null {
+    if (product.productSizes && product.productSizes.length > 0) {
+      return product.productSizes[0].price;
+    }
+    return null;
   }
 }

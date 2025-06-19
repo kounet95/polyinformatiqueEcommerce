@@ -2,7 +2,7 @@
   width: 100vw;
   overflow: hidden;
   height: 48px;
-  background: #f9f9f9;
+  background: #8c0d4f;
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
@@ -19,6 +19,6 @@
   text-align: center;
   font-weight: 500;
   line-height: 48px;
-  color: #4a0c4c;
+  color: #eeedee;
   white-space: nowrap;
 }

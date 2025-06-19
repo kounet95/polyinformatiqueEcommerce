@@ -1,12 +1,24 @@
-<section id="services" class="section">
+<section id="services" class="section py-5 bg-white">
   <div class="container">
-    <h2>Nos Services</h2>
-    <div class="services-grid">
-      <mat-card class="service-card" *ngFor="let service of services">
-        <mat-icon class="service-icon" [color]="service.color">{{service.icon}}</mat-icon>
-        <mat-card-title>{{service.title}}</mat-card-title>
-        <mat-card-content>{{service.desc}}</mat-card-content>
-      </mat-card>
+
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Nos Services</h2>
+      <p class="text-muted">Découvrez ce que nous proposons pour vous accompagner</p>
     </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" *ngFor="let service of services">
+        <mat-card class="h-100 p-4 text-center shadow-sm border-0 service-card">
+          <div class="icon-circle mx-auto mb-3">
+            <mat-icon [color]="service.color" style="font-size: 32px;">{{service.icon}}</mat-icon>
+          </div>
+          <mat-card-title class="fw-semibold mb-2">{{service.title}}</mat-card-title>
+          <mat-card-content>
+            <p class="text-muted small">{{service.desc}}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
   </div>
 </section>

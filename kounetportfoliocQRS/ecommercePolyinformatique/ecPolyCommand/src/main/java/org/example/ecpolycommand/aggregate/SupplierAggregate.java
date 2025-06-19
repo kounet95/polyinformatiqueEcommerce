@@ -10,6 +10,7 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateSupplierCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SupplierDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.SupplierCreatedEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.SupplierDeletedEvent;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -25,12 +26,10 @@ public class SupplierAggregate {
     @AggregateIdentifier
     private String supplierId;
     private String firstName;
-
     private String email;
-    private String city;
-
     private String personToContact;
-
+    private String  addressId;
+     private boolean deleted;
     public SupplierAggregate() {}
 
 
@@ -45,7 +44,12 @@ public class SupplierAggregate {
          this.supplierId = event.getId();
          this.firstName = event.getSupplierDTO().getFullname();
          this.email = event.getSupplierDTO().getEmail();
-         this.city = event.getSupplierDTO().getCity();
          this.personToContact = event.getSupplierDTO().getPersonToContact();
+         this.addressId = event.getSupplierDTO().getAddressId();
      }
+
+  @EventSourcingHandler
+  public void on(SupplierDeletedEvent event) {
+    this.deleted = true;
+  }
 }

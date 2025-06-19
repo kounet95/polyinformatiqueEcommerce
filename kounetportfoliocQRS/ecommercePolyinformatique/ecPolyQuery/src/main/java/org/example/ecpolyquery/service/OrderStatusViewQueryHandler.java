@@ -64,8 +64,6 @@ public class OrderStatusViewQueryHandler {
                 .barcode(orderStatusView.getBarcode())
                 .status(orderStatusView.getStatus())
                 .updatedAt(orderStatusView.getUpdatedAt().format(DateTimeFormatter.ISO_DATE_TIME))
-                .customerId(orderStatusView.getCustomer() != null ? orderStatusView.getCustomer().getId() : null)
-                .customerName(orderStatusView.getCustomer() != null ? orderStatusView.getCustomer().getFirstname() + " " + orderStatusView.getCustomer().getLastname() : null)
                 .build();
     }
 

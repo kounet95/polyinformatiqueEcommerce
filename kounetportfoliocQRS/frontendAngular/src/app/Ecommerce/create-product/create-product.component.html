@@ -1,49 +1,111 @@
-<h2>Créer un produit</h2>
-<form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
-  <div class="mb-3">
-    <label for="name" class="form-label">Nom du produit*</label>
-    <input type="text" class="form-control" id="name" name="name" ngModel required>
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+          <div class="section-header mb-4 text-center">
+            <h2>Créer un produit</h2>
+            <p>Remplissez les champs pour enregistrer un nouveau produit</p>
+          </div>
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+              <!-- Nom -->
+              <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Nom du produit</label>
+                <input type="text" id="name" class="form-control" formControlName="name" placeholder="Ex: Chemise wax">
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('required') && productForm.get('name')?.touched">
+                  Nom requis.
+                </div>
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('minlength') && productForm.get('name')?.touched">
+                  Minimum 2 caractères.
+                </div>
+              </div>
+              <!-- Catégorie -->
+              <div class="col-md-6 mb-3">
+                <label for="category" class="form-label">Catégorie</label>
+                <select class="form-select" formControlName="categoryId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched">
+                  Catégorie requise.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Sous-catégorie -->
+              <div class="col-md-6 mb-3">
+                <label for="subcategory" class="form-label">Sous-catégorie</label>
+                <select class="form-select" formControlName="subcategoryId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let sc of sousCategories" [value]="sc.id">{{ sc.name }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productForm.get('subcategoryId')?.invalid && productForm.get('subcategoryId')?.touched">
+                  Sous-catégorie requise.
+                </div>
+              </div>
+              <!-- Groupe social -->
+              <div class="col-md-6 mb-3">
+                <label for="socialGroup" class="form-label">Groupe social</label>
+                <select class="form-select" formControlName="socialGroupId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let sg of categoriesSociales" [value]="sg.id">{{ sg.name }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productForm.get('socialGroupId')?.invalid && productForm.get('socialGroupId')?.touched">
+                  Groupe social requis.
+                </div>
+              </div>
+            </div>
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea rows="3" class="form-control" formControlName="description" placeholder="Décrire le produit..."></textarea>
+              <div class="text-danger small" *ngIf="productForm.get('description')?.hasError('required') && productForm.get('description')?.touched">
+                Description requise.
+              </div>
+            </div>
+  
+            <!-- Tailles disponibles -->
+                    <div class="mb-3">
+                      <label for="productSizes" class="form-label">Tailles disponibles</label>
+                      <select multiple class="form-select" formControlName="productSizes">
+                      <option *ngFor="let size of productSizes" [ngValue]="size">
+                  {{ size.sizeProd }} — {{ size.price | number:'1.2-2' }} €
+              </option>
+              </select>
+              <small class="form-text text-muted">Vous pouvez choisir plusieurs tailles.</small>
+              <div class="text-danger small" *ngIf="productForm.get('productSizes')?.invalid && productForm.get('productSizes')?.touched">
+                Choisissez au moins une taille.
+              </div>
+            </div>
+            <!-- Actif -->
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" formControlName="isActive" id="isActive">
+              <label class="form-check-label" for="isActive">
+                Produit actif
+              </label>
+            </div>
+            <!-- Image -->
+            <div class="mb-4">
+              <label for="file" class="form-label">Image du produit</label>
+              <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
+            </div>
+                        <!-- Bouton -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                {{ loading ? 'Création en cours...' : 'Créer le produit' }}
+              </button>
+            </div>
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" id="description" name="description" rows="3" ngModel></textarea>
-  </div>
-
-  <div class="mb-3">
-    <label for="price" class="form-label">Prix*</label>
-    <input type="number" class="form-control" id="price" name="price" ngModel required min="0">
-  </div>
-
-  <div class="mb-3">
-    <label for="imageUrl" class="form-label">Image (URL)</label>
-    <input type="text" class="form-control" id="imageUrl" name="imageUrl" ngModel>
-  </div>
-
-  <div class="mb-3">
-    <label for="media" class="form-label">Image locale (fichier)</label>
-    <input type="file" class="form-control" id="media" name="media" (change)="onFileSelected($event)" #mediaFileInput>
-  </div>
-
-  <div class="mb-3">
-    <label for="couleurs" class="form-label">Couleurs (séparées par une virgule)</label>
-    <input type="text" class="form-control" id="couleurs" name="couleurs" ngModel>
-  </div>
-
-  <div class="mb-3">
-    <label for="subcategoryId" class="form-label">Sous-catégorie*</label>
-    <input type="text" class="form-control" id="subcategoryId" name="subcategoryId" ngModel required>
-  </div>
-
-  <div class="mb-3">
-    <label for="socialGroupId" class="form-label">Groupe social*</label>
-    <input type="text" class="form-control" id="socialGroupId" name="socialGroupId" ngModel required>
-  </div>
-
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="isActive" name="isActive" ngModel>
-    <label class="form-check-label" for="isActive">Actif</label>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Créer le produit</button>
-</form>
+</section>

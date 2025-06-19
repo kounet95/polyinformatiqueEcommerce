@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "eco_shopping_purchase")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,15 +14,13 @@ import java.time.LocalDateTime;
 @Builder
 public class Shipping {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-
-    private String deliveryStatus;
+    private OrderStatus deliveryStatus;
     private LocalDateTime estimatedDeliveryDate;
     private LocalDateTime shippingDate;
-    private String shippingAddress;
-
+    @ManyToOne
+    @JoinColumn(name = "addressId")
+    private Address addressId;
     @OneToOne
     @JoinColumn(name = "order_id")
     private Orderecommerce orderecommerce;

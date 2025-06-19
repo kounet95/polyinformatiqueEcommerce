@@ -33,13 +33,13 @@ public class Stock {
         String stockId = UUID.randomUUID().toString();
         StockDTO stockDTO = new StockDTO(
                 stockId,
+                stock.getDesignation(),
                 stock.getProductSizeId(),
                 stock.getSupplierId(),
                 stock.getPurchasePrice(),
                 stock.getPromoPrice(),
-                stock.getSalePrice(),
-                stock.getStockAvailable(),
-                stock.getQuantity()
+                stock.getQuantity(),
+                stock.getAddressId()
         );
         AddStockCommand command = new AddStockCommand(stockId, stockDTO);
         return commandGateway.send(command);

@@ -3,6 +3,7 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateSupplierCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteSupplierCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SupplierDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +32,18 @@ public class Supplier {
         SupplierDTO supplierDTO = new SupplierDTO(
                 supplierId,
                 supplier.getFullname(),
-                supplier.getCity(),
                 supplier.getEmail(),
-                supplier.getPersonToContact()
+                supplier.getPersonToContact(),
+                supplier.getAddressId()
         );
         CreateSupplierCommand command = new CreateSupplierCommand(supplierId, supplierDTO);
         return commandGateway.send(command);
     }
-
+     @DeleteMapping("/{supplierId}")
+     public CompletableFuture<String> deleteSupplier(@PathVariable String supplierId) {
+    DeleteSupplierCommand command = new DeleteSupplierCommand(supplierId);
+    return commandGateway.send(command);
+  }
     @GetMapping("/events/{aggregateId}")
     public Stream<?> eventsStream(@PathVariable String aggregateId) {
         return eventStore.readEvents(aggregateId).asStream();

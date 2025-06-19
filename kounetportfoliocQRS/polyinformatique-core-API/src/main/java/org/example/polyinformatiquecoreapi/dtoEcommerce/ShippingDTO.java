@@ -1,30 +1,30 @@
 package org.example.polyinformatiquecoreapi.dtoEcommerce;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 public class ShippingDTO {
-    private String id;
-
-    @NotBlank(message = "Order ID cannot be blank")
-    private String orderId;
-
-    @NotBlank(message = "Delivery status cannot be blank")
-    private String deliveryStatus;
-
-    @NotBlank(message = "Estimated delivery date cannot be blank")
-    private String estimatedDeliveryDate;
-
-    @NotBlank(message = "Shipping date cannot be blank")
-    private String shippingDate;
-
-    @NotBlank(message = "Shipping address cannot be blank")
-    private String shippingAddress;
+  private String id;
+  @NotBlank
+  private String orderId;
+  @NotNull
+  private LocalDateTime estimatedDeliveryDate;
+  @NotNull
+  private LocalDateTime shippingDate;
+  @NotNull
+  private LocalDateTime createdAt;
+  @NotBlank
+  private String shippingAddressId;
+  @NotBlank
+  private OrderStatus orderStatus;
 }

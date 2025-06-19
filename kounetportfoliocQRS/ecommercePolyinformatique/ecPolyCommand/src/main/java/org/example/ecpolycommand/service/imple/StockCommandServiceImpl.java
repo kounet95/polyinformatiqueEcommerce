@@ -12,11 +12,13 @@ public class StockCommandServiceImpl implements StockCommandService {
     private final CommandGateway commandGateway;
 
     public StockCommandServiceImpl(CommandGateway commandGateway) {
-        this.commandGateway = commandGateway;
+
+      this.commandGateway = commandGateway;
     }
 
     @Override
     public void addStock(StockDTO dto) {
-        commandGateway.sendAndWait(new AddStockCommand(dto.getId(), dto));
+
+      commandGateway.sendAndWait(new AddStockCommand(dto.getId(), dto));
     }
 }

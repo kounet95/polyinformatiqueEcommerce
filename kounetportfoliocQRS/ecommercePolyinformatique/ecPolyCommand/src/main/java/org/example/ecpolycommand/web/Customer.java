@@ -38,8 +38,7 @@ public class Customer {
                 author.getEmail(),
                 author.getLastname(),
                 author.getPhone(),
-                author.getShippingAddress(),
-                author.getBillingAddress(),
+                author.getAddressId(),
                 author.getCreatedAt()
         );
         CreateCustomerCommand command = new CreateCustomerCommand(authorId, authorDTO);
