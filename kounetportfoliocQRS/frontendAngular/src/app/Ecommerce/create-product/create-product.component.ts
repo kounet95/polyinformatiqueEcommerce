@@ -38,9 +38,9 @@ export class CreateProductComponent implements OnInit {
       categoryId: ['', Validators.required],
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
-      productSizes: [[]], // Ajoute Validators.required si tu veux forcer une taille
+      productSizes: [[]], 
       isActive: [true]
-      // PAS de 'models' dans le form
+      
     });
   }
 
