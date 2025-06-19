@@ -66,12 +66,12 @@
             </div>
   
             <!-- Tailles disponibles -->
-            <div class="mb-3">
-              <label for="productSizes" class="form-label">Tailles disponibles</label>
-              <select multiple class="form-select" formControlName="productSizes">
-                <option *ngFor="let size of productSizes" [ngValue]="size">
+                    <div class="mb-3">
+                      <label for="productSizes" class="form-label">Tailles disponibles</label>
+                      <select multiple class="form-select" formControlName="productSizes">
+                      <option *ngFor="let size of productSizes" [ngValue]="size">
                   {{ size.sizeProd }} — {{ size.price | number:'1.2-2' }} €
-                </option>
+              </option>
               </select>
               <small class="form-text text-muted">Vous pouvez choisir plusieurs tailles.</small>
               <div class="text-danger small" *ngIf="productForm.get('productSizes')?.invalid && productForm.get('productSizes')?.touched">
@@ -87,10 +87,10 @@
             </div>
             <!-- Image -->
             <div class="mb-4">
-  <label for="file" class="form-label">Image du produit</label>
-  <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
-</div>
-            <!-- Bouton -->
+              <label for="file" class="form-label">Image du produit</label>
+              <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
+            </div>
+                        <!-- Bouton -->
             <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary" [disabled]="loading">
                 {{ loading ? 'Création en cours...' : 'Créer le produit' }}
