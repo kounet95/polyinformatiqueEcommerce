@@ -11,8 +11,8 @@ import { ProductService } from '../services/produit.service';
   styleUrl: './create-product-size.component.css'
 })
 export class CreateProductSizeComponent implements OnInit {
-  productSizeFrom: FormGroup;
-  product: ProductDTO[] = [];
+  productSizeForm: FormGroup;
+  products: ProductDTO[] = [];
   sizeEnumValues = Object.values(SizeProd);
   loading = false;
   successMessage?: string;
@@ -24,23 +24,23 @@ export class CreateProductSizeComponent implements OnInit {
     private fb: FormBuilder, 
     private productService: ProductService
   ) {
-    this.productSizeFrom = this.fb.group({
-      SizeProd: ['', [Validators.required]],
-      product: ['', [Validators.required]],
-      price: ['', [Validators.required, Validators.minLength(2)]],
-      pricePromo: ['', [Validators.required, Validators.minLength(2)]],
-      imageUrl: ['', [Validators.required, Validators.minLength(2)]]
+    this.productSizeForm = this.fb.group({
+      sizeProd: ['', [Validators.required]],
+      prodId: ['', [Validators.required]], // prodId = id du produit
+      price: ['', [Validators.required]],
+      pricePromo: ['', [Validators.required]],
+      imageUrl: ['']
     });
   }
 
   ngOnInit(): void {
-    this.loadProduct();
+    this.loadProducts();
   }
 
-  loadProduct(): void {
+  loadProducts(): void {
     this.productService.getAllProducts().subscribe({
       next: data => {
-        this.product = data.content || [];
+        this.products = Array.isArray(data) ? data : (data.content || []);
       },
       error: () => this.errorMessage = "Impossible de charger les produits."
     });
@@ -58,17 +58,17 @@ export class CreateProductSizeComponent implements OnInit {
   onSubmit() {
     this.successMessage = undefined;
     this.errorMessage = undefined;
-    if (this.productSizeFrom.invalid) {
-      this.productSizeFrom.markAllAsTouched();
+    if (this.productSizeForm.invalid) {
+      this.productSizeForm.markAllAsTouched();
       return;
     }
-    const raw = this.productSizeFrom.value;
+    const raw = this.productSizeForm.value;
     const productSize: ProductSizeDTO = {
       id: '',
-      sizeProd: raw.SizeProd,
-      prodId: raw.product,
+      sizeProd: raw.sizeProd,
+      prodId: raw.prodId, // juste l'id du produit
       price: raw.price,
-      imageUrl: '',
+      imageUrl: 'k', 
       pricePromo: raw.pricePromo 
     };
     this.loading = true;
@@ -76,9 +76,9 @@ export class CreateProductSizeComponent implements OnInit {
       next: () => {
         this.successMessage = 'ProduitSize créé avec succès !';
         this.loading = false;
-        this.productSizeFrom.reset({
-          SizeProd: '',
-          product: '',
+        this.productSizeForm.reset({
+          sizeProd: '',
+          prodId: '',
           price: '',
           pricePromo: '',
           imageUrl: ''
