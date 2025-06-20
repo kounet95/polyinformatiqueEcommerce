@@ -21,7 +21,11 @@ data class GetAllProductsQuery(
   val categoryId: String? = null,
   val couleurs: String? = null,
   val socialGroupId: String? = null,
-  val productSize: String? = null
+  val productSize: String? = null,
+  val sousCategories: String?= null,
+  val searchKeyword: String?= null,
+  val selectedPriceRange: String?= null,
+  val sortOption: String?= null
 )
 
 data class GetAllProductSizesQuery (

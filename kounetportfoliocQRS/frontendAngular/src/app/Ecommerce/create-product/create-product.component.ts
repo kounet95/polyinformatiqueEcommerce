@@ -69,7 +69,7 @@ export class CreateProductComponent implements OnInit {
 
     this.productSizeService.getAllProductSizes().subscribe({
       next: sizes => this.productSizes = sizes,
-      error: () => { /* gérer l'erreur si besoin */ }
+      error: () => { /* une erreur c'est produite */ }
     });
   }
 

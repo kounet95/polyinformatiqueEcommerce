@@ -2,9 +2,8 @@ package org.example.ecpolycommand.web;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.example.ecpolycommand.service.ImageStorageService;
+import org.example.ecpolycommand.service.CloudinaryService;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand;
-import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteInvoiceCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductDeletedEvent;
 import org.springframework.http.HttpStatus;
@@ -26,15 +25,17 @@ public class ProductCommandController {
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
   private final ImageStorageService imageStorageService;
+  private final CloudinaryService cloudinaryService;
 
   public ProductCommandController(
     CommandGateway commandGateway,
     EventStore eventStore,
-    ImageStorageService imageStorageService
+    ImageStorageService imageStorageService, CloudinaryService cloudinaryService
   ) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
     this.imageStorageService = imageStorageService;
+    this.cloudinaryService = cloudinaryService;
   }
 
   /**
@@ -52,8 +53,8 @@ public class ProductCommandController {
     // Upload l'image si présente
     if (mediaFile != null && !mediaFile.isEmpty()) {
       try {
-        String models = imageStorageService.uploadImage(mediaFile);
-        product.setModels(models);
+        String imageUrl = cloudinaryService.uploadImage(mediaFile);
+        product.setModels(imageUrl);
       } catch (IOException e) {
         CompletableFuture<String> failed = new CompletableFuture<>();
         failed.completeExceptionally(

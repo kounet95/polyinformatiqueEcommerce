@@ -217,7 +217,7 @@ export interface ProductDTO {
 // ===============================
 export interface ProductSizeDTO {
   id: string;
-  sizeProd: SizeProd;
+size: SizeProd;
   prodId: string;
   price: number;
   pricePromo: number;

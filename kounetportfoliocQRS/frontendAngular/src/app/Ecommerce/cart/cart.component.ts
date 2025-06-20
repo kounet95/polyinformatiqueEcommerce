@@ -49,7 +49,7 @@ export class CartComponent implements OnInit {
               ...freshProduct,
               qty: item.qty,
               productSizeId: chosenSize?.id ?? item.productSizeId,
-              productSize: chosenSize?.sizeProd ?? item.productSize,
+              productSize: chosenSize?.size ?? item.productSize,
               productSizePrice: chosenSize?.price ?? 0, // <-- LA BONNE PROPRIÉTÉ
             };
           })
