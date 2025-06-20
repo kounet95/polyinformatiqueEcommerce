@@ -12,6 +12,7 @@ public class ProductMapper {
         agg.setProductId(dto.getId());
         agg.setName(dto.getName());
         agg.setDescription(dto.getDescription());
+        agg.setProductSizesId(dto.getProductSizesId());
         agg.setSubcategoryId(dto.getSubcategoryId());
         agg.setSocialGroupId(dto.getSocialGroupId());
         agg.setModels(dto.getModels());
@@ -24,8 +25,7 @@ public class ProductMapper {
             agg.getProductId(),
             agg.getName(),
             agg.getDescription(),
-
-            null,
+          agg.getProductSizesId(),
             null,
             agg.getSubcategoryId(),
             agg.getSocialGroupId(),

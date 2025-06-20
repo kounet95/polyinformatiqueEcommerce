@@ -25,5 +25,6 @@ public class Product {
   @ManyToOne
   @JoinColumn(name = "social_group_id")
   private SocialGroup socialGroup;
-
+  @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<ProductSize> productSizes;
 }

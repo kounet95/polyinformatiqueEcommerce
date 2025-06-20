@@ -23,16 +23,14 @@ import java.util.stream.Stream;
 public class ProductSizeController {
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
-  private final ImageStorageService imageStorageService;
+
   private final CloudinaryService cloudinaryService;
   public ProductSizeController(
     CommandGateway commandGateway,
-    EventStore eventStore,
-    ImageStorageService imageStorageService, CloudinaryService cloudinaryService
+    EventStore eventStore, CloudinaryService cloudinaryService
   ) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
-    this.imageStorageService = imageStorageService;
     this.cloudinaryService = cloudinaryService;
   }
 

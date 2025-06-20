@@ -29,7 +29,7 @@ public class ProductAggregate {
   private String name;
   private String description;
   private LocalDateTime createdAt;
-  private List<ProductSizeDTO> productSizes;
+  private List<String> productSizesId;
   private String subcategoryId;
   private String socialGroupId;
   private String models;
@@ -48,7 +48,7 @@ public class ProductAggregate {
     this.name = event.getProductDTO().getName();
     this.description = event.getProductDTO().getDescription();
     this.createdAt = event.getProductDTO().getCreatedAt();
-    this.productSizes = event.getProductDTO().getProductSizes();
+    this.productSizesId = event.getProductDTO().getProductSizesId();
     this.subcategoryId = event.getProductDTO().getSubcategoryId();
     this.socialGroupId = event.getProductDTO().getSocialGroupId();
     this.models = event.getProductDTO().getModels();
@@ -67,7 +67,7 @@ public class ProductAggregate {
     this.subcategoryId = "[deleted]";
     this.productId = "[deleted]";
     this.models = null;
-    this.productSizes = null;
+    this.productSizesId = null;
     this.socialGroupId = "[deleted]";
     this.createdAt = LocalDateTime.now();
     this.isActive = false;

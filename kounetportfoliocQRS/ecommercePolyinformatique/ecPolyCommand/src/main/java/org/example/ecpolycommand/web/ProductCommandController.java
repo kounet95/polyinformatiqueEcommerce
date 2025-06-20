@@ -24,17 +24,17 @@ public class ProductCommandController {
 
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
-  private final ImageStorageService imageStorageService;
+
   private final CloudinaryService cloudinaryService;
 
   public ProductCommandController(
     CommandGateway commandGateway,
     EventStore eventStore,
-    ImageStorageService imageStorageService, CloudinaryService cloudinaryService
+     CloudinaryService cloudinaryService
   ) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
-    this.imageStorageService = imageStorageService;
+
     this.cloudinaryService = cloudinaryService;
   }
 
@@ -68,7 +68,7 @@ public class ProductCommandController {
       productId,
       product.getName(),
       product.getDescription(),
-      product.getProductSizes(),
+      product.getProductSizesId(),
       product.getCreatedAt(),
       product.getModels(),
       product.getSubcategoryId(),
