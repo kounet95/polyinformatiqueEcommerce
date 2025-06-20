@@ -65,13 +65,13 @@
               </div>
             </div>
   
-            <!-- Tailles disponibles -->
+              <!-- Tailles disponibles -->
                     <div class="mb-3">
                       <label for="productSizes" class="form-label">Tailles disponibles</label>
                       <select multiple class="form-select" formControlName="productSizes">
                     <option *ngFor="let size of productSizes" [ngValue]="size">
-  {{ size.size || size.sizeProd }} — {{ size.price | number:'1.2-2' }} €
-</option>
+                {{ size.sizeProd }} — {{ size.price | number:'1.2-2' }} €
+              </option>
               </select>
               <small class="form-text text-muted">Vous pouvez choisir plusieurs tailles.</small>
               <div class="text-danger small" *ngIf="productForm.get('productSizes')?.invalid && productForm.get('productSizes')?.touched">

@@ -53,6 +53,7 @@ export class ProductService {
    * @param categoryId (optionnel)
    * @param couleurs (optionnel)
    * @param socialGroupId (optionnel)
+   * @param sousCategories (optionnel)
    * @param productSize (optionnel)
    */
   searchProducts(
@@ -61,6 +62,7 @@ export class ProductService {
     categoryId?: string,
     couleurs?: string,
     socialGroupId?: string,
+    sousCategories?: string,
     productSize?: string
   ): Observable<PageResponse<ProductDTO>> {
     let params = new HttpParams()
@@ -69,6 +71,7 @@ export class ProductService {
     if (categoryId) params = params.set('categoryId', categoryId);
     if (couleurs) params = params.set('couleurs', couleurs);
     if (socialGroupId) params = params.set('socialGroupId', socialGroupId);
+    if (sousCategories) params = params.set('sousCategories', sousCategories);
     if (productSize) params = params.set('productSize', productSize);
 
     return this.http.get<PageResponse<ProductDTO>>(

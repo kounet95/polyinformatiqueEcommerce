@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service'; 
 import { ProductService } from '../services/produit.service';
-import { CategoryDTO, ProductDTO } from '../../mesModels/models';
+import { CategoryDTO, ProductDTO, SubcategoryDTO } from '../../mesModels/models';
 import { ProductSizeService } from '../services/product-size.service';
+import { SouscategoriesService } from '../services/souscategories.service';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -23,6 +24,7 @@ export class CategoryComponent implements OnInit {
   // Filtres
   selectedCategoryId: string | null = null;
   selectedCouleurs: string[] = [];
+  selectedSouscategorie: string[] = [];
   selectedSocialGroup: string | null = null;
   selectedProductSize: string | null = null;
   currentIndex: number = 0;
@@ -31,30 +33,36 @@ export class CategoryComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
-    private productSizeService: ProductSizeService
+    private productSizeService: ProductSizeService,
+    private sousCategorieService: SouscategoriesService
   ) {}
 
   ngOnInit(): void {
-    this.fetchCategories();
+    this.fetchCategoriesAndSubcategories();
   }
 
-  fetchCategories(): void {
+  fetchCategoriesAndSubcategories(): void {
+    this.loading = true;
     this.categoryService.getAllCategories().subscribe({
-      next: (data) => {
-        this.categories = data.map(cat => ({
-          ...cat,
-          children: [
-            { id: '1', name: "Men's Wear" },
-            { id: '2', name: "Women's Wear" },
-            { id: '3', name: "Kids' Clothing" },
-            { id: '4', name: "Accessories" }
-          ]
-        }));
-        this.loading = false;
-        // Charge les produits de la première catégorie par défaut
-        if (this.categories.length > 0) {
-          this.onCategorySelect(this.categories[0].id);
-        }
+      next: (cats) => {
+        this.sousCategorieService.getAllSubcategories().subscribe({
+          next: (sousCats) => {
+            this.categories = cats.map(cat => ({
+              ...cat,
+              children: sousCats
+                .filter(sc => sc.categoryId === cat.id)
+                .map(sc => ({ id: sc.id, name: sc.name }))
+            }));
+            this.loading = false;
+            if (this.categories.length > 0) {
+              this.onCategorySelect(this.categories[0].id);
+            }
+          },
+          error: () => {
+            this.error = "Erreur lors du chargement des sous-catégories.";
+            this.loading = false;
+          }
+        });
       },
       error: () => {
         this.error = "Erreur lors du chargement des catégories.";
@@ -78,9 +86,14 @@ export class CategoryComponent implements OnInit {
       this.selectedCouleurs.length > 0 ? this.selectedCouleurs.join(',') : undefined,
       this.selectedSocialGroup || undefined,
       this.selectedProductSize || undefined,
+      this.selectedSouscategorie.length > 0 ? this.selectedSouscategorie.join(',') : undefined,
     ).subscribe({
       next: (data) => {
-        this.products = data.content;
+        const arr = Array.isArray(data) ? data : data.content ?? [];
+      this.products = arr.map(prod => ({
+        ...prod,
+        productSizes: prod.productSizes ?? []
+      }));
         this.loading = false;
       },
       error: () => {
@@ -122,6 +135,10 @@ export class CategoryComponent implements OnInit {
     this.selectedProductSize = size;
     this.fetchProducts();
   }
+  onProductSouscategorieChange(id: string): void {
+    this.selectedSouscategorie = this.selectedSouscategorie.filter(c => c !== id); 
+    this.fetchProducts();
+  }
 
   onMobileSearch(): void {
     // Ajoute ici ta logique de recherche par texte si tu veux
@@ -131,6 +148,13 @@ export class CategoryComponent implements OnInit {
   toggleMobileSearch(): void {
     this.showMobileSearch = !this.showMobileSearch;
   }
+
+getProductImageUrl(models: string): string {
+  return models ?? 'assets/img/placeholder.png';
+}
+
+
+
 
   /**
    * Retourne le prix principal d'un produit (prix de la première taille).

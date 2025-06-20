@@ -1,98 +1,104 @@
-<section id="shop" class="section bg-light py-5">
-  <div class="container">
+<app-announcement-bar></app-announcement-bar>
 
-    <!-- Barre de recherche mobile -->
-    <div class="d-flex justify-content-end d-md-none mb-3">
-      <button class="btn btn-outline-secondary" (click)="toggleMobileSearch()">
+<!-- BOUTON MOBILE SEARCH -->
+<button
+  class="btn btn-link d-md-none"
+  (click)="toggleMobileSearch()"
+  style="position: absolute; right: 1rem; top: 1rem; z-index: 1000; background: none; border: none;">
+  <mat-icon>search</mat-icon>
+</button>
+
+<!-- BARRE DE RECHERCHE MOBILE -->
+<div class="mobile-search-bar" *ngIf="showMobileSearch">
+  <button mat-icon-button (click)="toggleMobileSearch()" style="float:right;">
+    <mat-icon>close</mat-icon>
+  </button>
+  <form class="search-form" (ngSubmit)="onMobileSearch()">
+    <mat-form-field appearance="outline" class="mobile-search-field">
+      <input matInput placeholder="Search for products..." [(ngModel)]="mobileSearch" name="mobileSearch" />
+      <button mat-icon-button matSuffix type="submit">
         <mat-icon>search</mat-icon>
       </button>
-    </div>
-
-    <div class="mobile-search-bar mb-4" *ngIf="showMobileSearch">
-      <form class="search-form d-flex gap-2 align-items-center" (ngSubmit)="onMobileSearch()">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Rechercher un produit</mat-label>
-          <input matInput [(ngModel)]="mobileSearch" name="mobileSearch" placeholder="Tapez un mot-clé..." />
-        </mat-form-field>
-        <button mat-flat-button color="primary" type="submit">
-          <mat-icon>search</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleMobileSearch()" aria-label="Fermer la recherche">
-          <mat-icon>close</mat-icon>
-        </button>
-      </form>
-    </div>
-
-    <div class="row">
-      <!-- Filtres (Sidebar) -->
-      <div class="col-lg-4 mb-4">
-        <div class="p-4 bg-white rounded shadow-sm">
-          <h4 class="mb-3">Catégories</h4>
-          <mat-accordion>
-            <mat-expansion-panel *ngFor="let category of categories" [hideToggle]="!category.children?.length">
-              <mat-expansion-panel-header>
-                <span class="fw-semibold">{{ category.name }}</span>
-              </mat-expansion-panel-header>
+    </mat-form-field>
+  </form>
+</div>
+<div class="main-layout">
+  <div class="sidebar">
+    <!-- Bloc Catégories -->
+    <div class="category-card" *ngIf="!loading && !error">
+      <h3 class="widget-title mat-headline">Categories</h3>
+      <mat-accordion displayMode="flat" class="category-accordion">
+        <ng-container *ngFor="let category of categories">
+          <mat-expansion-panel [hideToggle]="!category.children?.length" class="category-panel">
+            <mat-expansion-panel-header>
+              <span class="category-title"><b>{{ category.name }}</b></span>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
               <mat-nav-list *ngIf="category.children?.length">
-                <mat-list-item *ngFor="let sub of category.children">
-                  <mat-icon class="text-muted me-2" fontIcon="fiber_manual_record" style="font-size: 0.75rem;"></mat-icon>
-                  {{ sub.name }}
+                <mat-list-item *ngFor="let sub of category.children" class="subcategory-item">
+                  <mat-icon matListIcon color="accent" class="subcategory-dot">fiber_manual_record</mat-icon>
+                  <span>{{ sub.name }}</span>
                 </mat-list-item>
               </mat-nav-list>
-            </mat-expansion-panel>
-          </mat-accordion>
+            </ng-template>
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-accordion>
+    </div>
 
-          <hr class="my-4">
-
-          <h4 class="mb-3">Couleurs</h4>
-          <div class="d-flex flex-wrap gap-2">
-            <div *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']" class="form-check color-option">
-              <input class="form-check-input" type="checkbox" [id]="'color-' + color"
-                     [value]="color"
-                     [checked]="selectedCouleurs.includes(color)"
-                     (change)="onCouleurCheckboxChange(color, $event)">
+    <!-- Bloc Couleurs -->
+    <div class="couleur-card">
+      <div class="color-filter-widget widget-item">
+        <h3 class="widget-title">Filter by Color</h3>
+        <div class="color-filter-content">
+          <div class="color-options">
+            <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
+              <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
+                [checked]="selectedCouleurs.includes(color)"
+                (change)="onCouleurCheckboxChange(color, $event)">
               <label class="form-check-label" [for]="'color-' + color">
-                <span class="color-swatch" [style.backgroundColor]="color" title="{{ color | titlecase }}"></span>
+                <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
               </label>
             </div>
           </div>
-
-          <div class="d-flex justify-content-between mt-3">
-            <button class="btn btn-sm btn-outline-secondary" (click)="clearAllColors()">Effacer</button>
-            <button class="btn btn-sm btn-primary" (click)="applyColorFilters()">Appliquer</button>
+          <div class="color-filter-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Clear All</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Appliquer le filtre</button>
           </div>
-        </div>
-      </div>
-
-      <!-- Produits -->
-      <div class="col-lg-8">
-        <div class="row g-4">
-          <div class="col-md-6" *ngFor="let product of products">
-            <div class="card h-100 shadow-sm border-0 product-box">
-              <img [src]="product.models || 'assets/img/placeholder.png'" class="card-img-top" [alt]="product.name">
-              <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-primary fw-semibold" *ngIf="product.productSizes?.length">
-                  {{ product.productSizes[0].price | currency }}
-                </p>
-                <p class="card-text text-muted" *ngIf="!product.productSizes?.length">
-                  Prix indisponible
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Loader et messages -->
-        <div *ngIf="loading" class="text-center my-4">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Chargement...</span>
-          </div>
-        </div>
-        <div *ngIf="error" class="alert alert-danger mt-3">
-          {{ error }}
         </div>
       </div>
     </div>
   </div>
-</section>
+  <!-- Affichage produits filtrés -->
+  <div class="row gy-4 mt-4">
+    <div class="col-lg-6" *ngFor="let product of products">
+      <div class="product-box">
+        <div class="product-thumb">
+         
+          <img [src]="getProductImageUrl(product.models)" />
+
+        </div>
+        <div class="product-content">
+          <div class="product-details">
+            <h3 class="product-title">{{ product.name }}</h3>
+            <div class="product-price" *ngIf="product.productSizes && product.productSizes.length > 0">
+              <span>{{ product.productSizes[0].price | currency }}</span>
+            </div>
+            <div class="product-price" *ngIf="!product.productSizes || product.productSizes.length === 0">
+              <span>Prix indisponible</span>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loader et erreur -->
+<div *ngIf="loading" class="text-center my-4">
+  <span class="spinner-border"></span> Chargement...
+</div>
+<div *ngIf="error" class="alert alert-danger">
+  {{ error }}
+</div>

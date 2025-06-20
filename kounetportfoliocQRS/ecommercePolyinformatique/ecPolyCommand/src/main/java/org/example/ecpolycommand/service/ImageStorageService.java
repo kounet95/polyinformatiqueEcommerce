@@ -48,7 +48,8 @@ public class ImageStorageService {
       tempFile.delete();
 
       // 7. Retourne le lien partageable
-      return uploadedFile.getWebViewLink();
+      return  "https://drive.google.com/uc?export=view&id=" + uploadedFile.getId();
+
 
     } catch (GeneralSecurityException e) {
       throw new IOException("Erreur d'authentification Google Drive : " + e.getMessage(), e);
