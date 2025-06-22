@@ -16,7 +16,6 @@ public class Product {
   private String id;
   private String name;
   private String description;
-  private LocalDateTime createdAt;
   private boolean isActive;
   private String urlModels;
   @ManyToOne

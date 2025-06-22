@@ -18,7 +18,6 @@ public class ProductSize {
   private String id;
   @Enumerated(EnumType.STRING)
   private SizeProd size;
-  private LocalDateTime createdAt;
   private Double price;
   private Double promoPrice;
   private String urlImage;

@@ -1,5 +1,6 @@
 package org.example.ecpolyquery.query
 
+import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd
 import java.util.*
 
 public class GetAllCategoriesQuery {
@@ -21,12 +22,10 @@ data class GetAllProductsQuery(
   val page: Int = 0,
   val size: Int = 10,
   val categoryId: String? = null,
-  val couleurs: String? = null,
+  val motifs: String? = null,
   val socialGroupId: String? = null,
-  val productSize: String? = null,
   val sousCategories: String?= null,
   val searchKeyword: String?= null,
-  val selectedPriceRange: String?= null,
   val sortOption: String?= null
 )
 
@@ -35,8 +34,7 @@ data class GetAllProductSizesQuery(
   val size: Int = 10,
   val selectedPrice: Int = 0,
   val selectedPricePromo: Int = 0,
-  val productId: String? = null,
-  val productSize: String? = null
+  val prodsize: Enum<SizeProd>?
 )
 data class GetAllProductSizesByQuery(
   val id: String,

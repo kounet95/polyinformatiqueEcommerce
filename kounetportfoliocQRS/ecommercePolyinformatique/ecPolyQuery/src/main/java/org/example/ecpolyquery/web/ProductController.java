@@ -28,17 +28,17 @@ public class ProductController {
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size,
     @RequestParam(required = false) String categoryId,
-    @RequestParam(required = false) String couleurs,
+    @RequestParam(required = false) String notifs,
     @RequestParam(required = false) String socialGroupId,
-    @RequestParam(required = false) String productSize,
     @RequestParam(required = false) String sousCategories,
     @RequestParam(required = false) String searchKeyword,
-    @RequestParam(required = false) String selectedPriceRange,
+
+
     @RequestParam(required = false) String sortOption
   ) {
     GetAllProductsQuery query = new GetAllProductsQuery(
-      page, size, categoryId, couleurs, socialGroupId,
-      productSize, sousCategories, searchKeyword, selectedPriceRange, sortOption
+      page, size, categoryId, notifs, socialGroupId,
+      sousCategories, searchKeyword, sortOption
     );
 
     return queryGateway.query(query, ResponseTypes.multipleInstancesOf(Product.class))

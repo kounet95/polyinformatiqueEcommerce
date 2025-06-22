@@ -65,7 +65,7 @@ public class ProductService {
       .name(productDTO.getName())
       .description(productDTO.getDescription())
       .productSizes(productSize)
-      .createdAt(createdAt)
+
       .isActive(productDTO.getIsActive())
       .subcategory(subcategory)
       .socialGroup(socialGroup)
