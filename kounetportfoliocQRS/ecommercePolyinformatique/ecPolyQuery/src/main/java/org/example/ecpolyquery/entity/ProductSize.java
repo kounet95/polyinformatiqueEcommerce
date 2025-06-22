@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +18,7 @@ public class ProductSize {
   private String id;
   @Enumerated(EnumType.STRING)
   private SizeProd size;
+  private LocalDateTime createdAt;
   private Double price;
   private Double promoPrice;
   private String urlImage;

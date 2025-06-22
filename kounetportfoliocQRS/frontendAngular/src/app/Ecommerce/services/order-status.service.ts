@@ -8,12 +8,9 @@ import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
   providedIn: 'root'
 })
 export class OrderStatusService {
-
   constructor(private http: HttpClient) {}
 
-  /**
-   * Suivre le statut de la commande en temps réel (EventStream)
-   */
+  /** EventStream: Suivre le statut de la commande par ID (SSE) */
   watchOrderStatus(orderId: string): Observable<OrderStatusDTO> {
     return this.http.get<OrderStatusDTO>(
       `${ecpolyQuery.backend}/api/orderstatus/watch/${orderId}`,
@@ -21,9 +18,7 @@ export class OrderStatusService {
     );
   }
 
-  /**
-   * Suivre le statut de la commande par code-barres en temps réel (EventStream)
-   */
+  /** EventStream: Suivre le statut de la commande par code-barres (SSE) */
   watchOrderStatusByBarcode(barcode: string): Observable<OrderStatusDTO> {
     return this.http.get<OrderStatusDTO>(
       `${ecpolyQuery.backend}/api/orderstatus/watch-by-barcode/${barcode}`,

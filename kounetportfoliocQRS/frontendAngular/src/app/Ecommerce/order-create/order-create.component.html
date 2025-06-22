@@ -1,1 +1,10 @@
-<p>order-create works!</p>
+<form (ngSubmit)="onSubmit()">
+  <input [(ngModel)]="customerId" name="customerId" placeholder="Client ID" required />
+  <input [(ngModel)]="supplierId" name="supplierId" placeholder="Supplier ID" />
+  <input [(ngModel)]="paymentMethod" name="paymentMethod" placeholder="Moyen de paiement" required />
+  <input [(ngModel)]="shippingId" name="shippingId" placeholder="Shipping ID" />
+  <button [disabled]="loading || !customerId || !paymentMethod" type="submit">
+    Passer la commande
+  </button>
+  <div *ngIf="message">{{ message }}</div>
+</form>

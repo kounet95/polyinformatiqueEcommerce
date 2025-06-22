@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OrderDTO, OrderLineDTO, InvoiceDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
@@ -9,103 +9,58 @@ import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
   providedIn: 'root'
 })
 export class OrderService {
+  private commandBase = `${ecpolyCommand.backend}/order/command`;
+  private queryBase = `${ecpolyQuery.backend}/api`;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Création d'une commande
-   */
+  /** Command: Création d'une commande */
   createOrder(order: OrderDTO): Observable<string> {
-    return this.http.post<string>(
-      `${ecpolyCommand.backend}/order/command/create`,
-      order
-    );
+    return this.http.post<string>(`${this.commandBase}/create`, order);
   }
 
-  /**
-   * Ajout d'un produit à une commande existante
-   */
+  /** Command: Ajout d'un produit à une commande existante */
   addProductToOrder(orderId: string, orderLine: OrderLineDTO): Observable<string> {
-    return this.http.post<string>(
-      `${ecpolyCommand.backend}/order/command/${orderId}/add-product`,
-      orderLine
-    );
+    return this.http.post<string>(`${this.commandBase}/${orderId}/add-product`, orderLine);
   }
 
-  /**
-   * Confirmation d'une commande
-   */
+  /** Command: Confirmation d'une commande */
   confirmOrder(orderId: string): Observable<string> {
-    return this.http.put<string>(
-      `${ecpolyCommand.backend}/order/command/${orderId}/confirm`,
-      {}
-    );
+    return this.http.put<string>(`${this.commandBase}/${orderId}/confirm`, {});
   }
 
-  /**
-   * Génération d'une facture pour une commande
-   */
+  /** Command: Génération d'une facture pour une commande */
   generateInvoice(orderId: string, invoice: InvoiceDTO): Observable<string> {
-    return this.http.post<string>(
-      `${ecpolyCommand.backend}/order/command/${orderId}/generate-invoice`,
-      invoice
-    );
+    return this.http.post<string>(`${this.commandBase}/${orderId}/generate-invoice`, invoice);
   }
 
-  /**
-   * Paiement d'une facture
-   */
+  /** Command: Paiement d'une facture */
   payInvoice(invoiceId: string): Observable<string> {
-    return this.http.put<string>(
-      `${ecpolyCommand.backend}/order/command/invoice/${invoiceId}/pay`,
-      {}
-    );
+    return this.http.put<string>(`${this.commandBase}/invoice/${invoiceId}/pay`, {});
   }
 
-  /**
-   * Lancement de la livraison d'une commande
-   */
+  /** Command: Lancement de la livraison */
   startShipping(orderId: string): Observable<string> {
-    return this.http.put<string>(
-      `${ecpolyCommand.backend}/order/command/${orderId}/start-shipping`,
-      {}
-    );
+    return this.http.put<string>(`${this.commandBase}/${orderId}/start-shipping`, {});
   }
 
-  /**
-   * Marquer une commande comme livrée
-   */
+  /** Command: Marquer comme livrée */
   deliverOrder(orderId: string): Observable<string> {
-    return this.http.put<string>(
-      `${ecpolyCommand.backend}/order/command/${orderId}/deliver`,
-      {}
-    );
+    return this.http.put<string>(`${this.commandBase}/${orderId}/deliver`, {});
   }
 
-  /**
-   * Récupérer toutes les commandes (Query)
-   */
+  /** Query: Toutes les commandes */
   getAllOrders(): Observable<OrderDTO[]> {
-    return this.http.get<OrderDTO[]>(
-      `${ecpolyQuery.backend}/api/orders`
-    );
+    return this.http.get<OrderDTO[]>(`${this.queryBase}/orders`);
   }
 
-  /**
-   * Récupérer une commande par son ID (Query)
-   */
+  /** Query: Détail d'une commande */
   getOrderById(orderId: string): Observable<OrderDTO> {
-    return this.http.get<OrderDTO>(
-      `${ecpolyQuery.backend}/api/orders/${orderId}`
-    );
+    return this.http.get<OrderDTO>(`${this.queryBase}/orders/${orderId}`);
   }
 
-  /**
-   * Récupérer les évènements d'une commande (Event sourcing)
-   */
+  /** Command: Obtenir les événements d'une commande (Event Sourcing) */
   getOrderEvents(aggregateId: string): Observable<any[]> {
-    return this.http.get<any[]>(
-      `${ecpolyCommand.backend}/order/command/events/${aggregateId}`
-    );
+    return this.http.get<any[]>(`${this.commandBase}/events/${aggregateId}`);
   }
 }

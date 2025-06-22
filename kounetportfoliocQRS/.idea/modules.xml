@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ecommercePolyinformatique/ecPolyQuery/ecPolyQuery.iml" filepath="$PROJECT_DIR$/ecommercePolyinformatique/ecPolyQuery/ecPolyQuery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/blogService/queryBlog/queryBlog.iml" filepath="$PROJECT_DIR$/blogService/queryBlog/queryBlog.iml" />
+    </modules>
+  </component>
+</project>

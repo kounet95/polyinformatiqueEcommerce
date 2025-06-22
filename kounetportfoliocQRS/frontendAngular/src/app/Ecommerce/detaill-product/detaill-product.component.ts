@@ -40,7 +40,6 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart() {
     if (!this.product) return;
-    this.cartService.addToCart(this.product, this.quantity);
     this.addedMessage = 'Produit ajouté au panier !';
     setTimeout(() => (this.addedMessage = ''), 1500);
   }

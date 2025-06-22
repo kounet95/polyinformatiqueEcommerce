@@ -3,6 +3,7 @@ package org.example.polyinformatiquecoreapi.dtoEcommerce;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,20 +14,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 public class InvoiceDTO {
-    @NotBlank(message = "Invoice ID cannot be blank")
+
     private String id;
-    @NotBlank(message = "Order ID cannot be blank")
+  @NotBlank(message = "Street cannot be blank")
+  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private String orderId;
-    @NotBlank(message = "Order ID cannot be blank")
+  @NotBlank(message = "Street cannot be blank")
+  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private String custumerId;
-    @Min(value = 0, message = "Amount must be positive")
+  @NotBlank(message = "Street cannot be blank")
+  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private double amount;
-    @NotBlank(message = "Payment status cannot be blank")
+   @NotBlank(message = "Street cannot be blank")
+   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private String methodePayment;
-    @NotBlank(message = "Payment status cannot be blank")
+   @NotBlank(message = "Street cannot be blank")
+   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private Double restMonthlyPayment;
-    @NotBlank(message = "Payment status cannot be blank")
+    @NotBlank(message = "Street cannot be blank")
+   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private String paymentStatus;
-   @NotBlank(message = "Payment status cannot be blank")
+   @NotBlank(message = "Street cannot be blank")
+   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
    private String supplierId;
 }

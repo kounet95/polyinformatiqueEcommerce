@@ -204,7 +204,6 @@ export interface ProductDTO {
   id: string;
   name: string;
   description: string;
-  productSizes: ProductSizeDTO[];
   createdAt: string;
   models: string;
   subcategoryId: string;
@@ -217,8 +216,8 @@ export interface ProductDTO {
 // ===============================
 export interface ProductSizeDTO {
   id: string;
-size: SizeProd;
-  prodId: string;
+  sizeProd: SizeProd;
+  prodId: ProductDTO;
   price: number;
   pricePromo: number;
   imageUrl: string;
@@ -290,4 +289,15 @@ export interface SupplierDTO {
   addressId: string;
   email: string;
   personToContact: string;
+}
+
+export interface CartItem {
+  productId: string;
+  productName: string;
+  productImg: string;
+  qty: number;
+  productSizeId: string;   
+  productSize: string;     
+  productSizePrice: number; 
+  pricePromo?: number;     
 }

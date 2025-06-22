@@ -9,6 +9,8 @@ import org.example.ecpolyquery.query.GetProductByIdQuery;
 import org.example.ecpolyquery.repos.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ProductQueryHandler {
   private final ProductRepository productRepository;
 
   @QueryHandler
-  public List<Product> on(GetAllProductsQuery query) {
+  Page<Product> findAll(Specification<Product> spec, Pageable pageable) {
     log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}",
       query.getPage(), query.getSize());
     Page<Product> productPage = productRepository.findAll(
