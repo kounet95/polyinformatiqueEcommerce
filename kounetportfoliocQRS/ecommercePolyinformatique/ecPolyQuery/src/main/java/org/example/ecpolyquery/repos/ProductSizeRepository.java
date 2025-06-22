@@ -12,7 +12,7 @@ public interface ProductSizeRepository extends JpaRepository<ProductSize, String
 
   List<ProductSize> findBySubcategoryIdAndSocialGroupId(String subcategoryId, String socialGroupId);
   // News, pour les 30 derniers jours
-  @Query("SELECT p FROM ProductSize p WHERE p.createdAt >= :fromDate")
+  @Query("SELECT p FROM Stock s join ProductSize p where s.createdDate <=30 +:fromDate")
   List<ProductSize> findAllNewsProducts(@Param("fromDate") Date fromDate);
 
   // Sale

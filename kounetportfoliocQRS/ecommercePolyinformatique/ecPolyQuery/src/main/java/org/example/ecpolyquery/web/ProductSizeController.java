@@ -13,6 +13,8 @@ import org.example.ecpolyquery.query.findAllNewsProducts;
 import org.example.ecpolyquery.query.findAllSaleProducts;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -51,6 +53,7 @@ public class ProductSizeController {
   }
 
   @GetMapping("news/{date}")
+  // News, pour les 30 derniers jours
   public CompletableFuture<List<ProductSizeDTO>> getAllNewsProducts(@PathVariable Date date) {
     return queryGateway.query(
       new findAllNewsProducts(date),
