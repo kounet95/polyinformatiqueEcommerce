@@ -28,12 +28,22 @@ public class ProductController {
     @RequestParam(required = false) String categoryId,
     @RequestParam(required = false) String couleurs,
     @RequestParam(required = false) String socialGroupId,
-    @RequestParam(required = false) String productSize) {
-    return queryGateway.query(
-        new GetAllProductsQuery(page, size, categoryId, couleurs, socialGroupId, productSize),
-        ResponseTypes.multipleInstancesOf(Product.class)
-      )
-      .thenApply(products -> products.stream().map(ProductController::toDto).collect(Collectors.toList()));
+    @RequestParam(required = false) String productSize,
+    @RequestParam(required = false) String sousCategories,
+    @RequestParam(required = false) String searchKeyword,
+    @RequestParam(required = false) String selectedPriceRange,
+    @RequestParam(required = false) String sortOption
+  ) {
+    GetAllProductsQuery query = new GetAllProductsQuery(
+      page, size, categoryId, couleurs, socialGroupId,
+      productSize, sousCategories, searchKeyword, selectedPriceRange, sortOption
+    );
+
+    return queryGateway.query(query, ResponseTypes.multipleInstancesOf(Product.class))
+      .thenApply(products -> products.stream()
+        .map(ProductController::toDto)
+        .collect(Collectors.toList())
+      );
   }
 
   @GetMapping("/{id}")

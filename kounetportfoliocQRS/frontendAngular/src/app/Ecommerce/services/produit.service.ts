@@ -47,35 +47,49 @@ export class ProductService {
   }
 
   /**
-   * Recherche avancée de produits avec filtres (catégorie, couleurs, socialGroup, taille)
-   * @param page numéro de page (par défaut 0)
-   * @param size taille de page (par défaut 10)
-   * @param categoryId (optionnel)
-   * @param couleurs (optionnel)
-   * @param socialGroupId (optionnel)
-   * @param productSize (optionnel)
-   */
-  searchProducts(
-    page: number = 0,
-    size: number = 10,
-    categoryId?: string,
-    couleurs?: string,
-    socialGroupId?: string,
-    productSize?: string
-  ): Observable<PageResponse<ProductDTO>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString());
-    if (categoryId) params = params.set('categoryId', categoryId);
-    if (couleurs) params = params.set('couleurs', couleurs);
-    if (socialGroupId) params = params.set('socialGroupId', socialGroupId);
-    if (productSize) params = params.set('productSize', productSize);
+ * Recherche avancée de produits avec filtres
+ * @param page numéro de page (par défaut 0)
+ * @param size taille de page (par défaut 10)
+ * @param categoryId (optionnel)
+ * @param couleurs (optionnel, ex: "red,green")
+ * @param socialGroupId (optionnel)
+ * @param productSize (optionnel)
+ * @param sousCategories (optionnel, ex: "sub1,sub2")
+ * @param searchKeyword (optionnel, texte libre)
+ * @param selectedPriceRange (optionnel, ex: "0-50", "50-100", "100+")
+ * @param sortOption (optionnel, ex: "priceAsc", "priceDesc", "featured")
+ */
+searchProducts(
+  page: number = 0,
+  size: number = 10,
+  categoryId?: string,
+  couleurs?: string,
+  socialGroupId?: string,
+  productSize?: string,
+  sousCategories?: string,
+  searchKeyword?: string,
+  selectedPriceRange?: string,
+  sortOption?: string
+): Observable<PageResponse<ProductDTO>> {
+  let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
 
-    return this.http.get<PageResponse<ProductDTO>>(
-      `${ecpolyQuery.backend}/api/products`,
-      { params }
-    );
-  }
+  if (categoryId)         params = params.set('categoryId', categoryId);
+  if (couleurs)           params = params.set('couleurs', couleurs);
+  if (socialGroupId)      params = params.set('socialGroupId', socialGroupId);
+  if (productSize)        params = params.set('productSize', productSize);
+  if (sousCategories)     params = params.set('sousCategories', sousCategories);
+  if (searchKeyword)      params = params.set('search', searchKeyword);
+  if (selectedPriceRange) params = params.set('priceRange', selectedPriceRange);
+  if (sortOption)         params = params.set('sort', sortOption);
+
+  return this.http.get<PageResponse<ProductDTO>>(
+    `${ecpolyQuery.backend}/api/products`,
+    { params }
+  );
+}
+
 
   /**
    * Récupérer un produit par son ID (Query)

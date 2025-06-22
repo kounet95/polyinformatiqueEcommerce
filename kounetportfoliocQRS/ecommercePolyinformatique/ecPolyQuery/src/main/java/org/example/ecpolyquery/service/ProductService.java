@@ -48,6 +48,10 @@ public class ProductService {
         .orElseThrow(() -> new RuntimeException("Subcategory not found with id: " + productDTO.getSubcategoryId()));
     }
 
+    List <ProductSize> productSize = null;
+    if (productDTO.getProductSizesId() != null && !productDTO.getProductSizesId().isEmpty()) {
+      productSize= productSizeRepository.findAllById(productDTO.getProductSizesId());
+    }
     SocialGroup socialGroup = null;
     if (productDTO.getSocialGroupId() != null && !productDTO.getSocialGroupId().isEmpty()) {
       socialGroup = socialGroupRepository.findById(productDTO.getSocialGroupId())
@@ -60,6 +64,7 @@ public class ProductService {
       .id(event.getId())
       .name(productDTO.getName())
       .description(productDTO.getDescription())
+      .productSizes(productSize)
       .createdAt(createdAt)
       .isActive(productDTO.getIsActive())
       .subcategory(subcategory)

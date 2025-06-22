@@ -3,9 +3,9 @@ import { ProductDTO } from '../../mesModels/models';
 
 export interface CartItem extends ProductDTO {
   qty: number;
-  productSizeId?: string;    // l'id de la taille choisie
-  productSize?: string;      // le libellé ou nom de la taille choisie
-  productSizePrice?: number; // le prix précis de la taille choisie
+  productSizeId?: string;    
+  productSize?: string;      
+  productSizePrice?: number; 
 }
 
 @Injectable({
@@ -34,7 +34,7 @@ export class CartService {
     } else if (product.productSizes && product.productSizes.length > 0) {
       price = product.productSizes[0].price;
       productSizeId = product.productSizes[0].id;
-      productSize = product.productSizes[0].sizeProd;
+      productSize = product.productSizes[0].size;
     }
     if (existing) {
       existing.qty += qty;

@@ -65,7 +65,7 @@ export class CreateProductSizeComponent implements OnInit {
     const raw = this.productSizeForm.value;
     const productSize: ProductSizeDTO = {
       id: '',
-      sizeProd: raw.sizeProd,
+      size: raw.sizeProd,
       prodId: raw.prodId, // juste l'id du produit
       price: raw.price,
       imageUrl: 'k', 

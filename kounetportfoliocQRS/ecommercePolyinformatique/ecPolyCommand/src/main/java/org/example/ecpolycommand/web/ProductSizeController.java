@@ -3,12 +3,9 @@ package org.example.ecpolycommand.web;
 import jakarta.validation.Valid;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.example.ecpolycommand.service.ImageStorageService;
-import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductCommand;
+import org.example.ecpolycommand.service.CloudinaryService;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateProductSizeCommand;
-import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteInvoiceCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteProductSizeCommand;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +23,15 @@ import java.util.stream.Stream;
 public class ProductSizeController {
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
-  private final ImageStorageService imageStorageService;
 
+  private final CloudinaryService cloudinaryService;
   public ProductSizeController(
     CommandGateway commandGateway,
-    EventStore eventStore,
-    ImageStorageService imageStorageService
+    EventStore eventStore, CloudinaryService cloudinaryService
   ) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
-    this.imageStorageService = imageStorageService;
+    this.cloudinaryService = cloudinaryService;
   }
 
   /**
@@ -53,7 +49,7 @@ public class ProductSizeController {
     // Upload l'image si présente
     if (mediaFile != null && !mediaFile.isEmpty()) {
       try {
-        String imageUrl = imageStorageService.uploadImage(mediaFile);
+        String imageUrl = cloudinaryService.uploadImage(mediaFile);
         product.setImageUrl(imageUrl);
       } catch (IOException e) {
         CompletableFuture<String> failed = new CompletableFuture<>();
