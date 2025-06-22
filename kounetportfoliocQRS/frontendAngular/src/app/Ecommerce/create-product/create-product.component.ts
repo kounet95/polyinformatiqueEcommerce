@@ -105,8 +105,7 @@ export class CreateProductComponent implements OnInit {
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
       models: '', 
-      isActive: !!raw.isActive,
-      productSizes: raw.productSizes
+      isActive: !!raw.isActive
     };
     this.loading = true;
     this.productService.createProduct(product, this.selectedFile ?? undefined).subscribe({

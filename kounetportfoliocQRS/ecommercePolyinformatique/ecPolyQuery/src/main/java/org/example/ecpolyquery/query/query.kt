@@ -1,5 +1,7 @@
 package org.example.ecpolyquery.query
 
+import java.util.*
+
 public class GetAllCategoriesQuery {
 }
 
@@ -28,13 +30,14 @@ data class GetAllProductsQuery(
   val sortOption: String?= null
 )
 
-data class GetAllProductSizesQuery (
+data class GetAllProductSizesQuery(
   val page: Int = 0,
   val size: Int = 10,
-  val price: String? = null,
-  val pricePromo: String? = null,
+  val selectedPrice: Int = 0,
+  val selectedPricePromo: Int = 0,
+  val productId: String? = null,
+  val productSize: String? = null
 )
-
 data class GetAllProductSizesByQuery(
   val id: String,
 )
@@ -67,8 +70,19 @@ class GetOrderByIdQuery(val id: String)
 class GetOrderLineByIdQuery(val id: String)
 
 class GetProductByIdQuery(val id: String)
-
 class GetProductSizeByIdQuery(val id: String)
+class findAllNewsProducts(date: Date?) {
+  var date: Date?
+    get() = date
+  init {
+    this.date = date
+  }
+}
+
+class findAllSaleProducts( )
+
+
+
 
 class GetPurchaseByIdQuery(val id: String)
 

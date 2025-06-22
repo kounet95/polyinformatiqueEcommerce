@@ -25,6 +25,6 @@ public class ShippingDTO {
   private LocalDateTime createdAt;
   @NotBlank
   private String shippingAddressId;
-  @NotBlank
+  @NotNull
   private OrderStatus orderStatus;
 }

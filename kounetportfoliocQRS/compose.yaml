@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   axonserver:
-    image: 'axoniq/axonserver:latest'
+    image: axoniq/axonserver:4.5.13-jdk-17-dev
     container_name: axonserver
     environment:
-      - AXONIQ_AXONSERVER_STANDALONE=TRUE
+      - AXON SERVER_STANDALONE=TRUE
     ports:
       - '8024:8024'
       - '8124:8124'

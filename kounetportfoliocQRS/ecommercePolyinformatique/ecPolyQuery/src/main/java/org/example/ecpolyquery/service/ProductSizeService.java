@@ -63,8 +63,8 @@ public class ProductSizeService {
     ProductSizeDTO productSizeDTO = event.getProductSizeDTO();
     productSizeRepository.findById(event.getId()).ifPresent(productSize -> {
       if (productSizeDTO.getProdId() != null) {
-        Product product = productSizeRepository.findById(productSizeDTO.getProdId())
-          .orElseThrow(()->new RuntimeException("Product not found with id:"+ productSizeDTO.getProdId())).getProductId();
+        Product product = productRepository.findById(productSizeDTO.getProdId())
+          .orElseThrow(()->new RuntimeException("Product not found with id:"+ productSizeDTO.getProdId()));
       }
 
       productSize.setSize(productSizeDTO.getSizeProd());

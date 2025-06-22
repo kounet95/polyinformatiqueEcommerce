@@ -110,11 +110,15 @@
     </div>
   </div>
   
-  <!-- Affichage produits filtrés -->
-  <div class="row gy-4 mt-4">
-    <div class="col-lg-6" *ngFor="let product of products">
+
+ <!-- Affichage produits filtrés -->
+<div class="row gy-4 mt-4">
+  <div class="col-lg-6" *ngFor="let product of products">
+    <ng-container *ngIf="product.productSizes && product.productSizes.length > 0; else noSizes">
       <div class="card p-3 shadow rounded" style="max-width: 300px; margin: auto; border: none;">
         <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">New Season</span>
+        <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">Hot</span>
+        <span class="badge btn-outline-danger text-dark mb-2" style="align-self: flex-start; color: brown;">Sold Out</span>
         <div class="product-card">
           <img 
             [src]="product.models" 
@@ -130,15 +134,8 @@
             <button type="button" class="quick-action-btn">
               <i class="bi bi-eye"></i>
             </button>
-            <!-- Sélecteur de taille si plusieurs tailles -->
-            <div *ngIf="product.productSizes && product.productSizes.length > 1" class="mb-2">
-              <select [(ngModel)]="product.selectedSizeId" class="form-select form-select-sm">
-                <option *ngFor="let sz of product.productSizes" [value]="sz.id">{{ sz.size }}</option>
-              </select>
-            </div>
-            <div class="add-to-cart-container">
-              <button type="button" class="add-to-cart-btn"
-                (click)="addToCart(product, 1, product.selectedSizeId || product.productSizes?.[0]?.id, getSelectedSizeName(product))">
+            <div class="add-to-cart-container" *ngFor="let size of product.productSizes">
+              <button type="button" class="add-to-cart-btn" (click)="addCart(size)">
                 Add to Cart
               </button>
             </div>
@@ -146,12 +143,23 @@
         </div>
         <div class="card-body text-center">
           <h6 class="card-title text-dark fw-semibold">{{ product.name }}</h6>
-          <h5 class="text-dark fw-bold mt-2 mb-3">
-            <ng-container *ngIf="getMainProductPrice(product) !== null; else noPrice">
-              {{ getMainProductPrice(product) | currency }}
-            </ng-container>
-            <ng-template #noPrice>Prix indisponible</ng-template>
-          </h5>
+          <!-- je vais utilise un tableau pour afficher des tailles/prix -->
+          <table class="table table-sm mb-2">
+              <thead>
+                <tr>
+                  <th style="width:33%;">Taille</th>
+                  <th style="width:33%;">Prix</th>
+                  <th style="width:33%;">Prix promo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let size of product.productSizes">
+                <td>{{ size.sizeProd || 'N/A' }}</td>
+                <td>{{ size.price }} €</td>
+                <td>{{ size.pricePromo ? (size.pricePromo + ' €') : '' }}</td>
+                </tr>
+              </tbody>
+            </table>
           <div class="d-flex justify-content-center align-items-center mb-2">
             <span class="text-warning me-1">
               <i class="bi bi-star-fill"></i>
@@ -170,10 +178,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
+    <ng-template #noSizes>
+      <span class="text-muted">Aucune taille disponible.</span>
+    </ng-template>
   </div>
 </div>
-
 <!-- Loader et erreur -->
 <div *ngIf="loading" class="text-center my-4">
   <span class="spinner-border"></span> Chargement...

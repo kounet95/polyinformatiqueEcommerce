@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Product;
+
 import org.example.ecpolyquery.query.GetAllProductsQuery;
+
 import org.example.ecpolyquery.query.GetProductByIdQuery;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -45,6 +47,10 @@ public class ProductController {
         .collect(Collectors.toList())
       );
   }
+
+
+
+
 
   @GetMapping("/{id}")
   public CompletableFuture<ProductDTO> getProductById(@PathVariable String id) {

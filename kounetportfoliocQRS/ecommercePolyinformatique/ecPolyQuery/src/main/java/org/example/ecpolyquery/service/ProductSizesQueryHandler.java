@@ -6,6 +6,8 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.query.GetAllProductSizesByQuery;
 import org.example.ecpolyquery.query.GetAllProductSizesQuery;
+import org.example.ecpolyquery.query.findAllNewsProducts;
+import org.example.ecpolyquery.query.findAllSaleProducts;
 import org.example.ecpolyquery.repos.ProductSizeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +40,27 @@ public class ProductSizesQueryHandler {
     Optional<ProductSize> optionalProduct = productSizeRepository.findById(query.getId());
     return optionalProduct
       .orElseThrow(() -> new RuntimeException("ProductSize not found with id: " + query.getId()));
+  }
+
+
+  @QueryHandler
+  public List<ProductSize> on(findAllSaleProducts query) {
+    log.debug("Handling FindAllSaleProducts Query");
+    List<ProductSize> saleProductSizes = productSizeRepository.findAllSaleProducts();
+    if (saleProductSizes == null || saleProductSizes.isEmpty()) {
+      throw new RuntimeException("No ProductSizes found on sale.");
+    }
+    return saleProductSizes;
+  }
+
+  @QueryHandler
+  public List<ProductSize> on(findAllNewsProducts query) {
+    log.debug("Handling FindAllNewsProducts Query");
+    List<ProductSize> newsProductSizes = productSizeRepository.findAllNewsProducts(query.getDate());
+    if (newsProductSizes == null || newsProductSizes.isEmpty()) {
+      throw new RuntimeException("No ProductSizes found for news.");
+    }
+    return newsProductSizes;
   }
 
 }

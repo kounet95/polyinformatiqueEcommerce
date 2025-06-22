@@ -64,20 +64,6 @@
                 Description requise.
               </div>
             </div>
-  
-              <!-- Tailles disponibles -->
-                <div class="mb-3">
-  <label for="productSizes" class="form-label">Tailles disponibles</label>
-  <select multiple class="form-select" formControlName="productSizes" id="productSizes">
-    <option *ngFor="let size of productSizes" [ngValue]="size">
-      {{ size.size }} — {{ size.price | number:'1.2-2' }} €
-    </option>
-  </select>
-  <small class="form-text text-muted">Vous pouvez choisir plusieurs tailles.</small>
-  <div class="text-danger small" *ngIf="productForm.get('productSizes')?.invalid && productForm.get('productSizes')?.touched">
-    Choisissez au moins une taille.
-  </div>
-</div>
             <!-- Actif -->
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" formControlName="isActive" id="isActive">

@@ -29,6 +29,14 @@ export class ProductSizeService {
     );
   }
 
+   /**
+   * Récupérer un Product par son ID dans ProductSize (Query)
+   */
+   getProductSizesByProductId(productId: string): Observable<ProductSizeDTO[]> {
+  return this.http.get<ProductSizeDTO[]>(
+    `${ecpolyQuery.backend}/api/productsizes?productId=${productId}`
+  );
+}
   /**
    * Créer un ProductSize (Command)
    * @param productSize ProductSizeDTO

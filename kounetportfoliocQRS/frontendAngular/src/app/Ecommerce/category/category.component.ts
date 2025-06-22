@@ -1,13 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service'; 
 import { ProductService } from '../services/produit.service';
-import { CategoryDTO, ProductDTO, ProductSizeDTO, SubcategoryDTO } from '../../mesModels/models';
+import { CategoryDTO, ProductDTO, ProductSizeDTO, SubcategoryDTO,CartItem } from '../../mesModels/models';
 import { ProductSizeService } from '../services/product-size.service';
 import { SouscategoriesService } from '../services/souscategories.service';
-import { CartItem, CartService } from '../services/cartservice';
+import { CartService } from '../services/cartservice';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
-type ProductWithSelection = ProductDTO & { selectedSizeId?: string };
+type ProductWithSelection = ProductDTO & { 
+  selectedSizeId?: string; 
+  productSizes?: ProductSizeDTO[];
+  sizes?:string;
+};
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -17,11 +24,13 @@ type ProductWithSelection = ProductDTO & { selectedSizeId?: string };
 export class CategoryComponent implements OnInit {
   categories: CategoryWithChildren[] = [];
   products: ProductWithSelection[] = [];
+  displayedColumns =["id" ,"sizeProd", "price", "pricePromo"];
   loading: boolean = true;
   error: string | null = null;
   showMobileSearch: boolean = false;
   mobileSearch: string = '';
   productSizes: ProductSizeDTO[] = [];
+  public datasource:any;
   // Filtres
   selectedCategoryId: string | null = null;
   selectedCouleurs: string[] = [];
@@ -37,21 +46,20 @@ export class CategoryComponent implements OnInit {
   itemsPerPage: number = 12;
   activeFilters: { key: string, label: string }[] = [];
 
-  currentIndex: number = 0;
-  intervalId: any;
-
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
     private productSizeService: ProductSizeService,
     private sousCategorieService: SouscategoriesService,
-   private cartService: CartService ,
-   
+    private cartService: CartService,
+    private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.fetchCategoriesAndSubcategories();
-  }
+ ngOnInit(): void {
+  this.fetchCategoriesAndSubcategories();
+  this.fetchProductSizes();
+  this.datasource=new MatTableDataSource();
+}
 
   fetchCategoriesAndSubcategories(): void {
     this.loading = true;
@@ -83,6 +91,42 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+  fetchProductSizes(): void {
+    this.loading = true;
+    this.productSizeService.getAllProductSizes().subscribe({
+      next: (apiSizes: any[]) => {
+        // Mapping API -> Front Model
+        const sizes: ProductSizeDTO[] = apiSizes.map(apiPs => ({
+          id: apiPs.id,
+          sizeProd: apiPs.size, // API: size ; Front: sizeProd
+          prodId: {
+            id: apiPs.productId.id,
+            name: apiPs.productId.name,
+            description: apiPs.productId.description,
+            createdAt: apiPs.productId.createdAt,
+            models: apiPs.productId.urlModels,
+            subcategoryId: apiPs.productId.subcategory?.id,
+            socialGroupId: apiPs.productId.socialGroup?.id,
+            isActive: apiPs.productId.active
+          },
+          price: apiPs.price,
+          pricePromo: apiPs.promoPrice,
+          imageUrl: apiPs.urlImage
+        }));
+
+        this.productSizes = sizes;
+
+        // Pour une table à plat si besoin
+        this.datasource = new MatTableDataSource(this.productSizes);
+        this.loading = false;
+      },
+      error: () => {
+        this.error = "Erreur lors du chargement des tailles/produits.";
+        this.loading = false;
+      }
+    });
+  }
+
   onCategorySelect(categoryId: string): void {
     this.selectedCategoryId = categoryId;
     this.applyFilters();
@@ -107,10 +151,26 @@ export class CategoryComponent implements OnInit {
       next: (data) => {
         const arr = Array.isArray(data) ? data : data.content ?? [];
         this.products = arr.map(prod => ({
-  ...prod,
-  productSizes: prod.productSizes ?? [],
-  selectedSizeId: prod.productSizes?.[0]?.id
-}));
+          ...prod,
+          productSizes: [],
+          selectedSizeId: undefined
+        }));
+        // Récupère les tailles pour chaque produit
+        this.products.forEach(product => {
+          this.productSizeService.getProductSizesByProductId(product.id).subscribe(sizes => {
+            product.productSizes = sizes.map(apiPs => ({
+              id: apiPs.id,
+              sizeProd: apiPs.sizeProd,
+              prodId: product,
+              price: apiPs.price,
+              pricePromo: apiPs.pricePromo,
+              imageUrl: apiPs.imageUrl
+            }));
+            if (sizes.length > 0) {
+              product.selectedSizeId = sizes[0].id;
+            }
+          });
+        });
         this.loading = false;
       },
       error: () => {
@@ -184,18 +244,6 @@ export class CategoryComponent implements OnInit {
     this.fetchProducts();
   }
 
-   addToCart(product: ProductDTO, qty: number = 1, productSizeId?: string, productSize?: string): void {
-    this.cartService.addToCart(product, qty, productSizeId, productSize);
-  }
-  
-  
- getSelectedSizeName(product: ProductWithSelection): string | undefined {
-    if (!product.productSizes) return undefined;
-    const sz = product.productSizes.find(s => s.id === product.selectedSizeId) ||
-               product.productSizes[0];
-    return sz?.size;
-  }
-   
   onSocialGroupChange(sgId: string): void {
     this.selectedSocialGroup = sgId;
     this.fetchProducts();
@@ -224,7 +272,17 @@ export class CategoryComponent implements OnInit {
     return models ?? 'assets/img/placeholder.png';
   }
 
-  getMainProductPrice(product: ProductDTO): number | null {
-    return product.productSizes?.[0]?.price ?? null;
+  getMainProductPrice(product: ProductSizeDTO): number | null {
+    return null;
   }
+
+addCart(size: ProductSizeDTO) {
+    this.cartService.addToCart(size, 1);
+    this.snackBar.open(
+      `Ajouté: ${size.prodId.name} - ${size.sizeProd} au panier !`,
+      'Fermer',
+      { duration: 2000, verticalPosition: 'top' }
+    );
+  }
+
 }

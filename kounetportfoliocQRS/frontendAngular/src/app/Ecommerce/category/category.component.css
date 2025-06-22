@@ -434,3 +434,14 @@
   box-sizing: border-box;
   background: transparent;   
 }
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+.table th {
+  font-weight: 600;
+}
+.table {
+  width: 100%;
+  margin-bottom: 0;
+}

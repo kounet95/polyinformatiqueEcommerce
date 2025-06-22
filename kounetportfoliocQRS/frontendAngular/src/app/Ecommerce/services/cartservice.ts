@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ProductDTO } from '../../mesModels/models';
+import { ProductSizeDTO, CartItem } from '../../mesModels/models';
 
-export interface CartItem extends ProductDTO {
-  qty: number;
-  productSizeId?: string;    
-  productSize?: string;      
-  productSizePrice?: number; 
-}
+const CART_KEY = 'cart_items';
 
 @Injectable({
   providedIn: 'root'
@@ -14,49 +9,59 @@ export interface CartItem extends ProductDTO {
 export class CartService {
   private items: CartItem[] = [];
 
+  constructor() {
+    this.loadCart();
+  }
+
+  private loadCart() {
+    const stored = localStorage.getItem(CART_KEY);
+    this.items = stored ? JSON.parse(stored) : [];
+  }
+
+  private saveCart() {
+    localStorage.setItem(CART_KEY, JSON.stringify(this.items));
+  }
+
   getCart(): CartItem[] {
+    this.loadCart();
     return this.items;
   }
 
   setCart(newCart: CartItem[]) {
     this.items = newCart;
+    this.saveCart();
   }
 
-  addToCart(product: ProductDTO, qty: number = 1, productSizeId?: string, productSize?: string): void {
-    // Si le produit existe déjà et la même taille, on incrémente la quantité
+  addToCart(productSize: ProductSizeDTO, qty: number = 1): void {
+    this.loadCart();
     const existing = this.items.find(
-      item => item.id === product.id && item.productSizeId === productSizeId
+      item => item.productSizeId === productSize.id && item.productId === productSize.prodId.id
     );
-    let price = 0;
-    if (productSizeId && product.productSizes) {
-      const match = product.productSizes.find((sz: any) => sz.id === productSizeId);
-      price = match ? match.price : 0;
-    } else if (product.productSizes && product.productSizes.length > 0) {
-      price = product.productSizes[0].price;
-      productSizeId = product.productSizes[0].id;
-      productSize = product.productSizes[0].size;
-    }
     if (existing) {
       existing.qty += qty;
     } else {
       this.items.push({
-        ...product,
+        productId: productSize.prodId.id,
+        productName: productSize.prodId.name,
+        productImg: productSize.imageUrl,
         qty,
-        productSizeId,
-        productSize,
-        productSizePrice: price
+        productSizeId: productSize.id,
+        productSize: productSize.sizeProd,
+        productSizePrice: productSize.price,
+        pricePromo: productSize.pricePromo
       });
     }
+    this.saveCart();
   }
 
-  removeFromCart(productId: string, productSizeId?: string) {
-    // Retire seulement la bonne taille si précisée
-    this.items = this.items.filter(
-      item => !(item.id === productId && (!productSizeId || item.productSizeId === productSizeId))
-    );
+  removeFromCart(productSizeId: string) {
+    this.loadCart();
+    this.items = this.items.filter(item => item.productSizeId !== productSizeId);
+    this.saveCart();
   }
 
   clearCart() {
     this.items = [];
+    this.saveCart();
   }
 }

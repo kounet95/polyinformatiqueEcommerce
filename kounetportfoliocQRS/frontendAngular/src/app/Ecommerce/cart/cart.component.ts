@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService, CartItem } from '../services/cartservice';
-import { ProductService } from '../services/produit.service';
+import { CartService } from '../services/cartservice';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CartItem } from '../../mesModels/models';
 
 @Component({
   selector: 'app-cart',
@@ -22,48 +20,12 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private productService: ProductService,
     private router: Router
   ) {}
 
   ngOnInit() {
-    const cart = this.cartService.getCart();
-    if (cart.length > 0) {
-      const requests = cart.map(item =>
-        this.productService.getProductById(item.id).pipe(
-          map(freshProduct => {
-            let chosenSize = null;
-            if (item.productSizeId) {
-              chosenSize = freshProduct.productSizes?.find(
-                (size: any) => size.id === item.productSizeId
-              );
-            } else if (item.productSize) {
-              chosenSize = freshProduct.productSizes?.find(
-                (size: any) => size.sizeProd === item.productSize
-              );
-            }
-            if (!chosenSize && freshProduct.productSizes?.length) {
-              chosenSize = freshProduct.productSizes[0];
-            }
-            return {
-              ...freshProduct,
-              qty: item.qty,
-              productSizeId: chosenSize?.id ?? item.productSizeId,
-              productSize: chosenSize?.size ?? item.productSize,
-              productSizePrice: chosenSize?.price ?? 0, // <-- LA BONNE PROPRIÉTÉ
-            };
-          })
-        )
-      );
-      forkJoin(requests).subscribe(freshCartItems => {
-        this.cartItems = freshCartItems;
-        this.recalculate();
-        this.cartService.setCart(this.cartItems);
-      });
-    } else {
-      this.cartItems = [];
-      this.recalculate();
-    }
+    this.cartItems = this.cartService.getCart();
+    this.recalculate();
   }
 
   incrementQty(item: CartItem) {
@@ -78,15 +40,9 @@ export class CartComponent implements OnInit {
     }
   }
 
-  removeFromCart(productId: string, productSizeId?: string) {
-    this.cartService.removeFromCart(productId, productSizeId);
+  removeItem(item: CartItem) {
+    this.cartService.removeFromCart(item.productSizeId);
     this.cartItems = this.cartService.getCart();
-    this.recalculate();
-  }
-
-  clearCart() {
-    this.cartService.clearCart();
-    this.cartItems = [];
     this.recalculate();
   }
 
@@ -105,7 +61,9 @@ export class CartComponent implements OnInit {
   }
 
   recalculate() {
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.productSizePrice || 0) * item.qty, 0);
+    this.subtotal = this.cartItems.reduce((sum, item) =>
+      sum + ((item.pricePromo ?? item.productSizePrice) * item.qty), 0
+    );
     let shipping = 0;
     if (this.shippingOption === 'standard') shipping = 4.99;
     else if (this.shippingOption === 'express') shipping = 12.99;
@@ -117,10 +75,10 @@ export class CartComponent implements OnInit {
   }
 
   proceedToCheckout() {
-    this.router.navigate(['/order/create']);
+    this.router.navigate(['/checkout']);
   }
 
   continueShopping() {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/home']);
   }
 }

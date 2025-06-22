@@ -1,62 +1,59 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
-import { KeycloakAngularModule } from 'keycloak-angular';
-import { CarouselModule } from 'ngx-owl-carousel-o';
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../services/produit.service';
+import { CategoryService } from '../services/category.service';
+import { ProductDTO, CategoryDTO, ProductSizeDTO } from '../../mesModels/models';
+import { ProductSizeService } from '../services/product-size.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
-   standalone: true,
-  imports: [
-  CommonModule,
-  MatToolbarModule,
-  MatButtonModule,
-  MatIconModule,
-  
-  MatMenuModule,
-  
-  RouterModule, 
-]
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-selectedLanguage = 'English'; 
- selectedCurrency = 'USD'; 
-  selectLanguage(lang: string) {
-    this.selectedLanguage = lang;
-    // Optionnel : localStorage pour persistance
-    localStorage.setItem('selectedLanguage', lang);
-  }
+export class HomeComponent implements OnInit {
+  featuredProducts: ProductDTO[] = [];
+  featuredProductsSize:ProductSizeDTO[]= [];
+  newArrivals: ProductDTO[] = [];
+  saleProducts: ProductDTO[] = [];
+  categories: CategoryDTO[] = [];
+  selectedLanguage = 'English';
+  selectedCurrency = 'USD';
+
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private productSizeService: ProductSizeService
+  ) {}
 
   ngOnInit() {
-    // Récupérer le choix sauvegardé au chargement
-    const lang = localStorage.getItem('selectedLanguage');
-    if (lang) this.selectedLanguage = lang;
-     // Charger la devise sauvegardée au démarrage
-    const curr = localStorage.getItem('selectedCurrency');
-    if (curr) this.selectedCurrency = curr;
+    // Appelle tes services pour charger les produits et catégories dynamiquement
+    this.loadFeaturedProducts();
+    this.loadFeaturedProductsSize();
+    this.loadNewArrivals();
+    this.loadSaleProducts();
+    this.loadCategories();
   }
 
-  
-
-  selectCurrency(curr: string) {
-    this.selectedCurrency = curr;
-    // Optionnel : sauvegarde le choix dans le navigateur
-    localStorage.setItem('selectedCurrency', curr);
+  loadFeaturedProducts() {
+    this.productService.getAllProducts().subscribe(prods => this.featuredProducts = prods);
   }
+
+  loadFeaturedProductsSize() {
+    this.productService.getAllProducts().subscribe(
+      prods => this.featuredProductsSize = prods);
+  }
+
+  loadNewArrivals() {
+    this.productService.getNewArrivals().subscribe(prods => this.newArrivals = prods);
+  }
+
+  loadSaleProducts() {
+    this.productService.getSaleProducts().subscribe(prods => this.saleProducts = prods);
+  }
+
+  loadCategories() {
+    this.categoryService.getAllCategories().subscribe(cats => this.categories = cats);
+  }
+
+  selectLanguage(lang: string) { this.selectedLanguage = lang; }
+  selectCurrency(curr: string) { this.selectedCurrency = curr; }
 }
