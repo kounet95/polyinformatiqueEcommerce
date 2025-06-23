@@ -5,5 +5,4 @@ VOLUME /tmp
 COPY target/*.jar app.jar
 
 
-COPY credentials /credentials
 ENTRYPOINT ["java","-jar","app.jar"]
