@@ -38,11 +38,11 @@ export class CategoryCreateComponent {
       name: this.categoryForm.value.name
     };
 
-    this.loading = true;
+    this.loading = false;
     this.categoryService.createCategory(category).subscribe({
       next: () => {
         this.successMessage = 'Catégorie créée avec succès !';
-        this.loading = false;
+        this.loading = true;
         this.categoryForm.reset();
       },
       error: err => {

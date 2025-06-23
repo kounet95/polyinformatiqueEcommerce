@@ -13,16 +13,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
-<<<<<<< HEAD:kounetportfoliocQRS/blogService/commandeBlog/src/main/java/org/example/commandeblog/web/DomainController.java
 @RequestMapping("/domain/command")
 @CrossOrigin
 public class DomainController {
-=======
-
-@RequestMapping("/category/command")
-
-public class CategoryController {
->>>>>>> cb015458f76953e53f2ff14fd3746048c3b44e27:kounetportfoliocQRS/blogService/commandeBlog/src/main/java/org/example/commandeblog/web/CategoryController.java
 
     private final DomainCommandService domainCommandService;
     private final EventStore eventStore;
