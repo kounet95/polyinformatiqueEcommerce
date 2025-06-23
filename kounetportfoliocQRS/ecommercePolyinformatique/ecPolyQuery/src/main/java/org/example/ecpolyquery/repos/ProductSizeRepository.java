@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface ProductSizeRepository extends JpaRepository<ProductSize, String>, JpaSpecificationExecutor<ProductSize> {
 
-  List<ProductSize> findBySubcategoryIdAndSocialGroupId(String subcategoryId, String socialGroupId);
-
   // News, pour les 30 derniers jours
   @Query("SELECT DISTINCT s.productSize FROM Stock s WHERE s.createdDate >= :fromDate")
   List<ProductSize> findAllNewsProducts(@Param("fromDate") Date fromDate);
