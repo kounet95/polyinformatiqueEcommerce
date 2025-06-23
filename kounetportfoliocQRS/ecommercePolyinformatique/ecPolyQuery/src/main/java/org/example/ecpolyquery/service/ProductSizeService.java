@@ -32,9 +32,7 @@ public class ProductSizeService {
       product = productRepository.findById(productSizeDTO.getProdId())
         .orElseThrow(() -> new RuntimeException("Subcategory not found with id: " + productSizeDTO.getProdId()));
     }
-
     ProductSize productSize = ProductSize.builder()
-
       .id(event.getId())
       .size(event.getProductSizeDTO().getSizeProd())
       .productId(product)

@@ -7,13 +7,13 @@ import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 import org.example.ecpolyquery.query.GetProductByIdQuery;
 import org.example.ecpolyquery.repos.ProductRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,18 +24,27 @@ public class ProductQueryHandler {
   private final ProductRepository productRepository;
 
   @QueryHandler
-  Page<Product> findAll(Specification<Product> spec, Pageable pageable) {
+  public Page<Product> handle(GetAllProductsQuery query) {
     log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}",
       query.getPage(), query.getSize());
-    Page<Product> productPage = productRepository.findAll(
-      PageRequest.of(query.getPage(), query.getSize()));
-    return productPage.getContent();
+
+
+    Specification<Product> spec = ProductSpecification.withFilters(
+      query.getCategoryId(),
+      query.getSocialGroupId(),
+      query.getSousCategories(),
+      query.getSearchKeyword(),
+      query.getMotifs()
+    );
+
+    Pageable pageable = PageRequest.of(query.getPage(), query.getSize(), query.getSortOptionAsSort());
+    return productRepository.findAll(spec, pageable);
   }
+
   @QueryHandler
-  public Product on(GetProductByIdQuery query) {
+  public Product handle(GetProductByIdQuery query) {
     log.debug("Handling GetProductByIdQuery: {}", query.getId());
     Optional<Product> optionalProduct = productRepository.findById(query.getId());
-    return optionalProduct
-      .orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
+    return optionalProduct.orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
   }
 }
