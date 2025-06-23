@@ -17,6 +17,7 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -61,7 +62,9 @@ private final ProductSizeRepository productSizeRepository;
 
   @GetMapping("news/{date}")
 
-  public CompletableFuture<List<ProductSizeDTO>> getAllNewsProducts(@PathVariable Date date) {
+  public CompletableFuture<List<ProductSizeDTO>> getAllNewsProducts( @PathVariable
+                                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                       Date date) {
     return queryGateway.query(
       new findAllNewsProducts(date),
       ResponseTypes.multipleInstancesOf(ProductSize.class)
@@ -93,11 +96,4 @@ private final ProductSizeRepository productSizeRepository;
     return dto;
   }
 
-  @GetMapping("/news")
-  public List<ProductSize> getRecentProductSizes() {
-    Calendar cal = Calendar.getInstance();
-    cal.add(Calendar.DAY_OF_YEAR, -30);
-    Date fromDate = cal.getTime();
-    return productSizeRepository.findAllNewsProducts(fromDate);
-  }
 }
