@@ -11,12 +11,15 @@ import org.example.ecpolyquery.query.GetAllProductSizesQuery;
 import org.example.ecpolyquery.query.GetProductSizeByIdQuery;
 import org.example.ecpolyquery.query.findAllNewsProducts;
 import org.example.ecpolyquery.query.findAllSaleProducts;
+import org.example.ecpolyquery.repos.ProductSizeRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,19 +31,23 @@ import java.util.stream.Collectors;
 public class ProductSizeController {
 
   private final QueryGateway queryGateway;
-
+private final ProductSizeRepository productSizeRepository;
   @GetMapping
   public CompletableFuture<List<ProductSize>> getAllProductSizes(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size,
-    @RequestParam(required = false) String productSize,
+    @RequestParam(required = false) SizeProd productSize,
     @RequestParam(defaultValue = "0") int selectedPrice,
     @RequestParam(defaultValue = "0") int selectedPricePromo,
-    @RequestParam(required = false) String productId) {
-
-    // Correction : passe les params à la query selon le nouvel ordre
+    @RequestParam(required = false) String sortOption
+  ) {
     GetAllProductSizesQuery query = new GetAllProductSizesQuery(
-      page, size, selectedPrice, selectedPricePromo, productId, productSize
+      page,
+      size,
+      selectedPrice,
+      selectedPricePromo,
+      productSize,
+      sortOption
     );
 
     return queryGateway.query(query, ResponseTypes.multipleInstancesOf(ProductSize.class));
@@ -53,7 +60,7 @@ public class ProductSizeController {
   }
 
   @GetMapping("news/{date}")
-  // News, pour les 30 derniers jours
+
   public CompletableFuture<List<ProductSizeDTO>> getAllNewsProducts(@PathVariable Date date) {
     return queryGateway.query(
       new findAllNewsProducts(date),
@@ -84,5 +91,13 @@ public class ProductSizeController {
     dto.setPrice(productSize.getPrice());
     dto.setPricePromo(productSize.getPromoPrice());
     return dto;
+  }
+
+  @GetMapping("/news")
+  public List<ProductSize> getRecentProductSizes() {
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DAY_OF_YEAR, -30);
+    Date fromDate = cal.getTime();
+    return productSizeRepository.findAllNewsProducts(fromDate);
   }
 }
