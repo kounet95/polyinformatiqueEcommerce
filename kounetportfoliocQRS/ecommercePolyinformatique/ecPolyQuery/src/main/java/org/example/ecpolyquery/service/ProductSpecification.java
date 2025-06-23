@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ProductSpecification {
   public static Specification<Product> withFilters(
-    String categoryId,
     String socialGroupId,
     String sousCategories,
     String searchKeyword,
@@ -19,7 +18,6 @@ public class ProductSpecification {
   ) {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
-      if (categoryId != null) predicates.add(cb.equal(root.get("category").get("id"), categoryId));
       if (socialGroupId != null) predicates.add(cb.equal(root.get("socialGroup").get("id"), socialGroupId));
       if (sousCategories != null) predicates.add(cb.equal(root.get("sousCategorie"), sousCategories));
       if (searchKeyword != null) predicates.add(cb.like(cb.lower(root.get("name")), "%" + searchKeyword.toLowerCase() + "%"));

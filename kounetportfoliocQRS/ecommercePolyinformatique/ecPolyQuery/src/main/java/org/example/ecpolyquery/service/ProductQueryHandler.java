@@ -28,9 +28,7 @@ public class ProductQueryHandler {
     log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}",
       query.getPage(), query.getSize());
 
-
     Specification<Product> spec = ProductSpecification.withFilters(
-      query.getCategoryId(),
       query.getSocialGroupId(),
       query.getSousCategories(),
       query.getSearchKeyword(),

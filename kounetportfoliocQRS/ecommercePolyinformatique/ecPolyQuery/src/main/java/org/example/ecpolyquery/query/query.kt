@@ -88,16 +88,20 @@ data class GetAllProductSizesByQuery(
 public class GetAllShippingsQuery {
 }
 
-public class GetAllSocialGroupsQuery {
-}
+public class GetAllSocialGroupsQuery (
+  val page: Int = 0,
+  val size: Int = 10,
+  val categoryId: String? = null)
+
+
+
 
 public class GetAllStocksQuery {
 }
 
 public class GetAllSubcategoriesQuery {
 }
-
-public class GetAllSuppliersQuery(
+ class GetAllSuppliersQuery(
     var page: Int = 0,
     var size: Int = 10
 )
