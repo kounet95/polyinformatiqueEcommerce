@@ -42,6 +42,7 @@ public class ProductSizeController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public CompletableFuture<String> createProductSize(
     @RequestPart("productSize") @Valid ProductSizeDTO product,
+
     @RequestPart(value = "media", required = false) MultipartFile mediaFile
   ) {
     String productId = UUID.randomUUID().toString();

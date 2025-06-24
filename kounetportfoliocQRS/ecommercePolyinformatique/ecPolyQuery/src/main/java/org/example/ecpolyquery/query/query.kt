@@ -1,8 +1,12 @@
 package org.example.ecpolyquery.query
 
+import org.example.ecpolyquery.entity.ProductSize
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd
 import org.springframework.data.domain.Sort
+import org.springframework.data.jpa.domain.Specification
+import java.time.LocalDateTime
 import java.util.*
+
 
 public class GetAllCategoriesQuery {
 }
@@ -21,37 +25,8 @@ public class GetAllOrderLinesQuery {
 
 data class GetAllProductsQuery(
   val page: Int = 0,
-  val size: Int = 10,
-  val categoryId: String? = null,
-  val motifs: String? = null,
-  val socialGroupId: String? = null,
-  val sousCategories: String?= null,
-  val searchKeyword: String?= null,
-  val sortOption: String?= null
-) {
-  /**
-   * Convertit le champ sortOption (ex : "price,asc" ou "name,desc") en objet Sort utilisable par Spring Data JPA.
-   */
-  fun getSortOptionAsSort(): Sort {
-    if (sortOption.isNullOrBlank()) {
-      return Sort.unsorted()
-    }
-    //"price,asc" ou "name,desc"
-    val parts = sortOption.split(",")
-    return if (parts.size == 2) {
-      val property = parts[0].trim()
-      val direction = parts[1].trim()
-      if (direction.equals("desc", ignoreCase = true)) {
-        Sort.by(property).descending()
-      } else {
-        Sort.by(property).ascending()
-      }
-    } else {
-      Sort.unsorted()
-    }
-  }
-}
-
+  val size: Int = 10
+)
 data class GetAllProductSizesQuery(
   val page: Int = 0,
   val size: Int = 10,

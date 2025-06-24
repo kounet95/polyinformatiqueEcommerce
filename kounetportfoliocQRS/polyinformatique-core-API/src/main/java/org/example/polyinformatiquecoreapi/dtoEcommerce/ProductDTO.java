@@ -28,7 +28,7 @@ public class ProductDTO {
   private List<String> productSizesId;
   @NotNull(message = "CreatedAt cannot be null")
   private LocalDateTime createdAt;
-  @NotBlank(message = "models  cannot be blank")
+  @NotNull(message = "models  cannot be blank")
   private String models;
   @NotBlank(message = "Subcategory ID cannot be blank")
   private String subcategoryId;

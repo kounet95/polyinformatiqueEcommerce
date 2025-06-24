@@ -26,6 +26,6 @@ public class ProductSizeDTO {
   @NotNull(message = "Le prix est obligatoire")
   @Min(value = 0, message = "Le prix doit être positif")
   private Double pricePromo;
-  @NotBlank(message = "prodId cannot be blank")
+  @NotNull(message = "prodId cannot be blank")
   private String imageUrl;
 }

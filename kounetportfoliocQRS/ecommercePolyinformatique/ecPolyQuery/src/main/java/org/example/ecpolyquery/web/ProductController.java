@@ -5,12 +5,16 @@ import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Product;
 
+import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 
 import org.example.ecpolyquery.query.GetProductByIdQuery;
+import org.example.ecpolyquery.service.ProductQueryHandler;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,23 +26,17 @@ import java.util.stream.Collectors;
 public class ProductController {
 
   private final QueryGateway queryGateway;
-
+private final ProductQueryHandler productQueryHandler;
   @GetMapping
   public CompletableFuture<List<ProductDTO>> getAllProducts(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size,
-    @RequestParam(required = false) String categoryId,
-    @RequestParam(required = false) String notifs,
-    @RequestParam(required = false) String socialGroupId,
-    @RequestParam(required = false) String sousCategories,
-    @RequestParam(required = false) String searchKeyword,
 
 
     @RequestParam(required = false) String sortOption
   ) {
     GetAllProductsQuery query = new GetAllProductsQuery(
-      page, size, categoryId, notifs, socialGroupId,
-      sousCategories, searchKeyword, sortOption
+      page, size
     );
 
     return queryGateway.query(query, ResponseTypes.multipleInstancesOf(Product.class))
@@ -47,8 +45,6 @@ public class ProductController {
         .collect(Collectors.toList())
       );
   }
-
-
 
 
 
