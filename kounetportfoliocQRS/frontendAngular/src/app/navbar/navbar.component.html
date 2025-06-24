@@ -1,25 +1,26 @@
 <mat-toolbar color="white" class="main-toolbar mat-elevation-z2" style="padding: 0 32px;">
   <!-- Logo -->
-  <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+ 
+
+  <span class="spacer"></span>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+      <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
     <mat-icon class="mat-icon-rtl-mirror">thumb_up</mat-icon>
 
     <span style="font-weight: bold; font-size: 2rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
       Polyinformatique <span style="color: #ff5252;">.</span>
     </span>
   </a>
-
-  <span class="spacer"></span>
-
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
     <a class="navbar-brand" routerLink="/home">Boutique</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+    <button class="navbar-toggler" (click)="isMenuOpen = !isMenuOpen" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <div class="collapse navbar-collapse" [ngClass]="{'collapse navbar-collapse': true, 'show': isMenuOpen}"  id="navbarNavDropdown">
       <ul class="navbar-nav">
 
         

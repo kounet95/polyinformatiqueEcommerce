@@ -51,6 +51,8 @@ import { KeycloakProfile } from 'keycloak-js';
 })
 export class NavbarComponent  implements OnInit{
   title = 'ecom-app-angular';
+  isMenuOpen = false;
+
   public profile! : KeycloakProfile;
   constructor(public keycloakService : KeycloakService) {
   }
