@@ -171,7 +171,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatDividerModule,
     MatExpansionModule,
     MatProgressBarModule,
-  MatFormFieldModule,
+    MatFormFieldModule,
     MatSortModule,
     MatIconModule,
     ReactiveFormsModule,
@@ -182,7 +182,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatTabsModule,
     MatCardModule,
    MatTableModule,
-   MatBadgeModule
+   MatBadgeModule,
+   
    
 ],
 

@@ -7,13 +7,14 @@ import { ProductSizeService } from '../services/product-size.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  standalone:false,
 })
 export class HomeComponent implements OnInit {
   featuredProducts: ProductDTO[] = [];
-  featuredProductsSize:ProductSizeDTO[]= [];
-  newArrivals: ProductDTO[] = [];
-  saleProducts: ProductDTO[] = [];
+  featuredProductsSize: ProductSizeDTO[] = [];
+  newArrivals: ProductSizeDTO[] = [];
+  saleProducts: ProductSizeDTO[] = [];
   categories: CategoryDTO[] = [];
   selectedLanguage = 'English';
   selectedCurrency = 'USD';
@@ -25,7 +26,6 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Appelle tes services pour charger les produits et catégories dynamiquement
     this.loadFeaturedProducts();
     this.loadFeaturedProductsSize();
     this.loadNewArrivals();
@@ -33,27 +33,48 @@ export class HomeComponent implements OnInit {
     this.loadCategories();
   }
 
+  // Suppose que getAllProducts() retourne un objet paginé avec une propriété 'content'
   loadFeaturedProducts() {
-    this.productService.getAllProducts().subscribe(prods => this.featuredProducts = prods);
+    this.productService.getAllProducts().subscribe({
+      next: page => this.featuredProducts = page.content || [],
+      error: err => this.featuredProducts = []
+    });
   }
 
   loadFeaturedProductsSize() {
-    this.productService.getAllProducts().subscribe(
-      prods => this.featuredProductsSize = prods);
+    this.productSizeService.getAllProductSizes().subscribe({
+      next: prods => this.featuredProductsSize = prods || [],
+      error: err => this.featuredProductsSize = []
+    });
   }
 
   loadNewArrivals() {
-    this.productService.getNewArrivals().subscribe(prods => this.newArrivals = prods);
+    const date = new Date();
+    this.productSizeService.getNewArrivals(date).subscribe({
+      next: prods => this.newArrivals = prods || [],
+      error: err => this.newArrivals = []
+    });
   }
 
   loadSaleProducts() {
-    this.productService.getSaleProducts().subscribe(prods => this.saleProducts = prods);
+    this.productSizeService.getSaleProducts().subscribe({
+      next: prods => this.saleProducts = prods || [],
+      error: err => this.saleProducts = []
+    });
   }
 
   loadCategories() {
-    this.categoryService.getAllCategories().subscribe(cats => this.categories = cats);
+    this.categoryService.getAllCategories().subscribe({
+      next: cats => this.categories = cats || [],
+      error: err => this.categories = []
+    });
   }
 
-  selectLanguage(lang: string) { this.selectedLanguage = lang; }
-  selectCurrency(curr: string) { this.selectedCurrency = curr; }
+  selectLanguage(lang: string) {
+    this.selectedLanguage = lang;
+  }
+
+  selectCurrency(curr: string) {
+    this.selectedCurrency = curr;
+  }
 }

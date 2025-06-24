@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ProductSizeDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
+import { Data } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,21 @@ export class ProductSizeService {
   getProductSizeEvents(aggregateId: string): Observable<any[]> {
     return this.http.get<any[]>(
       `${ecpolyCommand.backend}/productsize/command/events/${aggregateId}`
+    );
+  }
+
+
+  
+ getNewArrivals(date: Date): Observable<any[]> {
+  const dateStr = date.toISOString();
+  return this.http.get<any[]>(
+    `${ecpolyCommand.backend}/api/productsizes/news/${dateStr}`
+  );
+}
+
+  getSaleProducts(): Observable<any[]>{
+         return this.http.get<any[]>(
+      `${ecpolyCommand.backend}/api/productsizes/sale`
     );
   }
 }

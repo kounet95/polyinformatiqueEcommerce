@@ -125,15 +125,5 @@ searchProducts(
   }
 
 
-  getNewArrivals(): Observable<any[]>{
-         return this.http.get<any[]>(
-      `${ecpolyCommand.backend}/product/command/getAllNewsProducts`
-    );
-  }
-  getSaleProducts(): Observable<any[]>{
-         return this.http.get<any[]>(
-      `${ecpolyCommand.backend}/product/command/getAllSaleProducts`
-    );
-  }
 
 }
