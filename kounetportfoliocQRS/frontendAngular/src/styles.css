@@ -18,3 +18,7 @@ app-root, .main-wrapper {
   display: flex;
   flex-direction: column;
 }
+
+.dropdown-menu {
+  z-index: 1050 !important;
+}
