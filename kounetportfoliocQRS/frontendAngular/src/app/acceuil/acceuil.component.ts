@@ -1,5 +1,5 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,8 @@ import { ArticleRecentComponent } from "../article-recent/article-recent.compone
     CommonModule,         
     MatCardModule,  ]
 })
-export class AcceuilComponent {
+export class AcceuilComponent implements OnInit{
+
 services = [
     { icon: 'build', title: 'Conception de sites web', desc: 'Sites web modernes et performants', color: 'primary' },
     { icon: 'build', title: 'Conception d\'applications web', desc: 'Applications web modernes et performants', color: 'primary' },
@@ -42,4 +43,11 @@ services = [
     { icon: 'brush', title: 'Commerce vestimentaire', desc: 'Vetements culturels', color: 'warn' },
   ];
 
+  constructor(){
+
+  }
+  
+  ngOnInit(): void {
+      
+  }
 }

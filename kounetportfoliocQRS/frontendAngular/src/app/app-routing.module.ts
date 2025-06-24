@@ -30,21 +30,15 @@ import { OrderCreateComponent } from './Ecommerce/order-create/order-create.comp
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { FaqComponent } from './Ecommerce/faq/faq.component';
 
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
   { path: 'about', component: AboutComponent },
- {
-  path: 'services', component:ServicesComponent,
-},
-{
-  path: 'team', component: TeamComponent,
-},
-  {
-  path: 'portfolio',component: PortfolioComponent,
-}
-,
+  { path: 'services', component:ServicesComponent,},
+  { path: 'team', component: TeamComponent,},
+  { path: 'portfolio',component: PortfolioComponent,},
   { path: 'pricing', component: PrincingComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'newsArticle', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
@@ -56,7 +50,8 @@ const routes: Routes = [
   { path: 'contact', loadComponent: () => import('./contact/contact.component').then(m => m.ContactComponent) },
   { path: 'articles', component: ArticleComponent },
   { path: 'home', component: HomeComponent },
-   { path: 'product/:id', component: ProductDetailsComponent },
+  { path: 'faq', component: FaqComponent },
+  { path: 'product/:id', component: ProductDetailsComponent },
   { path: 'souscategorie', component: SousCategoryCreateComponent },
   { path: 'socialgroupe', component: CreatGroupeSocialComponent },
   { path: 'account', component: AccountComponent },
