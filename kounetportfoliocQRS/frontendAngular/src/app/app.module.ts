@@ -71,6 +71,7 @@ import { CreateProductSizeComponent } from './Ecommerce/create-product-size/crea
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
+import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 
 
 
@@ -128,6 +129,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductSizeComponent,
     ProductSizeComponent,
     CheckoutComponent,
+    PrivacyComponent,
 
    
     

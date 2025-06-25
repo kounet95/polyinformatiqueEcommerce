@@ -38,12 +38,13 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="productMenu"
              role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Produits
+            Catalogue 
           </a>
           <ul class="dropdown-menu" aria-labelledby="productMenu">
             <li><a class="dropdown-item" routerLink="/product">Voir les produits</a></li>
             <li><a class="dropdown-item" routerLink="/productcreate">Créer un produit</a></li>
             <li><a class="dropdown-item" routerLink="/creatproductsize">Tailles de produits</a></li>
+               <li><a class="dropdown-item" routerLink="/category">Catégories</a></li>
             <li><a class="dropdown-item" routerLink="/souscategorie">Sous-catégories</a></li>
             <li><a class="dropdown-item" routerLink="/promos">Promotions</a></li>
           </ul>
@@ -58,6 +59,7 @@
             <li><a class="dropdown-item" routerLink="/temoiage">Témoignages</a></li>
             <li><a class="dropdown-item" routerLink="/team">Équipe</a></li>
              <li><a class="dropdown-item" routerLink="/faq">Faq</a></li>
+             <li><a class="dropdown-item" routerLink="/privacy">Privacy</a></li>
             <li><a class="dropdown-item" routerLink="/socialgroupe">Groupes sociaux</a></li>
           </ul>
         </li>
@@ -71,7 +73,7 @@
             PolyInfo
           </a>
           <ul class="dropdown-menu" aria-labelledby="productMenu">
-            <li><a class="nav-link" href="#services">Services</a></li>
+            <li><a class="nav-link" routerLink="/services">Services</a></li>
             <li> <a class="nav-link" routerLink="/portfolio">Portfolio</a></li>
              <li><a class="nav-link" routerLink="/contact">Contact</a></li>
               <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
@@ -84,16 +86,7 @@
         </li>
 
       </ul>
-    </div>
-  </div>
-</nav>
-
-
-  <span class="spacer"></span>
-
-
-
-
+      
  <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
        <span *ngIf="profile;else login_template">{{profile.username}}</span>
             <ng-template #login_template>
@@ -107,6 +100,14 @@
     <button mat-menu-item (click)="handleLogout()">Logoout</button>
 
   </mat-menu>
+
+    </div>
+  </div>
+</nav>
+
+
+
+
 
 
 

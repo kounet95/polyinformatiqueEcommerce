@@ -31,6 +31,7 @@ import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-sppli
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
+import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,7 @@ const routes: Routes = [
   { path: 'articles', component: ArticleComponent },
   { path: 'home', component: HomeComponent },
   { path: 'faq', component: FaqComponent },
+  { path: 'privacy', component: PrivacyComponent },
   { path: 'product/:id', component: ProductDetailsComponent },
   { path: 'souscategorie', component: SousCategoryCreateComponent },
   { path: 'socialgroupe', component: CreatGroupeSocialComponent },
