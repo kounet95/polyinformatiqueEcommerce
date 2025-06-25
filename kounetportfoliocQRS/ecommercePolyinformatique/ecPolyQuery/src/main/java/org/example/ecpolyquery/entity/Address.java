@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +12,7 @@ import java.util.List;
 @Builder
 public class Address {
   @Id
-  private Long id;
+  private String id;
   private String street;
   private String city;
   private String state;
@@ -21,15 +20,15 @@ public class Address {
   private String country;
   private int appartment;
 
-  @OneToMany(mappedBy = "billingAddress", cascade = CascadeType.ALL)
-  private List<Customer> customers;
+  @ManyToOne
+  private Customer customer;
 
-  @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-  private List<Stock> store;
+  @ManyToOne
+  private Stock store;
 
-  @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
-  private List<Supplier> supplier;
+  @ManyToOne
+  private Supplier supplier;
 
-  @OneToMany(mappedBy = "addressId", cascade = CascadeType.ALL)
-  private List<Shipping> shipping;
+  @ManyToOne
+  private Shipping shipping;
 }

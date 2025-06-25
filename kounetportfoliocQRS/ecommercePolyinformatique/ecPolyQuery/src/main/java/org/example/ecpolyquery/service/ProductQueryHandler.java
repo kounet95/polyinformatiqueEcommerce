@@ -33,7 +33,8 @@ public class ProductQueryHandler {
       query.getPage(), query.getSize());
 
 
-    Pageable pageable = PageRequest.of(query.getPage(), query.getSize(), query.getSortOptionAsSort());
+    Pageable pageable = PageRequest.of(query.getPage(),
+      query.getSize());
     return productRepository.findAll( pageable);
   }
 

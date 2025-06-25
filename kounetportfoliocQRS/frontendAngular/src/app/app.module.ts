@@ -70,6 +70,8 @@ import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-sppli
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { StockComponent } from './Ecommerce/stock/stock.component';
+import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
 
 
 
@@ -127,6 +129,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductSizeComponent,
     ProductSizeComponent,
     CheckoutComponent,
+    StockComponent,
+    CreatStockComponent,
    
     
   ],

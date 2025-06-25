@@ -11,6 +11,9 @@ import java.util.*
 public class GetAllCategoriesQuery {
 }
 
+public class GetAllAddressQuery {
+}
+
 public class GetAllCustomersQuery {
 }
 
@@ -82,6 +85,7 @@ public class GetAllSubcategoriesQuery {
 )
 
 class GetCategoryByIdQuery(val id: String)
+class GetAddressByIdQuery(val id: String)
 
 class GetCustomerByIdQuery(val id: String)
 

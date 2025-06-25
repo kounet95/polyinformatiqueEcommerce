@@ -27,7 +27,8 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> getAllCategories() {
       try {
-        List<Category> categories = queryGateway.query(new GetAllCategoriesQuery(), ResponseTypes.multipleInstancesOf(Category.class)).join();
+        List<Category> categories = queryGateway.query(new GetAllCategoriesQuery(),
+          ResponseTypes.multipleInstancesOf(Category.class)).join();
         return ResponseEntity.ok(categories);
       } catch (Exception e) {
         log.error("Erreur lors de la récupération des catégories", e);

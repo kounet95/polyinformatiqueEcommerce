@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressDTO {
 
-  private Long id;
+  private String id;
 
   @NotBlank(message = "Street cannot be blank")
   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")

@@ -7,6 +7,7 @@ import { SouscategoriesService } from '../services/souscategories.service';
 import { CartService } from '../services/cartservice';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -49,7 +50,8 @@ export class CategoryComponent implements OnInit {
     private productSizeService: ProductSizeService,
     private sousCategorieService: SouscategoriesService,
     private cartService: CartService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -226,7 +228,9 @@ export class CategoryComponent implements OnInit {
       { duration: 2000, verticalPosition: 'top' }
     );
   }
-
+  voirDetaille(id: string){
+  this.router.navigate([`/product/${id}`]);
+  }
   get allFilters(): Record<string, any> {
     return { ...this.filters };
   }
