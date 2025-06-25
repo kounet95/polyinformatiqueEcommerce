@@ -51,23 +51,15 @@ public class ProductSizesQueryHandler {
   }
 
   @QueryHandler
-  public List<ProductSize> search(
-    String productName,
-    Double minPromo, Double maxPromo,
-    String size,
-    Boolean sale,
-    LocalDateTime newSince,
-    String subcategoryId,
-    String socialGroupId
-  ) {
+  public List<ProductSize> search(SearchProductSizesQuery query) {
     Specification<ProductSize> spec = Specification
-      .where(ProductSpecification.hasProductsizeName(productName))
-      .and(ProductSpecification.hasSubcategoryId(subcategoryId))
-      .and(ProductSpecification.hasSocialGroupId(socialGroupId))
-      .and(ProductSpecification.hasPromoPriceBetween(minPromo, maxPromo))
-      .and(ProductSpecification.hasSize(size))
-      .and(sale != null && sale ? ProductSpecification.isOnSale() : null)
-      .and(ProductSpecification.isNewArrival(newSince));
+      .where(ProductSpecification.hasProductsizeName(query.getProductName()))
+      .and(ProductSpecification.hasSubcategoryId(query.getSubcategoryId()))
+      .and(ProductSpecification.hasSocialGroupId(query.getSocialGroupId()))
+      .and(ProductSpecification.hasPromoPriceBetween(query.getMinPromo(), query.getMaxPromo()))
+      .and(ProductSpecification.hasSize(query.getSize()))
+      .and(query.getSale() != null && query.getSale() ? ProductSpecification.isOnSale() : null)
+      .and(ProductSpecification.isNewArrival(query.getNewSince()));
 
     return productSizeRepository.findAll(spec);
   }

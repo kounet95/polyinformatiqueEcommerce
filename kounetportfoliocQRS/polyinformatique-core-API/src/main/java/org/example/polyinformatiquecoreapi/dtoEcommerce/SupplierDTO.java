@@ -16,8 +16,6 @@ public class SupplierDTO {
 
     @NotBlank(message = "Fullname cannot be blank")
     private String fullname;
-
-    @NotBlank(message = "City cannot be blank")
     private String addressId;
 
     @NotBlank(message = "Email cannot be blank")

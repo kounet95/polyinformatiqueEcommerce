@@ -6,11 +6,8 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
 
-import org.example.ecpolyquery.query.GetAllProductSizesQuery;
+import org.example.ecpolyquery.query.*;
 
-import org.example.ecpolyquery.query.GetProductSizeByIdQuery;
-import org.example.ecpolyquery.query.findAllNewsProducts;
-import org.example.ecpolyquery.query.findAllSaleProducts;
 import org.example.ecpolyquery.repos.ProductSizeRepository;
 import org.example.ecpolyquery.service.ProductSizesQueryHandler;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
@@ -73,9 +70,10 @@ public class ProductSizeController {
     @RequestParam(required = false) String subcategoryId,
     @RequestParam(required = false) String socialGroupId
   ) {
-    return productSizesQueryHandler.search(
-      productName, minPromo,
-      maxPromo, size, sale, newSince,
-      subcategoryId, socialGroupId);
+
+    SearchProductSizesQuery query = new SearchProductSizesQuery(
+      productName, minPromo, maxPromo, size, sale, newSince, subcategoryId, socialGroupId
+    );
+    return productSizesQueryHandler.search(query);
   }
 }

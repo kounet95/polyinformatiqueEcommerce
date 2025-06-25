@@ -83,7 +83,16 @@ public class GetAllSubcategoriesQuery {
     var page: Int = 0,
     var size: Int = 10
 )
-
+data class SearchProductSizesQuery(
+  val productName: String? = null,
+  val minPromo: Double? = null,
+  val maxPromo: Double? = null,
+  val size: String? = null,
+  val sale: Boolean? = null,
+  val newSince: LocalDateTime? = null,
+  val subcategoryId: String? = null,
+  val socialGroupId: String? = null
+)
 class GetCategoryByIdQuery(val id: String)
 class GetAddressByIdQuery(val id: String)
 

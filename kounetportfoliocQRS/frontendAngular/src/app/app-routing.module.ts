@@ -30,6 +30,7 @@ import { OrderCreateComponent } from './Ecommerce/order-create/order-create.comp
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
 
 
 const routes: Routes = [
@@ -63,6 +64,7 @@ const routes: Routes = [
   { path: 'ordersummary', component: OrderSummaryComponentComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'category', component: CategoryComponent },
+  { path: 'createstock', component: CreatStockComponent },
   { path: 'createsupplier', component: CreateSupplierComponent },
   { path: 'products', component: ProductComponent },
   { path: 'product-details', component: ProductDetailsComponent },

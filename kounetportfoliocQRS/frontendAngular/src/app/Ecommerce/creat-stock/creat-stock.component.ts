@@ -49,7 +49,7 @@ export class CreatStockComponent implements OnInit {
   loadProductSizes(): void {
     this.productSizeService.getAllProductSizes().subscribe({
       next: data => {
-        this.productSizes = Array.isArray(data) ? data : (data.content || []);
+        this.productSizes = Array.isArray(data) ? data : (data || []);
       },
       error: () => this.errorMessage = "Impossible de charger les tailles de produits."
     });
@@ -67,7 +67,7 @@ export class CreatStockComponent implements OnInit {
   loadAddresses(): void {
     this.addressService.getAllAddresses().subscribe({
       next: data => {
-        this.addresses = Array.isArray(data) ? data : (data.content || []);
+        this.addresses = Array.isArray(data) ? data : (data || []);
       },
       error: () => this.errorMessage = "Impossible de charger les adresses."
     });
