@@ -1,78 +1,106 @@
-<mat-toolbar color="white" class="main-toolbar mat-elevation-z2" style="padding: 0 32px;">
+<mat-toolbar color="white" class="main-toolbar mat-elevation-z2" >
   <!-- Logo -->
-  <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+      <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
     <mat-icon class="mat-icon-rtl-mirror">thumb_up</mat-icon>
-
-    <span style="font-weight: bold; font-size: 2rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
-      Polyinformatique <span style="color: #ff5252;">.</span>
+    <span style="font-weight: bold; font-size: 1.5rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
+      Polyinformatique <span style="color: #3e0925;">.</span>
     </span>
   </a>
-
-  <span class="spacer"></span>
-
-  <nav class="nav-links">
-    <a mat-button href="#services" >Services</a>
-    <a mat-button routerLink="/portfolio">Portfolio</a>
-    <a mat-button routerLink="/account">account</a>
-    <a mat-button routerLink="/cart">Panier</a>
-    <a mat-button routerLink="/temoiage" >Temoignage</a>
-    <a mat-button routerLink="/team" >Team</a>
-    <a mat-button routerLink="/souscategorie" >sous categorie</a>
-    <a mat-button routerLink="/promos" >Promotion</a>
-    <a mat-button routerLink="/product" >Product</a>
-    <a mat-button routerLink="/productcreate" >creatProduct</a>
-    <a mat-button routerLink="/socialgroupe" >creat social group</a>
-    <a mat-button routerLink="/creatproductsize" >creat productsize</a>
-    <a mat-button routerLink="/home" > Boutique</a>
-    <a mat-button routerLink="/contact">Contact</a>
-    <a class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')"></a>
-
-    <button mat-button class="dropdown-btn">
-     <a mat-button routerLink="/blog">Blog </a>
+    
+    <button class="navbar-toggler" (click)="isMenuOpen = !isMenuOpen" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-  </nav>
 
-  <span class="spacer"></span>
+    <div class="collapse navbar-collapse" [ngClass]="{'collapse navbar-collapse': true, 'show': isMenuOpen}"  id="navbarNavDropdown">
+      <ul class="navbar-nav">
+         <li class="nav-item">
+          <a class="nav-link" routerLink="/home">Boutique</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/account">Account</a>
+        </li>
 
-  <!-- CTA -->
-  <a mat-raised-button color="accent" class="cta-btn" routerLink="/get-started" style="margin-left:16px;">
-    Salon-Virtuel
-  </a>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/cart">Panier</a>
+        </li>
 
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="productMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Catalogue 
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="productMenu">
+            <li><a class="dropdown-item" routerLink="/product">Voir un vêtement</a></li>
+            <li><a class="dropdown-item" routerLink="/productcreate">Créer un vêtement</a></li>
+            <li><a class="dropdown-item" routerLink="/creatproductsize">Tailles </a></li>
+               <li><a class="dropdown-item" routerLink="/category">Catégories</a></li>
+            <li><a class="dropdown-item" routerLink="/souscategorie">Sous-catégories</a></li>
+            <li><a class="dropdown-item" routerLink="/promos">Promotions</a></li>
+          </ul>
+        </li>
 
- <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="socialMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Communauté
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="socialMenu">
+            <li><a class="dropdown-item" routerLink="/temoiage">Témoignages</a></li>
+            <li><a class="dropdown-item" routerLink="/team">Équipe</a></li>
+             <li><a class="dropdown-item" routerLink="/faq">Faq</a></li>
+             <li><a class="dropdown-item" routerLink="/privacy">Confidentialité</a></li>
+            <li><a class="dropdown-item" routerLink="/socialgroupe">Groupes sociaux</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/blog">Blog</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="productMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            PolyInfo
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="productMenu">
+            <li><a class="nav-link" routerLink="/services">Services</a></li>
+            <li> <a class="nav-link" routerLink="/portfolio">Portfolio</a></li>
+             <li><a class="nav-link" routerLink="/contact">Contact</a></li>
+              <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
+          <a class="nav-link text-danger">Admin</a>
+        </li>
+        
+        <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
        <span *ngIf="profile;else login_template">{{profile.username}}</span>
             <ng-template #login_template>
               <button class="btn btn-success" (click)="handleLogin()">Login</button>
             </ng-template><mat-icon>expand_more</mat-icon>
     </button>
-
+      </ul>
+    
 
   <mat-menu #dropdownMenu="matMenu">
     <button mat-menu-item  (click)="handleLogin()">Login</button>
-    <button mat-menu-item (click)="handleLogout()">Logoout</button>
+    <button mat-menu-item (click)="handleLogout()">Logout</button>
 
   </mat-menu>
 
-
-
-
-  <!-- Mobile toggle -->
-  <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
+    </div>
+  </div>
+</nav>
+  
 </mat-toolbar>
 
 <!-- Sidenav for mobile -->
 <mat-sidenav-container class="mobile-nav-container">
   <mat-sidenav #drawer mode="over" class="mobile-sidenav">
     <nav>
-     <a mat-button >Services</a>
-<a mat-button >Portfolio</a>
-<a mat-button >Équipe</a>
-<a mat-button >Contact</a>
-<a mat-button >Articles</a>
-
       <button mat-list-item [matMenuTriggerFor]="dropdownMenu">Dropdown</button>
       <a mat-raised-button color="accent" routerLink="/get-started" style="margin-top:12px;">Salon-Virtuel</a>
     </nav>

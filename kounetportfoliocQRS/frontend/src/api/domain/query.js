@@ -1,5 +1,4 @@
 const BASE_URL = 'http://localhost:8888/queryblog';
-
 // Domain API - Query
 export const getAllDomains = async () => {
   try {

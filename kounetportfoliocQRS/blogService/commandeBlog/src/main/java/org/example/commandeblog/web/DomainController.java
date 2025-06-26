@@ -13,15 +13,14 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @RestController
-
-@RequestMapping("/category/command")
-
-public class CategoryController {
+@RequestMapping("/domain/command")
+@CrossOrigin
+public class DomainController {
 
     private final DomainCommandService domainCommandService;
     private final EventStore eventStore;
 
-    public CategoryController(DomainCommandService domainCommandService, EventStore eventStore) {
+    public DomainController(DomainCommandService domainCommandService, EventStore eventStore) {
         this.domainCommandService = domainCommandService;
         this.eventStore = eventStore;
     }

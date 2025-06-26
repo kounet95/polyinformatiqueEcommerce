@@ -1,97 +1,134 @@
-<div class="cart-container">
-  <div class="cart-main">
-    <h2>Cart</h2>
-    <div class="cart-table">
-      <div class="cart-table-header">
-        <span class="product-col">Product</span>
-        <span class="price-col">Price</span>
-        <span class="qty-col">Quantity</span>
-        <span class="total-col">Total</span>
-      </div>
-
-      <div class="cart-item" *ngFor="let item of cartItems">
-        <div class="product-col">
-          <img [src]="item.productImg" alt="" class="cart-img" />
-          <div class="cart-product-info">
-            <div class="cart-product-title">{{ item.productName }}</div>
-            <div class="cart-product-meta">
-              Size: {{ item.productSize || '—' }}
-            </div>
-            <div class="cart-product-actions">
-              <button (click)="removeItem(item)" class="remove-btn">
-                <i class="material-icons">delete</i> Remove
-              </button>
-            </div>
-          </div>
-        </div>
-        <span class="price-col">
-          ${{ (item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo.toFixed(2) : item.productSizePrice.toFixed(2) }}
-        </span>
-        <div class="qty-col">
-          <button (click)="decrementQty(item)" class="qty-btn">-</button>
-          <span class="qty-val">{{ item.qty }}</span>
-          <button (click)="incrementQty(item)" class="qty-btn">+</button>
-        </div>
-        <span class="total-col">
-          ${{ ((item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo : item.productSizePrice) * item.qty | number:'1.2-2' }}
-        </span>
-      </div>
-    </div>
-
-    <div class="cart-actions">
-      <input type="text" placeholder="Coupon code" [(ngModel)]="couponCode">
-      <button class="apply-coupon-btn" (click)="applyCoupon()">Apply Coupon</button>
-      <button class="update-cart-btn" (click)="updateCart()">Update Cart</button>
-    </div>
-  </div>
-
-  <div class="cart-summary">
-    <h3>Order Summary</h3>
-    <div class="summary-row">
-      <span>Subtotal</span>
-      <span>${{ subtotal.toFixed(2) }}</span>
-    </div>
-    <div class="summary-row shipping">
-      <span>Shipping</span>
-      <div class="shipping-options">
-        <div>
-          <input type="radio" id="standard" name="shipping" [(ngModel)]="shippingOption" value="standard">
-          <label for="standard">Standard Delivery - $4.99</label>
-        </div>
-        <div>
-          <input type="radio" id="express" name="shipping" [(ngModel)]="shippingOption" value="express">
-          <label for="express">Express Delivery - $12.99</label>
-        </div>
-        <div>
-          <input type="radio" id="free" name="shipping" [(ngModel)]="shippingOption" value="free">
-          <label for="free">Free Shipping (Orders over $300)</label>
-        </div>
-      </div>
-    </div>
-    <div class="summary-row">
-      <span>Tax</span>
-      <span>${{ tax.toFixed(2) }}</span>
-    </div>
-    <div class="summary-row">
-      <span>Discount</span>
-      <span>-${{ discount.toFixed(2) }}</span>
-    </div>
-    <hr />
-    <div class="summary-row total">
-      <span>Total</span>
-      <span class="total-amount">${{ total.toFixed(2) }}</span>
-    </div>
-    <button class="checkout-btn" (click)="proceedToCheckout()">
-      Proceed to Checkout &rarr;
-    </button>
-    <div class="continue-shopping" (click)="continueShopping()">
-      &larr; Continue Shopping
-    </div>
-    <div class="payment-icons">
-      <i class="material-icons">credit_card</i>
-      <i class="material-icons">payment</i>
-      <i class="material-icons">account_balance</i>
-      <i class="material-icons">account_balance_wallet</i>
-    </div>
+<!-- Titre de la page -->
+<div class="page-title light-background">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a routerLink="/boutique">Boutique</a></li>
+        <li class="current">Panier</li>
+      </ol>
+    </nav>
   </div>
 </div>
+
+<app-announcement-bar></app-announcement-bar>
+
+<section id="cart" class="cart section">
+  <div class="cart-container">
+
+    <!-- Section principale du panier -->
+    <div class="cart-main">
+      <h2>Panier</h2>
+
+      <!-- Tableau du panier -->
+      <div class="cart-table">
+        <div class="cart-table-header">
+          <span class="product-col">Produit</span>
+          <span class="price-col">Prix</span>
+          <span class="qty-col">Quantité</span>
+          <span class="total-col">Total</span>
+        </div>
+
+        <!-- Articles du panier -->
+        <div class="cart-item" *ngFor="let item of cartItems">
+          <div class="product-col">
+            <img [src]="item.productImg" alt="" class="cart-img" />
+            <div class="cart-product-info">
+              <div class="cart-product-title">{{ item.productName }}</div>
+              <div class="cart-product-meta">
+                Taille : {{ item.productSize || '—' }}
+              </div>
+              <div class="cart-product-actions">
+                <button (click)="removeItem(item)" class="remove-btn">
+                  <i class="material-icons">delete</i> Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <span class="price-col">
+            ${{ (item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo.toFixed(2) : item.productSizePrice.toFixed(2) }}
+          </span>
+
+          <div class="qty-col">
+            <button (click)="decrementQty(item)" class="qty-btn">-</button>
+            <span class="qty-val">{{ item.qty }}</span>
+            <button (click)="incrementQty(item)" class="qty-btn">+</button>
+          </div>
+
+          <span class="total-col">
+            ${{ ((item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo : item.productSizePrice) * item.qty | number:'1.2-2' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Actions du panier -->
+      <div class="cart-actions">
+        <input type="text" placeholder="Code promo" [(ngModel)]="couponCode">
+        <button class="apply-coupon-btn" (click)="applyCoupon()">Appliquer le code</button>
+        <button class="update-cart-btn" (click)="updateCart()">Mettre à jour le panier</button>
+      </div>
+    </div>
+
+    <!-- Résumé de commande -->
+    <div class="cart-summary">
+      <h3>Résumé de la commande</h3>
+
+      <div class="summary-row">
+        <span>Sous-total</span>
+        <span>${{ subtotal.toFixed(2) }}</span>
+      </div>
+
+      <div class="summary-row shipping">
+        <span>Livraison</span>
+        <div class="shipping-options">
+          <div>
+            <input type="radio" id="standard" name="shipping" [(ngModel)]="shippingOption" value="standard">
+            <label for="standard">Livraison standard - 4,99 $</label>
+          </div>
+          <div>
+            <input type="radio" id="express" name="shipping" [(ngModel)]="shippingOption" value="express">
+            <label for="express">Livraison express - 12,99 $</label>
+          </div>
+          <div>
+            <input type="radio" id="free" name="shipping" [(ngModel)]="shippingOption" value="free">
+            <label for="free">Livraison gratuite (commandes de plus de 300 $)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <span>Taxe</span>
+        <span>${{ tax.toFixed(2) }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Remise</span>
+        <span>-${{ discount.toFixed(2) }}</span>
+      </div>
+
+      <hr />
+
+      <div class="summary-row total">
+        <span>Total</span>
+        <span class="total-amount">${{ total.toFixed(2) }}</span>
+      </div>
+
+      <button class="checkout-btn" (click)="proceedToCheckout()">
+        Passer à la caisse &rarr;
+      </button>
+
+      <div class="continue-shopping" (click)="continueShopping()">
+        &larr; Continuer vos achats
+      </div>
+
+      <div class="payment-icons">
+        <i class="material-icons">credit_card</i>
+        <i class="material-icons">payment</i>
+        <i class="material-icons">account_balance</i>
+        <i class="material-icons">account_balance_wallet</i>
+      </div>
+    </div>
+
+  </div>
+</section>
