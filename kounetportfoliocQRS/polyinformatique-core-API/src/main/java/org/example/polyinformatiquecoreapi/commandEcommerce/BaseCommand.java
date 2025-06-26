@@ -10,7 +10,10 @@ public abstract class BaseCommand<T> {
         this.id = id;
     }
 
-    public T getId() {
+  protected BaseCommand() {
+  }
+
+  public T getId() {
         return id;
     }
 }

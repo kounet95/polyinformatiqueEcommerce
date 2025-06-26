@@ -6,10 +6,10 @@
 
   <div>
     <label>
-      <input type="radio" [(ngModel)]="isNewAddress" [value]="false" name="addressType" /> Adresse existante
+      <input type="radio" [(ngModel)]="isNewAddress" [value]="false" name="addressType" (ngModelChange)="onAddressTypeChange($event)" /> Adresse existante
     </label>
     <label>
-      <input type="radio" [(ngModel)]="isNewAddress" [value]="true" name="addressType" /> Nouvelle adresse
+      <input type="radio" [(ngModel)]="isNewAddress" [value]="true" name="addressType" (ngModelChange)="onAddressTypeChange($event)" /> Nouvelle adresse
     </label>
   </div>
 
