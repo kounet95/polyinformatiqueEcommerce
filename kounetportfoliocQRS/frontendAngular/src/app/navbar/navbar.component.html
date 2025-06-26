@@ -1,19 +1,14 @@
-<mat-toolbar color="white" class="main-toolbar mat-elevation-z2" style="padding: 0 32px;">
+<mat-toolbar color="white" class="main-toolbar mat-elevation-z2" >
   <!-- Logo -->
- 
-
-  <span class="spacer"></span>
-
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container-fluid">
       <a routerLink="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
     <mat-icon class="mat-icon-rtl-mirror">thumb_up</mat-icon>
-
-    <span style="font-weight: bold; font-size: 2rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
-      Polyinformatique <span style="color: #ff5252;">.</span>
+    <span style="font-weight: bold; font-size: 1.5rem; color: #222; font-family: 'Poppins', Arial, sans-serif;">
+      Polyinformatique <span style="color: #3e0925;">.</span>
     </span>
   </a>
-    <a class="navbar-brand" routerLink="/home">Boutique</a>
+    
     <button class="navbar-toggler" (click)="isMenuOpen = !isMenuOpen" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -22,11 +17,9 @@
 
     <div class="collapse navbar-collapse" [ngClass]="{'collapse navbar-collapse': true, 'show': isMenuOpen}"  id="navbarNavDropdown">
       <ul class="navbar-nav">
-
-        
-
-       
-
+         <li class="nav-item">
+          <a class="nav-link" routerLink="/home">Boutique</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/account">Account</a>
         </li>
@@ -41,9 +34,9 @@
             Catalogue 
           </a>
           <ul class="dropdown-menu" aria-labelledby="productMenu">
-            <li><a class="dropdown-item" routerLink="/product">Voir les produits</a></li>
-            <li><a class="dropdown-item" routerLink="/productcreate">Créer un produit</a></li>
-            <li><a class="dropdown-item" routerLink="/creatproductsize">Tailles de produits</a></li>
+            <li><a class="dropdown-item" routerLink="/product">Voir un vêtement</a></li>
+            <li><a class="dropdown-item" routerLink="/productcreate">Créer un vêtement</a></li>
+            <li><a class="dropdown-item" routerLink="/creatproductsize">Tailles </a></li>
                <li><a class="dropdown-item" routerLink="/category">Catégories</a></li>
             <li><a class="dropdown-item" routerLink="/souscategorie">Sous-catégories</a></li>
             <li><a class="dropdown-item" routerLink="/promos">Promotions</a></li>
@@ -59,7 +52,7 @@
             <li><a class="dropdown-item" routerLink="/temoiage">Témoignages</a></li>
             <li><a class="dropdown-item" routerLink="/team">Équipe</a></li>
              <li><a class="dropdown-item" routerLink="/faq">Faq</a></li>
-             <li><a class="dropdown-item" routerLink="/privacy">Privacy</a></li>
+             <li><a class="dropdown-item" routerLink="/privacy">Confidentialité</a></li>
             <li><a class="dropdown-item" routerLink="/socialgroupe">Groupes sociaux</a></li>
           </ul>
         </li>
@@ -79,55 +72,35 @@
               <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
           </ul>
         </li>
-    
-
         <li class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
           <a class="nav-link text-danger">Admin</a>
         </li>
-
-      </ul>
-      
- <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+        
+        <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
        <span *ngIf="profile;else login_template">{{profile.username}}</span>
             <ng-template #login_template>
               <button class="btn btn-success" (click)="handleLogin()">Login</button>
             </ng-template><mat-icon>expand_more</mat-icon>
     </button>
-
+      </ul>
+    
 
   <mat-menu #dropdownMenu="matMenu">
     <button mat-menu-item  (click)="handleLogin()">Login</button>
-    <button mat-menu-item (click)="handleLogout()">Logoout</button>
+    <button mat-menu-item (click)="handleLogout()">Logout</button>
 
   </mat-menu>
 
     </div>
   </div>
 </nav>
-
-
-
-
-
-
-
-
-  <!-- Mobile toggle -->
-  <button mat-icon-button class="mobile-toggle" (click)="drawer.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
+  
 </mat-toolbar>
 
 <!-- Sidenav for mobile -->
 <mat-sidenav-container class="mobile-nav-container">
   <mat-sidenav #drawer mode="over" class="mobile-sidenav">
     <nav>
-     <a mat-button >Services</a>
-<a mat-button >Portfolio</a>
-<a mat-button >Équipe</a>
-<a mat-button >Contact</a>
-<a mat-button >Articles</a>
-
       <button mat-list-item [matMenuTriggerFor]="dropdownMenu">Dropdown</button>
       <a mat-raised-button color="accent" routerLink="/get-started" style="margin-top:12px;">Salon-Virtuel</a>
     </nav>

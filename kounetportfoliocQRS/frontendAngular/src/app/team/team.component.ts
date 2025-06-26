@@ -30,6 +30,6 @@ import { RouterModule } from '@angular/router';
 export class TeamComponent {
 team = [
     { img: 'assets/img/person-m-1.webp', name: 'Arsene', role: 'Dev , Formateur TI', desc: 'CCNA, AZ900.' },
-    { img: 'assets/img/person-m-9.webp', name: 'Oumar', role: ' Dev, FOrmateur TI', desc: 'LIPC.' },
+    { img: 'assets/img/person-m-9.webp', name: 'Oumar', role: ' Dev, Formateur TI', desc: 'CCNA, LIPC.' },
   ];
 }

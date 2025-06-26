@@ -1,126 +1,132 @@
+<!-- Titre de la page -->
 <div class="page-title light-background">
-      <div class="container">
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a routerLink="/">Home</a></li>
-            <li><a routerLink="/boutique">Boutique</a></li>
-            <li class="current">Account</li>
-          </ol>
-        </nav>
-      </div>
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a routerLink="/boutique">Boutique</a></li>
+        <li class="current">Mon Compte</li>
+      </ol>
+    </nav>
+  </div>
 </div>
+
 <app-announcement-bar></app-announcement-bar>
- <section id="account" class="account section">
-<div class="account-root">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <mat-nav-list>
-      <div class="avatar-section">
-        <mat-icon matBadge=" " class="avatar">account_circle</mat-icon>
-        <div>
-          <div class="user-name">{{user.name}}</div>
-          <div class="bonuses">
-            <mat-icon inline>card_giftcard</mat-icon>
-            {{user.bonuses}} bonuses available
+
+<section id="account" class="account section">
+  <div class="account-root">
+
+    <!-- Barre latérale -->
+    <aside class="sidebar">
+      <mat-nav-list>
+        <div class="avatar-section">
+          <mat-icon matBadge=" " class="avatar">account_circle</mat-icon>
+          <div>
+            <div class="user-name">{{user.name}}</div>
+            <div class="bonuses">
+              <mat-icon inline>card_giftcard</mat-icon>
+              {{user.bonuses}} bonus disponibles
+            </div>
           </div>
         </div>
-      </div>
-      <ng-container *ngFor="let item of menu">
-        <a mat-list-item [class.selected]="item.selected">
-          <mat-icon mat-list-icon>{{item.icon}}</mat-icon>
-          <span mat-line>{{item.label}}</span>
-          <span *ngIf="item.count" matBadge="{{item.count}}" matBadgeColor="accent"></span>
-        </a>
-      </ng-container>
-      <div class="service-section">
-        <div class="service-title">CUSTOMER SERVICE</div>
-        <ng-container *ngFor="let item of service">
-          <a mat-list-item [ngClass]="item.color">
+        <ng-container *ngFor="let item of menu">
+          <a mat-list-item [class.selected]="item.selected">
             <mat-icon mat-list-icon>{{item.icon}}</mat-icon>
-            <span mat-line [ngClass]="item.color">{{item.label}}</span>
+            <span mat-line>{{item.label}}</span>
+            <span *ngIf="item.count" matBadge="{{item.count}}" matBadgeColor="accent"></span>
           </a>
         </ng-container>
-      </div>
-    </mat-nav-list>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-section">
-    <div class="breadcrumb">Home / <b>Account</b></div>
-    <h1>Account</h1>
-    <section class="orders-section">
-      <div class="orders-header">
-        <h2>Orders</h2>
-        <div class="actions">
-          <mat-form-field appearance="outline">
-            <mat-label>Select status</mat-label>
-            <mat-select>
-              <mat-option>All</mat-option>
-              <mat-option>In progress</mat-option>
-              <mat-option>Delivered</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>For all time</mat-label>
-            <mat-select>
-              <mat-option>For all time</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div class="service-section">
+          <div class="service-title">SERVICE CLIENT</div>
+          <ng-container *ngFor="let item of service">
+            <a mat-list-item [ngClass]="item.color">
+              <mat-icon mat-list-icon>{{item.icon}}</mat-icon>
+              <span mat-line [ngClass]="item.color">{{item.label}}</span>
+            </a>
+          </ng-container>
         </div>
-      </div>
-      <mat-card class="orders-list">
-        <table mat-table [dataSource]="orders" class="mat-elevation-z0">
-          <ng-container matColumnDef="order">
-            <th mat-header-cell *matHeaderCellDef>Order #</th>
-            <td mat-cell *matCellDef="let order">{{order.id}}</td>
-          </ng-container>
-          <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Order date</th>
-            <td mat-cell *matCellDef="let order">{{order.date}}</td>
-          </ng-container>
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let order">
-              <mat-icon [ngClass]="order.statusColor" class="dot">fiber_manual_record</mat-icon>
-              <span [ngClass]="order.statusColor">{{order.status}}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="total">
-            <th mat-header-cell *matHeaderCellDef>Total</th>
-            <td mat-cell *matCellDef="let order">${{order.total | number:'1.2-2'}}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="['order', 'date', 'status', 'total']"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['order', 'date', 'status', 'total'];"></tr>
-        </table>
-      </mat-card>
+      </mat-nav-list>
+    </aside>
 
-      <!-- Expanded Order Details (example for selectedOrder) -->
-      <mat-card class="order-details" *ngIf="selectedOrder">
-        <h3>Order Details</h3>
-        <div class="order-meta">
-          <span><b>Order Date:</b> {{selectedOrder.details?.date}}</span>
-          <span><b>Payment Method:</b> {{selectedOrder.details?.payment}}</span>
-        </div>
-        <div class="order-items">
-          <div class="item" *ngFor="let item of selectedOrder.details?.items">
-            <img class="item-img" [src]="item.image" width="48" alt="{{item.name}}">
-            <div>
-              <div class="item-name">{{item.name}}</div>
-              <div class="item-sku">SKU: {{item.sku}} &nbsp; Qty: {{item.qty}}</div>
-            </div>
-            <div class="item-price">${{item.price | number:'1.2-2'}}</div>
+    <!-- Contenu principal -->
+    <main class="main-section">
+      <div class="breadcrumb">Accueil / <b>Mon Compte</b></div>
+      <h1>Mon Compte</h1>
+      
+      <section class="orders-section">
+        <div class="orders-header">
+          <h2>Commandes</h2>
+          <div class="actions">
+            <mat-form-field appearance="outline">
+              <mat-label>Sélectionner un statut</mat-label>
+              <mat-select>
+                <mat-option>Toutes</mat-option>
+                <mat-option>En cours</mat-option>
+                <mat-option>Livrées</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Période</mat-label>
+              <mat-select>
+                <mat-option>Toute la période</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
-        <app-order-summary-component
-          [subtotal]="selectedOrder.summary?.subtotal"
-          [shipping]="selectedOrder.summary?.shipping"
-          [tax]="selectedOrder.summary?.tax"
-          [total]="selectedOrder.summary?.total"
-          [shippingAddress]="selectedOrder.summary?.shippingAddress"
-          [shippingMethod]="selectedOrder.summary?.shippingMethod">
-        </app-order-summary-component>
-      </mat-card>
-    </section>
-  </main>
-</div>
+
+        <mat-card class="orders-list">
+          <table mat-table [dataSource]="orders" class="mat-elevation-z0">
+            <ng-container matColumnDef="order">
+              <th mat-header-cell *matHeaderCellDef>Commande #</th>
+              <td mat-cell *matCellDef="let order">{{order.id}}</td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let order">{{order.date}}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Statut</th>
+              <td mat-cell *matCellDef="let order">
+                <mat-icon [ngClass]="order.statusColor" class="dot">fiber_manual_record</mat-icon>
+                <span [ngClass]="order.statusColor">{{order.status}}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="total">
+              <th mat-header-cell *matHeaderCellDef>Total</th>
+              <td mat-cell *matCellDef="let order">${{order.total | number:'1.2-2'}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['order', 'date', 'status', 'total']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['order', 'date', 'status', 'total'];"></tr>
+          </table>
+        </mat-card>
+
+        <!-- Détails de la commande -->
+        <mat-card class="order-details" *ngIf="selectedOrder">
+          <h3>Détails de la commande</h3>
+          <div class="order-meta">
+            <span><b>Date :</b> {{selectedOrder.details?.date}}</span>
+            <span><b>Mode de paiement :</b> {{selectedOrder.details?.payment}}</span>
+          </div>
+          <div class="order-items">
+            <div class="item" *ngFor="let item of selectedOrder.details?.items">
+              <img class="item-img" [src]="item.image" width="48" alt="{{item.name}}">
+              <div>
+                <div class="item-name">{{item.name}}</div>
+                <div class="item-sku">SKU : {{item.sku}} &nbsp; Qté : {{item.qty}}</div>
+              </div>
+              <div class="item-price">${{item.price | number:'1.2-2'}}</div>
+            </div>
+          </div>
+          <app-order-summary-component
+            [subtotal]="selectedOrder.summary?.subtotal"
+            [shipping]="selectedOrder.summary?.shipping"
+            [tax]="selectedOrder.summary?.tax"
+            [total]="selectedOrder.summary?.total"
+            [shippingAddress]="selectedOrder.summary?.shippingAddress"
+            [shippingMethod]="selectedOrder.summary?.shippingMethod">
+          </app-order-summary-component>
+        </mat-card>
+      </section>
+    </main>
+  </div>
 </section>
