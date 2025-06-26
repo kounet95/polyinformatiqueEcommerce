@@ -21,7 +21,7 @@
           <a class="nav-link" routerLink="/home">Boutique</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/account">Account</a>
+          <a class="nav-link" routerLink="/account">Mon compte</a>
         </li>
 
         <li class="nav-item">
@@ -72,24 +72,23 @@
               <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
           </ul>
         </li>
-        <li class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
-          <a class="nav-link text-danger">Admin</a>
-        </li>
+       
         
-        <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
-       <span *ngIf="profile;else login_template">{{profile.username}}</span>
-            <ng-template #login_template>
-              <button class="btn btn-success" (click)="handleLogin()">Login</button>
-            </ng-template><mat-icon>expand_more</mat-icon>
-    </button>
+        <li mat-button [matMenuTriggerFor]="dropdownMenu" style="display: flex; flex-direction: column; align-items: center;" >
+                <span *ngIf="profile;else login_template">{{profile.username}}</span>
+                <ng-template #login_template>
+                  <button class="btn btn-success" (click)="handleLogin()">Login</button>
+                </ng-template>
+                <mat-icon n >expand_more</mat-icon>
+          </li>
       </ul>
     
 
-  <mat-menu #dropdownMenu="matMenu">
-    <button mat-menu-item  (click)="handleLogin()">Login</button>
-    <button mat-menu-item (click)="handleLogout()">Logout</button>
-
-  </mat-menu>
+    <mat-menu #dropdownMenu="matMenu">
+      <span *ngIf="!isLoggedIn">
+        <button mat-menu-item (click)="handleLogout()">Logout</button>
+      </span>
+    </mat-menu>
 
     </div>
   </div>

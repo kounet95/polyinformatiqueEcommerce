@@ -29,7 +29,7 @@ export class FaqComponent {
     },
     {
       title: 'Quels sont les moyens de paiement acceptés ?',
-      answer: 'Nous acceptons les paiements par carte bancaire, PayPal, Mobile Money et virements bancaires.'
+      answer: 'Nous acceptons les paiements par carte bancaire, PayPal, Virement interact, Orange Money et virements bancaires.'
     }
   ];
 }

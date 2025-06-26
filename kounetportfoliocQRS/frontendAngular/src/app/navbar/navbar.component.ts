@@ -52,7 +52,7 @@ import { KeycloakProfile } from 'keycloak-js';
 export class NavbarComponent  implements OnInit{
   title = 'ecom-app-angular';
   isMenuOpen = false;
-
+  isLoggedIn = false;
   public profile! : KeycloakProfile;
   constructor(public keycloakService : KeycloakService) {
   }
@@ -68,10 +68,15 @@ export class NavbarComponent  implements OnInit{
   async handleLogin() {
     await this.keycloakService.login({
       redirectUri: window.location.origin
+       
     });
+    this.isLoggedIn = true
   }
 
   handleLogout(){
     this.keycloakService.logout(window.location.origin);
+     this.isLoggedIn = false
   }
+
+
 }
