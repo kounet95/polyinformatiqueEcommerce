@@ -8,9 +8,11 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateCustomerCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.CustomerUpdatedCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCustomerCommand;
 import org.example.polyinformatiquecoreapi.eventEcommerce.CustomerCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.CustomerDeletedEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.CustomerUpdatedEvent;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -65,5 +67,18 @@ public class CustomerAggregate {
          this.addressId = null;
          this.phone = null;
 
+     }
+     @CommandHandler
+     public  void handle(CustomerUpdatedCommand command){
+      apply(new CustomerCreatedEvent(command.getId(), command.getCustomerEcommerceDTO()));
+     }
+
+     public void on(CustomerUpdatedEvent event){
+       this.customerId = event.getId();
+       this.firstName = event.getCustomerDTO().getFirstname();
+       this.lastName = event.getCustomerDTO().getLastname();
+       this.email = event.getCustomerDTO().getEmail();
+       this.addressId = event.getCustomerDTO().getAddressId();
+       this.phone = event.getCustomerDTO().getPhone();
      }
 }

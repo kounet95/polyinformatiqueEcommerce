@@ -3,6 +3,7 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateCustomerCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.CustomerUpdatedCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCustomerCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
 import org.springframework.http.HttpStatus;
@@ -61,4 +62,23 @@ public class Customer {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(" Error: " + exception.getMessage());
     }
+
+  @PutMapping("/update/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> updateCustomer(
+    @Valid @RequestBody CustomerEcommerceDTO author,
+    @PathVariable String id) {
+      CustomerEcommerceDTO customerDTO = new CustomerEcommerceDTO(
+              id,
+              author.getFirstname(),
+              author.getEmail(),
+              author.getLastname(),
+              author.getPhone(),
+              author.getAddressId(),
+              author.getCreatedAt()
+      );
+      CustomerUpdatedCommand command = new CustomerUpdatedCommand(id, customerDTO);
+      return commandGateway.send(command);
+  }
+
 }

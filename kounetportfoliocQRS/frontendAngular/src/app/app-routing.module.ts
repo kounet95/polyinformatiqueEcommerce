@@ -76,7 +76,7 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'creataddress', component: CreatAddressComponent },
   { path: 'order', component: OrderCreateComponent },
-  { path: 'creatcustomer', component: CreatCustomerComponent },
+  { path: 'creatcustomer', component: CreatCustomerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'productcreate', component: CreateProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
