@@ -9,14 +9,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface ProductSizeRepository extends JpaRepository<ProductSize, String>, JpaSpecificationExecutor<ProductSize> {
-
-  // News, pour les 30 derniers jours
-  @Query("SELECT DISTINCT s.productSize FROM Stock s WHERE s.createdDate >= :fromDate")
-  List<ProductSize> findAllNewsProducts(@Param("fromDate") Date fromDate);
-
-  // Sale
-  @Query("SELECT p FROM ProductSize p WHERE p.promoPrice IS NOT NULL AND p.promoPrice < p.price")
-  List<ProductSize> findAllSaleProducts();
+public interface ProductSizeRepository extends JpaRepository<ProductSize, String>, JpaSpecificationExecutor<ProductSize>  {
+  List<ProductSize> findByProductId_Id(String productId);
+//  // News, pour les 30 derniers jours
+//  @Query("SELECT DISTINCT s.productSize FROM Stock s WHERE s.createdDate >= :fromDate")
+//  List<ProductSize> findAllNewsProducts(@Param("fromDate") Date fromDate);
+//
+//  // Sale
+//  @Query("SELECT p FROM ProductSize p WHERE p.promoPrice IS NOT NULL AND p.promoPrice < p.price")
+//  List<ProductSize> findAllSaleProducts();
 
 }

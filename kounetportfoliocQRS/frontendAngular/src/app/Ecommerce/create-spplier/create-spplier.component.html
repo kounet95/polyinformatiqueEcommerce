@@ -9,10 +9,15 @@
       </div>
     </div>
     <div>
-      <label for="city">Ville :</label>
-      <input id="city" formControlName="city" type="text" />
-      <div class="error" *ngIf="supplierForm.get('city')?.invalid && supplierForm.get('city')?.touched">
-        Ville requise
+      <label for="addressId">Adresse :</label>
+      <select id="addressId" formControlName="addressId">
+        <option value="" disabled>Choisir une adresse...</option>
+        <option *ngFor="let a of addresses" [value]="a.id">
+          {{ a.street }}, {{ a.city }} ({{ a.country }})
+        </option>
+      </select>
+      <div class="error" *ngIf="supplierForm.get('addressId')?.invalid && supplierForm.get('addressId')?.touched">
+        Adresse requise
       </div>
     </div>
     <div>

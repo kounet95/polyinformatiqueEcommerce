@@ -12,10 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,14 +28,17 @@ public class ProductSizesQueryHandler {
 
   @QueryHandler
   public Page<ProductSize> handle(GetAllProductSizesQuery query) {
-    log.debug("Handling GetAllProductSizesQuery with pagination: page={}, size={}",
-      query.getPage(), query.getSize());
+    log.debug("Handling GetAllProductSizesQuery with pagination: page={}, size={}", query.getPage(), query.getSize());
 
-    Specification<ProductSize> spec = ProductSpecification.withFiltersSize(
-      query.getSelectedPrice(),
-      query.getSelectedPricePromo(),
-      query.getProdsize()
-    );
+    Specification<ProductSize> spec = Specification
+      .where(ProductSpecification.hasPromoPriceBetween(
+        (double) query.getSelectedPrice(),
+        (double) query.getSelectedPricePromo()
+      ))
+      .and(ProductSpecification.hasSize(
+        query.getProdsize() != null ? query.getProdsize().name() : null
+      ));
+
     Pageable pageable = PageRequest.of(query.getPage(), query.getSize(), query.getSortOptionAsSortSize());
     return productSizeRepository.findAll(spec, pageable);
   }
@@ -41,35 +46,73 @@ public class ProductSizesQueryHandler {
   @QueryHandler
   public ProductSize on(GetAllProductSizesByQuery query) {
     log.debug("Handling GetProductByIdQuery: {}", query.getId());
-    Optional<ProductSize> optionalProduct = productSizeRepository.findById(query.getId());
-    return optionalProduct
+    return productSizeRepository.findById(query.getId())
       .orElseThrow(() -> new RuntimeException("ProductSize not found with id: " + query.getId()));
   }
 
   @QueryHandler
-  public List<ProductSize> on(findAllSaleProducts query) {
-    log.debug("Handling FindAllSaleProducts Query");
-    List<ProductSize> saleProductSizes = productSizeRepository.findAllSaleProducts();
-    if (saleProductSizes == null || saleProductSizes.isEmpty()) {
-      throw new RuntimeException("No ProductSizes found on sale.");
-    }
-    return saleProductSizes;
+  public List<ProductSize> search(SearchProductSizesQuery query) {
+    Specification<ProductSize> spec = Specification
+      .where(ProductSpecification.hasProductsizeName(query.getProductName()))
+      .and(ProductSpecification.hasSubcategoryId(query.getSubcategoryId()))
+      .and(ProductSpecification.hasSocialGroupId(query.getSocialGroupId()))
+      .and(ProductSpecification.hasPromoPriceBetween(query.getMinPromo(), query.getMaxPromo()))
+      .and(ProductSpecification.hasSize(query.getSize()))
+      .and(query.getSale() != null && query.getSale() ? ProductSpecification.isOnSale() : null)
+      .and(ProductSpecification.isNewArrival(query.getNewSince()));
+
+    return productSizeRepository.findAll(spec);
   }
 
   @QueryHandler
-  public List<ProductSize> on(findAllNewsProducts query) {
+  public List<ProductSize> on(FindAllNewsProducts query) {
     log.debug("Handling FindAllNewsProducts Query");
-    // Calculons la date il y a 30 jours si le query n’amene pas déjà une Date
     Date fromDate = query.getDate();
     if (fromDate == null) {
       Calendar cal = Calendar.getInstance();
       cal.add(Calendar.DAY_OF_YEAR, -30);
       fromDate = cal.getTime();
     }
-    List<ProductSize> newsProductSizes = productSizeRepository.findAllNewsProducts(fromDate);
-    if (newsProductSizes == null || newsProductSizes.isEmpty()) {
+    // Conversion Date -> LocalDateTime
+    LocalDateTime since = LocalDateTime.ofInstant(fromDate.toInstant(), ZoneId.systemDefault());
+    Specification<ProductSize> spec = ProductSpecification.isNewArrival(since);
+    List<ProductSize> newsProductSizes = productSizeRepository.findAll(spec);
+    if (newsProductSizes.isEmpty()) {
       throw new RuntimeException("No ProductSizes found for news.");
     }
     return newsProductSizes;
   }
+
+  public List<ProductSize> search(
+    String productName,
+    Double minPromo, Double maxPromo,
+    String size,
+    Boolean sale,
+    LocalDateTime newSince
+  ) {
+    Specification<ProductSize> spec = Specification
+      .where(ProductSpecification.hasProductsizeName(productName))
+      .and(ProductSpecification.hasPromoPriceBetween(minPromo, maxPromo))
+      .and(ProductSpecification.hasSize(size))
+      .and(sale != null && sale ? ProductSpecification.isOnSale() : null)
+      .and(ProductSpecification.isNewArrival(newSince));
+
+    return productSizeRepository.findAll(spec);
+  }
+  public class FindAllNewsProducts {
+    private final Date date;
+
+    public FindAllNewsProducts(Date date) {
+      this.date = date;
+    }
+
+    public Date getDate() {
+      return date;
+    }
+  }
+  public class FindAllSaleProducts {
+
+  }
+
+
 }

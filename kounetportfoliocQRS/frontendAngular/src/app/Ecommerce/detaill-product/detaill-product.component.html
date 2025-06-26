@@ -1,0 +1,234 @@
+<div class="product-details-container">
+  <nav class="breadcrumb-nav">
+    <span>Home</span>
+    <span>/</span>
+    <span>Product Details</span>
+  </nav>
+  <h1 class="details-title">Product Details</h1>
+
+  <div class="details-flex">
+    <!-- Galerie images -->
+    <div class="gallery">
+      <!-- Miniatures -->
+      <div class="thumbnails">
+        <img *ngFor="let img of images; let idx = index"
+             [src]="img"
+             [class.selected]="idx === selectedImageIndex"
+             (click)="selectImage(idx)"
+             class="thumbnail-img"
+             [alt]="'Product thumbnail ' + (idx + 1)" />
+      </div>
+      <!-- Image principale avec flèches -->
+      <div class="main-image">
+        <button class="arrow left"
+                (click)="selectImage((selectedImageIndex - 1 + images.length) % images.length)">
+          &#8249;
+        </button>
+        <img [src]="images[selectedImageIndex]" alt="Selected product image" class="main-img" />
+        <button class="arrow right"
+                (click)="selectImage((selectedImageIndex + 1) % images.length)">
+          &#8250;
+        </button>
+      </div>
+    </div>
+
+    <!-- Infos produit -->
+    <div class="details-info">
+      <div class="category-text">HEADPHONES</div>
+      <h2 class="product-title">{{ product?.name }}</h2>
+      <div class="rating-row">
+        <span class="stars">
+          <ng-container *ngFor="let s of fiveStars; let i = index">
+            <mat-icon [ngClass]="{'star-filled': i < 4.5}">star</mat-icon>
+          </ng-container>
+        </span>
+        <span class="rating-value">4.5</span>
+        <span class="review-count">42 Reviews</span>
+      </div>
+      <div class="price-card">
+        <span class="main-price">$249.99</span>
+        <span class="old-price">$299.99</span>
+        <div class="discount-badge">Save 17%</div>
+        <div class="stock-info">
+          <mat-icon color="success" class="stock-icon">check_circle</mat-icon>
+          In Stock <span class="stock-count">(24 items left)</span>
+        </div>
+      </div>
+      <div class="desc-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at lacus congue, suscipit elit nec, tincidunt orci. Phasellus egestas nisi vitae lectus imperdiet venenatis.
+      </div>
+      <!-- Couleurs -->
+      <div class="option-row">
+        <span class="option-label">Color</span>
+        <div class="color-options">
+          <button *ngFor="let color of colors; let i = index"
+                  class="color-circle"
+                  [class.selected]="color.selected"
+                  [ngStyle]="{'background-color': color.value}"
+                  (click)="selectColor(i)">
+            <span *ngIf="color.selected" class="color-check">&#10003;</span>
+          </button>
+        </div>
+        <span class="color-name">{{ selectedColorName }}</span>
+      </div>
+      <!-- Tailles -->
+              <div class="option-row">
+          <span class="option-label">Size</span>
+          <div class="size-options">
+            <button *ngFor="let s of productSize"
+                    class="size-btn"
+                    [class.selected]="selectedSize === s.sizeProd"
+                    (click)="selectSize(s.sizeProd)">
+              {{ s.sizeProd }} — {{ s.price }} €
+            </button>
+          </div>
+          <span class="size-name">{{ selectedSize }}</span>
+        </div>
+              <div class="option-row">
+          <span class="option-label">prix</span>
+          <div class="size-options">
+             <button *ngFor="let s of productSize"
+                    class="size-btn"
+                    [class.selected]="selectedSize === s.sizeProd"
+                    (click)="selectSize(s.sizeProd)">
+                   — {{s.price}} €
+              </button>
+          </div>
+          <span class="size-name">{{ selectedSize }}</span>
+        </div>
+      <!-- Quantité -->
+      <div class="option-row">
+        <span class="option-label">Quantity</span>
+        <div class="qty-control">
+          <button (click)="decrementQty()">-</button>
+          <span>{{ quantity }}</span>
+          <button (click)="incrementQty()">+</button>
+        </div>
+      </div>
+      <!-- Actions panier et achat -->
+      <div class="cta-row">
+        <button class="btn btn-primary big-btn" (click)="addToCart()">
+          <mat-icon>shopping_cart</mat-icon> Add to Cart
+        </button>
+        <button class="btn btn-outline-primary big-btn">
+          <mat-icon>flash_on</mat-icon> Buy Now
+        </button>
+        <button class="btn btn-outline-secondary favorite-btn">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+      </div>
+      <div class="info-row">
+        <div class="info-block">
+          <mat-icon>local_shipping</mat-icon>
+          <span>
+            <span class="info-title">Free Shipping</span>
+            <span class="info-text">On orders over $50</span>
+          </span>
+        </div>
+        <div class="info-block">
+          <mat-icon>autorenew</mat-icon>
+          <span>
+            <span class="info-title">30-Day Returns</span>
+            <span class="info-text">Hassle-free returns</span>
+          </span>
+        </div>
+        <div class="info-block">
+          <mat-icon>verified_user</mat-icon>
+          <span>
+            <span class="info-title">2-Year Warranty</span>
+            <span class="info-text">Full coverage</span>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="addedMessage" class="alert alert-success mt-2">{{ addedMessage }}</div>
+    </div>
+  </div>
+
+  <!-- Product Description & Tabs -->
+  <div class="mt-5">
+    <mat-tab-group>
+      <mat-tab label="Product Overview">
+        <div class="mt-3">
+         <h1>{{ product?.name }}</h1>
+        <p>{{ product?.description }}</p>
+        </div>
+      </mat-tab>
+      <mat-tab label="Technical Specifications">
+        <div class="mt-3 d-flex flex-wrap gap-4">
+          <div>
+            <table class="table table-bordered">
+              <tr><th>Connectivity</th><td>Bluetooth 5.0, 3.5mm jack</td></tr>
+              <tr><th>Battery Life</th><td>Up to 30 hours</td></tr>
+              <tr><th>Charging Time</th><td>3 hours</td></tr>
+              <tr><th>Driver Size</th><td>40mm</td></tr>
+              <tr><th>Frequency Response</th><td>20Hz - 20kHz</td></tr>
+              <tr><th>Impedance</th><td>32 Ohm</td></tr>
+              <tr><th>Weight</th><td>250g</td></tr>
+            </table>
+          </div>
+          <div>
+            <table class="table table-bordered">
+              <tr><th>Noise Cancellation</th><td>Active Noise Cancellation (ANC)</td></tr>
+              <tr><th>Controls</th><td>Touch controls, Voice assistant</td></tr>
+              <tr><th>Microphone</th><td>Dual beamforming microphones</td></tr>
+              <tr><th>Water Resistance</th><td>IPX4 (splash resistant)</td></tr>
+            </table>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Reviews (42)">
+        <div class="mt-3">
+          <div class="review-summary mb-4">
+            <span style="font-size: 2.5rem; font-weight: bold;">4.5</span>
+            <span class="text-warning ms-2">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-half"></i>
+            </span>
+            <span class="ms-2">(42 reviews)</span>
+          </div>
+          <div *ngFor="let review of reviews" class="mb-4 p-3 border rounded shadow-sm">
+            <div>
+              <b>{{review.author}}</b> <span class="text-muted">{{review.date}}</span>
+              <span class="ms-3 text-warning">
+                <ng-container *ngFor="let star of fiveStars; let i = index">
+                  <i class="bi" [ngClass]="i < review.rating ? 'bi-star-fill' : 'bi-star'"></i>
+                </ng-container>
+              </span>
+            </div>
+            <div>{{review.text}}</div>
+          </div>
+          <!-- Formulaire d'ajout de review (exemple statique) -->
+          <div class="mt-4">
+            <h5>Write a Review</h5>
+            <form>
+              <div class="mb-2">
+                <label>Your Rating:</label>
+                <span class="text-warning">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                </span>
+              </div>
+              <div class="mb-2 d-flex gap-2">
+                <input type="text" class="form-control" placeholder="Your Name" />
+                <input type="email" class="form-control" placeholder="Your Email" />
+              </div>
+              <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Review Title" />
+              </div>
+              <div class="mb-2">
+                <textarea class="form-control" rows="3" placeholder="Your Review"></textarea>
+              </div>
+              <button type="button" class="btn btn-primary">Submit Review</button>
+            </form>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

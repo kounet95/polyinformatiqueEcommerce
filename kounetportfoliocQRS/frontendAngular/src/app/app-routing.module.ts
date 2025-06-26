@@ -30,6 +30,9 @@ import { OrderCreateComponent } from './Ecommerce/order-create/order-create.comp
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
+import { CreatAddressComponent } from './Ecommerce/creat-address/creat-address.component';
+import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
 
 
 const routes: Routes = [
@@ -63,6 +66,7 @@ const routes: Routes = [
   { path: 'ordersummary', component: OrderSummaryComponentComponent },
   { path: 'track-order', component: TrackOrderComponent },
   { path: 'category', component: CategoryComponent },
+  { path: 'createstock', component: CreatStockComponent },
   { path: 'createsupplier', component: CreateSupplierComponent },
   { path: 'products', component: ProductComponent },
   { path: 'product-details', component: ProductDetailsComponent },
@@ -70,7 +74,9 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'creataddress', component: CreatAddressComponent },
   { path: 'order', component: OrderCreateComponent },
+  { path: 'creatcustomer', component: CreatCustomerComponent },
   { path: 'productcreate', component: CreateProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 

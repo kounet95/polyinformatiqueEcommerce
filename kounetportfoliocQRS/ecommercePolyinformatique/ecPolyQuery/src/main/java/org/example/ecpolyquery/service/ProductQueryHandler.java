@@ -4,17 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Product;
+import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 import org.example.ecpolyquery.query.GetProductByIdQuery;
 import org.example.ecpolyquery.repos.ProductRepository;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 @Slf4j
@@ -28,15 +32,10 @@ public class ProductQueryHandler {
     log.debug("Handling GetAllProductsQuery with pagination: page={}, size={}",
       query.getPage(), query.getSize());
 
-    Specification<Product> spec = ProductSpecification.withFilters(
-      query.getSocialGroupId(),
-      query.getSousCategories(),
-      query.getSearchKeyword(),
-      query.getMotifs()
-    );
 
-    Pageable pageable = PageRequest.of(query.getPage(), query.getSize(), query.getSortOptionAsSort());
-    return productRepository.findAll(spec, pageable);
+    Pageable pageable = PageRequest.of(query.getPage(),
+      query.getSize());
+    return productRepository.findAll( pageable);
   }
 
   @QueryHandler
@@ -45,4 +44,5 @@ public class ProductQueryHandler {
     Optional<Product> optionalProduct = productRepository.findById(query.getId());
     return optionalProduct.orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
   }
+
 }

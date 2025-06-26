@@ -39,6 +39,7 @@ public class ProductAggregate {
 
   @CommandHandler
   public ProductAggregate(CreateProductCommand cmd) {
+    log.debug("reception de la commande de creation de produit");
     apply(new ProductCreatedEvent(cmd.getId(), cmd.getProductDTO()));
   }
 

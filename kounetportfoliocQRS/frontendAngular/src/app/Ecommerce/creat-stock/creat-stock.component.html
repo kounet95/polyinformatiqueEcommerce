@@ -1,0 +1,99 @@
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+          <div class="section-header mb-4 text-center">
+            <h2>Ajouter un Stock</h2>
+            <p>Créez une entrée de stock liée à une taille de produit, un fournisseur et une adresse</p>
+          </div>
+          <form [formGroup]="stockForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+              <!-- Désignation -->
+              <div class="col-md-6 mb-3">
+                <label for="designation" class="form-label">Désignation</label>
+                <input type="text" id="designation" class="form-control" formControlName="designation" placeholder="Nom du stock">
+                <div class="text-danger small" *ngIf="stockForm.get('designation')?.invalid && stockForm.get('designation')?.touched">
+                  Désignation requise.
+                </div>
+              </div>
+              <!-- Quantité -->
+              <div class="col-md-6 mb-3">
+                <label for="quantity" class="form-label">Quantité</label>
+                <input type="number" id="quantity" class="form-control" formControlName="quantity" placeholder="Ex: 100">
+                <div class="text-danger small" *ngIf="stockForm.get('quantity')?.invalid && stockForm.get('quantity')?.touched">
+                  Quantité requise.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Taille de produit -->
+              <div class="col-md-6 mb-3">
+                <label for="productSizeId" class="form-label">Taille de produit</label>
+                <select class="form-select" formControlName="productSizeId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let ps of productSizes" [value]="ps.id">
+                    {{ ps.sizeProd }} ({{ ps.price }} €)
+                  </option>
+                </select>
+                <div class="text-danger small" *ngIf="stockForm.get('productSizeId')?.invalid && stockForm.get('productSizeId')?.touched">
+                  Taille de produit requise.
+                </div>
+              </div>
+              <!-- Fournisseur -->
+              <div class="col-md-6 mb-3">
+                <label for="supplierId" class="form-label">Fournisseur</label>
+                <select class="form-select" formControlName="supplierId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let s of suppliers" [value]="s.id">{{ s.fullname }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="stockForm.get('supplierId')?.invalid && stockForm.get('supplierId')?.touched">
+                  Fournisseur requis.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Prix d'achat -->
+              <div class="col-md-6 mb-3">
+                <label for="purchasePrice" class="form-label">Prix d'achat (€)</label>
+                <input type="number" id="purchasePrice" class="form-control" formControlName="purchasePrice" placeholder="Ex: 20">
+                <div class="text-danger small" *ngIf="stockForm.get('purchasePrice')?.invalid && stockForm.get('purchasePrice')?.touched">
+                  Prix d'achat requis.
+                </div>
+              </div>
+              <!-- Prix promo -->
+              <div class="col-md-6 mb-3">
+                <label for="promoPrice" class="form-label">Prix promo (€)</label>
+                <input type="number" id="promoPrice" class="form-control" formControlName="promoPrice" placeholder="Ex: 15">
+              </div>
+            </div>
+            <div class="mb-3">
+              <!-- Adresse -->
+              <label for="addressId" class="form-label">Adresse de stockage</label>
+              <select class="form-select" formControlName="addressId">
+                <option value="" disabled>Choisir...</option>
+                <option *ngFor="let a of addresses" [value]="a.id">
+                  {{ a.street }}, {{ a.city }} ({{ a.country }})
+                </option>
+              </select>
+              <div class="text-danger small" *ngIf="stockForm.get('addressId')?.invalid && stockForm.get('addressId')?.touched">
+                Adresse requise.
+              </div>
+            </div>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                {{ loading ? 'Création en cours...' : 'Ajouter le stock' }}
+              </button>
+            </div>
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

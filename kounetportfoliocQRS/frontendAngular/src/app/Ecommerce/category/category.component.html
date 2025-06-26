@@ -1,10 +1,11 @@
 <app-announcement-bar></app-announcement-bar>
 
+<!-- Filtres visibles -->
 <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between mb-4 p-3 border rounded shadow-sm" style="background: #fff;">
   <!-- Search input -->
   <div class="d-flex align-items-center mb-2 mb-md-0">
     <input type="text" class="form-control me-2" placeholder="Search for products..."
-           [(ngModel)]="searchKeyword" (keydown.enter)="applyFilters()" />
+           [(ngModel)]="filters.searchKeyword" (keydown.enter)="applyFilters()" />
     <button class="btn btn-primary" (click)="applyFilters()">
       <mat-icon>search</mat-icon>
     </button>
@@ -12,7 +13,7 @@
 
   <!-- Price Range -->
   <div class="form-group me-2">
-    <select class="form-select" [(ngModel)]="selectedPriceRange" (change)="applyFilters()">
+    <select class="form-select" [(ngModel)]="filters.selectedPriceRange" (change)="applyFilters()">
       <option value="">All Prices</option>
       <option value="0-50">Under $50</option>
       <option value="50-100">$50 to $100</option>
@@ -23,7 +24,7 @@
 
   <!-- Sort By -->
   <div class="form-group me-2">
-    <select class="form-select" [(ngModel)]="sortOption" (change)="applyFilters()">
+    <select class="form-select" [(ngModel)]="filters.sortOption" (change)="applyFilters()">
       <option value="featured">Featured</option>
       <option value="priceAsc">Price: Low to High</option>
       <option value="priceDesc">Price: High to Low</option>
@@ -33,17 +34,17 @@
 
   <!-- View Toggle -->
   <div class="btn-group me-2">
-    <button class="btn" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+    <button class="btn" [class.active]="filters.viewMode === 'grid'" (click)="filters.viewMode = 'grid'">
       <mat-icon>grid_view</mat-icon>
     </button>
-    <button class="btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+    <button class="btn" [class.active]="filters.viewMode === 'list'" (click)="filters.viewMode = 'list'">
       <mat-icon>list</mat-icon>
     </button>
   </div>
 
   <!-- Items per page -->
   <div class="form-group">
-    <select class="form-select" [(ngModel)]="itemsPerPage" (change)="applyFilters()">
+    <select class="form-select" [(ngModel)]="filters.itemsPerPage" (change)="applyFilters()">
       <option>6</option>
       <option>12</option>
       <option>24</option>
@@ -61,6 +62,9 @@
   </span>
   <button class="btn btn-outline-danger btn-sm ms-2" (click)="clearAllFilters()">Clear All</button>
 </div>
+
+<!-- Debug : Affichage de tous les filtres -->
+<pre>{{ allFilters | json }}</pre>
 
 <div class="main-layout">
   <div class="sidebar">
@@ -94,7 +98,7 @@
           <div class="color-options">
             <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
               <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
-                [checked]="selectedCouleurs.includes(color)"
+                [checked]="filters.selectedCouleurs.includes(color)"
                 (change)="onCouleurCheckboxChange(color, $event)">
               <label class="form-check-label" [for]="'color-' + color">
                 <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
@@ -103,87 +107,85 @@
           </div>
           <div class="color-filter-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
             <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Clear All</button>
-            <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Appliquer le filtre</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Apply</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
 
- <!-- Affichage produits filtrés -->
-<div class="row gy-4 mt-4">
-  <div class="col-lg-6" *ngFor="let product of products">
-    <ng-container *ngIf="product.productSizes && product.productSizes.length > 0; else noSizes">
-      <div class="card p-3 shadow rounded" style="max-width: 300px; margin: auto; border: none;">
-        <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">New Season</span>
-        <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">Hot</span>
-        <span class="badge btn-outline-danger text-dark mb-2" style="align-self: flex-start; color: brown;">Sold Out</span>
-        <div class="product-card">
-          <img 
-            [src]="product.models" 
-            [alt]="product.name" 
+  <!-- Affichage produits filtrés -->
+ <div class="row gy-4 mt-4">
+  <div class="col-lg-6" *ngFor="let size of productSizes">
+    <div class="card p-3 shadow rounded" style="max-width: 300px; margin: auto; border: none;">
+      <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">New Season</span>
+      <span class="badge bg-purple text-white mb-2" style="align-self: flex-start;">Hot</span>
+      <span class="badge btn-outline-danger text-dark mb-2" style="align-self: flex-start; color: brown;">Sold Out</span>
+      <div class="product-card">
+       <!-- Image de la taille/produit -->
+    <img 
+            [src]="size.prodId?.models" 
+            [alt]="size.prodId?.name" 
             class="card-img-top mx-auto rounded-card"
             loading="lazy"
             [ngStyle]="{ width: '250px', height: '250px', objectFit: 'cover' }"
           />
-          <div class="product-overlay"> 
-            <button type="button" class="quick-action-btn">
-              <i class="bi bi-arrow-repeat"></i>
+
+      <div class="card-body text-center">
+        <div class="product-overlay"> 
+          <button type="button" class="quick-action-btn">
+            <i class="bi bi-arrow-repeat"></i>
+          </button>
+          <button type="button" class="quick-action-btn" (click)="voirDetaille(size.id)" style="z-index: 9999; position: relative;">
+
+            <i class="bi bi-eye"></i>
+          </button>
+          <div class="add-to-cart-container">
+            <button type="button" class="add-to-cart-btn" (click)="addCart(size)">
+              Add to Cart
             </button>
-            <button type="button" class="quick-action-btn">
-              <i class="bi bi-eye"></i>
-            </button>
-            <div class="add-to-cart-container" *ngFor="let size of product.productSizes">
-              <button type="button" class="add-to-cart-btn" (click)="addCart(size)">
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body text-center">
-          <h6 class="card-title text-dark fw-semibold">{{ product.name }}</h6>
-          <!-- je vais utilise un tableau pour afficher des tailles/prix -->
-          <table class="table table-sm mb-2">
-              <thead>
-                <tr>
-                  <th style="width:33%;">Taille</th>
-                  <th style="width:33%;">Prix</th>
-                  <th style="width:33%;">Prix promo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let size of product.productSizes">
-                <td>{{ size.sizeProd || 'N/A' }}</td>
-                <td>{{ size.price }} €</td>
-                <td>{{ size.pricePromo ? (size.pricePromo + ' €') : '' }}</td>
-                </tr>
-              </tbody>
-            </table>
-          <div class="d-flex justify-content-center align-items-center mb-2">
-            <span class="text-warning me-1">
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star"></i>
-            </span>
-            <span class="ms-4 fw-bold text-dark">4.0</span>
-          </div>
-          <div class="d-flex justify-content-center gap-2">
-            <span class="rounded-circle" style="background-color: green; width: 15px; height: 15px;"></span>
-            <span class="rounded-circle" style="background-color: red; width: 15px; height: 15px;"></span>
-            <span class="rounded-circle" style="background-color: orange; width: 15px; height: 15px;"></span>
           </div>
         </div>
       </div>
-    </ng-container>
-    <ng-template #noSizes>
-      <span class="text-muted">Aucune taille disponible.</span>
-    </ng-template>
+      <div class="card-body text-center">
+        <h6 class="card-title text-dark fw-semibold">{{ size.prodId?.name }}</h6>
+        <table class="table table-sm mb-2">
+          <thead>
+            <tr>
+              <th style="width:33%;">Taille</th>
+              <th style="width:33%;">Prix</th>
+              <th style="width:33%;">Prix promo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ size.sizeProd || 'N/A' }}</td>
+              <td>{{ size.price }} €</td>
+              <td>{{ size.pricePromo ? (size.pricePromo + ' €') : '' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-center align-items-center mb-2">
+          <span class="text-warning me-1">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+          </span>
+          <span class="ms-4 fw-bold text-dark">4.0</span>
+        </div>
+        <div class="d-flex justify-content-center gap-2">
+          <span class="rounded-circle" style="background-color: green; width: 15px; height: 15px;"></span>
+          <span class="rounded-circle" style="background-color: red; width: 15px; height: 15px;"></span>
+          <span class="rounded-circle" style="background-color: orange; width: 15px; height: 15px;"></span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 <!-- Loader et erreur -->
 <div *ngIf="loading" class="text-center my-4">
   <span class="spinner-border"></span> Chargement...

@@ -104,7 +104,7 @@ export class CreateProductComponent implements OnInit {
       createdAt: new Date().toISOString(),
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
-      models: '', 
+      models: 'k', 
       isActive: !!raw.isActive
     };
     this.loading = true;
