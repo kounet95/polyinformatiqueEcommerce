@@ -7,7 +7,6 @@ import org.example.ecpolyquery.entity.Invoice;
 import org.example.ecpolyquery.entity.Orderecommerce;
 import org.example.ecpolyquery.repos.InvoiceRepository;
 import org.example.ecpolyquery.repos.OrderecommerceRepository;
-import org.example.ecpolyquery.repos.SupplierRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.InvoiceDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.InvoiceGeneratedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.InvoicePaidEvent;

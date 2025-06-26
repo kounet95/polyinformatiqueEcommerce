@@ -15,10 +15,9 @@ export class AddressService {
   constructor(private http: HttpClient) {}
 
   /** Command: Création d'une adresse */
-  createAddress(address: AddressDTO): Observable<string> {
-    return this.http.post<string>(`${this.commandBase}/create`, address);
+  createAddress(address: AddressDTO): Observable<AddressDTO> {
+    return this.http.post<AddressDTO>(`${this.commandBase}/create`, address);
   }
-
   /** Command: Suppression d'une adresse */
   deleteAddress(addressId: string): Observable<string> {
     return this.http.delete<string>(`${this.commandBase}/delete/${addressId}`);

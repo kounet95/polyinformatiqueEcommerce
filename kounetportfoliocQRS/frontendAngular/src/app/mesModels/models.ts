@@ -102,17 +102,17 @@ export interface TagModel {
 // ========== AddressDTO ==========
 // ===============================
 export interface AddressDTO {
-  id: number;
+  id?:  string;
   street: string;
   city: string;
   state: string;
   zip: string;
   country: string;
-  appartment: number;
-  customer: string;
-  store: string;
-  supplier: string;
-  shipping: string;
+  appartment?: number;
+  customer?: string;
+  store?: string;
+  supplier?: string;
+  shipping?: string;
 }
 
 // ===============================
@@ -127,13 +127,13 @@ export interface CategoryDTO {
 // ========== CustomerEcommerceDTO ==========
 // ===============================
 export interface CustomerEcommerceDTO {
-  id: string;
+  id?: string;
   firstname: string;
   lastname: string;
   email: string;
   phone: string;
   addressId: string;
-  createdAt: string; 
+  createdAt?: string; 
 }
 
 // ===============================

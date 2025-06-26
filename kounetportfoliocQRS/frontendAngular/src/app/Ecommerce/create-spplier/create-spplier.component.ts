@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SupplierService } from '../services/supplier.service';
 import { Router } from '@angular/router';
 import { AddressService } from '../services/address.service'; // Pour charger les adresses
-import { AddressDTO } from '../../mesModels/models';
+import { AddressDTO, ProductSizeDTO } from '../../mesModels/models';
 
 @Component({
   selector: 'app-create-supplier',
@@ -18,6 +18,7 @@ export class CreateSupplierComponent implements OnInit {
   successMsg = '';
 
   addresses: AddressDTO[] = [];
+  productSize: ProductSizeDTO[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -34,12 +35,14 @@ export class CreateSupplierComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Charge les adresses pour le select
+
     this.addressService.getAllAddresses().subscribe({
       next: data => {
         this.addresses = Array.isArray(data) ? data : (data || []);
       }
     });
+
+    
   }
 
   onSubmit() {

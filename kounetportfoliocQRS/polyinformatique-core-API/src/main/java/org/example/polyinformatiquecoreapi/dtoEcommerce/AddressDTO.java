@@ -38,16 +38,8 @@ public class AddressDTO {
 
   @PositiveOrZero(message = "Apartment number must be zero or positive")
   private int appartment;
-
-  @Size(max = 255, message = "Customer field must be less than 255 characters")
   private String customer;
-
-  @Size(max = 255, message = "Store field must be less than 255 characters")
   private String store;
-
-  @Size(max = 255, message = "Supplier field must be less than 255 characters")
   private String supplier;
-
-  @Size(max = 255, message = "Shipping field must be less than 255 characters")
   private String shipping;
 }
