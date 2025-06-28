@@ -2,6 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="discoveryservice" />
+        <module name="getwayservice" />
+        <module name="configservice" />
+      </profile>
       <profile name="Annotation profile for kounetportfoliocQRS" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -16,14 +24,6 @@
         <module name="ecPolyQuery" />
         <module name="ecPolyCommand" />
         <module name="queryBlog" />
-      </profile>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="discoveryservice" />
-        <module name="getwayservice" />
-        <module name="configservice" />
       </profile>
     </annotationProcessing>
   </component>
