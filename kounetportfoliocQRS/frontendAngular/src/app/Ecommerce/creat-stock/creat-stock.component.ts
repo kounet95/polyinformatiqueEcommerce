@@ -10,7 +10,8 @@ import { AddressService } from '../services/address.service';
   selector: 'app-creat-stock',
   standalone: false,
   templateUrl: './creat-stock.component.html',
-  styleUrls: ['./creat-stock.component.css']
+  styleUrls: ['./creat-stock.component.css'],
+
 })
 export class CreatStockComponent implements OnInit {
   stockForm: FormGroup;

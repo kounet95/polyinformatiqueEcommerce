@@ -7,6 +7,7 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Address;
 import org.example.ecpolyquery.entity.Category;
 import org.example.ecpolyquery.query.GetAddressByIdQuery;
+import org.example.ecpolyquery.query.GetAddressesByCustomerIdQuery;
 import org.example.ecpolyquery.query.GetAllAddressQuery;
 import org.example.ecpolyquery.query.GetAllCategoriesQuery;
 import org.example.ecpolyquery.query.GetCategoryByIdQuery;
@@ -31,10 +32,15 @@ public class AddressQueryHandler {
 
   @QueryHandler
   public Address on(GetAddressByIdQuery query) {
-    log.debug("Handling GetCategoryByIdQuery: {}", query.getId());
+    log.debug("Handling GetAddressByIdQuery: {}", query.getId());
     Optional<Address> optionalAddress = addressRepository.findById(query.getId());
     return optionalAddress
-      .orElseThrow(() -> new RuntimeException("Category not found with id: " + query.getId()));
+      .orElseThrow(() -> new RuntimeException("Address not found with id: " + query.getId()));
   }
 
+  @QueryHandler
+  public List<Address> on(GetAddressesByCustomerIdQuery query) {
+    log.debug("Handling GetAddressesByCustomerIdQuery: {}", query.getCustomerId());
+    return addressRepository.findByCustomer_Id(query.getCustomerId());
+  }
 }

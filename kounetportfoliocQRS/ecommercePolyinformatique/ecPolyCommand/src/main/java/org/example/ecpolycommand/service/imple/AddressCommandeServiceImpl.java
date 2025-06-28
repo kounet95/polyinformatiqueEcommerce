@@ -5,6 +5,8 @@ import org.example.ecpolycommand.service.AddressCommandService;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
 
+import java.util.UUID;
+
 
 public class AddressCommandeServiceImpl implements AddressCommandService {
 
@@ -17,7 +19,8 @@ public class AddressCommandeServiceImpl implements AddressCommandService {
 
   @Override
   public void createAddress(AddressDTO dto) {
-    commandGateway.sendAndWait(new CreateAddressCommand(dto.getId(), dto));
+    String id = UUID.randomUUID().toString();
+    commandGateway.sendAndWait(new CreateAddressCommand(id, dto));
   }
 
   @Override

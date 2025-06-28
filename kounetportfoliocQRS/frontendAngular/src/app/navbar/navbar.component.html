@@ -72,21 +72,21 @@
               <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
           </ul>
         </li>
-        <li class="nav-item" *ngIf="keycloakService.getUserRoles().includes('ADMIN')">
-          <a class="nav-link text-danger">Admin</a>
-        </li>
+        
         
         <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
        <span *ngIf="profile;else login_template">{{profile.username}}</span>
             <ng-template #login_template>
               <button class="btn btn-success" (click)="handleLogin()">Login</button>
-            </ng-template><mat-icon>expand_more</mat-icon>
+            </ng-template>
+                          
+            <mat-icon>expand_more</mat-icon>
     </button>
       </ul>
     
 
   <mat-menu #dropdownMenu="matMenu">
-    <button mat-menu-item  (click)="handleLogin()">Login</button>
+    <button mat-menu-item class="open" (click)="handleLogin()">Login</button>
     <button mat-menu-item (click)="handleLogout()">Logout</button>
 
   </mat-menu>

@@ -1,36 +1,37 @@
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
   <input formControlName="firstname" placeholder="Prénom" />
-  <input formControlName="lastname" placeholder="Nom" />
-  <input formControlName="email" placeholder="Email" />
-  <input formControlName="phone" placeholder="Téléphone" />
-
-  <div>
-    <label>
-      <input type="radio" [(ngModel)]="isNewAddress" [value]="false" name="addressType" (ngModelChange)="onAddressTypeChange($event)" /> Adresse existante
-    </label>
-    <label>
-      <input type="radio" [(ngModel)]="isNewAddress" [value]="true" name="addressType" (ngModelChange)="onAddressTypeChange($event)" /> Nouvelle adresse
-    </label>
+  <div *ngIf="customerForm.get('firstname')?.invalid && customerForm.get('firstname')?.touched" class="error">
+    Prénom requis
   </div>
 
-  <div *ngIf="!isNewAddress">
+  <input formControlName="lastname" placeholder="Nom" />
+  <div *ngIf="customerForm.get('lastname')?.invalid && customerForm.get('lastname')?.touched" class="error">
+    Nom requis
+  </div>
+
+  <input formControlName="email" placeholder="Email" />
+  <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched" class="error">
+    Email requis ou invalide
+  </div>
+
+  <input formControlName="phone" placeholder="Téléphone" />
+  <div *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched" class="error">
+    Téléphone requis
+  </div>
+
+  <div>
     <select formControlName="addressId">
+      <option value="">Sélectionner une adresse</option>
       <option *ngFor="let a of addresses" [value]="a.id">
         {{a.street}}, {{a.city}}, {{a.country}}
       </option>
     </select>
+    <div *ngIf="customerForm.get('addressId')?.invalid && customerForm.get('addressId')?.touched" class="error">
+      Adresse requise
+    </div>
   </div>
 
-  <div *ngIf="isNewAddress">
-    <input formControlName="street" placeholder="Rue" />
-    <input formControlName="city" placeholder="Ville" />
-    <input formControlName="state" placeholder="Région/État" />
-    <input formControlName="zip" placeholder="Code postal" />
-    <input formControlName="country" placeholder="Pays" />
-    <input formControlName="appartment" placeholder="Appartement" />
-  </div>
-
-  <button type="submit" [disabled]="isLoading">Créer</button>
-  <div *ngIf="successMsg">{{successMsg}}</div>
-  <div *ngIf="errorMsg">{{errorMsg}}</div>
+  <button type="submit" [disabled]="isLoading || customerForm.invalid">Valider</button>
+  <div *ngIf="successMsg" class="success">{{successMsg}}</div>
+  <div *ngIf="errorMsg" class="error">{{errorMsg}}</div>
 </form>

@@ -8,6 +8,7 @@ import org.example.polyinformatiquecoreapi.commandEcommerce.CreateAddressCommand
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateCategoryCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteAddressCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCategoryCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.UpdateAddressCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CategoryDTO;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,39 @@ public class AddressController {
   @PostMapping("/create")
   @PreAuthorize("hasAuthority('ADMIN')")
   public CompletableFuture<String> createAddress(@Valid @RequestBody AddressDTO address) {
-    String addressId = UUID.randomUUID().toString();
+    String id = UUID.randomUUID().toString();
+    AddressDTO addressDTO = new AddressDTO(
+      id,
+      address.getStreet(),
+      address.getCity(),
+      address.getState(),
+      address.getZip(),
+      address.getCountry(),
+      address.getAppartment(),
+      address.getCustomer(),
+      address.getStore(),
+      address.getSupplier(),
+      address.getShipping()
+    );
+    CreateAddressCommand command = new CreateAddressCommand(id, addressDTO);
+    return commandGateway.send(command);
+  }
+
+  @GetMapping("/events/{aggregateId}")
+  public Stream<?> eventsStream(@PathVariable String aggregateId) {
+    return eventStore.readEvents(aggregateId).asStream();
+  }
+
+  @DeleteMapping("/delete/{addressId}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> deleteAddress(@PathVariable String addressId) {
+    return commandGateway.send(new DeleteAddressCommand(addressId));
+  }
+
+  @PutMapping("/update/{addressId}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> updateAddress(@PathVariable String addressId, @Valid @RequestBody AddressDTO address) {
+
     AddressDTO addressDTO = new AddressDTO(
       addressId,
       address.getStreet(),
@@ -48,19 +81,10 @@ public class AddressController {
       address.getSupplier(),
       address.getShipping()
     );
-    CreateAddressCommand command = new CreateAddressCommand(addressId, addressDTO);
+
+
+    UpdateAddressCommand command = new UpdateAddressCommand(addressId, addressDTO);
     return commandGateway.send(command);
-  }
-
-  @GetMapping("/events/{aggregateId}")
-  public Stream<?> eventsStream(@PathVariable String aggregateId) {
-    return eventStore.readEvents(aggregateId).asStream();
-  }
-
-  @DeleteMapping("/delete/{addressId}")
-  @PreAuthorize("hasAuthority('ADMIN')")
-  public CompletableFuture<String> deleteAddress(@PathVariable String addressId) {
-    return commandGateway.send(new DeleteAddressCommand(addressId));
   }
 
   @ExceptionHandler(Exception.class)

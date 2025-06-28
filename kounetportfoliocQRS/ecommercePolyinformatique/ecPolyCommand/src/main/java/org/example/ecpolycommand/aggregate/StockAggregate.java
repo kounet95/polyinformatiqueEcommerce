@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.AddStockCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.LinkAddressCommand;
+import org.example.polyinformatiquecoreapi.eventEcommerce.AddressLinkedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.StockDecreasedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.StockIncreasedEvent;
 
@@ -45,11 +48,18 @@ public class StockAggregate {
     this.purchasePrice = event.getStockDTO().getPurchasePrice();
     this.promoPrice = event.getStockDTO().getPromoPrice();
     this.quantity += event.getStockDTO().getQuantity();
-    this.addressId = event.getStockDTO().getAddressId();
+
   }
 
   @EventSourcingHandler
   public void on(StockDecreasedEvent event) {
     this.quantity -= event.getStockDTO().getQuantity();
+  }
+
+  @CommandHandler
+  public void handle(LinkAddressCommand cmd) {
+    // on doit mettre une logique métier eventuelle
+    AggregateLifecycle.apply(new AddressLinkedEvent(cmd.getTargetType(),
+      cmd.getTargetId(), cmd.getAddressId()));
   }
 }

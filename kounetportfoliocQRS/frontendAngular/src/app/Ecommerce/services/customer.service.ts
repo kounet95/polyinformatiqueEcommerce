@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CustomerEcommerceDTO } from '../../mesModels/models';
+import { AddressDTO, CustomerEcommerceDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
 
@@ -22,6 +22,10 @@ export class CustomerService {
   /** Command: Suppression d'un client */
   deleteCustomer(customerId: string): Observable<string> {
     return this.http.delete<string>(`${this.commandBase}/delete/${customerId}`);
+  }
+  /** Command: update d'un client */
+  updateCustomer(customerId: CustomerEcommerceDTO): Observable<string> {
+    return this.http.delete<string>(`${this.commandBase}/update/${customerId}`);
   }
 
   /** Query: Liste de tous les clients */

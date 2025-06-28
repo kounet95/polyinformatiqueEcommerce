@@ -5,11 +5,11 @@ import org.example.polyinformatiquecoreapi.event.BaseEvent;
 
 import java.io.Serializable;
 
-public class CustomerCreatedEvent extends BaseEvent<String> implements Serializable {
+public class CustomerCreatedEvent  {
 
     private CustomerEcommerceDTO author;
-    public CustomerCreatedEvent(String id, CustomerEcommerceDTO author) {
-        super(id);
+    public CustomerCreatedEvent(CustomerEcommerceDTO author) {
+
         this.author = author;
     }
 

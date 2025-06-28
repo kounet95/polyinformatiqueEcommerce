@@ -132,3 +132,5 @@ class GetStockByIdQuery(val id: String)
 class GetSubcategoryByIdQuery(val id: String)
 
 class GetSupplierByIdQuery(val id: String)
+
+class GetAddressesByCustomerIdQuery(val customerId: String)

@@ -25,6 +25,4 @@ public class StockDTO {
   private double promoPrice;
   @Min(value = 0, message = "Quantity must be zero or positive")
   private double quantity;
-  @NotBlank(message = "Address ID cannot be blank")
-  private String addressId;
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.sql.Update;
 
 import java.time.LocalDateTime;
 
@@ -32,9 +33,5 @@ public class CustomerEcommerceDTO {
   @NotBlank(message = "Phone cannot be blank")
   @Size(min = 5, max = 20, message = "Phone must be between 5 and 20 characters")
   private String phone;
-
-  @NotBlank(message = "addressId address cannot be blank")
-  private String addressId;
-
   private LocalDateTime createdAt;
 }

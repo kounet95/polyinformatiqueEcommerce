@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddressService } from '../services/address.service';
 import { Router } from '@angular/router';
-import { AddressDTO, CustomerEcommerceDTO, ShippingDTO, StockDTO, SupplierDTO } from '../../mesModels/models';
-import { zip } from 'rxjs';
-import { ProductSizeService } from '../services/product-size.service';
+import { AuthService } from '../../services/AuthService';
+import { AddressDTO, ShippingDTO, StockDTO, SupplierDTO } from '../../mesModels/models';
 import { ShippingService } from '../services/shipping.service';
 import { SupplierService } from '../services/supplier.service';
 import { StockService } from '../services/stock.service';
@@ -21,16 +20,17 @@ export class CreatAddressComponent implements OnInit {
   isLoading = false;
   errorMsg = '';
   successMsg = '';
-  customer : CustomerEcommerceDTO[]=[];
-  store : StockDTO[]=[];
-  shipping : ShippingDTO []=[];
-  supplier :  SupplierDTO[]=[];
+  customerIds: string[] = [];
+  storeIds: string[] = [];
+  shippingIds: string[] = [];
+  supplierIds: string[] = [];
+  linkType: string = ''; // 'customer', 'stock', 'supplier', 'shipping'
 
   constructor(
     private fb: FormBuilder,
     private addressService: AddressService,
     private router: Router,
-    private productSizeService: ProductSizeService,
+    private authService: AuthService,
     private supplierService: SupplierService,
     private customerService: CustomerService,
     private shippingService: ShippingService,
@@ -45,6 +45,7 @@ export class CreatAddressComponent implements OnInit {
       postalCode: ['', Validators.required],
       country: ['', Validators.required],
       customer: [''],
+      addressType: [''],
       store: [''],
       supplier: [''],
       shipping: [''],
@@ -52,10 +53,37 @@ export class CreatAddressComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadCustomer();
-    this.loadShipping();
-    this.loadSupplier();
-    this.loadStore();
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.customerService.getCustomerById(userId).subscribe({
+        next: data => this.customerIds = data ? [data.id] : [],
+        error: () => this.errorMsg = "Impossible de charger le client."
+      });
+      this.shippingService.getShippingsByUserId(userId).subscribe({
+        next: data => this.shippingIds = Array.isArray(data) ? data.map((s: ShippingDTO) => s.id) : [],
+        error: () => this.errorMsg = "Impossible de charger les livraisons."
+      });
+      this.supplierService.getSuppliersByUserId(userId).subscribe({
+        next: data => this.supplierIds = Array.isArray(data) ? data.map((s: SupplierDTO) => s.id) : [],
+        error: () => this.errorMsg = "Impossible de charger les fournisseurs."
+      });
+      this.storeService.getStocksByUserId(userId).subscribe({
+        next: data => this.storeIds = Array.isArray(data) ? data.map((s: StockDTO) => s.id) : [],
+        error: () => this.errorMsg = "Impossible de charger les stocks."
+      });
+    }
+  }
+
+  onLinkTypeChange(type: string) {
+    this.linkType = type;
+    // Reset les champs non utilisés
+    this.addressForm.patchValue({
+      customer: '',
+      addressType: '',
+      store: '',
+      supplier: '',
+      shipping: ''
+    });
   }
 
   onSubmit() {
@@ -66,10 +94,35 @@ export class CreatAddressComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.addressService.createAddress(this.addressForm.value as AddressDTO).subscribe({
+
+    const formValue = this.addressForm.value;
+    let addressPayload: any = {
+      street: formValue.street,
+      city: formValue.city,
+      state: formValue.state,
+      zip: formValue.zip,
+      appartement: formValue.appartement,
+      postalCode: formValue.postalCode,
+      country: formValue.country,
+    };
+
+    // Ajoute le lien selon le type sélectionné
+    if (this.linkType === 'customer') {
+      addressPayload.customer = formValue.customer;
+      addressPayload.addressType = formValue.addressType;
+    } else if (this.linkType === 'stock') {
+      addressPayload.store = formValue.store;
+    } else if (this.linkType === 'supplier') {
+      addressPayload.supplier = formValue.supplier;
+    } else if (this.linkType === 'shipping') {
+      addressPayload.shipping = formValue.shipping;
+    }
+
+    this.addressService.createAddress(addressPayload as AddressDTO).subscribe({
       next: () => {
         this.successMsg = 'Adresse créée avec succès !';
         this.isLoading = false;
+        this.addressForm.reset();
         setTimeout(() => {
           this.router.navigate(['/addresses']);
         }, 2000);
@@ -80,43 +133,4 @@ export class CreatAddressComponent implements OnInit {
       }
     });
   }
-
-  loadCustomer(): void {
-    this.customerService.getAllCustomers().subscribe({
-      next: data => {
-        this.customer = Array.isArray(data) ? data : (data || []);
-      },
-      error: () => this.errorMsg = "Impossible de charger les clients."
-    });
-  }
-
-  loadShipping(): void {
-    this.shippingService.getAllShippings().subscribe({
-      next: data => {
-        this.shipping = Array.isArray(data) ? data : (data || []);
-      },
-      error: () => this.errorMsg = "Impossible de charger les livraisons."
-    });
-  }
-
-  loadSupplier(): void {
-    this.supplierService.getAllSuppliers().subscribe({
-      next: data => {
-        this.supplier = Array.isArray(data) ? data : (data.content || []);
-      },
-      error: () => this.errorMsg = "Impossible de charger les fournisseurs."
-    });
-  }
-
-  loadStore(): void {
-    this.storeService.getAllStocks().subscribe({
-      next: data => {
-        this.store = Array.isArray(data) ? data : (data || []);
-      },
-      error: () => this.errorMsg = "Impossible de charger les stocks."
-    });
-  }
-
-
-    
 }

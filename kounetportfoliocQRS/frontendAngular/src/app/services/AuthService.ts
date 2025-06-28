@@ -12,5 +12,14 @@ export class AuthService {
     return tokenParsed?.sub || null;
   }
 
- 
+  getUserProfile(): { firstname: string, lastname: string, email: string, phone: string } | null {
+    const tokenParsed: any = this.keycloak.getKeycloakInstance().idTokenParsed;
+    if (!tokenParsed) return null;
+    return {
+      firstname: tokenParsed.given_name || '',
+      lastname: tokenParsed.family_name || '',
+      email: tokenParsed.email || '',
+      phone: tokenParsed.phone_number || ''
+    };
+  }
 }

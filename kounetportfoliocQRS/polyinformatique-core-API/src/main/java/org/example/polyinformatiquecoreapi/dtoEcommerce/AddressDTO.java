@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO {
@@ -38,8 +39,4 @@ public class AddressDTO {
 
   @PositiveOrZero(message = "Apartment number must be zero or positive")
   private int appartment;
-  private String customer;
-  private String store;
-  private String supplier;
-  private String shipping;
 }

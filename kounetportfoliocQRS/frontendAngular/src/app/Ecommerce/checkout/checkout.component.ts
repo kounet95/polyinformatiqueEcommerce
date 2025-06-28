@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cartservice';
 import { OrderService } from '../services/order.service';
 import { InvoiceService } from '../services/invoice.service';
+import { CustomerService } from '../services/customer.service'; // Ajouté
+import { AuthService } from '../../services/AuthService'; // Ajouté
 import { CartItem, CustomerEcommerceDTO, InvoiceDTO, OrderDTO, OrderLineDTO, OrderStatus } from '../../mesModels/models';
 import { forkJoin } from 'rxjs';
 
@@ -9,7 +11,7 @@ import { forkJoin } from 'rxjs';
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
-  standalone:false,
+  standalone: false,
 })
 export class CheckoutComponent implements OnInit {
   step = 1;
@@ -23,7 +25,6 @@ export class CheckoutComponent implements OnInit {
   message: string = '';
   loading: boolean = false;
 
-  // Information
   customer: CustomerEcommerceDTO = {
     id: '',
     firstname: '',
@@ -34,15 +35,7 @@ export class CheckoutComponent implements OnInit {
     createdAt: ''
   };
 
-  // Shipping
-  shippingAddress: {
-    street: string;
-    apartment: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  } = {
+  shippingAddress = {
     street: '',
     apartment: '',
     city: '',
@@ -51,7 +44,6 @@ export class CheckoutComponent implements OnInit {
     country: ''
   };
 
-  // Payment
   payment: any = {
     method: 'card',
     cardNumber: '',
@@ -63,12 +55,33 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private customerService: CustomerService, // Ajouté
+    private authService: AuthService // Ajouté
   ) {}
 
   ngOnInit() {
     this.cartItems = this.cartService.getCart();
     this.calculateTotals();
+    this.loadCustomer();
+  }
+
+  loadCustomer() {
+    const userId = this.authService.getUserId ? this.authService.getUserId() : null;
+    if (userId) {
+      this.customerService.getCustomerById(userId).subscribe({
+        next: (customer) => {
+          if (customer) {
+            this.customer = customer;
+            // Pré-remplir l'adresse de livraison si besoin
+            // this.shippingAddress = ... (à adapter selon ton modèle)
+          }
+        },
+        error: () => {
+          this.message = "Impossible de charger les informations client.";
+        }
+      });
+    }
   }
 
   calculateTotals() {
@@ -94,11 +107,19 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     this.loading = true;
     this.message = '';
-    // 1. Creation dune commande
+
+    // Vérification des champs obligatoires
+    if (!this.customer.id || !this.customer.email) {
+      this.message = "Informations client manquantes.";
+      this.loading = false;
+      return;
+    }
+
+    // Création de la commande
     const order: OrderDTO = {
       id: '',
-      customerId: this.customer.id || this.customer.email, 
-      supplierId: '', 
+      customerId: this.customer.id || this.customer.email,
+      supplierId: '',
       createdAt: new Date().toISOString(),
       orderStatus: OrderStatus.Inprogress,
       paymentMethod: this.payment.method,
@@ -109,7 +130,6 @@ export class CheckoutComponent implements OnInit {
 
     this.orderService.createOrder(order).subscribe({
       next: orderId => {
-        // 2. Ajout des products a la commande
         const orderLineRequests = this.cartItems.map(item => {
           const orderLine: OrderLineDTO = {
             id: '',
@@ -122,11 +142,10 @@ export class CheckoutComponent implements OnInit {
 
         forkJoin(orderLineRequests).subscribe({
           next: () => {
-            // 3. Générer la facture
             const invoice: InvoiceDTO = {
               id: '',
               orderId: orderId,
-              customerId: this.customer.id || this.customer.email,
+              customerId: this.customer.id ? this.customer.id : (this.customer.email ?? ''),
               amount: this.total,
               paymentMethod: this.payment.method,
               restMonthlyPayment: 0,
@@ -141,19 +160,19 @@ export class CheckoutComponent implements OnInit {
                 this.loading = false;
                 this.step = 1;
               },
-              error: (err) => {
+              error: () => {
                 this.message = 'Erreur lors de la génération de la facture.';
                 this.loading = false;
               }
             });
           },
-          error: (err) => {
+          error: () => {
             this.message = "Erreur lors de l'ajout des produits à la commande.";
             this.loading = false;
           }
         });
       },
-      error: (err) => {
+      error: () => {
         this.message = "Erreur lors de la création de la commande.";
         this.loading = false;
       }

@@ -32,9 +32,9 @@ public class Customer {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
     public CompletableFuture<String> createCustomer(@Valid @RequestBody CustomerEcommerceDTO author) {
-        String authorId = UUID.randomUUID().toString();
+
         CustomerEcommerceDTO authorDTO = new CustomerEcommerceDTO(
-                authorId,
+                author.getId(),
                 author.getFirstname(),
                 author.getEmail(),
                 author.getLastname(),
@@ -42,7 +42,7 @@ public class Customer {
                 author.getAddressId(),
                 author.getCreatedAt()
         );
-        CreateCustomerCommand command = new CreateCustomerCommand(authorId, authorDTO);
+        CreateCustomerCommand command = new CreateCustomerCommand(authorDTO);
         return commandGateway.send(command);
     }
 

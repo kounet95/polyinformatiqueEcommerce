@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
@@ -21,9 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AboutComponent } from './about/about.component';
-import { ServicesComponent } from './services/services.component';
-import { PortfolioComponent } from './portfolio/portfolio.component';
+
 import { MatTableModule } from '@angular/material/table';
 import { PrincingComponent } from './princing/princing.component';
 import { TeamComponent } from './team/team.component';
@@ -55,7 +54,7 @@ import { CategoryCreateComponent } from './Ecommerce/category-create/category-cr
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
@@ -174,7 +173,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatFormFieldModule,
     MatSortModule,
     MatIconModule,
-    ReactiveFormsModule,
+
     MatSelectModule,
     MatOptionModule,
     MatCardModule,

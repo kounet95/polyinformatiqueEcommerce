@@ -6,9 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateSupplierCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.LinkAddressCommand;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SupplierDTO;
+import org.example.polyinformatiquecoreapi.eventEcommerce.AddressLinkedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.SupplierCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.SupplierDeletedEvent;
 
@@ -45,11 +48,17 @@ public class SupplierAggregate {
          this.firstName = event.getSupplierDTO().getFullname();
          this.email = event.getSupplierDTO().getEmail();
          this.personToContact = event.getSupplierDTO().getPersonToContact();
-         this.addressId = event.getSupplierDTO().getAddressId();
      }
 
   @EventSourcingHandler
   public void on(SupplierDeletedEvent event) {
     this.deleted = true;
+  }
+
+  @CommandHandler
+  public void handle(LinkAddressCommand cmd) {
+    // on doit mettre une logique métier eventuelle
+    AggregateLifecycle.apply(new AddressLinkedEvent(cmd.getTargetType(),
+      cmd.getTargetId(), cmd.getAddressId()));
   }
 }

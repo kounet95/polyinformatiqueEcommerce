@@ -7,7 +7,7 @@
             <h2>Ajouter un Stock</h2>
             <p>Créez une entrée de stock liée à une taille de produit, un fournisseur et une adresse</p>
           </div>
-          <form [formGroup]="stockForm" (ngSubmit)="onSubmit()" novalidate>
+          <form (ngSubmit)="onSubmit()" novalidate>
             <div class="row">
               <!-- Désignation -->
               <div class="col-md-6 mb-3">

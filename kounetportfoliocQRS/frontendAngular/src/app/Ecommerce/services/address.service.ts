@@ -28,6 +28,11 @@ export class AddressService {
     return this.http.get<AddressDTO[]>(`${this.queryBase}`);
   }
 
+  /** Query: Liste des adresses d'un client */
+getAddressesByCustomerId(customerId: string): Observable<AddressDTO[]> {
+  return this.http.get<AddressDTO[]>(`${this.queryBase}/customer/${customerId}`);
+}
+
   /** Query: Détail d'une adresse par ID */
   getAddressById(id: string): Observable<AddressDTO> {
     return this.http.get<AddressDTO>(`${this.queryBase}/${id}`);

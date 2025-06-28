@@ -68,7 +68,10 @@ export class NavbarComponent  implements OnInit{
   async handleLogin() {
     await this.keycloakService.login({
       redirectUri: window.location.origin
+      
     });
+
+    this.isMenuOpen = true;
   }
 
   handleLogout(){

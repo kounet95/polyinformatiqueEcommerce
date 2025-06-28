@@ -30,6 +30,11 @@ import { OrderCreateComponent } from './Ecommerce/order-create/order-create.comp
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { CreatAddressComponent } from './Ecommerce/creat-address/creat-address.component';
+import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
+import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
+import { FaqComponent } from './Ecommerce/faq/faq.component';
+import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 
 
 const routes: Routes = [
