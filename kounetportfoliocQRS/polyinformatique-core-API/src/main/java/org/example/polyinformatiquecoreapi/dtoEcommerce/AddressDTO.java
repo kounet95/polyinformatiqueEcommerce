@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -39,4 +41,6 @@ public class AddressDTO {
 
   @PositiveOrZero(message = "Apartment number must be zero or positive")
   private int appartment;
+
+  private List<AddressLinkDTO> links;
 }

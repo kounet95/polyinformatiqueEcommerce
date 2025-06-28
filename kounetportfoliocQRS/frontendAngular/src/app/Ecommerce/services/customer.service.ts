@@ -18,7 +18,10 @@ export class CustomerService {
   createCustomer(customer: CustomerEcommerceDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/create`, customer);
   }
-
+  /** Command: Création d'un client avec son address*/
+  createCustomerWithAddress(payload: any) :Observable<string>{
+  return this.http.post<string>(`${this.commandBase}/create-with-address`, payload);
+}
   /** Command: Suppression d'un client */
   deleteCustomer(customerId: string): Observable<string> {
     return this.http.delete<string>(`${this.commandBase}/delete/${customerId}`);

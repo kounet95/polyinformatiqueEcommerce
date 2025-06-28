@@ -35,9 +35,7 @@ public class ShippingService {
     Orderecommerce order = orderecommerceRepository.findById(event.getShippingDTO().getOrderId())
       .orElseThrow(() -> new RuntimeException("Order not found with id: "
         + event.getShippingDTO().getOrderId()));
-    Address address = addressRepository.findById(event.getShippingDTO().getShippingAddressId())
-      .orElseThrow(() -> new RuntimeException("Order not found with id: "
-        + event.getShippingDTO().getShippingAddressId()));
+
 
     // Check if shipping already exists for this order
     if (shippingRepository.existsById(event.getId())) {
@@ -51,7 +49,7 @@ public class ShippingService {
       .shippingDate(LocalDateTime.now())
       .estimatedDeliveryDate(LocalDateTime.now().plusDays(5))
       .orderecommerce(order)
-      .addressId(address)
+
       .build();
 
     shippingRepository.save(shipping);
@@ -65,9 +63,7 @@ public class ShippingService {
     Orderecommerce order = orderecommerceRepository.findById(event.getShippingDTO().getOrderId())
       .orElseThrow(() -> new RuntimeException("Order not found with id: "
         + event.getShippingDTO().getOrderId()));
-    Address address = addressRepository.findById(event.getShippingDTO().getShippingAddressId())
-      .orElseThrow(() -> new RuntimeException("Order not found with id: "
-        + event.getShippingDTO().getShippingAddressId()));
+
 
     Shipping shipping = shippingRepository.findById(event.getId())
       .orElseThrow(() -> new RuntimeException("Shipping not found with id: " + event.getId()));
@@ -77,7 +73,7 @@ public class ShippingService {
     shipping.setShippingDate(shippingDTO.getShippingDate());
     shipping.setEstimatedDeliveryDate(shippingDTO.getEstimatedDeliveryDate());
     shipping.setOrderecommerce(order);
-    shipping.setAddressId(address);
+
     shippingRepository.save(shipping);
     log.info("Shipping updated for ID: {}", shipping.getId());
   }

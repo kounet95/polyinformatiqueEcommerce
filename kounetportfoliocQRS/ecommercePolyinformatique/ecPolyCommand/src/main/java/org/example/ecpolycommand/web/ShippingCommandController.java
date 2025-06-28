@@ -35,7 +35,6 @@ public class ShippingCommandController {
       shipping.getEstimatedDeliveryDate(),
       shipping.getShippingDate(),
       shipping.getCreatedAt(),
-      shipping.getShippingAddressId(),
       shipping.getOrderStatus()
     );
     CreateShippingCommand command = new CreateShippingCommand(shippingId, shippingDTO);

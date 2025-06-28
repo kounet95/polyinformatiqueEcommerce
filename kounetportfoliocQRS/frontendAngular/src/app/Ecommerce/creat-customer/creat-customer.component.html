@@ -1,37 +1,11 @@
-<form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-  <input formControlName="firstname" placeholder="Prénom" />
-  <div *ngIf="customerForm.get('firstname')?.invalid && customerForm.get('firstname')?.touched" class="error">
-    Prénom requis
-  </div>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input formControlName="firstname" placeholder="First name">
+  <input formControlName="lastname" placeholder="Last name">
+  <input formControlName="email" placeholder="Email">
+  <input formControlName="phone" placeholder="Phone">
 
-  <input formControlName="lastname" placeholder="Nom" />
-  <div *ngIf="customerForm.get('lastname')?.invalid && customerForm.get('lastname')?.touched" class="error">
-    Nom requis
-  </div>
+  <h4>Adresse</h4>
+  <app-address-form [group]="addressGroup"></app-address-form>
 
-  <input formControlName="email" placeholder="Email" />
-  <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched" class="error">
-    Email requis ou invalide
-  </div>
-
-  <input formControlName="phone" placeholder="Téléphone" />
-  <div *ngIf="customerForm.get('phone')?.invalid && customerForm.get('phone')?.touched" class="error">
-    Téléphone requis
-  </div>
-
-  <div>
-    <select formControlName="addressId">
-      <option value="">Sélectionner une adresse</option>
-      <option *ngFor="let a of addresses" [value]="a.id">
-        {{a.street}}, {{a.city}}, {{a.country}}
-      </option>
-    </select>
-    <div *ngIf="customerForm.get('addressId')?.invalid && customerForm.get('addressId')?.touched" class="error">
-      Adresse requise
-    </div>
-  </div>
-
-  <button type="submit" [disabled]="isLoading || customerForm.invalid">Valider</button>
-  <div *ngIf="successMsg" class="success">{{successMsg}}</div>
-  <div *ngIf="errorMsg" class="error">{{errorMsg}}</div>
+  <button type="submit">Créer le client</button>
 </form>

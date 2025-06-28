@@ -30,12 +30,10 @@ public class SupplierService {
   public void on(SupplierCreatedEvent event) {
     log.debug("Handling SupplierCreatedEvent: {}", event.getId());
     SupplierDTO dto = event.getSupplierDTO();
-    Address address = addressRepository.findById(event.getSupplierDTO().getAddressId()).orElse(null);
     if (!supplierRepository.existsById(event.getId())) {
       Supplier supplier = Supplier.builder()
         .id(event.getId())
         .fullname(dto.getFullname())
-        .address(address)
         .email(dto.getEmail())
         .personToContact(dto.getPersonToContact())
         .build();
@@ -59,10 +57,8 @@ public class SupplierService {
   public void on(SupplierUpdatedEvent event) {
     log.debug("Handling SupplierUpdatedEvent: {}", event.getId());
     SupplierDTO dto = event.getDto();
-    Address address = addressRepository.findById(dto.getAddressId()).orElse(null);
     supplierRepository.findById(event.getId()).ifPresent(supplier -> {
       supplier.setFullname(dto.getFullname());
-      supplier.setAddress(address);
       supplier.setEmail(dto.getEmail());
       supplier.setPersonToContact(dto.getPersonToContact());
       supplierRepository.save(supplier);

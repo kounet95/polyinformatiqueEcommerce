@@ -34,4 +34,5 @@ public class CustomerEcommerceDTO {
   @Size(min = 5, max = 20, message = "Phone must be between 5 and 20 characters")
   private String phone;
   private LocalDateTime createdAt;
+
 }

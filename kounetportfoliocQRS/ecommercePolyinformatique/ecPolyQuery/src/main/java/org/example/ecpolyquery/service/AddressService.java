@@ -30,31 +30,34 @@ public class AddressService {
   public void on(CreatedAddressEvent event) {
     AddressDTO dto = event.getAddressDTO();
 
-    // Exemple basique: priorité CUSTOMER > SUPPLIER > STOCK > SHIPPING
-    String targetType = null;
-    String targetId = null;
-    if (dto.getCustomer() != null) {
-      targetType = "CUSTOMER";
-      targetId = dto.getCustomer();
-    } else if (dto.getSupplier() != null) {
-      targetType = "SUPPLIER";
-      targetId = dto.getSupplier();
-    } else if (dto.getStore() != null) {
-      targetType = "STOCK";
-      targetId = dto.getStore();
-    } else if (dto.getShipping() != null) {
-      targetType = "SHIPPING";
-      targetId = dto.getShipping();
-    }
+    Address address = Address.builder()
+      .id(dto.getId())
+      .street(dto.getStreet())
+      .city(dto.getCity())
+      .state(dto.getState())
+      .zip(dto.getZip())
+      .country(dto.getCountry())
+      .appartment(dto.getAppartment())
+      .build();
 
-    if (targetType == null || targetId == null) {
-      log.warn("CreatedAddressEvent: No targetType/targetId found in DTO {}", dto);
-      return;
-    }
+    addressRepository.save(address);
 
-    createAddressAndLink(dto, targetType, targetId);
-    log.info("Address created and linked [{}/{}]: {}", targetType, targetId, dto.getId());
+    // Pour chaque lien, créer une entrée AddressLink
+    if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+      dto.getLinks().forEach(linkDTO -> {
+        AddressLink link = AddressLink.builder()
+          .targetType(linkDTO.getTargetType())
+          .targetId(linkDTO.getTargetId())
+          .address(address)
+          .build();
+        addressLinkRepository.save(link);
+        log.info("Address linked to [{}/{}]: {}", linkDTO.getTargetType(), linkDTO.getTargetId(), dto.getId());
+      });
+    } else {
+      log.warn("CreatedAddressEvent: Aucun lien fourni pour Address {}", dto.getId());
+    }
   }
+
 
   public Address createAddressAndLink(AddressDTO dto, String targetType, String targetId) {
     Address address = Address.builder()
@@ -97,12 +100,10 @@ public class AddressService {
 
   @EventHandler
   public void on(UpdatedAddressEvent event) {
-    log.debug("Handling UpdatedAddressEvent: {}", event.getId());
     AddressDTO dto = event.getAddressDTO();
 
     addressRepository.findById(event.getId())
       .ifPresent(address -> {
-        // Update the address fields
         address.setStreet(dto.getStreet());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
@@ -110,9 +111,22 @@ public class AddressService {
         address.setCountry(dto.getCountry());
         address.setAppartment(dto.getAppartment());
         addressRepository.save(address);
-        log.info("Address updated with ID: {}", dto.getId());
+
+        // 🔄 Re-créer les liens
+        addressLinkRepository.deleteByAddress(address);
+
+        if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+          dto.getLinks().forEach(linkDTO -> {
+            AddressLink newLink = AddressLink.builder()
+              .targetType(linkDTO.getTargetType())
+              .targetId(linkDTO.getTargetId())
+              .address(address)
+              .build();
+            addressLinkRepository.save(newLink);
+          });
+        }
+
+        log.info("Address updated with new links: {}", dto.getId());
       });
-    // Si besoin, mettre à jour les AddressLink (changement de cible)
-    // Ex: Supprimer et recréer les liens selon les nouveaux targetType/targetId
   }
 }

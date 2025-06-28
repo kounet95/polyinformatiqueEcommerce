@@ -38,8 +38,7 @@ public class Stock {
                 stock.getSupplierId(),
                 stock.getPurchasePrice(),
                 stock.getPromoPrice(),
-                stock.getQuantity(),
-                stock.getAddressId()
+                stock.getQuantity()
         );
         AddStockCommand command = new AddStockCommand(stockId, stockDTO);
         return commandGateway.send(command);

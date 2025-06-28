@@ -69,6 +69,7 @@ import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-sppli
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
 
 
 

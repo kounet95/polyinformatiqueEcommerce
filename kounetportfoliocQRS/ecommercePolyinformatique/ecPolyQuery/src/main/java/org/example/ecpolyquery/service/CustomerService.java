@@ -26,8 +26,6 @@ public class CustomerService {
   @EventHandler
   public void on(CustomerCreatedEvent event) {
     CustomerEcommerceDTO customerDTO = event.getAuthor();
-
-    // Création du customer (aucune gestion d'adresse ici)
     Customer customer = Customer.builder()
       .id(customerDTO.getId())
       .firstname(customerDTO.getFirstname())

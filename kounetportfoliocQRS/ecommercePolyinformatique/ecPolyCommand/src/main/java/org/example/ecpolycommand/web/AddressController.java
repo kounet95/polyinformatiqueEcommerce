@@ -44,10 +44,7 @@ public class AddressController {
       address.getZip(),
       address.getCountry(),
       address.getAppartment(),
-      address.getCustomer(),
-      address.getStore(),
-      address.getSupplier(),
-      address.getShipping()
+      address.getLinks()
     );
     CreateAddressCommand command = new CreateAddressCommand(id, addressDTO);
     return commandGateway.send(command);
@@ -76,10 +73,7 @@ public class AddressController {
       address.getZip(),
       address.getCountry(),
       address.getAppartment(),
-      address.getCustomer(),
-      address.getStore(),
-      address.getSupplier(),
-      address.getShipping()
+      address.getLinks()
     );
 
 

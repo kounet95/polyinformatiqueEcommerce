@@ -2,16 +2,17 @@ package org.example.ecpolycommand.web;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.example.polyinformatiquecoreapi.commandEcommerce.CreateCustomerCommand;
-import org.example.polyinformatiquecoreapi.commandEcommerce.CustomerUpdatedCommand;
-import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCustomerCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerWithAddressDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -29,24 +30,36 @@ public class Customer {
         this.eventStore = eventStore;
     }
 
-    @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public CompletableFuture<String> createCustomer(@Valid @RequestBody CustomerEcommerceDTO author) {
+  @PostMapping("/create-with-address")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> createCustomerWithAddress(@Valid @RequestBody CustomerWithAddressDTO input,
+                                                             JwtAuthenticationToken jwtAuth) {
+    String userId = jwtAuth.getToken().getClaim("sub");
 
-        CustomerEcommerceDTO authorDTO = new CustomerEcommerceDTO(
-                author.getId(),
-                author.getFirstname(),
-                author.getEmail(),
-                author.getLastname(),
-                author.getPhone(),
-                author.getAddressId(),
-                author.getCreatedAt()
-        );
-        CreateCustomerCommand command = new CreateCustomerCommand(authorDTO);
-        return commandGateway.send(command);
-    }
+    CustomerEcommerceDTO customerDTO = new CustomerEcommerceDTO(
+      userId,
+      input.getFirstname(),
+      input.getEmail(),
+      input.getLastname(),
+      input.getPhone(),
+      LocalDateTime.now()
+    );
 
-    @GetMapping("/events/{aggregateId}")
+    CreateCustomerCommand cmd = new CreateCustomerCommand(customerDTO);
+
+    return commandGateway.send(cmd).thenCompose(result -> {
+      String addressId = UUID.randomUUID().toString();
+      CreateAddressCommand addrCmd = new CreateAddressCommand(addressId, input.getAddress());
+      return commandGateway.send(addrCmd)
+        .thenCompose(addr -> {
+          LinkAddressCommand linkCmd = new LinkAddressCommand("customer", userId, addressId);
+          return commandGateway.send(linkCmd);
+        })
+        .thenApply(done -> "Customer + Address + Link OK");
+    });
+  }
+
+  @GetMapping("/events/{aggregateId}")
     public Stream<?> eventsStream(@PathVariable String aggregateId) {
         return eventStore.readEvents(aggregateId).asStream();
     }
@@ -74,7 +87,6 @@ public class Customer {
               author.getEmail(),
               author.getLastname(),
               author.getPhone(),
-              author.getAddressId(),
               author.getCreatedAt()
       );
       CustomerUpdatedCommand command = new CustomerUpdatedCommand(id, customerDTO);

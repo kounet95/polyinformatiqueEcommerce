@@ -20,6 +20,7 @@ public class AddressLinkProjection {
   private final AddressRepository addressRepository;
 
   @EventHandler
+
   public void on(AddressLinkedEvent event) {
     addressRepository.findById(event.getAddressId()).ifPresent(address -> {
       AddressLink link = AddressLink.builder()
