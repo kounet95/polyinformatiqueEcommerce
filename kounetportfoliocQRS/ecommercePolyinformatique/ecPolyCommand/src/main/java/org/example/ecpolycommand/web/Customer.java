@@ -3,6 +3,8 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.CreateCustomerWithAddressDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerWithAddressDTO;
 import org.springframework.http.HttpStatus;
@@ -32,32 +34,51 @@ public class Customer {
 
   @PostMapping("/create-with-address")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public CompletableFuture<String> createCustomerWithAddress(@Valid @RequestBody CustomerWithAddressDTO input,
-                                                             JwtAuthenticationToken jwtAuth) {
-    String userId = jwtAuth.getToken().getClaim("sub");
+  public CompletableFuture<String> createCustomerWithAddress(
+    @Valid @RequestBody CreateCustomerWithAddressDTO input,
+    JwtAuthenticationToken jwtAuth) {
 
-    CustomerEcommerceDTO customerDTO = new CustomerEcommerceDTO(
-      userId,
-      input.getFirstname(),
-      input.getEmail(),
-      input.getLastname(),
-      input.getPhone(),
-      LocalDateTime.now()
-    );
+    // ✅ ID unique pour l’adresse
+    String addressId = UUID.randomUUID().toString();
 
-    CreateCustomerCommand cmd = new CreateCustomerCommand(customerDTO);
+    // ✅ L’Id du client vient du JWT
+    String customerId = jwtAuth.getToken().getClaim("sub");
 
-    return commandGateway.send(cmd).thenCompose(result -> {
-      String addressId = UUID.randomUUID().toString();
-      CreateAddressCommand addrCmd = new CreateAddressCommand(addressId, input.getAddress());
-      return commandGateway.send(addrCmd)
-        .thenCompose(addr -> {
-          LinkAddressCommand linkCmd = new LinkAddressCommand("customer", userId, addressId);
-          return commandGateway.send(linkCmd);
-        })
-        .thenApply(done -> "Customer + Address + Link OK");
-    });
+    // ✅ Crée la commande d’adresse (avec constructeur)
+    AddressDTO addressDTO = AddressDTO.builder()
+      .id(addressId)
+      .street(input.getStreet())
+      .city(input.getCity())
+      .state(input.getState())
+      .zip(input.getZip())
+      .country(input.getCountry())
+      .appartment(input.getAppartment())
+      .build();
+
+    CreateAddressCommand createAddressCmd = new CreateAddressCommand(addressId, addressDTO);
+
+    CustomerEcommerceDTO customerDTO = CustomerEcommerceDTO.builder()
+      .id(customerId)
+      .firstname(input.getFirstName())
+      .lastname(input.getLastName())
+      .email(input.getEmail())
+      .phone(input.getPhone())
+      .build();
+
+    CreateCustomerCommand createCustomerCmd = new CreateCustomerCommand(customerDTO);
+
+    LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
+      .targetType("customer")
+      .targetId(customerId)
+      .addressId(addressId)
+      .build();
+
+    return commandGateway.send(createAddressCmd)
+      .thenCompose(addressResult -> commandGateway.send(createCustomerCmd))
+      .thenCompose(customerResult -> commandGateway.send(linkAddressCmd))
+      .thenApply(linkResult -> "✅ Customer + Address created & linked successfully");
   }
+
 
   @GetMapping("/events/{aggregateId}")
     public Stream<?> eventsStream(@PathVariable String aggregateId) {

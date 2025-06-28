@@ -13,6 +13,7 @@ import org.example.polyinformatiquecoreapi.eventEcommerce.UpdatedAddressEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -30,8 +31,14 @@ public class AddressService {
   public void on(CreatedAddressEvent event) {
     AddressDTO dto = event.getAddressDTO();
 
+    String id = dto.getId();
+    if (id == null || id.isBlank()) {
+      id = UUID.randomUUID().toString();
+      log.warn("Generated new Address ID: {}", id);
+    }
+
     Address address = Address.builder()
-      .id(dto.getId())
+      .id(id)
       .street(dto.getStreet())
       .city(dto.getCity())
       .state(dto.getState())
@@ -42,7 +49,6 @@ public class AddressService {
 
     addressRepository.save(address);
 
-    // Pour chaque lien, créer une entrée AddressLink
     if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
       dto.getLinks().forEach(linkDTO -> {
         AddressLink link = AddressLink.builder()
@@ -51,12 +57,10 @@ public class AddressService {
           .address(address)
           .build();
         addressLinkRepository.save(link);
-        log.info("Address linked to [{}/{}]: {}", linkDTO.getTargetType(), linkDTO.getTargetId(), dto.getId());
       });
-    } else {
-      log.warn("CreatedAddressEvent: Aucun lien fourni pour Address {}", dto.getId());
     }
   }
+
 
 
   public Address createAddressAndLink(AddressDTO dto, String targetType, String targetId) {
