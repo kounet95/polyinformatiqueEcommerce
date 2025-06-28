@@ -32,7 +32,4 @@ public class Stock {
   @JoinColumn(name = "orderecommerceId")
   private Orderecommerce orderecommerceId;
 
-  @ManyToOne
-  @JoinColumn(name = "addressId")
-  private Address store;
 }

@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
@@ -21,9 +22,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AboutComponent } from './about/about.component';
-import { ServicesComponent } from './services/services.component';
-import { PortfolioComponent } from './portfolio/portfolio.component';
+
 import { MatTableModule } from '@angular/material/table';
 import { PrincingComponent } from './princing/princing.component';
 import { TeamComponent } from './team/team.component';
@@ -55,7 +54,7 @@ import { CategoryCreateComponent } from './Ecommerce/category-create/category-cr
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { AnnouncementBarComponent } from './Ecommerce/announcement-bar/announcement-bar.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CreateProductComponent } from './Ecommerce/create-product/create-product.component';
 import { SousCategoryCreateComponent } from './Ecommerce/sous-category-create/sous-category-create.component';
 import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/creat-groupe-social.component';
@@ -70,8 +69,10 @@ import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-sppli
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
+
 import { FaqComponent } from './Ecommerce/faq/faq.component';
 import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
+import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
 
 
 
@@ -129,8 +130,11 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductSizeComponent,
     ProductSizeComponent,
     CheckoutComponent,
+<<<<<<< HEAD
     PrivacyComponent,
 
+=======
+>>>>>>> 19c587ba5a8cb91b37c53420bee62a81f3622418
    
     
   ],
@@ -178,7 +182,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatFormFieldModule,
     MatSortModule,
     MatIconModule,
-    ReactiveFormsModule,
+
     MatSelectModule,
     MatOptionModule,
     MatCardModule,

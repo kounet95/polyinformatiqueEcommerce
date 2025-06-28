@@ -16,7 +16,7 @@ public class CustomerEcommerceMapper {
         agg.setLastName(dto.getLastname());
         agg.setEmail(dto.getEmail());
         agg.setPhone(dto.getPhone());
-        agg.setAddressId(dto.getAddressId());
+
         return agg;
     }
 
@@ -27,7 +27,6 @@ public class CustomerEcommerceMapper {
             aggregate.getLastName(),
             aggregate.getEmail(),
             aggregate.getPhone(),
-            aggregate.getAddressId(),
             LocalDateTime.now()
         );
     }

@@ -1,16 +1,15 @@
 package org.example.polyinformatiquecoreapi.commandEcommerce;
 
+import lombok.Builder;
 import org.example.polyinformatiquecoreapi.commands.BaseCommand;
-import org.example.polyinformatiquecoreapi.dto.CustomerBlogDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CustomerEcommerceDTO;
-
-public class CreateCustomerCommand extends BaseCommand<String> {
+@Builder
+public class CreateCustomerCommand {
 
     private final CustomerEcommerceDTO author;
 
 
-    public CreateCustomerCommand(String id, CustomerEcommerceDTO author) {
-        super(id);
+    public CreateCustomerCommand(CustomerEcommerceDTO author) {
         this.author = author;
     }
 

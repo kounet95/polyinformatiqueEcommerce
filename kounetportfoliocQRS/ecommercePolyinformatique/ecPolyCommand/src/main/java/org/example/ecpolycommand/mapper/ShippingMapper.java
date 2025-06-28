@@ -10,7 +10,6 @@ public class ShippingMapper {
     ShippingAggregate agg = new ShippingAggregate();
     agg.setShippingId(dto.getId());
     agg.setOrderId(dto.getOrderId());
-    agg.setAddress(dto.getShippingAddressId());
     agg.setOrderStatus(dto.getOrderStatus());
     agg.setEstimatedDeliveryDate(dto.getEstimatedDeliveryDate());
     agg.setShippingDate(dto.getShippingDate());
@@ -25,7 +24,6 @@ public class ShippingMapper {
       agg.getEstimatedDeliveryDate(),
       agg.getShippingDate(),
       agg.getCreatedAt(),
-      agg.getAddress(),
       agg.getOrderStatus()
     );
   }

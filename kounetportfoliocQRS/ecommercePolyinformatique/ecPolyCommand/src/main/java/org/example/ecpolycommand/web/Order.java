@@ -109,4 +109,10 @@ public class Order {
   }
 
 
+  @PutMapping("/{orderId}")
+  public CompletableFuture<String> updateOrder(@PathVariable String orderId) {
+    DeliverOrderCommand command = new DeliverOrderCommand(orderId);
+    return commandGateway.send(command);
+  }
+
 }

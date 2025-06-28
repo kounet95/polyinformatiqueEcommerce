@@ -38,7 +38,6 @@ private final AddressRepository addressRepository;
 
     // Convertir le ProductSizeDTO du DTO en ProductSize de l'entité
     ProductSize productSize = productSizeRepository.findById(event.getStockDTO().getProductSizeId()).get();
-    Address address = addressRepository.findById(event.getStockDTO().getAddressId()).get();
     Optional<Supplier> supplierOpt = supplierRepository.findById(dto.getSupplierId());
     if (supplierOpt.isPresent()) {
       Stock stock = Stock.builder()
@@ -46,7 +45,6 @@ private final AddressRepository addressRepository;
         .purchasePrice(dto.getPurchasePrice())
         .designation(dto.getDesignation())
         .promoPrice(dto.getPromoPrice())
-        .store(address)
         .productSize(productSize)
         .supplier(supplierOpt.get())
         .build();

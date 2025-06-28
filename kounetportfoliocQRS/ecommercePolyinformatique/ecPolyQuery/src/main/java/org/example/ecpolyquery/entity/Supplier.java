@@ -18,8 +18,6 @@ public class Supplier {
 
   private String email;
   private String personToContact;
-  @ManyToOne
-  @JoinColumn(name = "addressId")
-  private Address address;
+
 
 }

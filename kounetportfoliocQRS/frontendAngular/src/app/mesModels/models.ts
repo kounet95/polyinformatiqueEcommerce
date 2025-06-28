@@ -108,7 +108,7 @@ export interface AddressDTO {
   state: string;
   zip: string;
   country: string;
-  appartment?: number;
+  appartment?: number | string; 
   customer?: string;
   store?: string;
   supplier?: string;

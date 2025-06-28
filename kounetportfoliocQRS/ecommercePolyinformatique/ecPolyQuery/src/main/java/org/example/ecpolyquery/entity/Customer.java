@@ -15,9 +15,6 @@ public class Customer {
   private String id;
   private String firstname;
   private String lastname;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "address_id")
-  private Address billingAddress;
   private String email;
   private String phone;
 }

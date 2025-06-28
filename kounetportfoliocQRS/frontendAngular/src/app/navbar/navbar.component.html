@@ -72,16 +72,18 @@
               <li><a class="nav-link" routerLink="/get-started"> Salon-Virtuel</a></li>
           </ul>
         </li>
-
-
-        <li mat-button [matMenuTriggerFor]="dropdownMenu" style="display: flex; flex-direction: column; align-items: center;" >
-                <span *ngIf="profile;else login_template">{{profile.username}}</span>
+        
+        
+        <button mat-button [matMenuTriggerFor]="dropdownMenu" class="dropdown-btn">
+          <span *ngIf="profile;else login_template">{{profile.username}}</span>
                 <ng-template #login_template>
                   <button class="btn btn-success" (click)="handleLogin()">Login</button>
                 </ng-template>
-                <mat-icon n >expand_more</mat-icon>
-          </li>
+                              
+                <mat-icon>expand_more</mat-icon>
+        </button>
       </ul>
+
 
 
     <mat-menu #dropdownMenu="matMenu">

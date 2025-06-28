@@ -16,7 +16,7 @@ public class StockMapper {
     agg.setPurchasePrice(dto.getPurchasePrice());
     agg.setPromoPrice(dto.getPromoPrice());
     agg.setQuantity(dto.getQuantity());
-    agg.setAddressId(dto.getAddressId());
+
     return agg;
   }
 
@@ -28,8 +28,8 @@ public class StockMapper {
       agg.getSupplierId(),
       agg.getPurchasePrice(),
       agg.getPromoPrice(),
-      agg.getQuantity(),
-      agg.getAddressId()
+      agg.getQuantity()
+
     );
   }
 }

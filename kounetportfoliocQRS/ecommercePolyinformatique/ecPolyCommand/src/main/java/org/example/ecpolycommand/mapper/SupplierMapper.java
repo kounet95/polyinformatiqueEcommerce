@@ -12,7 +12,6 @@ public class SupplierMapper {
         agg.setSupplierId(dto.getId());
         agg.setFirstName(dto.getFullname());
         agg.setEmail(dto.getEmail());
-        agg.setAddressId(dto.getAddressId());
 
         agg.setPersonToContact(dto.getPersonToContact());
         return agg;
@@ -23,8 +22,7 @@ public class SupplierMapper {
             agg.getSupplierId(),
             agg.getFirstName(),
             agg.getEmail(),
-            agg.getPersonToContact(),
-            agg.getAddressId()
+            agg.getPersonToContact()
         );
     }
 }

@@ -4,14 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AddressDTO {
 
   private String id;
@@ -38,8 +39,6 @@ public class AddressDTO {
 
   @PositiveOrZero(message = "Apartment number must be zero or positive")
   private int appartment;
-  private String customer;
-  private String store;
-  private String supplier;
-  private String shipping;
+
+  private List<AddressLinkDTO> links;
 }

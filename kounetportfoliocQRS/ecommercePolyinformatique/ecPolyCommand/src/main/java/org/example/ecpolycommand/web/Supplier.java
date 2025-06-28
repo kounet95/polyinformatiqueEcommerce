@@ -33,8 +33,7 @@ public class Supplier {
                 supplierId,
                 supplier.getFullname(),
                 supplier.getEmail(),
-                supplier.getPersonToContact(),
-                supplier.getAddressId()
+                supplier.getPersonToContact()
         );
         CreateSupplierCommand command = new CreateSupplierCommand(supplierId, supplierDTO);
         return commandGateway.send(command);

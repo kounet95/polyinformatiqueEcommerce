@@ -43,6 +43,7 @@ public class OrderAggregate {
 
   @CommandHandler
   public OrderAggregate(CreateOrderCommand cmd) {
+    /**       annalyse sur la creation dune commande   **/
     apply(
       new OrderCreatedEvent(
         cmd.getId(), cmd.getOrderDTO()));

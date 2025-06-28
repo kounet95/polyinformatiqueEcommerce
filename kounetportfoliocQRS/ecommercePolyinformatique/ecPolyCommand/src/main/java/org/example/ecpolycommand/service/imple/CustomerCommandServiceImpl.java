@@ -19,7 +19,7 @@ public class CustomerCommandServiceImpl implements CustomerCommandService {
 
     @Override
     public void createCustomer(CustomerEcommerceDTO dto) {
-        commandGateway.sendAndWait(new CreateCustomerCommand(dto.getId(), dto));
+        commandGateway.sendAndWait(new CreateCustomerCommand(dto));
     }
 
     @Override

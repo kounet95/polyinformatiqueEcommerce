@@ -31,6 +31,12 @@ import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-sppli
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 
+import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
+import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
+import { FaqComponent } from './Ecommerce/faq/faq.component';
+import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
+import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
+
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
@@ -70,6 +76,10 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: CartComponent },
+<<<<<<< HEAD
+=======
+  { path: 'creataddress', component: AddressFormComponent },
+>>>>>>> 19c587ba5a8cb91b37c53420bee62a81f3622418
   { path: 'order', component: OrderCreateComponent },
   { path: 'productcreate', component: CreateProductComponent },
   { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },

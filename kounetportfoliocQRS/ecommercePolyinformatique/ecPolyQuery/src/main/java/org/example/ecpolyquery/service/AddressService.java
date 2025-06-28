@@ -1,68 +1,136 @@
 package org.example.ecpolyquery.service;
 
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.example.ecpolyquery.entity.*;
 import org.example.ecpolyquery.repos.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
+
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CreatedAddressEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.DeletedAddressEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.UpdatedAddressEvent;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class AddressService {
 
-  private AddressRepository addressRepository;
-  private SupplierRepository  supplierRepository;
-  private ShippingRepository shippingRepository;
-  private CustomerRepository customerRepository;
-  private StockRepository  stockRepository;
+  private final AddressRepository addressRepository;
+  private final SupplierRepository supplierRepository;
+  private final ShippingRepository shippingRepository;
+  private final CustomerRepository customerRepository;
+  private final StockRepository stockRepository;
+  private final AddressLinkRepository addressLinkRepository;
+
   @EventHandler
   public void on(CreatedAddressEvent event) {
-    log.debug("Handling CreatedAddressEvent: {}", event.getId());
     AddressDTO dto = event.getAddressDTO();
 
-    Customer customer = customerRepository.findById(dto.getCustomer())
-      .orElseThrow(() -> new RuntimeException("Customer not found"));
-    Stock store = stockRepository.findById(dto.getStore())
-      .orElseThrow(() -> new RuntimeException("Store not found"));
-    Supplier supplier = supplierRepository.findById(dto.getSupplier())
-      .orElseThrow(() -> new RuntimeException("Supplier not found"));
-    Shipping shipping = shippingRepository.findById(dto.getShipping())
-      .orElseThrow(() -> new RuntimeException("Shipping not found"));
-
-    if (!addressRepository.existsById(dto.getId())) {
-      Address address = Address.builder()
-        .id(dto.getId())
-        .appartment(dto.getAppartment())
-        .city(dto.getCity())
-        .street(dto.getStreet())
-        .zip(dto.getZip())
-        .country(dto.getCountry())
-        .state(dto.getState())
-        .customer(customer)
-        .store(store)
-        .supplier(supplier)
-        .shipping(shipping)
-        .build();
-      addressRepository.save(address);
-    } else {
-      log.warn("Address with ID {} already exists! Ignoring.", dto.getId());
+    String id = dto.getId();
+    if (id == null || id.isBlank()) {
+      id = UUID.randomUUID().toString();
+      log.warn("Generated new Address ID: {}", id);
     }
+
+    Address address = Address.builder()
+      .id(id)
+      .street(dto.getStreet())
+      .city(dto.getCity())
+      .state(dto.getState())
+      .zip(dto.getZip())
+      .country(dto.getCountry())
+      .appartment(dto.getAppartment())
+      .build();
+
+    addressRepository.save(address);
+
+    if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+      dto.getLinks().forEach(linkDTO -> {
+        AddressLink link = AddressLink.builder()
+          .targetType(linkDTO.getTargetType())
+          .targetId(linkDTO.getTargetId())
+          .address(address)
+          .build();
+        addressLinkRepository.save(link);
+      });
+    }
+  }
+
+
+
+  public Address createAddressAndLink(AddressDTO dto, String targetType, String targetId) {
+    Address address = Address.builder()
+      .id(dto.getId())
+      .appartment(dto.getAppartment())
+      .city(dto.getCity())
+      .street(dto.getStreet())
+      .zip(dto.getZip())
+      .country(dto.getCountry())
+      .state(dto.getState())
+      .build();
+    addressRepository.save(address);
+
+    AddressLink link = AddressLink.builder()
+      .targetType(targetType)
+      .targetId(targetId)
+      .address(address)
+      .build();
+    addressLinkRepository.save(link);
+
+    return address;
+  }
+
+  public List<Address> getAddressesFor(String targetType, String targetId) {
+    return addressLinkRepository.findByTargetTypeAndTargetId(targetType, targetId)
+      .stream()
+      .map(AddressLink::getAddress)
+      .toList();
   }
 
   @EventHandler
   public void on(DeletedAddressEvent event) {
-    log.debug("Handling CategoryDeletedEvent: {}", event.getId());
-
+    log.debug("Handling DeletedAddressEvent: {}", event.getId());
     addressRepository.findById(event.getId())
       .ifPresent(address -> {
         addressRepository.delete(address);
-        log.info("Category deleted with ID: {}", event.getId());
+        log.info("Address deleted with ID: {}", event.getId());
+      });
+  }
+
+  @EventHandler
+  public void on(UpdatedAddressEvent event) {
+    AddressDTO dto = event.getAddressDTO();
+
+    addressRepository.findById(event.getId())
+      .ifPresent(address -> {
+        address.setStreet(dto.getStreet());
+        address.setCity(dto.getCity());
+        address.setState(dto.getState());
+        address.setZip(dto.getZip());
+        address.setCountry(dto.getCountry());
+        address.setAppartment(dto.getAppartment());
+        addressRepository.save(address);
+
+        // 🔄 Re-créer les liens
+        addressLinkRepository.deleteByAddress(address);
+
+        if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+          dto.getLinks().forEach(linkDTO -> {
+            AddressLink newLink = AddressLink.builder()
+              .targetType(linkDTO.getTargetType())
+              .targetId(linkDTO.getTargetId())
+              .address(address)
+              .build();
+            addressLinkRepository.save(newLink);
+          });
+        }
+
+        log.info("Address updated with new links: {}", dto.getId());
       });
   }
 }
