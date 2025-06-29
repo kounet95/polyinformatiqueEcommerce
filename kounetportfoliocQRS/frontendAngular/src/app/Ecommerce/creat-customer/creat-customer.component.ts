@@ -88,15 +88,35 @@ export class CreatCustomerComponent implements OnInit {
     });
   }
 
- submit() {
+submit() {
   if (this.form.valid) {
+    const address = this.form.value.address;
+
     const payload = {
       firstname: this.form.value.firstname,
       lastname: this.form.value.lastname,
       email: this.form.value.email,
       phone: this.form.value.phone,
-      address: this.form.value.address
+
+      //Ici on "déplie" l'objet adresse
+      street: address.street,
+      city: address.city,
+      state: address.state,
+      zip: address.zip,
+      country: address.country,
+      appartment: address.appartment,
+
+      // Optionnel : tu peux passer links si tu veux gérer ça côté front
+      links: [
+        {
+          targetType: 'CUSTOMER',
+          targetId: this.customerId ?? '', // ou autre ID
+          addressId: '' // laissé vide, c'est ton aggregate qui lie tout
+        }
+      ]
     };
+
+    console.log('Payload envoyé :', payload);
 
     this.customerService.createCustomerWithAddress(payload).subscribe({
       next: () => {
@@ -108,6 +128,8 @@ export class CreatCustomerComponent implements OnInit {
     });
   }
 }
+
+
 
   get addressGroup(): FormGroup {
     return this.form.get('address') as FormGroup;

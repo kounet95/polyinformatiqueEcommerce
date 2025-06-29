@@ -53,6 +53,7 @@ public class Customer {
       .zip(input.getZip())
       .country(input.getCountry())
       .appartment(input.getAppartment())
+      .links(input.getLinks())
       .build();
 
     CreateAddressCommand createAddressCmd = new CreateAddressCommand(addressId, addressDTO);
@@ -68,9 +69,9 @@ public class Customer {
     CreateCustomerCommand createCustomerCmd = new CreateCustomerCommand(customerDTO);
 
     LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
-      .targetType("customer")
-      .targetId(customerId)
-      .addressId(addressId)
+      .addressId(addressId)      // clé pour l'aggregate
+      .targetType("CUSTOMER")    // le type cible
+      .targetId(customerId)      // l'entité cible
       .build();
 
     return commandGateway.send(createAddressCmd)

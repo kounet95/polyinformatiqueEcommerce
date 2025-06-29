@@ -22,6 +22,11 @@ export class StockService {
     );
   }
 
+
+  /** Command: Création d'un stock avec son address*/
+  createCustomerWithAddress(payload: any) :Observable<string>{
+  return this.http.post<string>(`${ecpolyCommand.backend}/stock/command/create-with-address`, payload);
+}
   /**
    * Récupère tous les stocks (Query)
    */

@@ -30,7 +30,6 @@ public class StockAggregate {
   private Double purchasePrice;
   private Double promoPrice;
   private double quantity;
-  private String addressId;
 
   public StockAggregate() {}
 
@@ -56,10 +55,5 @@ public class StockAggregate {
     this.quantity -= event.getStockDTO().getQuantity();
   }
 
-  @CommandHandler
-  public void handle(LinkAddressCommand cmd) {
-    // on doit mettre une logique métier eventuelle
-    AggregateLifecycle.apply(new AddressLinkedEvent(cmd.getTargetType(),
-      cmd.getTargetId(), cmd.getAddressId()));
-  }
+
 }

@@ -27,18 +27,14 @@ public class AddressService {
   private final StockRepository stockRepository;
   private final AddressLinkRepository addressLinkRepository;
 
+
+
   @EventHandler
   public void on(CreatedAddressEvent event) {
     AddressDTO dto = event.getAddressDTO();
 
-    String id = dto.getId();
-    if (id == null || id.isBlank()) {
-      id = UUID.randomUUID().toString();
-      log.warn("Generated new Address ID: {}", id);
-    }
-
     Address address = Address.builder()
-      .id(id)
+      .id(dto.getId())
       .street(dto.getStreet())
       .city(dto.getCity())
       .state(dto.getState())
@@ -49,7 +45,7 @@ public class AddressService {
 
     addressRepository.save(address);
 
-    if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+    if (dto.getLinks() != null) {
       dto.getLinks().forEach(linkDTO -> {
         AddressLink link = AddressLink.builder()
           .targetType(linkDTO.getTargetType())
@@ -60,6 +56,7 @@ public class AddressService {
       });
     }
   }
+
 
 
 
