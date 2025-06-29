@@ -8,7 +8,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 @Builder
 public class LinkAddressCommand {
   @TargetAggregateIdentifier
-  private String targetId;
-  private String targetType;
-  private String addressId;
+  private String addressId; // << c'est bien ça la clé de l'aggregate
+  private String targetType; // ex: "CUSTOMER"
+  private String targetId;   // ex: id du client
 }

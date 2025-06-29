@@ -47,8 +47,8 @@ public class CustomerAggregate {
     CustomerEcommerceDTO authorWithId = new CustomerEcommerceDTO(
       id,
       cmd.getAuthor().getFirstname(),
-      cmd.getAuthor().getEmail(),
       cmd.getAuthor().getLastname(),
+      cmd.getAuthor().getEmail(),
       cmd.getAuthor().getPhone(),
       cmd.getAuthor().getCreatedAt()
     );

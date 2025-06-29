@@ -2,11 +2,15 @@ package org.example.ecpolycommand.web;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.example.polyinformatiquecoreapi.commandEcommerce.CreateSupplierCommand;
-import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteSupplierCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.*;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.CreateStockWithAddressDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SupplierDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -38,7 +42,62 @@ public class Supplier {
         CreateSupplierCommand command = new CreateSupplierCommand(supplierId, supplierDTO);
         return commandGateway.send(command);
     }
-     @DeleteMapping("/{supplierId}")
+
+  @PostMapping("/create-with-address")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public CompletableFuture<String> createSupplierWithAddress(
+    @Valid @RequestBody CreateSupplierWithAddressDTO input,
+    JwtAuthenticationToken jwtAuth) {
+
+    // ✅ ID unique pour l’adresse
+    String addressId = UUID.randomUUID().toString();
+
+    // ID unique pour le stock
+    String stockId = UUID.randomUUID().toString();
+
+    //  Crée la commande d’adresse
+    AddressDTO addressDTO = AddressDTO.builder()
+      .id(addressId)
+      .street(input.getStreet())
+      .city(input.getCity())
+      .state(input.getState())
+      .zip(input.getZip())
+      .country(input.getCountry())
+      .appartment(input.getAppartment())
+      .links(input.getLinks())
+      .build();
+
+    CreateAddressCommand createAddressCmd = new CreateAddressCommand(addressId, addressDTO);
+
+    // Crée la commande stock
+    StockDTO stockDTO = StockDTO.builder()
+      .id(stockId)
+      .designation(input.getDesignation())
+      .productSizeId(input.getProductSizeId())
+      .supplierId(input.getSupplierId())
+      .purchasePrice(input.getPurchasePrice())
+      .promoPrice(input.getPromoPrice())
+      .quantity(input.getQuantity())
+      .build();
+
+    AddStockCommand addStockCommand = new AddStockCommand(stockId,stockDTO);
+
+    //  Crée la commande de liaison
+    LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
+      .addressId(addressId)
+      .targetType("STOCK")
+      .targetId(stockId)
+      .build();
+
+    return commandGateway.send(createAddressCmd)
+      .thenCompose(addressResult -> commandGateway.send(addStockCommand))
+      .thenCompose(stockResult -> commandGateway.send(linkAddressCmd))
+      .thenApply(linkResult -> "Stock + Address created & linked successfully");
+  }
+
+
+
+  @DeleteMapping("/{supplierId}")
      public CompletableFuture<String> deleteSupplier(@PathVariable String supplierId) {
     DeleteSupplierCommand command = new DeleteSupplierCommand(supplierId);
     return commandGateway.send(command);

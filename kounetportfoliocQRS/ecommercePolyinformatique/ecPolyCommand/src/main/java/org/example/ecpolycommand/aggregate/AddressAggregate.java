@@ -8,6 +8,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressLinkDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CreatedAddressEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.*;
 
@@ -42,13 +43,17 @@ public class AddressAggregate {
 
   @CommandHandler
   public AddressAggregate(CreateAddressCommand cmd) {
-    log.info("Creation de Address...");
-
-    String id = cmd.getId();
-    if (id == null || id.isBlank()) {
-      id = UUID.randomUUID().toString();
+    this.id = cmd.getId();
+    apply(new CreatedAddressEvent(cmd.getId(), cmd.getAddressDTO()));
+    if (cmd.getAddressDTO().getLinks() != null) {
+      for (AddressLinkDTO link : cmd.getAddressDTO().getLinks()) {
+        apply(new AddressLinkedEvent(
+          link.getTargetType(),
+          link.getTargetId(),
+          cmd.getId()
+        ));
+      }
     }
-    apply(new CreatedAddressEvent(id, cmd.getAddressDTO()));
   }
 
 
