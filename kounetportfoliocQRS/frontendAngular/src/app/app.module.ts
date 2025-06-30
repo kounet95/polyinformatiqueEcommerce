@@ -130,11 +130,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductSizeComponent,
     ProductSizeComponent,
     CheckoutComponent,
-<<<<<<< HEAD
     PrivacyComponent,
 
-=======
->>>>>>> 19c587ba5a8cb91b37c53420bee62a81f3622418
    
     
   ],

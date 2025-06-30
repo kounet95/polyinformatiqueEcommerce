@@ -41,48 +41,40 @@ import { AddressFormComponent } from './Ecommerce/address-form/address-form.comp
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
   { path: 'about', component: AboutComponent },
- {
-  path: 'services', component:ServicesComponent,
-},
-{
-  path: 'team', component: TeamComponent,
-},
-  {
-  path: 'portfolio',component: PortfolioComponent,
-}
-,
-  { path: 'pricing', component: PrincingComponent },
+  { path: 'account', component: AccountComponent },
+  { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },
-  { path: 'newsArticle', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'createDomain', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'createTag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'createNews', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'createEvent', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'cart', component: CartComponent },
+  { path: 'category', component: CategoryComponent },
+  { path: 'create-category', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'contact', loadComponent: () => import('./contact/contact.component').then(m => m.ContactComponent) },
-  { path: 'articles', component: ArticleComponent },
+  { path: 'create-address', component: AddressFormComponent },
+  { path: 'create-domain', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-event', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-news', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-product', component: CreateProductComponent },
+
+  { path: 'create-product-size', component: CreateProductSizeComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-stock', component: CreatStockComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }},
+  { path: 'create-social-groupe', component: CreatGroupeSocialComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-supplier', component: CreateSupplierComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'home', component: HomeComponent },
-   { path: 'product/:id', component: ProductDetailsComponent },
-  { path: 'souscategorie', component: SousCategoryCreateComponent },
-  { path: 'socialgroupe', component: CreatGroupeSocialComponent },
-  { path: 'account', component: AccountComponent },
-  { path: 'ordersummary', component: OrderSummaryComponentComponent },
-  { path: 'track-order', component: TrackOrderComponent },
-  { path: 'category', component: CategoryComponent },
-  { path: 'createsupplier', component: CreateSupplierComponent },
-  { path: 'products', component: ProductComponent },
-  { path: 'product-details', component: ProductDetailsComponent },
-  { path: 'creatproductsize', component: CreateProductSizeComponent },
-  { path: 'cart', component: CartComponent },
-  { path: 'checkout', component: CheckoutComponent },
-  { path: 'cart', component: CartComponent },
-<<<<<<< HEAD
-=======
-  { path: 'creataddress', component: AddressFormComponent },
->>>>>>> 19c587ba5a8cb91b37c53420bee62a81f3622418
+  { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+
   { path: 'order', component: OrderCreateComponent },
-  { path: 'productcreate', component: CreateProductComponent },
-  { path: 'categoryCreate', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'order-summary', component: OrderSummaryComponentComponent },
+
+  { path: 'portfolio',component: PortfolioComponent},
+  { path: 'pricing', component: PrincingComponent },
+  { path: 'products', component: ProductComponent },
+  { path: 'product/:id', component: ProductDetailsComponent },
+  { path: 'services', component:ServicesComponent},
+  { path: 'sous-categorie', component: SousCategoryCreateComponent },
+  {path: 'team', component: TeamComponent},
+  { path: 'track-order', component: TrackOrderComponent },
 
 ];
 
