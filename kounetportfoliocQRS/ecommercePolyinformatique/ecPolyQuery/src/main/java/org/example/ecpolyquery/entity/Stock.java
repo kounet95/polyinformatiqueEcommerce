@@ -1,5 +1,6 @@
 package org.example.ecpolyquery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,17 +16,20 @@ public class Stock {
   @Id
   private String id;
   private double purchasePrice;
-  private String designation;
   private double promoPrice;
+  private double quantity;
   private LocalDateTime createdDate;
   private LocalDateTime closedDate;
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "supply_id")
+  private Supply supply;
   @ManyToOne
   @JoinColumn(name = "product_size_id")
   private ProductSize productSize;
 
   @ManyToOne
   @JoinColumn(name = "supplier_id")
+  @JsonIgnore
   private Supplier supplier;
 
   @ManyToOne

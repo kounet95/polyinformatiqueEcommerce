@@ -1,0 +1,29 @@
+<form [formGroup]="parentForm">
+  <label>Product Size :</label>
+  <select formControlName="productSizeId">
+    <option value="">-- Sélectionner --</option>
+    <option *ngFor="let size of productSizes" [value]="size.id">
+      {{ size.sizeProd }}
+    </option>
+  </select>
+
+  <label>Supplier :</label>
+  <select formControlName="supplierId">
+    <option value="">-- Sélectionner --</option>
+    <option *ngFor="let supplier of suppliers" [value]="supplier.id">
+      {{ supplier.fullname }}
+    </option>
+  </select>
+
+  <label>Prix d'achat :</label>
+  <input type="number" formControlName="purchasePrice" />
+
+  <label>Prix promo :</label>
+  <input type="number" formControlName="promoPrice" />
+
+  <label>Quantité :</label>
+  <input type="number" formControlName="quantity" />
+
+  <h4>Adresse</h4>
+<app-address-form [parentForm]="addressGroup"></app-address-form>
+</form>

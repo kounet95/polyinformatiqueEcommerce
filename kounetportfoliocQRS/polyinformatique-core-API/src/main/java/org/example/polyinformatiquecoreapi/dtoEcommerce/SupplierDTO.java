@@ -2,15 +2,13 @@ package org.example.polyinformatiquecoreapi.dtoEcommerce;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Builder
 public class SupplierDTO {
     private String id;
 

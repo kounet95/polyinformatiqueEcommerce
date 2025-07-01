@@ -38,7 +38,10 @@ public class ProductSizeService {
       .productId(product)
       .price(event.getProductSizeDTO().getPrice())
       .promoPrice(event.getProductSizeDTO().getPricePromo())
-      .urlImage(event.getProductSizeDTO().getImageUrl())
+      .frontImage(event.getProductSizeDTO().getFrontUrl())
+      .backImage(event.getProductSizeDTO().getBackUrl())
+      .leftImage(event.getProductSizeDTO().getLeftUrl())
+      .rightmage(event.getProductSizeDTO().getRightUrl())
       .build();
     productSizeRepository.save(productSize);
     log.info("Product size saved event received: {}", productSize.getId());
@@ -68,7 +71,10 @@ public class ProductSizeService {
       productSize.setSize(productSizeDTO.getSizeProd());
       productSize.setPrice(productSizeDTO.getPrice());
       productSize.setPromoPrice(productSizeDTO.getPricePromo());
-      productSize.setUrlImage(productSizeDTO.getImageUrl());
+      productSize.setFrontImage(productSizeDTO.getFrontUrl());
+      productSize.setBackImage(productSizeDTO.getBackUrl());
+      productSize.setLeftImage(productSizeDTO.getLeftUrl());
+      productSize.setRightmage(productSizeDTO.getRightUrl());
       productSizeRepository.save(productSize);
       log.info("Product size saved event received: {}", productSize.getId());
 

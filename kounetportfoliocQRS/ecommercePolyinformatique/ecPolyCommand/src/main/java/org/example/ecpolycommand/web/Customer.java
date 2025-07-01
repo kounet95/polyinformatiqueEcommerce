@@ -38,13 +38,13 @@ public class Customer {
     @Valid @RequestBody CreateCustomerWithAddressDTO input,
     JwtAuthenticationToken jwtAuth) {
 
-    // ✅ ID unique pour l’adresse
+    // ID unique pour l’adresse
     String addressId = UUID.randomUUID().toString();
 
-    // ✅ L’Id du client vient du JWT
+    // L’Id du client vient du JWT
     String customerId = jwtAuth.getToken().getClaim("sub");
 
-    // ✅ Crée la commande d’adresse (avec constructeur)
+    // Crée la commande d’adresse (avec constructeur)
     AddressDTO addressDTO = AddressDTO.builder()
       .id(addressId)
       .street(input.getStreet())
@@ -69,15 +69,15 @@ public class Customer {
     CreateCustomerCommand createCustomerCmd = new CreateCustomerCommand(customerDTO);
 
     LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
-      .addressId(addressId)      // clé pour l'aggregate
+      .addressId(addressId)      // cle pour l'aggregate
       .targetType("CUSTOMER")    // le type cible
-      .targetId(customerId)      // l'entité cible
+      .targetId(customerId)      // l'entite cible
       .build();
 
     return commandGateway.send(createAddressCmd)
       .thenCompose(addressResult -> commandGateway.send(createCustomerCmd))
       .thenCompose(customerResult -> commandGateway.send(linkAddressCmd))
-      .thenApply(linkResult -> "✅ Customer + Address created & linked successfully");
+      .thenApply(linkResult -> "Customer + Address created & linked successfully");
   }
 
 

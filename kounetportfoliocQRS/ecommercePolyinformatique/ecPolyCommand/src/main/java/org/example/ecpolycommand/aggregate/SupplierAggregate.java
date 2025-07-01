@@ -55,10 +55,5 @@ public class SupplierAggregate {
     this.deleted = true;
   }
 
-  @CommandHandler
-  public void handle(LinkAddressCommand cmd) {
-    // on doit mettre une logique métier eventuelle
-    AggregateLifecycle.apply(new AddressLinkedEvent(cmd.getTargetType(),
-      cmd.getTargetId(), cmd.getAddressId()));
-  }
+
 }

@@ -19,7 +19,8 @@ public class CategoryCommandServiceImpl implements CategoryCommandService {
 
     @Override
     public void createCategory(CategoryDTO dto) {
-        commandGateway.sendAndWait(new CreateCategoryCommand(dto.getId(), dto));
+        commandGateway.sendAndWait(
+          new CreateCategoryCommand(dto.getId(), dto));
     }
 
     @Override

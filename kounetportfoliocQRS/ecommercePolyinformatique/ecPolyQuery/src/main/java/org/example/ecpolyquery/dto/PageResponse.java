@@ -23,6 +23,9 @@ public class PageResponse<T> {
   private boolean first;
   private boolean last;
 
+  public PageResponse(List<SupplierPageResponse> content, int number, int size, long totalElements) {
+  }
+
   /**
    * Creates a PageResponse from a Spring Data Page.
    * @param page the Spring Data Page
@@ -31,13 +34,10 @@ public class PageResponse<T> {
    */
   public static <T> PageResponse<T> from(Page<T> page) {
     return new PageResponse<>(
-      page.getContent(),
+      (List<SupplierPageResponse>) page.getContent(),
       page.getNumber(),
       page.getSize(),
-      page.getTotalElements(),
-      page.getTotalPages(),
-      page.isFirst(),
-      page.isLast()
+      page.getTotalElements()
     );
   }
 }

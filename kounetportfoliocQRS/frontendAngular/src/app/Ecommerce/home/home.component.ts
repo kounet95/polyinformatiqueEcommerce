@@ -8,7 +8,7 @@ import { ProductSizeService } from '../services/product-size.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  standalone:false,
+  standalone: false
 })
 export class HomeComponent implements OnInit {
   featuredProducts: ProductDTO[] = [];
@@ -33,18 +33,19 @@ export class HomeComponent implements OnInit {
     this.loadCategories();
   }
 
-  // Suppose que getAllProducts() retourne un objet paginé avec une propriété 'content'
+  /** ✅ suppose que getAllProducts() retourne un Page<ProductDTO> */
   loadFeaturedProducts() {
-    this.productService.getAllProducts().subscribe({
+    this.productService.getAllProducts(0, 10).subscribe({
       next: page => this.featuredProducts = page.content || [],
-      error: err => this.featuredProducts = []
+      error: () => this.featuredProducts = []
     });
   }
 
+  /** ✅ utilise bien la pagination ProductSize */
   loadFeaturedProductsSize() {
-    this.productSizeService.getAllProductSizes().subscribe({
-      next: prods => this.featuredProductsSize = prods || [],
-      error: err => this.featuredProductsSize = []
+    this.productSizeService.getAllProductSizes(0, 10).subscribe({
+      next: page => this.featuredProductsSize = page.content || [],
+      error: () => this.featuredProductsSize = []
     });
   }
 
@@ -52,21 +53,21 @@ export class HomeComponent implements OnInit {
     const date = new Date();
     this.productSizeService.getNewArrivals(date).subscribe({
       next: prods => this.newArrivals = prods || [],
-      error: err => this.newArrivals = []
+      error: () => this.newArrivals = []
     });
   }
 
   loadSaleProducts() {
     this.productSizeService.getSaleProducts().subscribe({
       next: prods => this.saleProducts = prods || [],
-      error: err => this.saleProducts = []
+      error: () => this.saleProducts = []
     });
   }
 
   loadCategories() {
     this.categoryService.getAllCategories().subscribe({
       next: cats => this.categories = cats || [],
-      error: err => this.categories = []
+      error: () => this.categories = []
     });
   }
 

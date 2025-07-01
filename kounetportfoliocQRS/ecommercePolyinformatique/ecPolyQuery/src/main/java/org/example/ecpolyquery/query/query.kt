@@ -30,6 +30,21 @@ data class GetAllProductsQuery(
   val page: Int = 0,
   val size: Int = 10
 )
+
+data class GetAllProductsSizeQuery(
+  val page: Int = 0,
+  val size: Int = 10
+)
+
+data class GetAllSupplyQuery(
+  val page: Int = 0,
+  val size: Int = 10
+)
+
+data class GetAllSupplieQuery(
+  val page: Int = 0,
+  val size: Int = 10
+)
 data class GetAllProductSizesQuery(
   val page: Int = 0,
   val size: Int = 10,

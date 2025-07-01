@@ -38,7 +38,7 @@ public class AddressDTO {
   private String country;
 
   @PositiveOrZero(message = "Apartment number must be zero or positive")
-  private int appartment;
+  private String appartment;
 
   private List<AddressLinkDTO> links;
 }

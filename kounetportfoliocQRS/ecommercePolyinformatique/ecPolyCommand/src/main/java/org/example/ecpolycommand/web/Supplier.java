@@ -3,10 +3,7 @@ package org.example.ecpolycommand.web;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.CreateStockWithAddressDTO;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
-import org.example.polyinformatiquecoreapi.dtoEcommerce.SupplierDTO;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,11 +46,11 @@ public class Supplier {
     @Valid @RequestBody CreateSupplierWithAddressDTO input,
     JwtAuthenticationToken jwtAuth) {
 
-    // ✅ ID unique pour l’adresse
+    //  ID unique pour l’adresse
     String addressId = UUID.randomUUID().toString();
 
     // ID unique pour le stock
-    String stockId = UUID.randomUUID().toString();
+    String supplierId = UUID.randomUUID().toString();
 
     //  Crée la commande d’adresse
     AddressDTO addressDTO = AddressDTO.builder()
@@ -69,30 +66,27 @@ public class Supplier {
 
     CreateAddressCommand createAddressCmd = new CreateAddressCommand(addressId, addressDTO);
 
-    // Crée la commande stock
-    StockDTO stockDTO = StockDTO.builder()
-      .id(stockId)
-      .designation(input.getDesignation())
-      .productSizeId(input.getProductSizeId())
-      .supplierId(input.getSupplierId())
-      .purchasePrice(input.getPurchasePrice())
-      .promoPrice(input.getPromoPrice())
-      .quantity(input.getQuantity())
+    // Crée la commande supplier
+      SupplierDTO supplierDTO= SupplierDTO.builder()
+        .id(supplierId)
+        .fullname(input.getFullname())
+        .email(input.getEmail())
+        .personToContact(input.getPersonToContact())
       .build();
 
-    AddStockCommand addStockCommand = new AddStockCommand(stockId,stockDTO);
+   CreateSupplierCommand addSupplierCommand = new CreateSupplierCommand(supplierId,supplierDTO);
 
     //  Crée la commande de liaison
     LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
       .addressId(addressId)
-      .targetType("STOCK")
-      .targetId(stockId)
+      .targetType("SUPPLIER")
+      .targetId(supplierId)
       .build();
 
     return commandGateway.send(createAddressCmd)
-      .thenCompose(addressResult -> commandGateway.send(addStockCommand))
-      .thenCompose(stockResult -> commandGateway.send(linkAddressCmd))
-      .thenApply(linkResult -> "Stock + Address created & linked successfully");
+      .thenCompose(addressResult -> commandGateway.send(addSupplierCommand))
+      .thenCompose(supplierResult -> commandGateway.send(linkAddressCmd))
+      .thenApply(linkResult -> "Supplier + Address created & linked successfully");
   }
 
 

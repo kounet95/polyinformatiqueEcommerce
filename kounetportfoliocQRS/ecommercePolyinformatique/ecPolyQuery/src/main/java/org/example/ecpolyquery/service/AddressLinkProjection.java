@@ -44,6 +44,12 @@ public class AddressLinkProjection {
   public void on(CreatedAddressEvent event) {
     AddressDTO dto = event.getAddressDTO();
 
+    // Ensure appartment is not null to avoid database constraint violation
+    String appartment = dto.getAppartment();
+    if (appartment == null) {
+      appartment = ""; // Default to empty string if null
+    }
+
     Address address = Address.builder()
       .id(dto.getId())
       .street(dto.getStreet())
@@ -51,7 +57,7 @@ public class AddressLinkProjection {
       .state(dto.getState())
       .zip(dto.getZip())
       .country(dto.getCountry())
-      .appartment(dto.getAppartment())
+      .appartment(appartment)
       .build();
     addressRepository.save(address);
 

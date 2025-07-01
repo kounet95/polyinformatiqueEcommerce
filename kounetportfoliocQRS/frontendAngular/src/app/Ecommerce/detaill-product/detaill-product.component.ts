@@ -71,6 +71,8 @@ export class ProductDetailsComponent implements OnInit {
   } else {
     alert("vous devez selectionne un produit");
   }
+
+  
 }
 
   selectImage(idx: number) {

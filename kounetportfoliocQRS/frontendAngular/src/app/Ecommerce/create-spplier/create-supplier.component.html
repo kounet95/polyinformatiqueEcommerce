@@ -1,0 +1,30 @@
+<form [formGroup]="supplierForm" (ngSubmit)="submit()">
+
+  <label for="fullname">Nom complet :</label>
+  <input id="fullname" formControlName="fullname" type="text" />
+
+  <label for="email">Email :</label>
+  <input id="email" formControlName="email" type="email" />
+
+  <label for="personToContact">Personne à contacter :</label>
+  <input id="personToContact" formControlName="personToContact" type="text" />
+
+  <label for="productSizeId">Taille de produit :</label>
+  <select id="productSizeId" formControlName="productSizeId">
+    <option value="">-- Sélectionner une taille --</option>
+    <option *ngFor="let ps of productSizes" [value]="ps.id">
+      {{ ps.sizeProd }}
+    </option>
+  </select>
+
+  
+  <app-address-form [formGroup]="addressGroup"></app-address-form>
+
+  <button type="submit" [disabled]="isLoading || supplierForm.invalid">
+    Créer le fournisseur
+  </button>
+
+  <div *ngIf="successMsg" class="success">{{ successMsg }}</div>
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+</form>

@@ -43,7 +43,7 @@ export class CartService {
       this.items.push({
         productId: productSize.prodId.id,
         productName: productSize.prodId.name,
-        productImg: productSize.imageUrl,
+        productImg: productSize.frontUrl,
         qty,
         productSizeId: productSize.id,
         productSize: productSize.sizeProd,

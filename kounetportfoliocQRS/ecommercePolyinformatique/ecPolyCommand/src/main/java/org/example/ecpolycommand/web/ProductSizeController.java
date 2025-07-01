@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
@@ -42,35 +43,35 @@ public class ProductSizeController {
   @PreAuthorize("hasAuthority('ADMIN')")
   public CompletableFuture<String> createProductSize(
     @RequestPart("productSize") @Valid ProductSizeDTO product,
-
-    @RequestPart(value = "media", required = false) MultipartFile mediaFile
+    @RequestPart(value = "media", required = false) List<MultipartFile> mediaFiles
   ) {
     String productId = UUID.randomUUID().toString();
 
-    // Upload l'image si présente
-    if (mediaFile != null && !mediaFile.isEmpty()) {
-      try {
-        String imageUrl = cloudinaryService.uploadImage(mediaFile);
-        product.setImageUrl(imageUrl);
-      } catch (IOException e) {
-        CompletableFuture<String> failed = new CompletableFuture<>();
-        failed.completeExceptionally(
-          new RuntimeException("Erreur lors de l'upload de l'image: " + e.getMessage())
-        );
-        return failed;
+    try {
+      if (mediaFiles != null && !mediaFiles.isEmpty()) {
+        for (int i = 0; i < mediaFiles.size(); i++) {
+          String imageUrl = cloudinaryService.uploadImage(mediaFiles.get(i));
+
+          //on va cherher associer chaque image à un champ spécifique
+          switch (i) {
+            case 0 -> product.setFrontUrl(imageUrl);
+            case 1 -> product.setBackUrl(imageUrl);
+            case 2 -> product.setLeftUrl(imageUrl);
+            case 3 -> product.setRightUrl(imageUrl);
+            default -> {}
+          }
+        }
       }
+    } catch (IOException e) {
+      CompletableFuture<String> failed = new CompletableFuture<>();
+      failed.completeExceptionally(
+        new RuntimeException("Erreur lors de l'upload de l'image: " + e.getMessage())
+      );
+      return failed;
     }
 
-    ProductSizeDTO productDTO = new ProductSizeDTO(
-      productId,
-      product.getSizeProd(),
-      product.getProdId(),
-      product.getPrice(),
-      product.getPricePromo(),
-      product.getImageUrl()
-    );
-
-    CreateProductSizeCommand command = new CreateProductSizeCommand(productId, productDTO);
+    product.setId(productId);
+    CreateProductSizeCommand command = new CreateProductSizeCommand(productId, product);
     return commandGateway.send(command);
   }
 

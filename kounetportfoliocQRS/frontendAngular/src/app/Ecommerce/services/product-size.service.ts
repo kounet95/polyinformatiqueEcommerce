@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProductSizeDTO } from '../../mesModels/models';
+import { Page, ProductSizeDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
+import { PageResponse } from '../../mesModels/page-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class ProductSizeService {
   constructor(private http: HttpClient) {}
 
   /** Liste paginée avec filtres dynamiques */
+  /** Liste paginée */
   getAllProductSizes(
     page: number = 0,
     size: number = 10,
@@ -19,7 +21,7 @@ export class ProductSizeService {
     selectedPrice: number = 0,
     selectedPricePromo: number = 0,
     sortOption?: string
-  ): Observable<ProductSizeDTO[]> {
+  ): Observable<Page<ProductSizeDTO>> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
@@ -29,8 +31,17 @@ export class ProductSizeService {
     if (productSize) params = params.set('productSize', productSize);
     if (sortOption) params = params.set('sortOption', sortOption);
 
-    return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes`, { params });
+    return this.http.get<Page<ProductSizeDTO>>(`${ecpolyQuery.backend}/api/productsizes`, { params });
   }
+
+   /** Récupération paginée */
+    getAllProductsise(page: number = 0, size: number = 10):
+     Observable<PageResponse<ProductSizeDTO>> {
+      const params = new HttpParams().set('page', page).set('size', size);
+
+      return this.http.get<PageResponse<ProductSizeDTO>>
+      (`${ecpolyQuery.backend}/api/productsizes/all`, { params });
+    }
 
   /** Recherche avancée sur ProductSize */
   searchProductSizes(
@@ -66,12 +77,20 @@ export class ProductSizeService {
   }
 
   /** Création */
-  createProductSize(productSize: ProductSizeDTO, mediaFile?: File): Observable<string> {
-    const formData = new FormData();
-    formData.append('productSize', new Blob([JSON.stringify(productSize)], { type: 'application/json' }));
-    if (mediaFile) formData.append('media', mediaFile, mediaFile.name);
-    return this.http.post<string>(`${ecpolyCommand.backend}/productsize/command/create`, formData);
+ createProductSize(productSize: ProductSizeDTO, imageFiles: { [key: string]: File | null }): Observable<string> {
+  const formData = new FormData();
+  formData.append('productSize', new Blob([JSON.stringify(productSize)], { type: 'application/json' }));
+
+  for (const key of Object.keys(imageFiles)) {
+    const file = imageFiles[key];
+    if (file) {
+      formData.append('media', file, file.name);
+    }
   }
+
+  return this.http.post<string>(`${ecpolyCommand.backend}/productsize/command/create`, formData);
+}
+
 
   /** Suppression */
   deleteProductSize(id: string): Observable<string> {

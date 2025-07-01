@@ -3,13 +3,13 @@ import { Component, Input } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-address-form',
+  selector: 'app-address-form', 
   templateUrl: './address-form.component.html',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class AddressFormComponent {
-  @Input() group!: FormGroup;
+ @Input() parentForm!: FormGroup;
 
   static buildAddressForm(fb: FormBuilder) {
     return fb.group({

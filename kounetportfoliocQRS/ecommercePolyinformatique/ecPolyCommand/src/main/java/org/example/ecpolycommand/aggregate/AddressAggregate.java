@@ -30,13 +30,14 @@ public class AddressAggregate {
   private String state;
   private String zip;
   private String country;
-  private int appartment;
+  private String appartment;
 
   // Liens des d'autres entités
   private String customer;
   private String store;
   private String supplier;
   private String shipping;
+  private String stock;
 
   public AddressAggregate() {
   }
@@ -117,6 +118,7 @@ public class AddressAggregate {
       case "store" -> this.store = event.getTargetId();
       case "supplier" -> this.supplier = event.getTargetId();
       case "shipping" -> this.shipping = event.getTargetId();
+      case "stock" -> this.stock = event.getTargetId();
       default -> throw new IllegalArgumentException("Unknown target type: " + event.getTargetType());
     }
     log.info("Address {} linked to {} {}", this.id, event.getTargetType(), event.getTargetId());
