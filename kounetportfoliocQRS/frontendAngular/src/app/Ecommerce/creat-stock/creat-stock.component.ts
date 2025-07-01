@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StockDTO, ProductSizeDTO, SupplierDTO } from '../../mesModels/models';
 import { StockService } from '../services/stock.service';
@@ -20,10 +20,18 @@ import { CommonModule } from '@angular/common';
 })
 export class CreatStockComponent implements OnInit {
 
-  stockForm: FormGroup;
+  @Input() parentForm!: FormGroup;
   productSizes: ProductSizeDTO[] = [];
   suppliers: SupplierDTO[] = [];
+  error: string | null = null;
 
+  isLoading = false;
+  successMsg = '';
+  errorMsg = '';
+
+  page: number = 0;
+  size: number = 10;
+  totalElements: number = 0;
   loading = false;
   successMessage?: string;
   errorMessage?: string;
@@ -34,7 +42,7 @@ export class CreatStockComponent implements OnInit {
     private productSizeService: ProductSizeService,
     private supplierService: SupplierService
   ) {
-    this.stockForm = this.fb.group({
+    this.parentForm = this.fb.group({
       designation: ['', Validators.required],
       productSizeId: ['', Validators.required],
       supplierId: ['', Validators.required],
@@ -51,16 +59,43 @@ export class CreatStockComponent implements OnInit {
   }
 
   loadProductSizes(): void {
-    this.productSizeService.getAllProductSizes().subscribe({
-      next: sizes => this.productSizes = sizes,
-      error: () => this.errorMessage = 'Impossible de charger les tailles de produit.'
+    this.loading = true;
+    this.productSizeService.getAllProductsise(this.page, this.size).subscribe({
+      next: (result: any) => {
+        if (Array.isArray(result)) {
+          this.productSizes = result;
+          this.totalElements = result.length;
+        } else {
+          this.productSizes = result.content ?? [];
+          this.totalElements = result.totalElements ?? 0;
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Erreur lors du chargement des tailles de produit.';
+        this.loading = false;
+      }
     });
   }
 
   loadSuppliers(): void {
-    this.supplierService.getAllSuppliers().subscribe({
-      next: suppliers => this.suppliers = suppliers.content,
-      error: () => this.errorMessage = 'Impossible de charger les fournisseurs.'
+    this.loading = true;
+    this.supplierService.getAllSuppliers(this.page, this.size).subscribe({
+      next:  (result: any) => {
+        if (Array.isArray(result)) {
+          this.suppliers =  result;
+          this.totalElements = result.length;
+        } else {
+            this.suppliers = result.content ?? [];
+          this.totalElements = result.totalElements ?? 0;
+           }
+      
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Erreur lors du chargement des tailles de produit.';
+        this.loading = false;
+      }
     });
   }
 
@@ -68,15 +103,15 @@ export class CreatStockComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-    if (this.stockForm.invalid) {
+    if (this.parentForm.invalid) {
       this.errorMessage = 'Formulaire invalide.';
       return;
     }
 
-    const raw = this.stockForm.value;
+    const raw = this.parentForm.value;
 
     const payload = {
-      designation: raw.designation,
+      
       productSizeId: raw.productSizeId,
       supplierId: raw.supplierId,
       purchasePrice: raw.purchasePrice,
@@ -94,7 +129,7 @@ export class CreatStockComponent implements OnInit {
     this.stockService.createCustomerWithAddress(payload).subscribe({
       next: () => {
         this.successMessage = 'Stock et adresse créés avec succès !';
-        this.stockForm.reset();
+        this.parentForm.reset();
       },
       error: () => {
         this.errorMessage = ' Une erreur est survenue.';
@@ -103,7 +138,7 @@ export class CreatStockComponent implements OnInit {
   }
 
   get addressGroup(): FormGroup {
-    return this.stockForm.get('address') as FormGroup;
+    return this.parentForm.get('address') as FormGroup;
   }
 
 }

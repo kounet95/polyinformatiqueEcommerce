@@ -220,7 +220,17 @@ export interface ProductSizeDTO {
   prodId: ProductDTO;
   price: number;
   pricePromo: number;
-  imageUrl: string;
+  frontUrl: string;
+    backUrl: string;
+    leftUrl: string;
+    rightUrl:string;
+}
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number; // numéro de la page actuelle
+  size: number;   // taille de la page
 }
 
 // ===============================
@@ -262,13 +272,13 @@ export interface SocialGroupDTO {
 // ===============================
 export interface StockDTO {
   id: string;
-  designation: string;
   productSizeId: string;
   supplierId: string;
   purchasePrice: number;
   promoPrice: number;
   quantity: number;
   addressId: string;
+  supply:string;
 }
 
 // ===============================
@@ -300,4 +310,30 @@ export interface CartItem {
   productSize: string;     
   productSizePrice: number; 
   pricePromo?: number;     
+}
+
+interface CreateSupplierPayload {
+  fullname: string;
+  email: string;
+  personToContact: string;
+  productSizeId: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  appartment?: string;
+  links: string[];
+}
+export interface SupplierPageResponse<T> {
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+}
+
+export interface SupplyDTO{
+   id: string;
+  name: string;
+  stockIds: string[];
 }

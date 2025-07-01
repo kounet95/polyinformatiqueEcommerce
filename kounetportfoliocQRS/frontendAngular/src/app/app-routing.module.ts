@@ -35,11 +35,14 @@ import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.compone
 import { FaqComponent } from './Ecommerce/faq/faq.component';
 import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
+import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
+import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
   { path: 'about', component: AboutComponent },
+  { path: 'creatsupply', component: CreatSupplyComponent },
   { path: 'services', component:ServicesComponent,},
   { path: 'team', component: TeamComponent,},
   { path: 'portfolio',component: PortfolioComponent,},
@@ -72,6 +75,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'cart', component: CartComponent },
   { path: 'creataddress', component: AddressFormComponent },
+  { path: 'productsize', component: ProductSizeComponent },
   { path: 'order', component: OrderCreateComponent },
   { path: 'creatcustomer', component: CreatCustomerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'productcreate', component: CreateProductComponent },

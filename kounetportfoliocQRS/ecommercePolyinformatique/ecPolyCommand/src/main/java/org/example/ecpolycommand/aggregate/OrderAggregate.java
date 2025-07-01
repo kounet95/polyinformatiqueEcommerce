@@ -58,6 +58,7 @@ public class OrderAggregate {
 
   @CommandHandler
   public void handle(ConfirmOrderCommand cmd) {
+
     apply(new OrderConfirmedEvent(cmd.getId()));
   }
 

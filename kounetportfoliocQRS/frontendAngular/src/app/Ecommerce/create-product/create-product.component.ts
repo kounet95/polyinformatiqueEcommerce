@@ -14,12 +14,15 @@ import { ProductSizeService } from '../services/product-size.service';
   standalone: false,
 })
 export class CreateProductComponent implements OnInit {
-  productForm: FormGroup;
+  productForm!: FormGroup;
+  addressGroup!: FormGroup;
+
   categories: CategoryDTO[] = [];
   sousCategories: SubcategoryDTO[] = [];
   categoriesSociales: SocialGroupDTO[] = [];
   selectedFile: File | null = null;
   productSizes: ProductSizeDTO[] = [];
+
   loading = false;
   successMessage?: string;
   errorMessage?: string;
@@ -31,20 +34,27 @@ export class CreateProductComponent implements OnInit {
     private categoriesocialesService: CategoriesocialesService,
     private productService: ProductService,
     private productSizeService: ProductSizeService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.addressGroup = this.fb.group({
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      zipCode: ['', Validators.required],
+      country: ['', Validators.required]
+    });
+
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required]],
       categoryId: ['', Validators.required],
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
-      productSizes: [[]], 
+      productSizeId: ['', Validators.required],
+      address: this.addressGroup,
       isActive: [true]
-      
     });
-  }
 
-  ngOnInit(): void {
     this.loadCategories();
 
     this.categoriesocialesService.getAllSocialGroups().subscribe({
@@ -68,8 +78,8 @@ export class CreateProductComponent implements OnInit {
     });
 
     this.productSizeService.getAllProductSizes().subscribe({
-      next: sizes => this.productSizes = sizes,
-      error: () => { /* une erreur c'est produite */ }
+      next: page => this.productSizes = page.content || [],
+      error: () => { this.productSizes = []; }
     });
   }
 
@@ -82,20 +92,18 @@ export class CreateProductComponent implements OnInit {
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    } else {
-      this.selectedFile = null;
-    }
+    this.selectedFile = input.files?.[0] ?? null;
   }
 
   onSubmit() {
     this.successMessage = undefined;
     this.errorMessage = undefined;
+
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       return;
     }
+
     const raw = this.productForm.value;
     const product: ProductDTO = {
       id: '',
@@ -104,9 +112,10 @@ export class CreateProductComponent implements OnInit {
       createdAt: new Date().toISOString(),
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
-      models: 'k', 
+      models: 'k',
       isActive: !!raw.isActive
     };
+
     this.loading = true;
     this.productService.createProduct(product, this.selectedFile ?? undefined).subscribe({
       next: () => {
@@ -118,7 +127,13 @@ export class CreateProductComponent implements OnInit {
           categoryId: '',
           subcategoryId: '',
           socialGroupId: '',
-          productSizes: [],
+          productSizeId: '',
+          address: {
+            street: '',
+            city: '',
+            zipCode: '',
+            country: ''
+          },
           isActive: true
         });
         this.selectedFile = null;

@@ -1,0 +1,22 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <label>Nom du Supply :</label>
+  <input type="text" formControlName="name" />
+
+  <div formArrayName="stocks">
+    <div *ngFor="let stockGroup of stocks.controls; let i = index" [formGroupName]="i">
+      <app-stock-form [parentForm]="stockGroup"></app-stock-form>
+      <button type="button" (click)="removeStock(i)" *ngIf="stocks.length > 1">
+        Supprimer ce stock
+      </button>
+    </div>
+  </div>
+
+  <button type="button" (click)="addStock()">Ajouter un Stock</button>
+
+  <button type="submit">Créer Supply + Stocks</button>
+
+  <div *ngIf="errorMsg" style="color:red;">{{ errorMsg }}</div>
+  <div *ngIf="successMsg" style="color:green;">{{ successMsg }}</div>
+
+</form>

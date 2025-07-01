@@ -19,7 +19,7 @@ type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: strin
 })
 export class CategoryComponent implements OnInit {
   categories: CategoryWithChildren[] = [];
-  // Si tu veux afficher des produits, conserve products, sinon mets uniquement productSizes
+  //pour afficher des produits, conserve products, sinon mets uniquement productSizes
   products: ProductDTO[] = [];
   displayedColumns = ["id", "sizeProd", "price", "pricePromo"];
   loading: boolean = true;
@@ -94,11 +94,11 @@ export class CategoryComponent implements OnInit {
     this.loading = true;
     this.productSizeService.searchProductSizes(
       this.filters.searchKeyword,
-      undefined, // minPromo pour lintant
-      undefined, // maxPromo pour linstant 
+      undefined,
+      undefined, 
       this.filters.selectedProductSize?? undefined,
-      undefined, // sale
-      undefined, // newSince
+      undefined, 
+      undefined, 
       this.filters.selectedSouscategorie.length > 0 ? this.filters.selectedSouscategorie[0] : undefined,
       this.filters.selectedSocialGroup?? undefined,
     ).subscribe({
@@ -116,7 +116,7 @@ export class CategoryComponent implements OnInit {
 
   onCategorySelect(categoryId: string): void {
     this.filters.selectedCategoryId = categoryId;
-    // la logique pour relier categoryId à une sous-catégorie, adapte ici :
+    
      this.filters.selectedSouscategorie = this.categories.find(c => c.id === categoryId)?.children?.map(child => child.id) || [];
     this.applyFilters();
   }

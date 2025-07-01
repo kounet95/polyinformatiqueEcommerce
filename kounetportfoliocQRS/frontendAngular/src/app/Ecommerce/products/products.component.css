@@ -1,0 +1,43 @@
+.announcement-bar {
+  background: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.mobile-search-bar {
+  margin: 10px 0;
+}
+
+.toggle-search-btn {
+  margin-bottom: 10px;
+}
+
+.spinner {
+  text-align: center;
+  font-style: italic;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}

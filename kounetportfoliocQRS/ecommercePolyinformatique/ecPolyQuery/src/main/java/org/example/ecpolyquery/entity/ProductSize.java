@@ -20,7 +20,10 @@ public class ProductSize {
   private SizeProd size;
   private Double price;
   private Double promoPrice;
-  private String urlImage;
+  private String rightmage;
+  private String frontImage;
+  private String backImage;
+  private String leftImage;
   @ManyToOne
   @JoinColumn(name = "product_id")
   private Product productId;

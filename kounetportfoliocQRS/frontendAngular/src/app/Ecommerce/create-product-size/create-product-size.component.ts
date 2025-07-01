@@ -8,7 +8,7 @@ import { ProductService } from '../services/produit.service';
   selector: 'app-create-product-size',
   standalone: false,
   templateUrl: './create-product-size.component.html',
-  styleUrl: './create-product-size.component.css'
+  styleUrls: ['./create-product-size.component.css']
 })
 export class CreateProductSizeComponent implements OnInit {
   productSizeForm: FormGroup;
@@ -17,19 +17,25 @@ export class CreateProductSizeComponent implements OnInit {
   loading = false;
   successMessage?: string;
   errorMessage?: string;
-  selectedFile: File | null = null;
+
+  /**les fichiers images par côté */
+  imageFiles: { [key: string]: File | null } = {
+    front: null,
+    back: null,
+    left: null,
+    right: null
+  };
 
   constructor(
-    private productSizeService: ProductSizeService, 
-    private fb: FormBuilder, 
+    private productSizeService: ProductSizeService,
+    private fb: FormBuilder,
     private productService: ProductService
   ) {
     this.productSizeForm = this.fb.group({
       sizeProd: ['', [Validators.required]],
-      prodId: ['', [Validators.required]], // prodId = id du produit
+      prodId: ['', [Validators.required]],
       price: ['', [Validators.required]],
-      pricePromo: ['', [Validators.required]],
-      imageUrl: ['']
+      pricePromo: ['', [Validators.required]]
     });
   }
 
@@ -46,47 +52,56 @@ export class CreateProductSizeComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: Event) {
+  /** Gestion pour les images */
+  onFileSelected(event: Event, side: 'front' | 'back' | 'left' | 'right') {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      this.imageFiles[side] = input.files[0];
     } else {
-      this.selectedFile = null;
+      this.imageFiles[side] = null;
     }
   }
 
+  
   onSubmit() {
     this.successMessage = undefined;
     this.errorMessage = undefined;
+
     if (this.productSizeForm.invalid) {
       this.productSizeForm.markAllAsTouched();
       return;
     }
+
     const raw = this.productSizeForm.value;
+
     const productSize: ProductSizeDTO = {
       id: '',
       sizeProd: raw.sizeProd,
-      prodId: raw.prodId, 
+      prodId: raw.prodId,
       price: raw.price,
-      imageUrl: 'k', 
-      pricePromo: raw.pricePromo 
+      pricePromo: raw.pricePromo,
+      frontUrl: '',
+      backUrl: '',
+      leftUrl: '',
+      rightUrl: ''
     };
+
     this.loading = true;
-    this.productSizeService.createProductSize(productSize, this.selectedFile ?? undefined).subscribe({
+
+    this.productSizeService.createProductSize(productSize, this.imageFiles).subscribe({
       next: () => {
-        this.successMessage = 'ProduitSize créé avec succès !';
+        this.successMessage = 'Taille de produit créée avec succès !';
         this.loading = false;
         this.productSizeForm.reset({
           sizeProd: '',
           prodId: '',
           price: '',
-          pricePromo: '',
-          imageUrl: ''
+          pricePromo: ''
         });
-        this.selectedFile = null;
+        this.imageFiles = { front: null, back: null, left: null, right: null };
       },
       error: () => {
-        this.errorMessage = 'Erreur lors de la création du produitSize.';
+        this.errorMessage = 'Erreur lors de la création de la taille du produit.';
         this.loading = false;
       }
     });

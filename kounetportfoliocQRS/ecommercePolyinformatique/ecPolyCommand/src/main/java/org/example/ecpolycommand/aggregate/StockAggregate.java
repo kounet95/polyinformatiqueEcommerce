@@ -24,13 +24,12 @@ public class StockAggregate {
 
   @AggregateIdentifier
   private String id;
-  private String designation;
   private String productSizeId;
   private String supplierId;
   private Double purchasePrice;
   private Double promoPrice;
   private double quantity;
-
+private String supplyId;
   public StockAggregate() {}
 
   @CommandHandler
@@ -41,12 +40,12 @@ public class StockAggregate {
   @EventSourcingHandler
   public void on(StockIncreasedEvent event) {
     this.id = event.getId();
-    this.designation = event.getStockDTO().getDesignation();
     this.productSizeId = event.getStockDTO().getProductSizeId();
     this.supplierId = event.getStockDTO().getSupplierId();
     this.purchasePrice = event.getStockDTO().getPurchasePrice();
     this.promoPrice = event.getStockDTO().getPromoPrice();
     this.quantity += event.getStockDTO().getQuantity();
+    this.supplyId = event.getStockDTO().getSupplyId();
 
   }
 

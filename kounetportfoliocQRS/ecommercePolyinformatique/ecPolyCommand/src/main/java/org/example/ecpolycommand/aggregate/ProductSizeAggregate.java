@@ -27,7 +27,10 @@ public class ProductSizeAggregate {
   @AggregateIdentifier
   private String id;
   private String prodId;
-  private String imageUrl;
+  private String frontUrl;
+  private String backUrl;
+  private String leftUrl;
+  private String rightUrl;
   private Double price;
   private Double pricePromo;
   private String sizeProd;
@@ -46,7 +49,10 @@ public class ProductSizeAggregate {
     ProductSizeDTO dto = event.getProductSizeDTO();
     this.id = event.getId();
     this.prodId = dto.getProdId();
-    this.imageUrl = dto.getImageUrl();
+    this.frontUrl = dto.getFrontUrl();
+    this.backUrl = dto.getBackUrl();
+    this.leftUrl = dto.getLeftUrl();
+    this.rightUrl = dto.getRightUrl();
     this.price = dto.getPrice();
     this.pricePromo = dto.getPricePromo();
     this.sizeProd = dto.getSizeProd() != null ? dto.getSizeProd().name() : null;

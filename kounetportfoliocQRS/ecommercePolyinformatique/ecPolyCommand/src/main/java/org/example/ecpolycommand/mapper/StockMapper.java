@@ -10,12 +10,13 @@ public class StockMapper {
   public StockAggregate toAggregate(StockDTO dto) {
     StockAggregate agg = new StockAggregate();
     agg.setId(dto.getId());
-    agg.setDesignation(dto.getDesignation());
+
     agg.setProductSizeId(dto.getProductSizeId());
     agg.setSupplierId(dto.getSupplierId());
     agg.setPurchasePrice(dto.getPurchasePrice());
     agg.setPromoPrice(dto.getPromoPrice());
     agg.setQuantity(dto.getQuantity());
+    agg.setSupplierId(dto.getSupplierId());
 
     return agg;
   }
@@ -23,12 +24,12 @@ public class StockMapper {
   public StockDTO toDTO(StockAggregate agg) {
     return new StockDTO(
       agg.getId(),
-      agg.getDesignation(),
       agg.getProductSizeId(),
       agg.getSupplierId(),
       agg.getPurchasePrice(),
       agg.getPromoPrice(),
-      agg.getQuantity()
+      agg.getQuantity(),
+      agg.getSupplierId()
 
     );
   }

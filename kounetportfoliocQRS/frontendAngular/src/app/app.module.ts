@@ -65,11 +65,12 @@ import { OrderComponent } from './Ecommerce/order/order.component';
 import { OrderStatusComponent } from './Ecommerce/order-status/order-status.component';
 import { CartComponent } from './Ecommerce/cart/cart.component';
 import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
-import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
+import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
+import { StockFormComponent } from './Ecommerce/stock-form/stock-form.component';
 
 
 
@@ -120,10 +121,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     OrderSummaryComponentComponent,
     OrderLineComponent,
     OrderComponent,
+    OrderCreateComponent,
     OrderStatusComponent,
     CartComponent,
-    OrderCreateComponent,
-    CreateSupplierComponent,
     CreateProductSizeComponent,
     ProductSizeComponent,
     CheckoutComponent,

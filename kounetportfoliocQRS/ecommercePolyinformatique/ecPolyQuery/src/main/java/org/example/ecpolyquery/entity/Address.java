@@ -20,7 +20,7 @@ public class Address {
   private String state;
   private String zip;
   private String country;
-  private int appartment;
+  private String appartment;
   @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<AddressLink> links;
 }

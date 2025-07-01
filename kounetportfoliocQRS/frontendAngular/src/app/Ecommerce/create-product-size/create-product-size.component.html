@@ -1,14 +1,14 @@
 <div class="page-title light-background">
-      <div class="container">
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a routerLink="/dashboard">Dashboard</a></li>
-        
-            <li class="current">Creer une taille de produits</li>
-          </ol>
-        </nav>
-      </div>
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li class="current">Créer une taille de produit</li>
+      </ol>
+    </nav>
+  </div>
 </div>
+
 <section class="register section py-5">
   <div class="container">
     <div class="row justify-content-center">
@@ -16,8 +16,9 @@
         <div class="registration-form-wrapper p-4 shadow rounded bg-white">
           <div class="section-header mb-4 text-center">
             <h2>Ajouter une taille à un produit</h2>
-            <p>Associez une taille, un prix et une image à un produit</p>
+            <p>Associez une taille, un prix et des images à un produit</p>
           </div>
+
           <form [formGroup]="productSizeForm" (ngSubmit)="onSubmit()" novalidate>
             <div class="row">
               <!-- Produit -->
@@ -31,6 +32,7 @@
                   Produit requis.
                 </div>
               </div>
+
               <!-- Taille -->
               <div class="col-md-6 mb-3">
                 <label for="sizeProd" class="form-label">Taille</label>
@@ -43,6 +45,7 @@
                 </div>
               </div>
             </div>
+
             <!-- Prix -->
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -52,6 +55,7 @@
                   Prix requis.
                 </div>
               </div>
+
               <div class="col-md-6 mb-3">
                 <label for="pricePromo" class="form-label">Prix promo (€)</label>
                 <input type="number" id="pricePromo" class="form-control" formControlName="pricePromo" placeholder="Ex: 20">
@@ -60,23 +64,45 @@
                 </div>
               </div>
             </div>
-            <!-- Image -->
-            <div class="mb-4">
-              <label for="imageUrl" class="form-label">Image</label>
-              <input type="file" class="form-control" id="imageUrl" (change)="onFileSelected($event)">
-              <!-- L'imageUrl sera remplie backend après upload -->
+
+            <!-- Images -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="front" class="form-label">Image Avant</label>
+                <input type="file" id="front" class="form-control" (change)="onFileSelected($event, 'front')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="back" class="form-label">Image Arrière</label>
+                <input type="file" id="back" class="form-control" (change)="onFileSelected($event, 'back')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="left" class="form-label">Image Gauche</label>
+                <input type="file" id="left" class="form-control" (change)="onFileSelected($event, 'left')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="right" class="form-label">Image Droite</label>
+                <input type="file" id="right" class="form-control" (change)="onFileSelected($event, 'right')">
+              </div>
             </div>
+
+            <!-- Bouton -->
             <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary" [disabled]="loading">
                 {{ loading ? 'Création en cours...' : 'Ajouter la taille' }}
               </button>
             </div>
+
+            <!-- Messages -->
             <div *ngIf="successMessage" class="alert alert-success text-center">
               {{ successMessage }}
             </div>
             <div *ngIf="errorMessage" class="alert alert-danger text-center">
               {{ errorMessage }}
             </div>
+
           </form>
         </div>
       </div>

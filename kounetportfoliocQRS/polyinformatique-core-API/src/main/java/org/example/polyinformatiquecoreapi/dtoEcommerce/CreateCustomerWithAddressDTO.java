@@ -25,7 +25,7 @@ public class CreateCustomerWithAddressDTO {
   private String state;
   private String zip;
   private String country;
-  private int appartment;
+  private String appartment;
    private List<AddressLinkDTO> links;
 }
 

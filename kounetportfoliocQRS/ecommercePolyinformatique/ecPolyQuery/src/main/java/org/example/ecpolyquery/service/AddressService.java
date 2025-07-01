@@ -8,6 +8,7 @@ import org.example.ecpolyquery.repos.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressDTO;
 
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CreatedAddressEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.AddressLinkedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.DeletedAddressEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.UpdatedAddressEvent;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,12 @@ public class AddressService {
   public void on(CreatedAddressEvent event) {
     AddressDTO dto = event.getAddressDTO();
 
+    // Ensure appartment is not null to avoid database constraint violation
+    String appartment = dto.getAppartment();
+    if (appartment == null) {
+      appartment = ""; // Default to empty string if null
+    }
+
     Address address = Address.builder()
       .id(dto.getId())
       .street(dto.getStreet())
@@ -40,7 +47,7 @@ public class AddressService {
       .state(dto.getState())
       .zip(dto.getZip())
       .country(dto.getCountry())
-      .appartment(dto.getAppartment())
+      .appartment(appartment)
       .build();
 
     addressRepository.save(address);
@@ -57,13 +64,33 @@ public class AddressService {
     }
   }
 
+  @EventHandler
+  public void on(AddressLinkedEvent event) {
+    addressRepository.findById(event.getAddressId()).ifPresentOrElse(address -> {
+      AddressLink link = AddressLink.builder()
+        .targetType(event.getTargetType())
+        .targetId(event.getTargetId())
+        .address(address)
+        .build();
 
-
+      addressLinkRepository.save(link);
+      log.info("✅ Address link saved: {} -> {} {}", address.getId(), event.getTargetType(), event.getTargetId());
+    }, () -> {
+      log.warn("⚠️ Address not found yet: {} -> {} {}", event.getAddressId(), event.getTargetType(), event.getTargetId());
+      throw new IllegalStateException("Address not found yet: " + event.getAddressId());
+    });
+  }
 
   public Address createAddressAndLink(AddressDTO dto, String targetType, String targetId) {
+    // Ensure appartment is not null to avoid database constraint violation
+    String appartment = dto.getAppartment();
+    if (appartment == null) {
+      appartment = ""; // Default to empty string if null
+    }
+
     Address address = Address.builder()
       .id(dto.getId())
-      .appartment(dto.getAppartment())
+      .appartment(appartment)
       .city(dto.getCity())
       .street(dto.getStreet())
       .zip(dto.getZip())
@@ -110,7 +137,13 @@ public class AddressService {
         address.setState(dto.getState());
         address.setZip(dto.getZip());
         address.setCountry(dto.getCountry());
-        address.setAppartment(dto.getAppartment());
+
+        // Ensure appartment is not null to avoid database constraint violation
+        String appartment = dto.getAppartment();
+        if (appartment == null) {
+          appartment = ""; // Default to empty string if null
+        }
+        address.setAppartment(appartment);
         addressRepository.save(address);
 
         // 🔄 Re-créer les liens

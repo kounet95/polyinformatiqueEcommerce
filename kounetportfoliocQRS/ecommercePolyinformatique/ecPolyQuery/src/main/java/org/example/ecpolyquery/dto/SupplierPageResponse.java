@@ -14,4 +14,7 @@ public class SupplierPageResponse {
   private int size;
   private int totalPages;
   private long totalElements;
+
+  public SupplierPageResponse(String id, String fullname, String email, String personToContact) {
+  }
 }

@@ -33,8 +33,10 @@ public class CategoryAggregate {
      @CommandHandler
      public CategoryAggregate(CreateCategoryCommand cmd) {
 
-      
-         apply(new CategoryCreatedEvent(cmd.getId(), cmd.getCategoryDTO()));
+
+         apply(new
+           CategoryCreatedEvent(cmd.getId(), cmd.getCategoryDTO()));
+
      }
 
 

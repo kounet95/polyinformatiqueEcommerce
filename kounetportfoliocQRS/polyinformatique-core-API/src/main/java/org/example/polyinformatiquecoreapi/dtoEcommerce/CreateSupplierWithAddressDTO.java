@@ -2,9 +2,16 @@ package org.example.polyinformatiquecoreapi.dtoEcommerce;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CreateSupplierWithAddressDTO {
 
   // --- Données du supplier ---
@@ -19,6 +26,6 @@ public class CreateSupplierWithAddressDTO {
   private String state;
   private String zip;
   private String country;
-  private int appartment;
+  private String appartment;
   private List<AddressLinkDTO> links;
 }
