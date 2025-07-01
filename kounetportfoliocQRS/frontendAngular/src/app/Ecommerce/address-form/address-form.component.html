@@ -1,8 +1,70 @@
-<div [formGroup]="group">
-  <input formControlName="street" placeholder="Street" />
-  <input formControlName="city" placeholder="City" />
-  <input formControlName="state" placeholder="State" />
-  <input formControlName="zip" placeholder="Zip" />
-  <input formControlName="country" placeholder="Country" />
-  <input formControlName="appartment" placeholder="Apartment" />
-</div>
+ <div class="page-title light-background position-relative">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a routerLink="/">Home</a></li>
+            <li class="current">Nouvelle adresse</li>
+          </ol>
+        </nav>
+       
+      </div>
+    </div>
+<section id="address-form" class="section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8" data-aos="zoom-in" data-aos-delay="200">
+        <div class="form-wrapper p-4 shadow rounded bg-white">
+
+          <div class="form-header text-center mb-4">
+            <h2>Address Information</h2>
+            <p>Please fill in your address details below</p>
+          </div>
+
+          <form [formGroup]="group">
+            <!-- Street -->
+            <div class="mb-3">
+              <label for="street" class="form-label">Street</label>
+              <input type="text" class="form-control" id="street" placeholder="Street" formControlName="street" required>
+            </div>
+
+            <!-- City -->
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input type="text" class="form-control" id="city" placeholder="City" formControlName="city" required>
+            </div>
+
+            <!-- State -->
+            <div class="mb-3">
+              <label for="state" class="form-label">State</label>
+              <input type="text" class="form-control" id="state" placeholder="State" formControlName="state">
+            </div>
+
+            <!-- Zip -->
+            <div class="mb-3">
+              <label for="zip" class="form-label">Zip Code</label>
+              <input type="text" class="form-control" id="zip" placeholder="Zip" formControlName="zip">
+            </div>
+
+            <!-- Country -->
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" class="form-control" id="country" placeholder="Country" formControlName="country">
+            </div>
+
+            <!-- Apartment -->
+            <div class="mb-4">
+              <label for="appartment" class="form-label">Apartment</label>
+              <input type="text" class="form-control" id="appartment" placeholder="Apartment" formControlName="appartment">
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">Save Address</button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

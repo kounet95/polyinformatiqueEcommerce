@@ -36,6 +36,9 @@ import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.compone
 import { FaqComponent } from './Ecommerce/faq/faq.component';
 import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
+import { RegisterComponent } from './Ecommerce/register/register.component';
+import { LoginComponent } from './Ecommerce/login/login.component';
+import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 
 
 const routes: Routes = [
@@ -50,6 +53,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'contact', loadComponent: () => import('./contact/contact.component').then(m => m.ContactComponent) },
+  { path: 'conditions', component: ConditionsComponent },
   { path: 'create-address', component: AddressFormComponent },
   { path: 'create-domain', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-event', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
@@ -69,8 +73,13 @@ const routes: Routes = [
 
   { path: 'portfolio',component: PortfolioComponent},
   { path: 'pricing', component: PrincingComponent },
+  { path: 'privacy', component: PrivacyComponent },
   { path: 'products', component: ProductComponent },
+  { path: 'product', component: ProductDetailsComponent },
+
   { path: 'product/:id', component: ProductDetailsComponent },
+  { path: 'signin', component: LoginComponent },
+  { path: 'signup', component: RegisterComponent },
   { path: 'services', component:ServicesComponent},
   { path: 'sous-categorie', component: SousCategoryCreateComponent },
   {path: 'team', component: TeamComponent},

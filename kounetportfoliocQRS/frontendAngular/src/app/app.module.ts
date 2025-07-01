@@ -73,6 +73,9 @@ import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
 import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
+import { RegisterComponent } from './Ecommerce/register/register.component';
+import { LoginComponent } from './Ecommerce/login/login.component';
+import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 
 
 
@@ -131,6 +134,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ProductSizeComponent,
     CheckoutComponent,
     PrivacyComponent,
+    RegisterComponent,
+    LoginComponent,
+    ConditionsComponent,
 
    
     
