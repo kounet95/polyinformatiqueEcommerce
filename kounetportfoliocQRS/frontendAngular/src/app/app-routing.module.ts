@@ -39,6 +39,7 @@ import { AddressFormComponent } from './Ecommerce/address-form/address-form.comp
 import { RegisterComponent } from './Ecommerce/register/register.component';
 import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
+import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 
 
 const routes: Routes = [
@@ -64,6 +65,8 @@ const routes: Routes = [
   { path: 'create-stock', component: CreatStockComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }},
   { path: 'create-social-groupe', component: CreatGroupeSocialComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-supplier', component: CreateSupplierComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'create-supply', component: CreatSupplyComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+
   { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'home', component: HomeComponent },
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
