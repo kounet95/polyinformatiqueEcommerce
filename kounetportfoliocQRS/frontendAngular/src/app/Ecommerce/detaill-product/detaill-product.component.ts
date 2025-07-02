@@ -13,67 +13,71 @@ import { CommentService } from '../services/commentaire.service';
   standalone: false,
 })
 export class ProductDetailsComponent implements OnInit {
-  product: ProductDTO | null = null;
-  productSize: ProductSizeDTO []=[];
-  commentaire: CommentModel[]=[];
-  quantity: number = 1;
-  addedMessage: string = '';
 
- images = [
-  'assets/img/01_Home.png', 
-  'assets/img/p1.jpeg', 
-  'assets/img/p2.jpeg', 
-  'assets/img/p2.jpeg'  
-];
+  product: ProductDTO | null = null;
+  productSize: ProductSizeDTO | null = null;
+  commentaire: CommentModel[] = [];
+
+  quantity = 1;
+  addedMessage = '';
+
   selectedImageIndex = 0;
 
   colors = [
-    { value: 'black', name: 'Black', selected: true },
-    { value: 'gray', name: 'Gray', selected: false },
-    { value: 'blue', name: 'Blue', selected: false },
-    { value: 'pink', name: 'Pink', selected: false }
+    { value: 'black', name: 'Noir', selected: true },
+    { value: 'gray', name: 'Gris', selected: false },
+    { value: 'blue', name: 'Bleu', selected: false },
+    { value: 'pink', name: 'Rose', selected: false }
   ];
-  sizes = [
-    { label: 'S', value: 'S' },
-    { label: 'M', value: 'M' },
-    { label: 'L', value: 'L' }
-  ];
-  selectedSize = 'M';
 
-  // Exemple reviews
+  selectedSize = ''; // mis à vide pour prendre la taille du produit dynamique
+
   reviews = [
-    {author: 'John Doe', date: '21/04/2024', rating: 5, text: 'Exceptional sound quality and comfort.'},
-    {author: 'Jane Smith', date: '19/04/2024', rating: 4, text: 'Great headphones, battery could be better.'},
-    {author: 'Michael Johnson', date: '12/04/2024', rating: 5, text: 'Impressive noise cancellation.'}
+    { author: 'John Doe', date: '21/04/2024', rating: 5, text: 'Exceptional sound quality and comfort.' },
+    { author: 'Jane Smith', date: '19/04/2024', rating: 4, text: 'Great headphones, battery could be better.' },
+    { author: 'Michael Johnson', date: '12/04/2024', rating: 5, text: 'Impressive noise cancellation.' }
   ];
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private productSizeService: ProductSizeService,
-    private commentaireSevice:CommentService,
+    private commentaireService: CommentService,
     private cartService: CartService
   ) {}
 
- ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
-  if (id) {
-    this.productService.getProductById(id).subscribe(prod => {
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.productSizeService.getProductSizeById(id).subscribe(size => {
+  this.productSize = size;
+  console.log('ProductSize:', size);
+
+  this.selectedSize = size.sizeProd;
+
+  const prodIdToUse = size.prodId || '4b624571-6347-4e94-a606-7fc91fd7f5b2';
+  if (prodIdToUse) {
+    this.productService.getProductById(prodIdToUse).subscribe(prod => {
       this.product = prod;
+      console.log('Product:', prod);
     });
-
-    this.productSizeService.getProductSizesByProductId(id).subscribe(sizes => {
-      this.productSize = sizes;
-    });
-    /*this.commentaireSevice.getCommentairesByProductId(id).subscribe(coms => {
-      this.commentaire = coms;
-    });*/
   } else {
-    alert("vous devez selectionne un produit");
+    console.warn('prodId is null, cannot load product');
   }
+});
 
-  
-}
+
+      // Décommente si besoin
+      /*
+      this.commentaireService.getCommentairesByProductId(id).subscribe(coms => {
+        this.commentaire = coms;
+      });
+      */
+
+    } else {
+      alert('Vous devez sélectionner un produit');
+    }
+  }
 
   selectImage(idx: number) {
     this.selectedImageIndex = idx;
@@ -92,23 +96,26 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   decrementQty() {
-    if (this.quantity > 1) this.quantity--;
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
   }
 
   addToCart() {
     if (!this.product) return;
+
     this.addedMessage = 'Produit ajouté au panier !';
+    // Ici tu peux appeler le vrai cartService pour ajouter l’article
+    // this.cartService.addToCart({...});
     setTimeout(() => (this.addedMessage = ''), 1500);
   }
 
-  // Getter pour la couleur sélectionnée (évite la fonction dans le template)
   get selectedColorName(): string {
     const selected = this.colors.find(c => c.selected);
     return selected ? selected.name : '';
   }
 
-  // Pour itérer sur un nombre dans *ngFor
   get fiveStars() {
-    return [1,2,3,4,5];
+    return [1, 2, 3, 4, 5];
   }
 }

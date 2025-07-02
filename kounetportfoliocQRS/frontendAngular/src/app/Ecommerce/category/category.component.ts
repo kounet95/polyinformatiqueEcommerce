@@ -139,7 +139,6 @@ export class CategoryComponent implements OnInit {
         this.activeFilters.push({ key: 'category', label: cat.name });
       }
     }
-    // Ajoute d'autres filtres si besoin (couleur, sous-catégorie, etc.)
     this.fetchFilteredProductSizes();
   }
 
@@ -198,7 +197,7 @@ export class CategoryComponent implements OnInit {
   }
 
   onProductSouscategorieChange(id: string): void {
-    // Si tu veux gérer plusieurs sous-catégories
+  
     if (this.filters.selectedSouscategorie.includes(id)) {
       this.filters.selectedSouscategorie = this.filters.selectedSouscategorie.filter(c => c !== id);
     } else {
@@ -223,13 +222,13 @@ export class CategoryComponent implements OnInit {
   addCart(size: ProductSizeDTO) {
     this.cartService.addToCart(size, 1);
     this.snackBar.open(
-      `Ajouté: ${size.prodId.name} - ${size.sizeProd} au panier !`,
+      `Ajouté: ${size.prodId} - ${size.sizeProd} au panier !`,
       'Fermer',
       { duration: 2000, verticalPosition: 'top' }
     );
   }
   voirDetaille(id: string){
-  this.router.navigate([`/product/${id}`]);
+  this.router.navigate([`/productsizes/${id}`]);
   }
   get allFilters(): Record<string, any> {
     return { ...this.filters };

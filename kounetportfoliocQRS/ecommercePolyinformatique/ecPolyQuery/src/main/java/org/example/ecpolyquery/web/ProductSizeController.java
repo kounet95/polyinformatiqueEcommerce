@@ -107,5 +107,15 @@ public class ProductSizeController {
     );
     return productSizesQueryHandler.search(query);
   }
+  @GetMapping("/{id}")
+  public CompletableFuture<ProductSizeDTO> getProductSizeById(@PathVariable String id) {
+    GetProductSizeByIdQuery query = new GetProductSizeByIdQuery(id);
+    return queryGateway.query(query, ResponseTypes.instanceOf(ProductSize.class))
+      .thenApply(ProductSizeController::toDto);
+  }
+
+
+
+
 
 }

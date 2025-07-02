@@ -136,8 +136,8 @@
       <div class="product-card">
        <!-- Image de la taille/produit -->
     <img 
-            [src]="size.prodId" 
-            [alt]="size.prodId?.name" 
+            [src]="size.id" 
+            [alt]="size.prodId" 
             class="card-img-top mx-auto rounded-card"
             loading="lazy"
             [ngStyle]="{ width: '250px', height: '250px', objectFit: 'cover' }"
@@ -160,7 +160,7 @@
         </div>
       </div>
       <div class="card-body text-center">
-        <h6 class="card-title text-dark fw-semibold">{{ size.prodId?.name }}</h6>
+        <h6 class="card-title text-dark fw-semibold">{{ size.prodId }}</h6>
         <table class="table table-sm mb-2">
           <thead>
             <tr>

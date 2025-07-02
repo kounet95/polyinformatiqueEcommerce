@@ -66,15 +66,17 @@ export class ProductSizeService {
 
   return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/search`, { params });
 }
-  /** Un ProductSize par son id */
-  getProductSizeById(id: string): Observable<ProductSizeDTO> {
-    return this.http.get<ProductSizeDTO>(`${ecpolyQuery.backend}/api/productsizes/${id}`);
-  }
+ /** Un ou plusieurs ProductSize liés à un ID */
+/** Un ProductSize par son id */
+getProductSizeById(id: string): Observable<ProductSizeDTO> {
+  return this.http.get<ProductSizeDTO>(`${ecpolyQuery.backend}/api/productsizes/${id}`);
+}
 
-  /** Tous les ProductSize d'un produit */
-  getProductSizesByProductId(productId: string): Observable<ProductSizeDTO[]> {
-    return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes?productId=${productId}`);
-  }
+
+
+ getProductSizesByProductId(productId: string): Observable<ProductSizeDTO[]> {
+  return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/${productId}`);
+}
 
   /** Création */
  createProductSize(productSize: ProductSizeDTO, imageFiles: { [key: string]: File | null }): Observable<string> {

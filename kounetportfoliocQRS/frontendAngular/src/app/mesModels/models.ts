@@ -217,7 +217,7 @@ export interface ProductDTO {
 export interface ProductSizeDTO {
   id: string;
   sizeProd: SizeProd;
-  prodId: ProductDTO;
+  prodId: string;
   price: number;
   pricePromo: number;
   frontUrl: string;
@@ -229,8 +229,8 @@ export interface Page<T> {
   content: T[];
   totalElements: number;
   totalPages: number;
-  number: number; // numéro de la page actuelle
-  size: number;   // taille de la page
+  number: number;
+  size: number;  
 }
 
 // ===============================

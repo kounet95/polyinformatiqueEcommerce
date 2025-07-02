@@ -1,41 +1,82 @@
 <div class="product-details-container">
+  <!-- Fil d'Ariane -->
   <nav class="breadcrumb-nav">
     <span>Accueil</span>
     <span>/</span>
     <span>Détails du produit</span>
   </nav>
+
+  <!-- Titre principal -->
   <h1 class="details-title">Détails du produit</h1>
 
+  <!-- Bloc principal -->
   <div class="details-flex">
-    <!-- Galerie images -->
-    <div class="gallery">
-      <!-- Miniatures -->
+
+    <!-- Galerie d'images -->
+    <div class="gallery" *ngIf="productSize">
+      <!--Images Miniatures -->
       <div class="thumbnails">
-        <img *ngFor="let img of images; let idx = index"
-             [src]="img"
-             [class.selected]="idx === selectedImageIndex"
-             (click)="selectImage(idx)"
+        <img [src]="productSize.frontUrl"
+             [class.selected]="selectedImageIndex === 0"
+             (click)="selectImage(0)"
              class="thumbnail-img"
-             [alt]="'Miniature produit ' + (idx + 1)" />
+             alt="Vue de face" />
+
+        <img [src]="productSize.backUrl"
+             [class.selected]="selectedImageIndex === 1"
+             (click)="selectImage(1)"
+             class="thumbnail-img"
+             alt="Vue de dos" />
+
+        <img [src]="productSize.leftUrl"
+             [class.selected]="selectedImageIndex === 2"
+             (click)="selectImage(2)"
+             class="thumbnail-img"
+             alt="Vue de gauche" />
+
+        <img [src]="productSize.rightUrl"
+             [class.selected]="selectedImageIndex === 3"
+             (click)="selectImage(3)"
+             class="thumbnail-img"
+             alt="Vue de droite" />
       </div>
+
       <!-- Image principale -->
       <div class="main-image">
         <button class="arrow left"
-                (click)="selectImage((selectedImageIndex - 1 + images.length) % images.length)">
+                (click)="selectImage((selectedImageIndex - 1 + 4) % 4)">
           &#8249;
         </button>
-        <img [src]="images[selectedImageIndex]" alt="Image sélectionnée" class="main-img" />
+        <img [src]="
+          selectedImageIndex === 0 ? productSize.frontUrl :
+          selectedImageIndex === 1 ? productSize.backUrl :
+          selectedImageIndex === 2 ? productSize.leftUrl :
+          productSize.rightUrl
+        " alt="Image sélectionnée" class="main-img" />
         <button class="arrow right"
-                (click)="selectImage((selectedImageIndex + 1) % images.length)">
+                (click)="selectImage((selectedImageIndex + 1) % 4)">
           &#8250;
         </button>
       </div>
     </div>
-
+<span style="display: flex;"></span>
     <!-- Informations produit -->
-    <div class="details-info">
-      <div class="category-text">ACCESSOIRES</div>
-      <h2 class="product-title">{{ product?.name }}</h2>
+    <div class="details-info" *ngIf="product">
+
+      <!-- Sous-catégories -->
+      <div class="category-text" *ngIf="product.subcategoryId.length > 0; else noSubcat">
+        <span *ngFor="let sub of product.subcategoryId; let last = last">
+          {{ sub }}<span *ngIf="!last">, </span>
+        </span>
+      </div>
+      <ng-template #noSubcat>
+        <div class="category-text">Catégorie inconnue</div>
+      </ng-template>
+
+      <!-- Nom du produit -->
+      <h2 class="product-title">{{ product.name }}</h2>
+
+      <!-- Évaluation -->
       <div class="rating-row">
         <span class="stars">
           <ng-container *ngFor="let s of fiveStars; let i = index">
@@ -45,17 +86,30 @@
         <span class="rating-value">4.5</span>
         <span class="review-count">42 avis</span>
       </div>
-      <div class="price-card">
-        <span class="main-price">249,99 €</span>
-        <span class="old-price">299,99 €</span>
-        <div class="discount-badge">Économisez 17%</div>
+
+      <!-- Prix -->
+      <div class="price-card" *ngIf="productSize">
+        <span class="main-price">{{ productSize.price | currency:'EUR' }}</span>
+
+        <span class="old-price" *ngIf="productSize.pricePromo != null && productSize.pricePromo < productSize.price">
+          {{ productSize.pricePromo | currency:'EUR' }}
+        </span>
+
+        <div class="discount-badge" *ngIf="productSize.pricePromo != null && productSize.pricePromo < productSize.price">
+          Économisez {{
+            (((productSize.price ?? 0) - (productSize.pricePromo ?? 0)) / (productSize.price ?? 1) * 100) | number:'1.0-0'
+          }}%
+        </div>
+
         <div class="stock-info">
           <mat-icon color="success" class="stock-icon">check_circle</mat-icon>
           En stock <span class="stock-count">(24 articles restants)</span>
         </div>
       </div>
+
+      <!-- Description -->
       <div class="desc-text">
-        Ce vêtement allie style moderne et culture africaine. Confectionné avec soin, il convient aussi bien aux événements traditionnels qu'aux sorties urbaines.
+        {{ product.description || 'Description non disponible.' }}
       </div>
 
       <!-- Couleurs -->
@@ -74,17 +128,16 @@
       </div>
 
       <!-- Tailles -->
-      <div class="option-row">
+      <div class="option-row" *ngIf="productSize">
         <span class="option-label">Taille</span>
         <div class="size-options">
-          <button *ngFor="let s of productSize"
-                  class="size-btn"
-                  [class.selected]="selectedSize === s.sizeProd"
-                  (click)="selectSize(s.sizeProd)">
-            {{ s.sizeProd }} — {{ s.price }} €
+          <button class="size-btn"
+                  [class.selected]="selectedSize === productSize.sizeProd"
+                  (click)="selectSize(productSize.sizeProd)">
+            {{ productSize.sizeProd }} — {{ productSize.price | currency:'EUR' }}
           </button>
         </div>
-        <span class="size-name">{{ selectedSize }}</span>
+        <span class="size-name">{{ productSize.price | currency:'EUR' }}</span>
       </div>
 
       <!-- Quantité -->
@@ -110,6 +163,7 @@
         </button>
       </div>
 
+      <!-- Infos livraison, retour, garantie -->
       <div class="info-row">
         <div class="info-block">
           <mat-icon>local_shipping</mat-icon>
@@ -133,9 +187,15 @@
           </span>
         </div>
       </div>
-      <div *ngIf="addedMessage" class="alert alert-success mt-2">{{ addedMessage }}</div>
-    </div>
-  </div>
+
+      <!-- Message succès -->
+      <div *ngIf="addedMessage" class="alert alert-success mt-2">
+        {{ addedMessage }}
+      </div>
+
+    </div> <!-- Fin details-info -->
+
+  </div> <!-- Fin details-flex -->
 
   <!-- Onglets supplémentaires -->
   <div class="mt-5">

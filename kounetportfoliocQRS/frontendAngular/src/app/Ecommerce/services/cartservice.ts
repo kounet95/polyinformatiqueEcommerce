@@ -35,14 +35,14 @@ export class CartService {
   addToCart(productSize: ProductSizeDTO, qty: number = 1): void {
     this.loadCart();
     const existing = this.items.find(
-      item => item.productSizeId === productSize.id && item.productId === productSize.prodId.id
+      item => item.productSizeId === productSize.id && item.productId === productSize.prodId
     );
     if (existing) {
       existing.qty += qty;
     } else {
       this.items.push({
-        productId: productSize.prodId.id,
-        productName: productSize.prodId.name,
+        productId: productSize.prodId,
+        productName: productSize.prodId,
         productImg: productSize.frontUrl,
         qty,
         productSizeId: productSize.id,

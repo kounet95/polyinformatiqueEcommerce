@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -81,4 +82,11 @@ public class ProductSizesQueryHandler {
     Specification<ProductSize> spec = ProductSpecification.isNewArrival(since);
     return productSizeRepository.findAll(spec);
   }
+
+  @QueryHandler
+  public ProductSize handle(GetProductSizeByIdQuery query) {
+    return productSizeRepository.findById(query.getId())
+      .orElseThrow(() -> new RuntimeException("ProductSize not found for id: " + query.getId()));
+  }
+
 }
