@@ -1,30 +1,78 @@
-<form [formGroup]="supplierForm" (ngSubmit)="submit()">
+<!-- Titre de la page -->
+<div class="page-title light-background position-relative">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Dashboard</a></li>
+        <li class="current">Nouveau un fournisseur</li>
+      </ol>
+    </nav>
+    <h1>Nouveau un forunisseur</h1>
+  </div>
+</div>
+<section id="create-supplier" class="section py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-md-10">
+        <div class="login-form-wrapper bg-white shadow rounded p-4">
 
-  <label for="fullname">Nom complet :</label>
-  <input id="fullname" formControlName="fullname" type="text" />
+          <div class="login-header text-center mb-4">
+            <h2>Créer un fournisseur</h2>
+            <p>Veuillez remplir les informations du fournisseur</p>
+          </div>
 
-  <label for="email">Email :</label>
-  <input id="email" formControlName="email" type="email" />
+          <form [formGroup]="supplierForm" (ngSubmit)="submit()">
+            <!-- Nom complet -->
+            <div class="mb-3">
+              <label for="fullname" class="form-label">Nom complet</label>
+              <input id="fullname" formControlName="fullname" type="text" class="form-control" placeholder="Ex: Entreprise ABC">
+            </div>
 
-  <label for="personToContact">Personne à contacter :</label>
-  <input id="personToContact" formControlName="personToContact" type="text" />
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" formControlName="email" type="email" class="form-control" placeholder="exemple@entreprise.com">
+            </div>
 
-  <label for="productSizeId">Taille de produit :</label>
-  <select id="productSizeId" formControlName="productSizeId">
-    <option value="">-- Sélectionner une taille --</option>
-    <option *ngFor="let ps of productSizes" [value]="ps.id">
-      {{ ps.sizeProd }}
-    </option>
-  </select>
+            <!-- Personne à contacter -->
+            <div class="mb-3">
+              <label for="personToContact" class="form-label">Personne à contacter</label>
+              <input id="personToContact" formControlName="personToContact" type="text" class="form-control" placeholder="Ex: Jean Dupont">
+            </div>
 
-  
-  <app-address-form [formGroup]="addressGroup"></app-address-form>
+            <!-- Taille de produit -->
+            <div class="mb-4">
+              <label for="productSizeId" class="form-label">Taille de produit</label>
+              <select id="productSizeId" class="form-select" formControlName="productSizeId">
+                <option value="">-- Sélectionner une taille --</option>
+                <option *ngFor="let ps of productSizes" [value]="ps.id">
+                  {{ ps.sizeProd }}
+                </option>
+              </select>
+            </div>
 
-  <button type="submit" [disabled]="isLoading || supplierForm.invalid">
-    Créer le fournisseur
-  </button>
+            <!-- Adresse (component déjà stylisé) -->
+            <div class="mb-4">
+              <h5 class="mb-3">Adresse</h5>
+              <app-address-form [formGroup]="addressGroup"></app-address-form>
+            </div>
 
-  <div *ngIf="successMsg" class="success">{{ successMsg }}</div>
-  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+            <!-- Bouton soumission -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="isLoading || supplierForm.invalid">
+                Créer le fournisseur
+              </button>
+            </div>
 
-</form>
+            <!-- Messages -->
+            <div *ngIf="successMsg" class="alert alert-success text-center">
+              {{ successMsg }}
+            </div>
+            <div *ngIf="errorMsg" class="alert alert-danger text-center">
+              {{ errorMsg }}
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+</section>

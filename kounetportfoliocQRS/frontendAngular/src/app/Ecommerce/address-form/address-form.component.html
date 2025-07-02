@@ -1,8 +1,39 @@
-<div [formGroup]="parentForm">
-  <input formControlName="street" placeholder="Street" />
-  <input formControlName="city" placeholder="City" />
-  <input formControlName="state" placeholder="State" />
-  <input formControlName="zip" placeholder="Zip" />
-  <input formControlName="country" placeholder="Country" />
-  <input formControlName="appartment" placeholder="Apartment" />
+<div [formGroup]="parentForm" class="row g-3 p-3 border rounded bg-white shadow-sm">
+
+  <!-- Rue -->
+  <div class="col-md-8">
+    <label for="street" class="form-label">Rue</label>
+    <input type="text" id="street" class="form-control" formControlName="street" placeholder="Ex: 123 rue Principale">
+  </div>
+
+  <!-- Appartement -->
+  <div class="col-md-4">
+    <label for="appartment" class="form-label">Appartement</label>
+    <input type="text" id="appartment" class="form-control" formControlName="appartment" placeholder="Ex: Apt 4B">
+  </div>
+
+  <!-- Ville -->
+  <div class="col-md-6">
+    <label for="city" class="form-label">Ville</label>
+    <input type="text" id="city" class="form-control" formControlName="city" placeholder="Ex: Montréal">
+  </div>
+
+  <!-- Province / État -->
+  <div class="col-md-6">
+    <label for="state" class="form-label">Province / État</label>
+    <input type="text" id="state" class="form-control" formControlName="state" placeholder="Ex: Québec">
+  </div>
+
+  <!-- Code postal -->
+  <div class="col-md-6">
+    <label for="zip" class="form-label">Code postal</label>
+    <input type="text" id="zip" class="form-control" formControlName="zip" placeholder="Ex: H2X 3Y7">
+  </div>
+
+  <!-- Pays -->
+  <div class="col-md-6">
+    <label for="country" class="form-label">Pays</label>
+    <input type="text" id="country" class="form-control" formControlName="country" placeholder="Ex: Canada">
+  </div>
+
 </div>

@@ -1,29 +1,52 @@
-<form [formGroup]="parentForm">
-  <label>Product Size :</label>
-  <select formControlName="productSizeId">
-    <option value="">-- Sélectionner --</option>
-    <option *ngFor="let size of productSizes" [value]="size.id">
-      {{ size.sizeProd }}
-    </option>
-  </select>
+<form [formGroup]="parentForm" class="p-3 bg-light rounded shadow-sm">
 
-  <label>Supplier :</label>
-  <select formControlName="supplierId">
-    <option value="">-- Sélectionner --</option>
-    <option *ngFor="let supplier of suppliers" [value]="supplier.id">
-      {{ supplier.fullname }}
-    </option>
-  </select>
+  <!-- Taille du produit -->
+   <div class="row">
+  <div class="mb-3   col-6">
+    <label for="productSizeId" class="form-label">Taille du produit</label>
+    <select id="productSizeId" class="form-select" formControlName="productSizeId">
+      <option value="">-- Sélectionner --</option>
+      <option *ngFor="let size of productSizes" [value]="size.id">
+        {{ size.sizeProd }}
+      </option>
+    </select>
+  </div>
 
-  <label>Prix d'achat :</label>
-  <input type="number" formControlName="purchasePrice" />
+  <!-- Fournisseur -->
+  <div class="mb-3  col-6">
+    <label for="supplierId" class="form-label">Fournisseur</label>
+    <select id="supplierId" class="form-select" formControlName="supplierId">
+      <option value="">-- Sélectionner --</option>
+      <option *ngFor="let supplier of suppliers" [value]="supplier.id">
+        {{ supplier.fullname }}
+      </option>
+    </select>
+  </div>
+</div>
+  <!-- Prix d'achat -->
+   <div class="row">
+  <div class="mb-3 col-4">
+    <label for="purchasePrice" class="form-label">Prix d'achat</label>
+    <input type="number" id="purchasePrice" class="form-control" formControlName="purchasePrice" placeholder="Entrez le prix d'achat">
+  </div>
 
-  <label>Prix promo :</label>
-  <input type="number" formControlName="promoPrice" />
+  <!-- Prix promo -->
+  <div class="mb-3  col-4">
+    <label for="promoPrice" class="form-label">Prix promotionnel</label>
+    <input type="number" id="promoPrice" class="form-control" formControlName="promoPrice" placeholder="Entrez le prix promotionnel">
+  </div>
+   <div class="mb-3 col-4">
+    <label for="quantity" class="form-label">Quantité</label>
+    <input type="number" id="quantity" class="form-control" formControlName="quantity" placeholder="Quantité en stock">
+  </div>
+</div>
+  <!-- Quantité -->
+ 
 
-  <label>Quantité :</label>
-  <input type="number" formControlName="quantity" />
+  <!-- Adresse -->
+  <div class="mt-4">
+    <h5 class="mb-3">Adresse</h5>
+    <app-address-form [parentForm]="addressGroup"></app-address-form>
+  </div>
 
-  <h4>Adresse</h4>
-<app-address-form [parentForm]="addressGroup"></app-address-form>
 </form>
