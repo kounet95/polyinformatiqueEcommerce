@@ -29,7 +29,7 @@ public class StockAggregate {
   private Double purchasePrice;
   private Double promoPrice;
   private double quantity;
-private String supplyId;
+  private String supplyId;
   public StockAggregate() {}
 
   @CommandHandler

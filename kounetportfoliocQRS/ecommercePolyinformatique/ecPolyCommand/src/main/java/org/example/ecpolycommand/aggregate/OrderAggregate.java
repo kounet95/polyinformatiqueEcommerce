@@ -107,7 +107,7 @@ public class OrderAggregate {
     this.customerId = dto.getCustomerId();
     this.supplierId = dto.getSupplierId();
     this.createdAt = dto.getCreatedAt();
-    this.orderStatus = dto.getOrderStatus();
+
     this.paymentMethod = dto.getPaymentMethod();
     this.total = dto.getTotal();
     this.barcode = dto.getBarcode();
@@ -130,7 +130,20 @@ public class OrderAggregate {
 
   @EventSourcingHandler
   public void on(InvoiceGeneratedEvent event) {
-   //comment genere mon invoice
+    // Update the order with invoice information
+    InvoiceDTO invoiceDTO = event.getInvoiceDTO();
+    // We don't update orderId, customerId, or supplierId as they are already set
+    // and shouldn't change when an invoice is generated
+
+    // Update payment-related information
+    this.paymentMethod = invoiceDTO.getMethodePayment();
+    this.total = invoiceDTO.getAmount();
+
+    // Set order status to indicate invoice has been generated
+    this.orderStatus = OrderStatus.Inprogress;
+
+    // Log the invoice generation
+    log.info("Invoice generated for order: {}", this.orderId);
   }
 
   @EventSourcingHandler

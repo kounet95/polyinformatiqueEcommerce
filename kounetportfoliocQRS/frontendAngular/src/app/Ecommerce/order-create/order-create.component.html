@@ -1,10 +1,98 @@
-<form (ngSubmit)="onSubmit()">
-  <input [(ngModel)]="customerId" name="customerId" placeholder="Client ID" required />
-  <input [(ngModel)]="supplierId" name="supplierId" placeholder="Supplier ID" />
-  <input [(ngModel)]="paymentMethod" name="paymentMethod" placeholder="Moyen de paiement" required />
-  <input [(ngModel)]="shippingId" name="shippingId" placeholder="Shipping ID" />
-  <button [disabled]="loading || !customerId || !paymentMethod" type="submit">
-    Passer la commande
-  </button>
-  <div *ngIf="message">{{ message }}</div>
-</form>
+<div class="order-create-container">
+
+  <h2>Créer une commande</h2>
+
+  <!-- Message de retour -->
+  <div *ngIf="message" class="message">
+    {{ message }}
+  </div>
+
+  <!-- Formulaire de création -->
+  <form (ngSubmit)="onSubmit()">
+
+    <!-- Client -->
+    <div class="form-group">
+      <label for="customerId">ID Client</label>
+      <input
+        type="text"
+        id="customerId"
+        [(ngModel)]="customerId"
+        name="customerId"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <!-- Fournisseur -->
+    <div class="form-group">
+      <label for="supplierId">ID Fournisseur</label>
+      <input
+        type="text"
+        id="supplierId"
+        [(ngModel)]="supplierId"
+        name="supplierId"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Moyen de paiement -->
+    <div class="form-group">
+      <label for="paymentMethod">Moyen de paiement</label>
+      <input
+        type="text"
+        id="paymentMethod"
+        [(ngModel)]="paymentMethod"
+        name="paymentMethod"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <!-- ID Livraison -->
+    <div class="form-group">
+      <label for="shippingId">ID Livraison</label>
+      <input
+        type="text"
+        id="shippingId"
+        [(ngModel)]="shippingId"
+        name="shippingId"
+        class="form-control"
+      />
+    </div>
+
+    <!-- Récap Panier -->
+    <h4>Produits du panier</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Prix</th>
+          <th>Quantité</th>
+          <th>Sous-total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cartItems">
+          <td>{{ item.productName }}</td>
+          <td>{{ item.pricePromo ?? item.productSizePrice }} €</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ (item.pricePromo ?? item.productSizePrice) * item.qty | number: '1.2-2' }} €</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Total -->
+    <div class="total">
+      <strong>Total : {{ total | number: '1.2-2' }} €</strong>
+    </div>
+
+    <!-- Bouton Submit -->
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Traitement...' : 'Créer la commande' }}
+    </button>
+  </form>
+</div>

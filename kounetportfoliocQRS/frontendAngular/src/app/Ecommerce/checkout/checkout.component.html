@@ -1,189 +1,144 @@
-<!-- Titre de la page -->
-<div class="page-title light-background">
-  <div class="container">
-    <nav class="breadcrumbs">
-      <ol>
-        <li><a routerLink="/">Accueil</a></li>
-        <li><a routerLink="/boutique">Boutique</a></li>
-        <li><a routerLink="/cart">Panier</a></li>
-        <li class="current">Paiement</li>
-      </ol>
-    </nav>
+<!-- 🔄 Switch mode -->
+<div class="checkout-mode">
+  <button [class.active]="mode === 'customer'" (click)="mode = 'customer'">Mode Client</button>
+  <button [class.active]="mode === 'supplier'" (click)="mode = 'supplier'">Mode Fournisseur</button>
+</div>
+
+<!-- 🔄 Étapes -->
+<div class="checkout-steps" *ngIf="mode === 'customer'">
+  <div class="step" [class.active]="step === 1" [class.completed]="step > 1">
+    <span>1</span><div>Informations</div>
+  </div>
+  <div class="line"></div>
+  <div class="step" [class.active]="step === 2" [class.completed]="step > 2">
+    <span>2</span><div>Livraison</div>
+  </div>
+  <div class="line"></div>
+  <div class="step" [class.active]="step === 3" [class.completed]="step > 3">
+    <span>3</span><div>Paiement</div>
+  </div>
+  <div class="line"></div>
+  <div class="step" [class.active]="step === 4">
+    <span>4</span><div>Révision</div>
   </div>
 </div>
 
-<app-announcement-bar></app-announcement-bar>
+<div class="checkout-main">
+  <div class="checkout-form">
 
-<section id="cart" class="cart section">
-  <div class="checkout-container">
+    <!-- === Mode CLIENT === -->
+    <ng-container *ngIf="mode === 'customer'">
 
-    <!-- Étapes du paiement -->
-    <div class="checkout-steps">
-      <div class="step" [class.active]="step === 1" [class.completed]="step > 1">
-        <span>1</span>
-        <div>Informations</div>
+      <!-- Étape 1 -->
+      <div *ngIf="step === 1">
+        <h2>Informations client</h2>
+        <form>
+          <input class="form-input" placeholder="Prénom" [(ngModel)]="customer.firstname" name="firstname" />
+          <input class="form-input" placeholder="Nom" [(ngModel)]="customer.lastname" name="lastname" />
+          <input class="form-input" placeholder="Email" [(ngModel)]="customer.email" name="email" />
+          <input class="form-input" placeholder="Téléphone" [(ngModel)]="customer.phone" name="phone" />
+          <button class="btn main-btn" type="button" (click)="nextStep()" [disabled]="!customer.firstname || !customer.lastname || !customer.email">
+            Continuer
+          </button>
+        </form>
       </div>
-      <div class="line"></div>
-      <div class="step" [class.active]="step === 2" [class.completed]="step > 2">
-        <span>2</span>
-        <div>Livraison</div>
-      </div>
-      <div class="line"></div>
-      <div class="step" [class.active]="step === 3" [class.completed]="step > 3">
-        <span>3</span>
-        <div>Paiement</div>
-      </div>
-      <div class="line"></div>
-      <div class="step" [class.active]="step === 4">
-        <span>4</span>
-        <div>Révision</div>
-      </div>
-    </div>
 
-    <!-- Formulaire principal -->
-    <div class="checkout-main">
-      <div class="checkout-form">
-
-        <!-- Étape 1 : Informations client -->
-        <div *ngIf="step === 1">
-          <h2>Informations client</h2>
-          <p class="form-desc">Veuillez entrer vos coordonnées</p>
-          <form>
-            <div class="form-row">
-              <input class="form-input" placeholder="Prénom" [(ngModel)]="customer.firstname" name="firstname" required />
-              <input class="form-input" placeholder="Nom" [(ngModel)]="customer.lastname" name="lastname" required />
-            </div>
-            <input class="form-input" placeholder="Votre courriel" [(ngModel)]="customer.email" name="email" required />
-            <input class="form-input" placeholder="Votre numéro de téléphone" [(ngModel)]="customer.phone" name="phone" />
-            <button type="button" class="btn main-btn" (click)="nextStep()"
-              [disabled]="!customer.firstname || !customer.lastname || !customer.email">
-              Continuer vers la livraison
-            </button>
-          </form>
-        </div>
-
-        <!-- Étape 2 : Adresse de livraison -->
-        <div *ngIf="step === 2">
-          <h2>Adresse de livraison</h2>
-          <p class="form-desc">Où souhaitez-vous que nous livrions votre commande ?</p>
-          <form>
-            <input class="form-input" placeholder="Adresse" [(ngModel)]="shippingAddress.street" name="street" required />
-            <input class="form-input" placeholder="Appartement, suite, etc. (optionnel)" [(ngModel)]="shippingAddress.apartment" name="apartment" />
-            <div class="form-row">
-              <input class="form-input" placeholder="Ville" [(ngModel)]="shippingAddress.city" name="city" required />
-              <input class="form-input" placeholder="État / Province" [(ngModel)]="shippingAddress.state" name="state" />
-              <input class="form-input" placeholder="Code postal" [(ngModel)]="shippingAddress.zip" name="zip" required />
-            </div>
-            <select class="form-input" [(ngModel)]="shippingAddress.country" name="country" required>
-              <option value="">Sélectionner un pays</option>
-              <option value="France">France</option>
-              <option value="USA">États-Unis</option>
-              <!-- Ajouter d'autres pays ici -->
-            </select>
-            <div class="form-actions">
-              <button type="button" class="btn secondary-btn" (click)="prevStep()">Retour</button>
-              <button type="button" class="btn main-btn" (click)="nextStep()"
-                [disabled]="!shippingAddress.street || !shippingAddress.city || !shippingAddress.zip || !shippingAddress.country">
-                Continuer vers le paiement
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Étape 3 : Méthode de paiement -->
-        <div *ngIf="step === 3">
-          <h2>Méthode de paiement</h2>
-          <p class="form-desc">Choisissez votre méthode de paiement</p>
-          <form>
-            <div class="payment-options">
-              <label>
-                <input type="radio" [(ngModel)]="payment.method" value="card" name="paymethod" /> Carte bancaire
-              </label>
-              <label>
-                <input type="radio" [(ngModel)]="payment.method" value="paypal" name="paymethod" /> PayPal
-              </label>
-              <label>
-                <input type="radio" [(ngModel)]="payment.method" value="applepay" name="paymethod" /> Apple Pay
-              </label>
-            </div>
-            <div *ngIf="payment.method === 'card'" class="card-form">
-              <input class="form-input" placeholder="Numéro de carte" [(ngModel)]="payment.cardNumber" name="cardNumber" />
-              <div class="form-row">
-                <input class="form-input" placeholder="Date d’expiration" [(ngModel)]="payment.exp" name="exp" />
-                <input class="form-input" placeholder="CVV" [(ngModel)]="payment.cvv" name="cvv" />
-              </div>
-              <input class="form-input" placeholder="Nom sur la carte" [(ngModel)]="payment.name" name="name" />
-            </div>
-            <div class="form-actions">
-              <button type="button" class="btn secondary-btn" (click)="prevStep()">Retour</button>
-              <button type="button" class="btn main-btn" (click)="nextStep()">Vérifier la commande</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Étape 4 : Vérification finale -->
-        <div *ngIf="step === 4">
-          <h2>Vérification de la commande</h2>
-          <p class="form-desc">Merci de vérifier vos informations avant de passer la commande</p>
-          <div class="review-block">
-            <div class="review-section">
-              <h4>Informations de contact <a (click)="step=1">Modifier</a></h4>
-              <div>{{ customer.firstname }} {{ customer.lastname }}</div>
-              <div>{{ customer.email }}</div>
-              <div>{{ customer.phone }}</div>
-            </div>
-            <div class="review-section">
-              <h4>Adresse de livraison <a (click)="step=2">Modifier</a></h4>
-              <div>{{ shippingAddress.street }} {{ shippingAddress.apartment }}</div>
-              <div>{{ shippingAddress.city }}, {{ shippingAddress.state }} {{ shippingAddress.zip }}</div>
-              <div>{{ shippingAddress.country }}</div>
-            </div>
-            <div class="review-section">
-              <h4>Méthode de paiement <a (click)="step=3">Modifier</a></h4>
-              <div *ngIf="payment.method==='card'">Carte se terminant par {{ payment.cardNumber?.slice(-4) }}</div>
-              <div *ngIf="payment.method==='paypal'">PayPal</div>
-              <div *ngIf="payment.method==='applepay'">Apple Pay</div>
-            </div>
-          </div>
+      <!-- Étape 2 -->
+      <div *ngIf="step === 2">
+        <h2>Adresse de livraison</h2>
+        <form>
+          <input class="form-input" placeholder="Rue" [(ngModel)]="shippingAddress.street" name="street" />
+          <input class="form-input" placeholder="Appartement" [(ngModel)]="shippingAddress.apartment" name="apartment" />
+          <input class="form-input" placeholder="Ville" [(ngModel)]="shippingAddress.city" name="city" />
+          <input class="form-input" placeholder="Province" [(ngModel)]="shippingAddress.state" name="state" />
+          <input class="form-input" placeholder="Code postal" [(ngModel)]="shippingAddress.zip" name="zip" />
+          <select class="form-input" [(ngModel)]="shippingAddress.country" name="country">
+            <option value="">Choisir un pays</option>
+            <option value="France">France</option>
+            <option value="Canada">Canada</option>
+          </select>
           <div class="form-actions">
             <button type="button" class="btn secondary-btn" (click)="prevStep()">Retour</button>
-            <button type="button" class="btn main-btn" (click)="placeOrder()">Passer la commande</button>
+            <button type="button" class="btn main-btn" (click)="nextStep()">Continuer</button>
           </div>
-          <div *ngIf="message" class="alert alert-success mt-3">{{message}}</div>
-        </div>
-
+        </form>
       </div>
 
-      <!-- Résumé de la commande -->
-      <aside class="order-summary">
-        <h3>Résumé de la commande</h3>
-        <div *ngFor="let item of cartItems" class="summary-item">
-          <img [src]="item.productImg" width="60" height="60" />
-          <div class="summary-details">
-            <div class="summary-title">{{item.productName}}</div>
-            <div class="summary-meta">Taille : {{item.productSize}}</div>
-            <div class="summary-meta">{{item.qty}} × ${{ item.pricePromo ?? item.productSizePrice | number:'1.2-2' }}</div>
+      <!-- Étape 3 -->
+      <div *ngIf="step === 3">
+        <h2>Méthode de paiement</h2>
+        <form>
+          <label><input type="radio" [(ngModel)]="payment.method" value="card" name="paymethod" /> Carte</label>
+          <label><input type="radio" [(ngModel)]="payment.method" value="paypal" name="paymethod" /> PayPal</label>
+          <label><input type="radio" [(ngModel)]="payment.method" value="applepay" name="paymethod" /> Apple Pay</label>
+
+          <div *ngIf="payment.method === 'card'">
+            <!-- ⚡️ Stripe Elements monté ici -->
+            <div id="card-element"></div>
           </div>
-        </div>
-        <hr>
-        <div class="summary-row"><span>Sous-total</span><span>${{ subtotal | number:'1.2-2' }}</span></div>
-        <div class="summary-row"><span>Livraison</span><span>${{ shipping | number:'1.2-2' }}</span></div>
-        <div class="summary-row"><span>Taxe</span><span>${{ tax | number:'1.2-2' }}</span></div>
-        <div class="summary-row total"><span>Total</span><span>${{ total | number:'1.2-2' }}</span></div>
-        <div class="promo-row">
-          <input class="promo-input" placeholder="Code promo" [(ngModel)]="promoCode" />
-          <button class="btn promo-btn" (click)="applyPromo()">Appliquer</button>
-        </div>
-        <div class="secure-checkout">
-          <span class="secure-icon">🔒</span> Paiement sécurisé
-          <div class="payment-icons">
-            <i class="material-icons">credit_card</i>
-            <i class="material-icons">payment</i>
-            <i class="material-icons">account_balance</i>
-            <i class="material-icons">account_balance_wallet</i>
+
+          <div class="form-actions">
+            <button type="button" class="btn secondary-btn" (click)="prevStep()">Retour</button>
+            <button type="button" class="btn main-btn" (click)="nextStep()">Vérifier</button>
           </div>
+        </form>
+      </div>
+
+      <!-- Étape 4 -->
+      <div *ngIf="step === 4">
+        <h2>Vérification</h2>
+        <p><b>Nom :</b> {{customer.firstname}} {{customer.lastname}}</p>
+        <p><b>Email :</b> {{customer.email}}</p>
+        <p><b>Adresse :</b> {{shippingAddressToString()}}</p>
+        <p><b>Paiement :</b> {{payment.method}}</p>
+
+        <!-- 💳 Bouton Stripe si carte -->
+        <div *ngIf="payment.method === 'card'">
+          <button type="button" class="btn main-btn" (click)="payWithStripe(clientSecret)">Payer maintenant</button>
         </div>
-      </aside>
-    </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn secondary-btn" (click)="prevStep()">Retour</button>
+          <button *ngIf="payment.method !== 'card'" type="button" class="btn main-btn" (click)="placeOrder()">Passer la commande</button>
+        </div>
+        <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+      </div>
+
+    </ng-container>
+
+    <!-- === Mode SUPPLIER === -->
+    <ng-container *ngIf="mode === 'supplier'">
+      <h2>Commande fournisseur</h2>
+      <p>Cette commande sera envoyée au fournisseur.</p>
+      <button class="btn main-btn" (click)="placeOrder()">Passer la commande fournisseur</button>
+      <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+    </ng-container>
+
   </div>
-</section>
+
+  <!-- ✅ Résumé commande -->
+  <aside class="order-summary">
+    <h3>Résumé</h3>
+    <div *ngFor="let item of cartItems" class="summary-item">
+      <img [src]="item.productImg" width="60" height="60" />
+      <div class="summary-details">
+        <div class="summary-title">{{item.productName}}</div>
+        <div class="summary-meta">Taille : {{item.productSize}}</div>
+        <div class="summary-meta">{{item.qty}} × ${{ item.pricePromo ?? item.productSizePrice | number:'1.2-2' }}</div>
+      </div>
+    </div>
+    <hr>
+    <div class="summary-row"><span>Sous-total</span><span>${{ subtotal | number:'1.2-2' }}</span></div>
+    <div class="summary-row"><span>Livraison</span><span>${{ shipping | number:'1.2-2' }}</span></div>
+    <div class="summary-row"><span>Taxe</span><span>${{ tax | number:'1.2-2' }}</span></div>
+    <div class="summary-row total"><span>Total</span><span>${{ total | number:'1.2-2' }}</span></div>
+    <div class="promo-row">
+      <input class="promo-input" placeholder="Code promo" [(ngModel)]="promoCode" />
+      <button class="btn promo-btn" (click)="applyPromo()">Appliquer</button>
+    </div>
+    <div class="secure-checkout">
+      <span class="secure-icon">🔒</span> Paiement sécurisé
+    </div>
+  </aside>
+
+</div>

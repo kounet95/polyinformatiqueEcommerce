@@ -17,19 +17,19 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StockQueryHandler {
 
-    private final StockRepository stockRepository;
+  private final StockRepository stockRepository;
 
-    @QueryHandler
-    public List<Stock> on(GetAllStocksQuery query) {
-        log.debug("Handling GetAllStocksQuery");
-        return stockRepository.findAll();
-    }
+  @QueryHandler
+  public List<Stock> on(GetAllStocksQuery query) {
+    log.debug("Handling GetAllStocksQuery");
+    return stockRepository.findAll();
+  }
 
-    @QueryHandler
-    public Stock on(GetStockByIdQuery query) {
-        log.debug("Handling GetStockByIdQuery: {}", query.getId());
-        Optional<Stock> optionalStock = stockRepository.findById(query.getId());
-        return optionalStock
-                .orElseThrow(() -> new RuntimeException("Stock not found with id: " + query.getId()));
-    }
+  @QueryHandler
+  public Stock on(GetStockByIdQuery query) {
+    log.debug("Handling GetStockByIdQuery: {}", query.getId());
+    Optional<Stock> optionalStock = stockRepository.findById(query.getId());
+    return optionalStock
+      .orElseThrow(() -> new RuntimeException("Stock not found with id: " + query.getId()));
+  }
 }

@@ -2,9 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cartservice';
 import { OrderService } from '../services/order.service';
 import { InvoiceService } from '../services/invoice.service';
-import { CustomerService } from '../services/customer.service'; // Ajouté
-import { AuthService } from '../../services/AuthService'; // Ajouté
-import { CartItem, CustomerEcommerceDTO, InvoiceDTO, OrderDTO, OrderLineDTO, OrderStatus } from '../../mesModels/models';
+import { CustomerService } from '../services/customer.service';
+import { AuthService } from '../../services/AuthService';
+import {
+  CartItem,
+  CustomerEcommerceDTO,
+  InvoiceDTO,
+  OrderDTO,
+  OrderLineDTO,
+  OrderStatus
+} from '../../mesModels/models';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -14,7 +21,9 @@ import { forkJoin } from 'rxjs';
   standalone: false,
 })
 export class CheckoutComponent implements OnInit {
+
   step = 1;
+ clientSecret: string = '';
   cartItems: CartItem[] = [];
   subtotal = 0;
   shipping = 9.99;
@@ -22,8 +31,11 @@ export class CheckoutComponent implements OnInit {
   total = 0;
   promoCode = '';
   discount = 0;
-  message: string = '';
-  loading: boolean = false;
+  message = '';
+  loading = false;
+
+  mode: 'customer' | 'supplier' = 'customer';
+  supplierId = 'SUPPLIER_XYZ';
 
   customer: CustomerEcommerceDTO = {
     id: '',
@@ -56,8 +68,8 @@ export class CheckoutComponent implements OnInit {
     private cartService: CartService,
     private orderService: OrderService,
     private invoiceService: InvoiceService,
-    private customerService: CustomerService, // Ajouté
-    private authService: AuthService // Ajouté
+    private customerService: CustomerService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -73,8 +85,6 @@ export class CheckoutComponent implements OnInit {
         next: (customer) => {
           if (customer) {
             this.customer = customer;
-            // Pré-remplir l'adresse de livraison si besoin
-            // this.shippingAddress = ... (à adapter selon ton modèle)
           }
         },
         error: () => {
@@ -104,32 +114,38 @@ export class CheckoutComponent implements OnInit {
   nextStep() { this.step++; }
   prevStep() { this.step--; }
 
+  shippingAddressToString(): string {
+    return `${this.shippingAddress.street} ${this.shippingAddress.apartment ?? ''} ${this.shippingAddress.city},
+     ${this.shippingAddress.state} ${this.shippingAddress.zip} ${this.shippingAddress.country}`;
+  }
+
   placeOrder() {
     this.loading = true;
     this.message = '';
 
-    // Vérification des champs obligatoires
-    if (!this.customer.id || !this.customer.email) {
+    if (!this.customer.id && !this.customer.email) {
       this.message = "Informations client manquantes.";
       this.loading = false;
       return;
     }
 
-    // Création de la commande
     const order: OrderDTO = {
       id: '',
       customerId: this.customer.id || this.customer.email,
-      supplierId: '',
+      supplierId: this.mode === 'supplier' ? this.supplierId : '',
       createdAt: new Date().toISOString(),
       orderStatus: OrderStatus.Inprogress,
       paymentMethod: this.payment.method,
       total: this.total,
       barcode: '',
-      shippingId: ''
+      shippingId: this.shippingAddressToString()
     };
 
+    // 1️⃣ Créer la commande
     this.orderService.createOrder(order).subscribe({
       next: orderId => {
+
+        // 2️⃣ Ajouter les lignes produits
         const orderLineRequests = this.cartItems.map(item => {
           const orderLine: OrderLineDTO = {
             id: '',
@@ -142,6 +158,8 @@ export class CheckoutComponent implements OnInit {
 
         forkJoin(orderLineRequests).subscribe({
           next: () => {
+
+            // 3️⃣ Générer la facture
             const invoice: InvoiceDTO = {
               id: '',
               orderId: orderId,
@@ -150,27 +168,47 @@ export class CheckoutComponent implements OnInit {
               paymentMethod: this.payment.method,
               restMonthlyPayment: 0,
               paymentStatus: 'WAITING',
-              supplierId: ''
+              supplierId: this.mode === 'supplier' ? this.supplierId : ''
             };
+
             this.invoiceService.createInvoice(invoice).subscribe({
               next: () => {
-                this.message = 'Commande et facture créées avec succès !';
-                this.cartService.clearCart();
-                this.cartItems = [];
-                this.loading = false;
-                this.step = 1;
+
+                // 4️⃣ Créer le PaymentIntent côté backend pour Stripe
+                this.orderService.createPaymentIntent(order).subscribe({
+                  next: (clientSecret) => {
+                    // 👉 Ici tu récupères le clientSecret pour Stripe.js
+                    console.log('Stripe clientSecret:', clientSecret);
+
+                    // 👉 TODO: Tu peux appeler Stripe.js ici :
+                    // this.payWithStripe(clientSecret);
+
+                    this.message = 'Commande créée ! Paiement en attente...';
+                    this.cartService.clearCart();
+                    this.cartItems = [];
+                    this.loading = false;
+                    this.step = 1;
+                  },
+                  error: () => {
+                    this.message = 'Erreur lors de la création du PaymentIntent Stripe.';
+                    this.loading = false;
+                  }
+                });
+
               },
               error: () => {
-                this.message = 'Erreur lors de la génération de la facture.';
+                this.message = 'Erreur lors de la création de la facture.';
                 this.loading = false;
               }
             });
+
           },
           error: () => {
             this.message = "Erreur lors de l'ajout des produits à la commande.";
             this.loading = false;
           }
         });
+
       },
       error: () => {
         this.message = "Erreur lors de la création de la commande.";
@@ -178,4 +216,47 @@ export class CheckoutComponent implements OnInit {
       }
     });
   }
+
+  // Méthode pour intégrer Stripe.js et confirmer le paiement
+async payWithStripe(clientSecret: string) {
+  //   on va faire un Chargement de Stripe.js
+  const stripeJs = await import('@stripe/stripe-js');
+  const stripe = await stripeJs.loadStripe('pk_test_TON_PUBLIC_KEY_STRIPE_ICI');
+
+  if (!stripe) {
+    this.message = 'Stripe.js non chargé correctement.';
+    return;
+  }
+
+  // Creation dun élément Stripe CardElement ou récupère les infos de ta page
+
+
+  const elements = stripe.elements();
+  const cardElement = elements.create('card');
+  cardElement.mount('#card-element'); // Assure-toi d'avoir <div id="card-element"></div> dans ton HTML
+
+  // Confirme le paiement
+  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    payment_method: {
+      card: cardElement,
+      billing_details: {
+        name: this.customer.firstname + ' ' + this.customer.lastname,
+        email: this.customer.email
+      }
+    }
+  });
+
+  if (error) {
+    console.error('Stripe Payment Error:', error);
+    this.message = 'Erreur de paiement Stripe : ' + error.message;
+  } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+    this.message = 'Paiement réussi !';
+    console.log('PaymentIntent:', paymentIntent);
+    // ✅ Tu peux rediriger vers une page de confirmation ici
+  } else {
+    this.message = 'Paiement non confirmé.';
+  }
+}
+
+
 }

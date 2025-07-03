@@ -252,3 +252,20 @@
     width: 100%;
   }
 }
+.checkout-mode {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.checkout-mode button {
+  padding: 8px 18px;
+  border: 2px solid #9c2069;
+  background: #fff;
+  color: #9c2069;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.checkout-mode button.active {
+  background: #9c2069;
+  color: #fff;
+}

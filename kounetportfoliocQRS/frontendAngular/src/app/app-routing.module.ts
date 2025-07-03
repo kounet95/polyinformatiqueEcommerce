@@ -4,12 +4,10 @@ import { AboutComponent } from './about/about.component';
 
 
 import { BlogComponent } from './blog/blog.component';
-import { ContactComponent } from './contact/contact.component';
 import { PrincingComponent } from './princing/princing.component';
 import { ArticleComponent } from './monBlog/article/article.component';
 import { NewsArticleComponent } from './monBlog/news-article/news-article.component';
 import { AuthGuard } from './guards/auth.guard';
-import { AcceuilComponent } from './acceuil/acceuil.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TeamComponent } from './team/team.component';
 import { ServicesComponent } from './services/services.component';
@@ -25,15 +23,13 @@ import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/crea
 import { AccountComponent } from './Ecommerce/account/account.component';
 import { OrderSummaryComponentComponent } from './Ecommerce/order-summary-component/order-summary-component.component';
 import { CartComponent } from './Ecommerce/cart/cart.component';
-import { OrderComponent } from './Ecommerce/order/order.component';
 import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
 import { CreateSupplierComponent } from './Ecommerce/create-spplier/create-spplier.component';
 import { CreateProductSizeComponent } from './Ecommerce/create-product-size/create-product-size.component';
 import { CheckoutComponent } from './Ecommerce/checkout/checkout.component';
 
-import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
 import { CreatStockComponent } from './Ecommerce/creat-stock/creat-stock.component';
-import { FaqComponent } from './Ecommerce/faq/faq.component';
+
 import { PrivacyComponent } from './Ecommerce/privacy/privacy.component';
 import { AddressFormComponent } from './Ecommerce/address-form/address-form.component';
 import { RegisterComponent } from './Ecommerce/register/register.component';
@@ -72,6 +68,7 @@ const routes: Routes = [
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'order', component: OrderCreateComponent },
+  { path: 'create-order', component: OrderCreateComponent },
   { path: 'order-summary', component: OrderSummaryComponentComponent },
 
   { path: 'portfolio',component: PortfolioComponent},

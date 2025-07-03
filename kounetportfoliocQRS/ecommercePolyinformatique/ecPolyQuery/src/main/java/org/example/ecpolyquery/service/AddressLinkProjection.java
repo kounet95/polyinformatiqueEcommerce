@@ -33,45 +33,79 @@ public class AddressLinkProjection {
 
   @CommandHandler
   public void handle(LinkAddressCommand cmd) {
-    eventBus.publish(GenericEventMessage.asEventMessage(
-      new AddressLinkedEvent(cmd.getAddressId(),
-        cmd.getTargetType(),
-        cmd.getTargetId())
-    ));
+    try {
+      log.debug("Handling LinkAddressCommand: addressId={}, targetType={}, targetId={}",
+                cmd.getAddressId(), cmd.getTargetType(), cmd.getTargetId());
+
+      eventBus.publish(GenericEventMessage.asEventMessage(
+        new AddressLinkedEvent(cmd.getAddressId(),
+          cmd.getTargetType(),
+          cmd.getTargetId())
+      ));
+
+      log.info("Published AddressLinkedEvent for addressId={}, targetType={}, targetId={}",
+               cmd.getAddressId(), cmd.getTargetType(), cmd.getTargetId());
+    } catch (Exception e) {
+      log.error("Error handling LinkAddressCommand: {}", e.getMessage(), e);
+      throw e; // Rethrow to ensure the command is not acknowledged
+    }
   }
 
   @EventHandler
   public void on(CreatedAddressEvent event) {
-    AddressDTO dto = event.getAddressDTO();
+    try {
+      log.debug("Handling CreatedAddressEvent: {}", event.getAddressDTO().getId());
+      AddressDTO dto = event.getAddressDTO();
 
-    // Ensure appartment is not null to avoid database constraint violation
-    String appartment = dto.getAppartment();
-    if (appartment == null) {
-      appartment = ""; // Default to empty string if null
-    }
+      // Check if address already exists to avoid duplicates
+      if (addressRepository.existsById(dto.getId())) {
+        log.info("Address with ID {} already exists, skipping creation", dto.getId());
+        return;
+      }
 
-    Address address = Address.builder()
-      .id(dto.getId())
-      .street(dto.getStreet())
-      .city(dto.getCity())
-      .state(dto.getState())
-      .zip(dto.getZip())
-      .country(dto.getCountry())
-      .appartment(appartment)
-      .build();
-    addressRepository.save(address);
+      // Ensure appartment is not null to avoid database constraint violation
+      String appartment = dto.getAppartment();
+      if (appartment == null) {
+        appartment = ""; // Default to empty string if null
+      }
 
-    if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
-      dto.getLinks().forEach(linkDTO -> {
-        AddressLink link = AddressLink.builder()
-          .targetType(linkDTO.getTargetType())
-          .targetId(linkDTO.getTargetId())
-          .address(address)
-          .build();
-        addressLinkRepository.save(link);
-      });
-    } else {
-      log.info("No links provided for Address {}", dto.getId());
+      Address address = Address.builder()
+        .id(dto.getId())
+        .street(dto.getStreet())
+        .city(dto.getCity())
+        .state(dto.getState())
+        .zip(dto.getZip())
+        .country(dto.getCountry())
+        .appartment(appartment)
+        .build();
+
+      addressRepository.save(address);
+      log.info("Address created with ID: {}", dto.getId());
+
+      // Create links if provided
+      if (dto.getLinks() != null && !dto.getLinks().isEmpty()) {
+        for (var linkDTO : dto.getLinks()) {
+          try {
+            AddressLink link = AddressLink.builder()
+              .targetType(linkDTO.getTargetType())
+              .targetId(linkDTO.getTargetId())
+              .address(address)
+              .build();
+            addressLinkRepository.save(link);
+            log.info("Address link created: {} -> {} {}",
+                    dto.getId(), linkDTO.getTargetType(), linkDTO.getTargetId());
+          } catch (Exception e) {
+            log.error("Error creating link for address {}: {}", dto.getId(), e.getMessage(), e);
+            // Continue with other links even if one fails
+          }
+        }
+      } else {
+        log.info("No links provided for Address {}", dto.getId());
+      }
+    } catch (Exception e) {
+      log.error("Error processing CreatedAddressEvent for address ID {}: {}",
+               event.getAddressDTO().getId(), e.getMessage(), e);
+      throw e; // Rethrow to ensure the event is not acknowledged
     }
   }
 

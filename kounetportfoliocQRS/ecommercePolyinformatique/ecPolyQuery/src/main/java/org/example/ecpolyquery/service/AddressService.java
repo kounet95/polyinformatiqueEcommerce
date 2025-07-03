@@ -22,10 +22,6 @@ import java.util.UUID;
 public class AddressService {
 
   private final AddressRepository addressRepository;
-  private final SupplierRepository supplierRepository;
-  private final ShippingRepository shippingRepository;
-  private final CustomerRepository customerRepository;
-  private final StockRepository stockRepository;
   private final AddressLinkRepository addressLinkRepository;
 
 
@@ -37,7 +33,7 @@ public class AddressService {
     // Ensure appartment is not null to avoid database constraint violation
     String appartment = dto.getAppartment();
     if (appartment == null) {
-      appartment = ""; // Default to empty string if null
+      appartment = "";
     }
 
     Address address = Address.builder()
@@ -77,7 +73,27 @@ public class AddressService {
       log.info("✅ Address link saved: {} -> {} {}", address.getId(), event.getTargetType(), event.getTargetId());
     }, () -> {
       log.warn("⚠️ Address not found yet: {} -> {} {}", event.getAddressId(), event.getTargetType(), event.getTargetId());
-      throw new IllegalStateException("Address not found yet: " + event.getAddressId());
+      // Create a placeholder address with the given ID
+      Address placeholderAddress = Address.builder()
+        .id(event.getAddressId())
+        .street("Pending")
+        .city("Pending")
+        .state("Pending")
+        .zip("Pending")
+        .country("Pending")
+        .appartment("")
+        .build();
+      addressRepository.save(placeholderAddress);
+
+      // Create the link with the placeholder address
+      AddressLink link = AddressLink.builder()
+        .targetType(event.getTargetType())
+        .targetId(event.getTargetId())
+        .address(placeholderAddress)
+        .build();
+      addressLinkRepository.save(link);
+      log.info("✅ Created placeholder address and link: {} -> {} {}",
+               placeholderAddress.getId(), event.getTargetType(), event.getTargetId());
     });
   }
 

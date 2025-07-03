@@ -61,7 +61,6 @@ import { CreatGroupeSocialComponent } from './Ecommerce/creat-groupe-social/crea
 import { AccountComponent } from './Ecommerce/account/account.component';
 import { OrderSummaryComponentComponent } from './Ecommerce/order-summary-component/order-summary-component.component';
 import { OrderLineComponent } from './Ecommerce/order-line/order-line.component';
-import { OrderComponent } from './Ecommerce/order/order.component';
 import { OrderStatusComponent } from './Ecommerce/order-status/order-status.component';
 import { CartComponent } from './Ecommerce/cart/cart.component';
 import { OrderCreateComponent } from './Ecommerce/order-create/order-create.component';
@@ -125,7 +124,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AccountComponent,
     OrderSummaryComponentComponent,
     OrderLineComponent,
-    OrderComponent,
     OrderStatusComponent,
     CartComponent,
     OrderCreateComponent,

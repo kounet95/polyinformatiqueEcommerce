@@ -19,27 +19,27 @@ export class OrderService {
     return this.http.post<string>(`${this.commandBase}/create`, order);
   }
 
-  /** Command: Ajout d'un produit à une commande existante */
+  /** Command: Ajout d'un produit */
   addProductToOrder(orderId: string, orderLine: OrderLineDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/${orderId}/add-product`, orderLine);
   }
 
-  /** Command: Confirmation d'une commande */
+  /** Command: Confirmer la commande */
   confirmOrder(orderId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/${orderId}/confirm`, {});
   }
 
-  /** Command: Génération d'une facture pour une commande */
+  /** Command: Générer une facture */
   generateInvoice(orderId: string, invoice: InvoiceDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/${orderId}/generate-invoice`, invoice);
   }
 
-  /** Command: Paiement d'une facture */
+  /** Command: Payer une facture */
   payInvoice(invoiceId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/invoice/${invoiceId}/pay`, {});
   }
 
-  /** Command: Lancement de la livraison */
+  /** Command: Lancer la livraison */
   startShipping(orderId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/${orderId}/start-shipping`, {});
   }
@@ -49,7 +49,17 @@ export class OrderService {
     return this.http.put<string>(`${this.commandBase}/${orderId}/deliver`, {});
   }
 
-  /** Query: Toutes les commandes */
+  /** Command: Annuler une commande */
+  cancelOrder(orderId: string, reason = 'Cancelled by user'): Observable<string> {
+    return this.http.delete<string>(`${this.commandBase}/${orderId}?reason=${encodeURIComponent(reason)}`);
+  }
+
+  /** Command: Générer le PaymentIntent Stripe */
+  createPaymentIntent(order: OrderDTO): Observable<string> {
+    return this.http.post<string>(`${this.commandBase}/payment-intent`, order);
+  }
+
+  /** Query: Liste des commandes */
   getAllOrders(): Observable<OrderDTO[]> {
     return this.http.get<OrderDTO[]>(`${this.queryBase}/orders`);
   }
@@ -59,7 +69,7 @@ export class OrderService {
     return this.http.get<OrderDTO>(`${this.queryBase}/orders/${orderId}`);
   }
 
-  /** Command: Obtenir les événements d'une commande (Event Sourcing) */
+  /** Event sourcing: Récupérer les événements */
   getOrderEvents(aggregateId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.commandBase}/events/${aggregateId}`);
   }
