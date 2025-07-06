@@ -36,17 +36,17 @@ public class Stock {
 //    @Valid @RequestBody CreateSupplyWithStockDTO input) {
 //
 //    String supplyId = UUID.randomUUID().toString();
-
+//
 //    SupplyDTO supplyDTO = SupplyDTO.builder()
 //      .id(supplyId)
 //      .name(input.getName())
 //      .createdAt(input.getCreatedAt())
-//      .stocksIds(new ArrayList<>()) // pas grave, tu peux remplir après
+//      .stocksIds(new ArrayList<>())
 //      .build();
 //
 //    CreateSupplyCommande createSupplyCommand = new CreateSupplyCommande(supplyId, supplyDTO);
 //
-//    List<CompletableFuture<Object>> stockCommands = input.getStocksIds().stream().map(stockInput -> {
+//    List<CompletableFuture<Object>> stockCommands = input.getStocks().stream().map(stockInput -> {
 //
 //      String stockId = UUID.randomUUID().toString();
 //      String addressId = UUID.randomUUID().toString();
@@ -78,7 +78,7 @@ public class Stock {
 //
 //      AddStockCommand addStockCommand = new AddStockCommand(stockId, stockDTO);
 //
-//      // ✅ Crée le lien entre l’adresse et le stock
+//      // Crée le lien entre l’adresse et le stock
 //      LinkAddressCommand linkAddressCmd = LinkAddressCommand.builder()
 //        .addressId(addressId)
 //        .targetType("STOCK")

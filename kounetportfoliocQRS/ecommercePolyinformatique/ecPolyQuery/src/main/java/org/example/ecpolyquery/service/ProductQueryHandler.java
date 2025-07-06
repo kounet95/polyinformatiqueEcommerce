@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
+import org.example.ecpolyquery.entity.Subcategory;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 import org.example.ecpolyquery.query.GetProductByIdQuery;
+import org.example.ecpolyquery.query.GetProductsBySousCategoryQuery;
 import org.example.ecpolyquery.repos.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +45,17 @@ public class ProductQueryHandler {
     log.debug("Handling GetProductByIdQuery: {}", query.getId());
     Optional<Product> optionalProduct = productRepository.findById(query.getId());
     return optionalProduct.orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getId()));
+  }
+
+
+  @QueryHandler
+  public List<Product> handle(GetProductsBySousCategoryQuery query) {
+    log.debug("Handling GetProductsBySousCategoryQuery: {}", query.getSousCategoryId());
+
+    Subcategory subcategory = new Subcategory();
+    subcategory.setId(query.getSousCategoryId());
+
+    return productRepository.findAllBySubcategory(subcategory);
   }
 
 }

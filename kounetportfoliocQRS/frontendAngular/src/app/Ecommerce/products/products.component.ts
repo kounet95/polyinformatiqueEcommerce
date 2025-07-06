@@ -43,7 +43,7 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
-    // (Facultatif) Lancer la rotation des annonces automatiquement
+ 
     this.startAnnouncementRotation();
   }
 

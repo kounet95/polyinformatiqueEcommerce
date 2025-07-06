@@ -16,7 +16,6 @@ public class ProductSizeDTO {
   private String id;
 
   private SizeProd sizeProd;
-  @NotBlank(message = "prodId cannot be blank")
   private String prodId;
   @NotNull(message = "Le prix est obligatoire")
   @Min(value = 0, message = "Le prix doit être positif")

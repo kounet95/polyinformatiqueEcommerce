@@ -30,6 +30,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final SupplierRepository supplierRepository;
     private final InvoiceRepository invoiceRepository;
+    private final  StockRepository stockRepository;
 
   @EventHandler
     public void on(OrderCreatedEvent event) {
@@ -47,7 +48,7 @@ public class OrderService {
           .createdAt(LocalDateTime.parse(orderDTO.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME))
              .paymentMethod(orderDTO.getPaymentMethod())
           .orderStatus(OrderStatus.Inprogress)
-          .barcode(orderDTO.getBarcode())
+
           .customer(customer)
           .supplierId(supplier)
 
@@ -78,40 +79,46 @@ public class OrderService {
         orderecommerceRepository.save(order);
     }
 
-//  @EventHandler
-//  public void on(ProductAddedToOrderEvent event) {
-//    log.debug("Handling ProductAddedToOrderEvent: {}", event.getId());
-//
-//    // 1. Récuperation de la commande
-//    Orderecommerce order = orderecommerceRepository.findById(event.getOrderLineDTO().getOrderId())
-//      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getOrderLineDTO().getOrderId()));
-//
-//    // 2. Vérifier le statut de la commande
-//    if (order.getOrderStatus() == OrderStatus.Delivered || order.getOrderStatus() == OrderStatus.Cancelled) {
-//      throw new IllegalStateException("Cannot add product: order already " + order.getOrderStatus());
-//    }
-//
-//    // 3. Récuperation du produit
-//    Product product = productRepository.findById(event.getOrderLineDTO().getStockId())
-//      .orElseThrow(() -> new RuntimeException("Product not found with id: " + event.getOrderLineDTO().getStockId()));
-//
-//    // 4. Créons la nouvelle ligne de commande
-//    OrderLine orderLine = OrderLine.builder()
-//      .id(UUID.randomUUID().toString())
-//      .orderecommerce(order)
-//      .stockId(event.getOrderLineDTO().getStockId())
-//      .qty(event.getOrderLineDTO().getQty())
-//      .build();
-//
-//    // 5. Ajoutons à la commande et sauvegardons le
-//    order.getLines().add(orderLine);
-//    orderLineRepository.save(orderLine);
-//    orderecommerceRepository.save(order);
-//
-//    log.info("Product {} (qty: {}) added to order {}", event.getOrderLineDTO().getProductId(), event.getOrderLineDTO().getQty(), event.getOrderLineDTO().getOrderId());
-//  }
+  @EventHandler
+  public void on(ProductAddedToOrderEvent event) {
+    log.debug("Handling ProductAddedToOrderEvent: {}", event.getId());
 
-    @EventHandler
+    // 1. Récupérer la commande
+    Orderecommerce order = orderecommerceRepository.findById(event.getOrderLineDTO().getOrderId())
+      .orElseThrow(() -> new RuntimeException("Order not found with id: " + event.getOrderLineDTO().getOrderId()));
+
+    // 2. Vérifier le statut
+    if (order.getOrderStatus() == OrderStatus.Delivered || order.getOrderStatus() == OrderStatus.Cancelled) {
+      throw new IllegalStateException("Cannot add product: order already " + order.getOrderStatus());
+    }
+
+    // 3. Récupérer le Stock et remonter jusqu'au Product
+    Stock stock = stockRepository.findById(event.getOrderLineDTO().getStockId())
+      .orElseThrow(() -> new RuntimeException("Stock not found with id: " + event.getOrderLineDTO().getStockId()));
+
+    Product product = stock.getProductSize().getProductId();
+    if (product == null) {
+      throw new RuntimeException("No Product linked to Stock: " + stock.getId());
+    }
+
+    // 4. Créer OrderLine
+    OrderLine orderLine = OrderLine.builder()
+      .id(UUID.randomUUID().toString())
+      .orderecommerce(order)
+      .stockId(stock)
+      .qty(event.getOrderLineDTO().getQty())
+      .build();
+
+    // 5. Sauvegarder
+    order.getOrderLines().add(orderLine);
+    orderLineRepository.save(orderLine);
+    orderecommerceRepository.save(order);
+
+    log.info("Product {} (qty: {}) added to order {}", product.getId(), event.getOrderLineDTO().getQty(), order.getId());
+  }
+
+
+  @EventHandler
     public void on(OrderCancelledEvent event) {
         log.debug("Handling OrderCancelledEvent: {}", event.getId());
 

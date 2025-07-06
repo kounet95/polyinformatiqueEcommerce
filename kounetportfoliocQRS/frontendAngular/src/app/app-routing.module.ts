@@ -36,6 +36,7 @@ import { RegisterComponent } from './Ecommerce/register/register.component';
 import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
+import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,7 @@ const routes: Routes = [
   { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'category', component: CategoryComponent },
+  { path: 'category', component: CategoryComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }  },
   { path: 'create-category', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
@@ -75,7 +76,7 @@ const routes: Routes = [
   { path: 'pricing', component: PrincingComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'products', component: ProductComponent },
-  { path: 'product', component: ProductDetailsComponent },
+  { path: 'productsize', component: ProductSizeComponent },
 
   { path: 'product/:id', component: ProductDetailsComponent },
   { path: 'signin', component: LoginComponent },

@@ -6,9 +6,12 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Product;
 
 import org.example.ecpolyquery.entity.ProductSize;
+import org.example.ecpolyquery.entity.Subcategory;
 import org.example.ecpolyquery.query.GetAllProductsQuery;
 
 import org.example.ecpolyquery.query.GetProductByIdQuery;
+import org.example.ecpolyquery.query.GetProductsBySousCategoryQuery;
+import org.example.ecpolyquery.repos.ProductRepository;
 import org.example.ecpolyquery.service.ProductQueryHandler;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductDTO;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +30,7 @@ public class ProductController {
 
   private final QueryGateway queryGateway;
 private final ProductQueryHandler productQueryHandler;
+private final ProductRepository productRepository;
   @GetMapping
   public CompletableFuture<List<ProductDTO>> getAllProducts(
     @RequestParam(defaultValue = "0") int page,
@@ -69,4 +73,18 @@ private final ProductQueryHandler productQueryHandler;
     dto.setIsActive(entity.isActive());
     return dto;
   }
+
+
+  @GetMapping("/by-souscategorie/{id}")
+  public CompletableFuture<List<ProductDTO>> getProductsBySousCategoryId(@PathVariable("id") String sousCategoryId) {
+    return queryGateway.query(
+      new GetProductsBySousCategoryQuery(sousCategoryId),
+      ResponseTypes.multipleInstancesOf(Product.class)
+    ).thenApply(products -> products.stream()
+      .map(ProductController::toDto)
+      .collect(Collectors.toList())
+    );
+  }
+
+
 }

@@ -121,6 +121,7 @@ class GetOrderLineByIdQuery(val id: String)
 
 class GetProductByIdQuery(val id: String)
 class GetProductSizeByIdQuery(val id: String)
+class GetProductsBySousCategoryQuery (val sousCategoryId: String)
 class findAllNewsProducts(date: Date?) {
   var date: Date?
     get() = date
@@ -128,8 +129,13 @@ class findAllNewsProducts(date: Date?) {
     this.date = date
   }
 }
+data class GetNewArrivalsStockQuery(
+  val since: LocalDateTime
+)
 
 class findAllSaleProducts( )
+
+class GetOnSaleStockQuery ( )
 
 
 

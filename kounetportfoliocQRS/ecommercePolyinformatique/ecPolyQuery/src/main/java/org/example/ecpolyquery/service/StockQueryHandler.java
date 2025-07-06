@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Stock;
 import org.example.ecpolyquery.query.GetAllStocksQuery;
+import org.example.ecpolyquery.query.GetNewArrivalsStockQuery;
+import org.example.ecpolyquery.query.GetOnSaleStockQuery;
 import org.example.ecpolyquery.query.GetStockByIdQuery;
 import org.example.ecpolyquery.repos.StockRepository;
 import org.springframework.stereotype.Service;
@@ -32,4 +34,17 @@ public class StockQueryHandler {
     return optionalStock
       .orElseThrow(() -> new RuntimeException("Stock not found with id: " + query.getId()));
   }
+
+  @QueryHandler
+  public List<Stock> on(GetNewArrivalsStockQuery query) {
+    log.debug("Handling GetNewArrivalsStockQuery since {}", query.getSince());
+    return stockRepository.findByCreatedDateAfter(query.getSince());
+  }
+
+  @QueryHandler
+  public List<Stock> on(GetOnSaleStockQuery query) {
+    log.debug("Handling GetOnSaleStockQuery");
+    return stockRepository.findOnSale();
+  }
+
 }

@@ -24,6 +24,12 @@ public class Orderecommerce {
   @ManyToOne
   @JoinColumn(name = "supplierId")
   private Supplier supplierId;
-  @OneToOne(mappedBy = "orderecommerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "orderecommerce",
+    cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Shipping shipping;
+  @OneToMany(mappedBy = "orderecommerce",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true,
+    fetch = FetchType.LAZY)
+  private List<OrderLine> orderLines;
 }

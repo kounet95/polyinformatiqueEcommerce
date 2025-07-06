@@ -110,7 +110,6 @@ public class OrderAggregate {
 
     this.paymentMethod = dto.getPaymentMethod();
     this.total = dto.getTotal();
-    this.barcode = dto.getBarcode();
     this.confirmed = false;
     this.paid = false;
     this.shipped = false;

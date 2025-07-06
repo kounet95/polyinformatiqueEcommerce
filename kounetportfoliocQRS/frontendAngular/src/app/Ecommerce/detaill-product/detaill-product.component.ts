@@ -77,6 +77,9 @@ export class ProductDetailsComponent implements OnInit {
     } else {
       alert('Vous devez sélectionner un produit');
     }
+
+    const sizeId = this.route.snapshot.paramMap.get('id');
+  console.log('ProductSize.id:', sizeId);
   }
 
   selectImage(idx: number) {

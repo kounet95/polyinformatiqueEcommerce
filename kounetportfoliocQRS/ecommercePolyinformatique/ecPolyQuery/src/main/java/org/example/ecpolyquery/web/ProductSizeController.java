@@ -57,17 +57,31 @@ public class ProductSizeController {
   }
   //un dto pour simplifier
   private static ProductSizeDTO toDto(ProductSize ps) {
+    ProductDTO productDTO = null;
+    if (ps.getProductId() != null) {
+      Product product = ps.getProductId();
+      productDTO = ProductDTO.builder()
+        .id(product.getId())
+        .name(product.getName())
+        .description(product.getDescription())
+        .isActive(product.isActive())
+        .models(product.getUrlModels())
+        .subcategoryId(product.getSubcategory() != null ? product.getSubcategory().getId() : null)
+        .socialGroupId(product.getSocialGroup() != null ? product.getSocialGroup().getId() : null)
+        .build();
+    }
+
     return ProductSizeDTO.builder()
       .id(ps.getId())
       .sizeProd(ps.getSize())
+      .prodId(ps.getProductId() != null ? ps.getProductId().getId() : null)
       .price(ps.getPrice())
       .pricePromo(ps.getPromoPrice())
       .frontUrl(ps.getFrontImage())
       .backUrl(ps.getBackImage())
       .leftUrl(ps.getLeftImage())
       .rightUrl(ps.getRightmage())
-
-
+      .prodId(ps.getProductId() != null ? ps.getProductId().getId() : null)
       .build();
   }
 

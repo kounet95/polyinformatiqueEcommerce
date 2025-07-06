@@ -34,16 +34,25 @@ export class CartService {
 
   addToCart(productSize: ProductSizeDTO, qty: number = 1): void {
     this.loadCart();
+
+    if (!productSize.product) {
+      console.error('ProductDTO manquant sur ProductSizeDTO !');
+      return;
+    }
+
     const existing = this.items.find(
-      item => item.productSizeId === productSize.id && item.productId === productSize.prodId
+      item =>
+        item.productSizeId === productSize.id &&
+        item.productId === productSize.product!.id
     );
+
     if (existing) {
       existing.qty += qty;
     } else {
       this.items.push({
-        productId: productSize.prodId,
-        productName: productSize.prodId,
-        productImg: productSize.frontUrl,
+        productId: productSize.product.id,
+        productName: productSize.product.name,
+        productImg: productSize.frontUrl || '',
         qty,
         productSizeId: productSize.id,
         productSize: productSize.sizeProd,
@@ -51,6 +60,7 @@ export class CartService {
         pricePromo: productSize.pricePromo
       });
     }
+
     this.saveCart();
   }
 

@@ -59,6 +59,11 @@ export class ProductService {
     return this.http.get<ProductDTO>(`${ecpolyQuery.backend}/api/products/${productId}`);
   }
 
+ getProductsBySousCategoryId(id: string): Observable<ProductDTO[]> {
+
+  return this.http.get<ProductDTO[]>(`/api/produits/by-souscategorie/${id}`);
+}
+
   /** Upload image */
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();

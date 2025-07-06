@@ -121,6 +121,7 @@ export interface AddressDTO {
 export interface CategoryDTO {
   id: string;
   name: string;
+  sousCategories: SubcategoryDTO[];
 }
 
 // ===============================
@@ -217,13 +218,14 @@ export interface ProductDTO {
 export interface ProductSizeDTO {
   id: string;
   sizeProd: SizeProd;
-  prodId: string;
+  prodId: string; 
+  product?: ProductDTO; 
   price: number;
   pricePromo: number;
   frontUrl: string;
-    backUrl: string;
-    leftUrl: string;
-    rightUrl:string;
+  backUrl: string;
+  leftUrl: string;
+  rightUrl: string;
 }
 export interface Page<T> {
   content: T[];
@@ -287,7 +289,8 @@ export interface StockDTO {
 export interface SubcategoryDTO {
   id: string;
   name: string;
-  categoryId: string;
+  categoryId?: string;
+  products?: ProductDTO[];
 }
 
 // ===============================
@@ -302,15 +305,16 @@ export interface SupplierDTO {
 }
 
 export interface CartItem {
-  productId: string;
-  productName: string;
-  productImg: string;
+  productId: string;      // ID du produit
+  productName: string;    // Nom du produit
+  productImg: string;     // URL de l’image
   qty: number;
-  productSizeId: string;   
-  productSize: string;     
-  productSizePrice: number; 
-  pricePromo?: number;     
+  productSizeId: string;  // ID de la taille choisie
+  productSize: string;    // Valeur de la taille
+  productSizePrice: number;
+  pricePromo: number;
 }
+
 
 interface CreateSupplierPayload {
   fullname: string;
