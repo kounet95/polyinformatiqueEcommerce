@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class Stock {
   @Id
   private String id;
-  private double purchasePrice;
-  private double promoPrice;
+  private Double purchasePrice;
+  private Double promoPrice;
   private double quantity;
   private LocalDateTime createdDate;
   private LocalDateTime closedDate;

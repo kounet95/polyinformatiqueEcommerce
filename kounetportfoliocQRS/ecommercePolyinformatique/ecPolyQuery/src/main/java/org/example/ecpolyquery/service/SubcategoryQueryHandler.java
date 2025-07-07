@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Subcategory;
 import org.example.ecpolyquery.query.GetAllSubcategoriesQuery;
+import org.example.ecpolyquery.query.GetSubcategoriesByCategoryIdQuery;
 import org.example.ecpolyquery.query.GetSubcategoryByIdQuery;
 import org.example.ecpolyquery.repos.SubcategoryRepository;
 import org.springframework.stereotype.Service;
@@ -32,4 +33,10 @@ public class SubcategoryQueryHandler {
         return optionalSubcategory
                 .orElseThrow(() -> new RuntimeException("Subcategory not found with id: " + query.getId()));
     }
+
+  @QueryHandler
+  public List<Subcategory> on(GetSubcategoriesByCategoryIdQuery query) {
+    log.debug("Handling GetSubcategoriesByCategoryIdQuery: {}", query.getCategoryIds());
+    return subcategoryRepository.findByCategory(query.getCategoryIds());
+  }
 }

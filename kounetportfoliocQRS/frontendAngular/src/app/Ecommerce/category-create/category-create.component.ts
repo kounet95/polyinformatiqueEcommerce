@@ -36,7 +36,7 @@ export class CategoryCreateComponent {
     const category: CategoryDTO = {
       id: '', 
       name: this.categoryForm.value.name,
-      sousCategories: [] // Initialise avec un tableau vide si nécessaire
+      sousCategories: [] 
     };
 
     this.loading = false;

@@ -133,6 +133,10 @@ data class GetNewArrivalsStockQuery(
   val since: LocalDateTime
 )
 
+data class GetSubcategoriesByCategoryIdQuery(
+  val categoryIds: String
+)
+
 class findAllSaleProducts( )
 
 class GetOnSaleStockQuery ( )

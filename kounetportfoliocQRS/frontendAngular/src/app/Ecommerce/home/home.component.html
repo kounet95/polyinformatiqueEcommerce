@@ -1,95 +1,51 @@
-<header id="header" class="header">
-  <div class="main-section">
-    <div class="container">
+<section class="categories">
+  <h2>Catégories</h2>
+  <div class="categories-list">
+    <button 
+      *ngFor="let cat of categories"
+      (click)="onSelectCategory(cat)"
+      [class.active]="cat === selectedCategory"
+    >
+      {{ cat.name }}
+    </button>
+  </div>
+</section>
 
-      <!-- Featured Products -->
-      <section>
-        <h2 class="section-title">Featured Products</h2>
-        <div class="product-grid">
-          <div class="product-card" *ngFor="let prod of featuredProductsSize">
-            <div class="product-image">
-              <img [src]="prod.frontUrl || prod.product?.models"
-                   [alt]="prod.product?.name || 'Product'"
-                   loading="lazy">
-            </div>
-            <div class="product-info">
-              <h5>{{ prod.product?.name || 'Unnamed' }}</h5>
-              <p class="price">
-                <span *ngIf="prod.pricePromo" class="original-price">\${{ prod.price }}</span>
-                \${{ prod.pricePromo || prod.price }}
-              </p>
-              <a class="btn-view">View Product</a>
-            </div>
-          </div>
-        </div>
-      </section>
+<section class="subcategories" *ngIf="selectedCategory">
+  <h3>Sous-catégories pour {{ selectedCategory.name }}</h3>
 
-      <!-- New Arrivals -->
-      <section>
-        <h2 class="section-title">New Arrivals</h2>
-        <div class="product-grid">
-          <div class="product-card" *ngFor="let prod of newArrivals">
-            <div class="product-image">
-              <img [src]="prod.frontUrl || prod.product?.models"
-                   [alt]="prod.product?.name || 'Produit'"
-                   loading="lazy" />
-            </div>
-            <div class="product-info">
-              <h5>{{ prod.product?.name || 'Inconnu' }}</h5>
-              <p class="price">
-                <span *ngIf="prod.pricePromo" class="original-price">\${{ prod.price }}</span>
-                \${{ prod.pricePromo || prod.price }}
-              </p>
-              <a class="btn-view">Voir</a>
-            </div>
-          </div>
-        </div>
-      </section>
+  <div *ngIf="selectedSubcategories.length > 0; else noSubcats">
+    <ul>
+      <li *ngFor="let sous of selectedSubcategories">
+        {{ sous.name }}
+      </li>
+    </ul>
+  </div>
 
-      <!-- On Sale -->
-      <section>
-        <h2 class="section-title">On Sale</h2>
-        <div class="product-grid">
-          <div class="product-card" *ngFor="let prod of saleProducts">
-            <div class="product-image">
-              <img [src]="prod.frontUrl || prod.product?.models"
-                   [alt]="prod.product?.name || 'Produit'"
-                   loading="lazy" />
-              <span *ngIf="prod.pricePromo" class="badge-sale">Promo</span>
-            </div>
-            <div class="product-info">
-              <h5>{{ prod.product?.name || 'Inconnu' }}</h5>
-              <p class="price">
-                <span *ngIf="prod.pricePromo" class="original-price">\${{ prod.price }}</span>
-                \${{ prod.pricePromo || prod.price }}
-              </p>
-              <a class="btn-view">Voir</a>
-            </div>
-          </div>
-        </div>
-      </section>
+  <ng-template #noSubcats>
+    <p>Aucune sous-catégorie trouvée.</p>
+  </ng-template>
+</section>
 
-      <!-- Catégories et sous-catégories -->
-      <section>
-        <h2 class="section-title">Categories</h2>
-        <div class="categories-grid">
-          <div class="category-card" *ngFor="let cat of categories">
-            <h4>{{ cat.name }}</h4>
-            <ul *ngIf="cat.sousCategories.length > 0; else noSousCat">
-              <li *ngFor="let sous of cat.sousCategories">
-                {{ sous.name }}
-                <ul>
-                  <li *ngFor="let prod of sous.products">{{ prod.name }}</li>
-                </ul>
-              </li>
-            </ul>
-            <ng-template #noSousCat>
-              <p>No subcategories</p>
-            </ng-template>
-          </div>
-        </div>
-      </section>
+<section class="products" *ngIf="selectedCategory">
+  <h3>Produits associés</h3>
 
+  <div *ngIf="selectedProducts.length > 0; else noProds">
+    <div class="product-list">
+      <div class="product-item" *ngFor="let prod of selectedProducts">
+        <img 
+          [src]="prod.models" 
+          [alt]="prod.name" 
+          width="200"
+          height="200"
+        />
+        <h4>{{ prod.name }}</h4>
+        <p>{{ prod.description }}</p>
+      </div>
     </div>
   </div>
-</header>
+
+  <ng-template #noProds>
+    <p>Aucun produit pour ces sous-catégories.</p>
+  </ng-template>
+</section>

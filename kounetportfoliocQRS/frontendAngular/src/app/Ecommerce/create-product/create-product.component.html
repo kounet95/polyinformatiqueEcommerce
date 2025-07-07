@@ -24,10 +24,12 @@
               <div class="col-md-6 mb-3">
                 <label for="name" class="form-label">Nom du produit</label>
                 <input type="text" id="name" class="form-control" formControlName="name" placeholder="Ex: Chemise wax">
-                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('required') && productForm.get('name')?.touched">
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('required') 
+                && productForm.get('name')?.touched">
                   Nom requis.
                 </div>
-                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('minlength') && productForm.get('name')?.touched">
+                <div class="text-danger small" *ngIf="productForm.get('name')?.hasError('minlength') 
+                && productForm.get('name')?.touched">
                   Minimum 2 caractères.
                 </div>
               </div>
@@ -89,9 +91,7 @@
             </div>
                         <!-- Bouton -->
             <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-primary" [disabled]="loading">
-                {{ loading ? 'Création en cours...' : 'Créer le produit' }}
-              </button>
+               <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
             </div>
             <!-- Messages -->
             <div *ngIf="successMessage" class="alert alert-success text-center">

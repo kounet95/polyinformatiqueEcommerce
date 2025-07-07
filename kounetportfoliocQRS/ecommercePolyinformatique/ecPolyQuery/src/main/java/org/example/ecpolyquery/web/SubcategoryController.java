@@ -6,6 +6,7 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Subcategory;
 import org.example.ecpolyquery.query.GetAllSubcategoriesQuery;
 import org.example.ecpolyquery.query.GetSubcategoryByIdQuery;
+import org.example.ecpolyquery.query.GetSubcategoriesByCategoryIdQuery;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SubcategoryDTO;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,14 @@ public class SubcategoryController {
     return queryGateway.query(new GetSubcategoryByIdQuery(id),
         ResponseTypes.instanceOf(Subcategory.class))
       .thenApply(SubcategoryController::toDto);
+  }
+
+  // ✅ Nouveau endpoint pour récupérer les sous-catégories par catégorie
+  @GetMapping("/by-category/{categoryId}")
+  public CompletableFuture<List<SubcategoryDTO>> getSubcategoriesByCategoryId(@PathVariable String categoryId) {
+    return queryGateway.query(new GetSubcategoriesByCategoryIdQuery(categoryId),
+        ResponseTypes.multipleInstancesOf(Subcategory.class))
+      .thenApply(subs -> subs.stream().map(SubcategoryController::toDto).collect(Collectors.toList()));
   }
 
   private static SubcategoryDTO toDto(Subcategory entity) {

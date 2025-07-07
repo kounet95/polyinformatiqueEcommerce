@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryDTO, SubcategoryDTO, SocialGroupDTO, ProductDTO, ProductSizeDTO } from '../../mesModels/models';
 import { CategoryService } from '../services/category.service';
 import { SouscategoriesService } from '../services/souscategories.service';
 import { CategoriesocialesService } from '../services/categoriesociales.service';
 import { ProductService } from '../services/produit.service';
 import { ProductSizeService } from '../services/product-size.service';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-create-product',
@@ -143,5 +145,7 @@ export class CreateProductComponent implements OnInit {
         this.loading = false;
       }
     });
+
+     console.log('Form valid → envoi...');
   }
 }

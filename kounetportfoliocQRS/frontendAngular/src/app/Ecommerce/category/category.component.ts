@@ -150,11 +150,6 @@ export class CategoryComponent implements OnInit {
                 .map(sc => ({ id: sc.id, name: sc.name }))
             }));
             this.loading = false;
-
-            // ** SUPPRESSION DE LA SELECTION AUTOMATIQUE DE LA PREMIERE CATEGORIE **
-            // if (this.categories.length > 0) {
-            //   this.onCategorySelect(this.categories[0].id);
-            // }
           },
           error: () => {
             this.error = "Erreur lors du chargement des sous-catégories.";
