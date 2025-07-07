@@ -79,11 +79,14 @@
         </button>
 
         <!-- Compte -->
-        <div class="dropdown account-dropdown">
-          <button class="header-action-btn" data-bs-toggle="dropdown">
-            <i class="bi bi-person"></i>
-            <span class="action-text d-none d-md-inline-block">Mon compte</span>
-          </button>
+       <div class="dropdown account-dropdown">
+  <button class="header-action-btn" data-bs-toggle="dropdown">
+    <i class="bi bi-person"></i>
+    <span *ngIf="profile; else noProfile">{{ profile.firstName }} {{ profile.lastName }}</span>
+    <ng-template #noProfile>
+      <span class="action-text d-none d-md-inline-block">Mon compte</span>
+    </ng-template>
+  </button>
           <div class="dropdown-menu">
             <div class="dropdown-header">
               <h6>Bienvenue sur <span class="sitename">LeContinent</span></h6>
@@ -94,7 +97,7 @@
                 <i class="bi bi-person-circle me-2"></i>
                 <span>Mon profil</span>
               </a>
-              <a class="dropdown-item d-flex align-items-center" href="orders.html">
+              <a class="dropdown-item d-flex align-items-center" routerLink="/account">
                 <i class="bi bi-bag-check me-2"></i>
                 <span>Mes commandes</span>
               </a>
