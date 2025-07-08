@@ -37,6 +37,6 @@ public class SubcategoryQueryHandler {
   @QueryHandler
   public List<Subcategory> on(GetSubcategoriesByCategoryIdQuery query) {
     log.debug("Handling GetSubcategoriesByCategoryIdQuery: {}", query.getCategoryIds());
-    return subcategoryRepository.findByCategory(query.getCategoryIds());
+    return subcategoryRepository.findByCategory_Id(query.getCategoryIds());
   }
 }

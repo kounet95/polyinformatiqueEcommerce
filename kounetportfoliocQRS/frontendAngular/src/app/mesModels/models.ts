@@ -213,6 +213,14 @@ export interface ProductDTO {
 }
 
 // ===============================
+// ========== LikeDTO ==========
+// ===============================
+export interface LikeDTO {
+  id: string; 
+  userId: string; 
+  productId: string;  
+}
+// ===============================
 // ========== ProductSizeDTO ==========
 // ===============================
 export interface ProductSizeDTO {

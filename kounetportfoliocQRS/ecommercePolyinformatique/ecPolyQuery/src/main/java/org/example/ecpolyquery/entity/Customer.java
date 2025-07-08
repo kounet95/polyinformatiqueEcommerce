@@ -18,5 +18,5 @@ public class Customer {
   private String email;
   private String phone;
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Like>  likes;
+  private List<LikeProduct>  likes;
 }

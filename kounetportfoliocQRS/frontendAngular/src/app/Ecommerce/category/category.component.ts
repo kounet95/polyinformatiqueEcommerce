@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../services/category.service';
 import { ProductService } from '../services/produit.service';
-import { CategoryDTO, ProductDTO, ProductSizeDTO } from '../../mesModels/models';
+import { CategoryDTO, ProductDTO, ProductSizeDTO, SocialGroupDTO } from '../../mesModels/models';
 import { ProductSizeService } from '../services/product-size.service';
 import { SouscategoriesService } from '../services/souscategories.service';
 import { CartService } from '../services/cartservice';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { CategoriesocialesService } from '../services/categoriesociales.service';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -26,6 +27,7 @@ export class CategoryComponent implements OnInit {
   showMobileSearch: boolean = false;
   mobileSearch: string = '';
   productSizes: ProductSizeDTO[] = [];
+  socialGroups: string[] = [];
   datasource: any;
  page: number = 0;
   size: number = 10;
@@ -53,7 +55,8 @@ export class CategoryComponent implements OnInit {
     private sousCategorieService: SouscategoriesService,
     private cartService: CartService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private socialGroupService: CategoriesocialesService 
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +64,7 @@ export class CategoryComponent implements OnInit {
     this.fetchFilteredProductSizes();
     this.datasource = new MatTableDataSource();
     this.loadProductSizes();
+    this.loadingSocialGroups();
   }
 
 
@@ -429,5 +433,23 @@ voirDetaille(sizeId: string) {
 
   get allFilters(): Record<string, any> {
     return { ...this.filters };
+  }
+
+  loadingSocialGroups(){
+    this.loading = true;
+
+    this.socialGroupService.getAllSocialGroups().subscribe({
+      next: (socialGroups) => {
+        this.filters.selectedSocialGroup = socialGroups.length > 0 ? socialGroups[0].id : null;
+        this.loading = false;
+        this.socialGroups = socialGroups.map(group => group.name);
+        console.log('Social Groups:', this.socialGroups);
+      },
+      error: () => {
+        this.error = "Erreur lors du chargement des groupes sociaux.";
+        this.loading = false;
+      }
+    });
+   
   }
 }

@@ -37,6 +37,7 @@ import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
+import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
 
 
 const routes: Routes = [
@@ -65,6 +66,7 @@ const routes: Routes = [
   { path: 'create-supply', component: CreatSupplyComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'liker', component: LikeProductComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'home', component: HomeComponent },
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 

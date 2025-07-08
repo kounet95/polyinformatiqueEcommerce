@@ -1,13 +1,15 @@
 package org.example.ecpolyquery.repos;
 
 import org.example.ecpolyquery.entity.Customer;
-import org.example.ecpolyquery.entity.Like;
+
+import org.example.ecpolyquery.entity.LikeProduct;
 import org.example.ecpolyquery.entity.Product;
+import org.example.ecpolyquery.entity.ProductSize;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LikeRepository extends JpaRepository<Like,Long> {
+public interface LikeRepository extends JpaRepository<LikeProduct,String> {
 
-  boolean existsByCustomerAndProduct(Customer customer, Product product);
-  long countByProduct(Product product);
-  void deleteByCustomerAndProduct(Customer customer, Product product);
+  boolean existsByCustomerAndProduct(Customer customer, ProductSize product);
+  long countByProduct(ProductSize product);
+  void deleteByCustomerAndProduct(Customer customer, ProductSize product);
 }

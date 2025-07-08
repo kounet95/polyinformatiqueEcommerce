@@ -39,12 +39,12 @@ export class CategoryCreateComponent {
       sousCategories: [] 
     };
 
-    this.loading = false;
+    this.loading = true;
     this.categoryService.createCategory(category).subscribe({
       next: () => {
-        this.successMessage = 'Catégorie créée avec succès !';
-        this.loading = true;
-        this.categoryForm.reset();
+    this.successMessage = 'Catégorie créée avec succès !';
+    this.loading = false; 
+    this.categoryForm.reset();
       },
       error: err => {
         this.errorMessage = "Erreur lors de la création de la catégorie.";

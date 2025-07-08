@@ -137,7 +137,15 @@ data class GetSubcategoriesByCategoryIdQuery(
   val categoryIds: String
 )
 
-class findAllSaleProducts( )
+class findAllSaleProducts( val id: String)
+
+class GetLikesByProductQuery( val productId: String)
+
+class CountLikesByProductQuery ( val productId: String)
+
+class CheckCustomerLikedProductQuery (
+  val productId: String,
+  val customerId: String)
 
 class GetOnSaleStockQuery ( )
 

@@ -6,6 +6,7 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -27,4 +28,6 @@ public class ProductSize {
   @ManyToOne
   @JoinColumn(name = "product_id")
   private Product productId;
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<LikeProduct> likes;
 }
