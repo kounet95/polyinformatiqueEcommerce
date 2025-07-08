@@ -1,63 +1,66 @@
-<!-- Titre de la page -->
-<div class="page-title light-background position-relative">
+<div class="page-title light-background">
   <div class="container">
     <nav class="breadcrumbs">
       <ol>
-        <li><a routerLink="/">Dashboard</a></li>
-        <li class="current">Nouveau un fournisseur</li>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li class="current">Créer un fournisseur</li>
       </ol>
     </nav>
-    <h1>Nouveau un forunisseur</h1>
   </div>
 </div>
-<section id="create-supplier" class="section py-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-7 col-md-10">
-        <div class="login-form-wrapper bg-white shadow rounded p-4">
 
-          <div class="login-header text-center mb-4">
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="registration-form-wrapper bg-white shadow rounded p-4">
+          <!-- En-tête -->
+          <div class="section-header mb-4 text-center">
             <h2>Créer un fournisseur</h2>
             <p>Veuillez remplir les informations du fournisseur</p>
           </div>
 
+          <!-- Formulaire -->
           <form [formGroup]="supplierForm" (ngSubmit)="submit()">
-            <!-- Nom complet -->
-            <div class="mb-3">
-              <label for="fullname" class="form-label">Nom complet</label>
-              <input id="fullname" formControlName="fullname" type="text" class="form-control" placeholder="Ex: Entreprise ABC">
+            <div class="row">
+              <!-- Nom complet -->
+              <div class="col-md-6 mb-3">
+                <label for="fullname" class="form-label">Nom complet</label>
+                <input id="fullname" formControlName="fullname" type="text" class="form-control" placeholder="Ex: Entreprise ABC">
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" formControlName="email" type="email" class="form-control" placeholder="exemple@entreprise.com">
+              </div>
             </div>
 
-            <!-- Email -->
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" formControlName="email" type="email" class="form-control" placeholder="exemple@entreprise.com">
+            <div class="row">
+              <!-- Personne à contacter -->
+              <div class="col-md-6 mb-3">
+                <label for="personToContact" class="form-label">Personne à contacter</label>
+                <input id="personToContact" formControlName="personToContact" type="text" class="form-control" placeholder="Ex: Jean Dupont">
+              </div>
+
+              <!-- Taille de produit -->
+              <div class="col-md-6 mb-3">
+                <label for="productSizeId" class="form-label">Taille de produit</label>
+                <select id="productSizeId" class="form-select" formControlName="productSizeId">
+                  <option value="">-- Sélectionner une taille --</option>
+                  <option *ngFor="let ps of productSizes" [value]="ps.id">{{ ps.sizeProd }}</option>
+                </select>
+              </div>
             </div>
 
-            <!-- Personne à contacter -->
-            <div class="mb-3">
-              <label for="personToContact" class="form-label">Personne à contacter</label>
-              <input id="personToContact" formControlName="personToContact" type="text" class="form-control" placeholder="Ex: Jean Dupont">
-            </div>
-
-            <!-- Taille de produit -->
-            <div class="mb-4">
-              <label for="productSizeId" class="form-label">Taille de produit</label>
-              <select id="productSizeId" class="form-select" formControlName="productSizeId">
-                <option value="">-- Sélectionner une taille --</option>
-                <option *ngFor="let ps of productSizes" [value]="ps.id">
-                  {{ ps.sizeProd }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Adresse (component déjà stylisé) -->
+            <!-- Adresse -->
             <div class="mb-4">
               <h5 class="mb-3">Adresse</h5>
               <app-address-form [parentForm]="addressGroup"></app-address-form>
             </div>
 
-            <!-- Bouton soumission -->
-            <div class="d-grid gap-2 mb-3">
+            <!-- Bouton -->
+            <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary" [disabled]="isLoading || supplierForm.invalid">
                 Créer le fournisseur
               </button>
@@ -75,4 +78,5 @@
         </div>
       </div>
     </div>
+  </div>
 </section>
