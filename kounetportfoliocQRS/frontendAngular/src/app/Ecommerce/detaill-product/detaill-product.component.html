@@ -14,7 +14,7 @@
 
     <!-- Galerie d'images -->
     <div class="gallery" *ngIf="productSize">
-      <!--Images Miniatures -->
+      <!-- Images Miniatures -->
       <div class="thumbnails">
         <img [src]="productSize.frontUrl"
              [class.selected]="selectedImageIndex === 0"
@@ -59,7 +59,7 @@
         </button>
       </div>
     </div>
-<span style="display: flex;"></span>
+
     <!-- Informations produit -->
     <div class="details-info" *ngIf="product">
 
@@ -96,9 +96,7 @@
         </span>
 
         <div class="discount-badge" *ngIf="productSize.pricePromo != null && productSize.pricePromo < productSize.price">
-          Économisez {{
-            (((productSize.price ?? 0) - (productSize.pricePromo ?? 0)) / (productSize.price ?? 1) * 100) | number:'1.0-0'
-          }}%
+          Économisez {{"(((productSize.price ?? 0) - (productSize.pricePromo ?? 0)) / (productSize.price ?? 1) * 100)" | number:'1.0-0'}}%
         </div>
 
         <div class="stock-info">
@@ -137,7 +135,6 @@
             {{ productSize.sizeProd }} — {{ productSize.price | currency:'EUR' }}
           </button>
         </div>
-        <span class="size-name">{{ productSize.price | currency:'EUR' }}</span>
       </div>
 
       <!-- Quantité -->
@@ -158,8 +155,9 @@
         <button class="btn btn-outline-primary big-btn">
           <mat-icon>flash_on</mat-icon> Acheter maintenant
         </button>
-        <button class="btn btn-outline-secondary favorite-btn">
-          <mat-icon>favorite_border</mat-icon>
+        <button class="btn btn-outline-secondary favorite-btn" (click)="toggleLike()">
+          <mat-icon>{{ liked ? 'favorite' : 'favorite_border' }}</mat-icon>
+          {{ liked ? 'Je n\'aime plus' : 'J\'aime' }} ({{ likeCount }})
         </button>
       </div>
 

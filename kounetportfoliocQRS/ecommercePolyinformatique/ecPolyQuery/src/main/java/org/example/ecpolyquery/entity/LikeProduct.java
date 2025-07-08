@@ -16,17 +16,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Builder
-public class Like {
+public class LikeProduct {
 
   @Id
-  private Long id;
+  private String id;
   @ManyToOne
   @JoinColumn(name = "customer_id", nullable = false)
   private Customer customer;
 
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
-  private Product product;
+  private ProductSize product;
 
   private LocalDateTime createdAt;
 }

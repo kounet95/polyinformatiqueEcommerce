@@ -5,9 +5,12 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.LikeDTO;
 @Getter
 public class ProductLikedEvent {
   private String id;
-  private LikeDTO likeDTO;
-  public ProductLikedEvent(String id, LikeDTO likeDTO) {
+  private String  user;
+  private String product;
+
+  public ProductLikedEvent(String id, String user, String product) {
     this.id = id;
-    this.likeDTO = likeDTO;
+    this.user = user;
+    this.product = product;
   }
 }

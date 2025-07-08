@@ -50,9 +50,7 @@ export class ProductSizeService {
   maxPromo?: number,
   size?: string,
   sale?: boolean,
-  newSince?: string,
-  subcategoryId?: string,
-  socialGroupId?: string
+  newSince?: string
 ): Observable<ProductSizeDTO[]> {
   let params = new HttpParams();
   if (productName) params = params.set('productName', productName);
@@ -61,8 +59,6 @@ export class ProductSizeService {
   if (size) params = params.set('size', size);
   if (sale !== undefined) params = params.set('sale', sale.toString());
   if (newSince) params = params.set('newSince', newSince);
-  if (subcategoryId) params = params.set('subcategoryId', subcategoryId);
-  if (socialGroupId) params = params.set('socialGroupId', socialGroupId);
 
   return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/search`, { params });
 }

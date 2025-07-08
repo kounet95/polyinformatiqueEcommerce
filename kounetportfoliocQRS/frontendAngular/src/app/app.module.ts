@@ -75,6 +75,7 @@ import { AddressFormComponent } from './Ecommerce/address-form/address-form.comp
 import { RegisterComponent } from './Ecommerce/register/register.component';
 import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
+import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
 
 
 
@@ -133,7 +134,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     PrivacyComponent,
     RegisterComponent,
     LoginComponent,
-    ConditionsComponent,
+    ConditionsComponent
 
    
     

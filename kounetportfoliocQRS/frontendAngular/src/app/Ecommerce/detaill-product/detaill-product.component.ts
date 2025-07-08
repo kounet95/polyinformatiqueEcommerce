@@ -5,6 +5,8 @@ import { ProductService } from '../../../app/Ecommerce/services/produit.service'
 import { CartService } from '../../../app/Ecommerce/services/cartservice';
 import { ProductSizeService } from '../services/product-size.service';
 import { CommentService } from '../services/commentaire.service';
+import { LikeService } from '../services/like.service';
+import { AuthService } from '../../services/AuthService';
 
 @Component({
   selector: 'app-product-details',
@@ -30,7 +32,10 @@ export class ProductDetailsComponent implements OnInit {
     { value: 'pink', name: 'Rose', selected: false }
   ];
 
-  selectedSize = ''; // mis à vide pour prendre la taille du produit dynamique
+  selectedSize = ''; // taille dynamique
+
+  likeCount = 0;
+  liked = false;
 
   reviews = [
     { author: 'John Doe', date: '21/04/2024', rating: 5, text: 'Exceptional sound quality and comfort.' },
@@ -43,43 +48,40 @@ export class ProductDetailsComponent implements OnInit {
     private productService: ProductService,
     private productSizeService: ProductSizeService,
     private commentaireService: CommentService,
-    private cartService: CartService
+    private cartService: CartService,
+    private likeService: LikeService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.productSizeService.getProductSizeById(id).subscribe(size => {
-  this.productSize = size;
-  console.log('ProductSize:', size);
+        this.productSize = size;
+        console.log('ProductSize:', size);
 
-  this.selectedSize = size.sizeProd;
+        this.selectedSize = size.sizeProd;
 
-  const prodIdToUse = size.prodId || '4b624571-6347-4e94-a606-7fc91fd7f5b2';
-  if (prodIdToUse) {
-    this.productService.getProductById(prodIdToUse).subscribe(prod => {
-      this.product = prod;
-      console.log('Product:', prod);
-    });
-  } else {
-    console.warn('prodId is null, cannot load product');
-  }
-});
+        const prodIdToUse = size.prodId || '4b624571-6347-4e94-a606-7fc91fd7f5b2';
+        if (prodIdToUse) {
+          this.productService.getProductById(prodIdToUse).subscribe(prod => {
+            this.product = prod;
+            console.log('Product:', prod);
 
-
-      // Décommente si besoin
-      /*
-      this.commentaireService.getCommentairesByProductId(id).subscribe(coms => {
-        this.commentaire = coms;
+            this.loadLikesCount();
+            this.checkIfLiked();
+          });
+        } else {
+          console.warn('prodId is null, cannot load product');
+        }
       });
-      */
 
     } else {
       alert('Vous devez sélectionner un produit');
     }
 
     const sizeId = this.route.snapshot.paramMap.get('id');
-  console.log('ProductSize.id:', sizeId);
+    console.log('ProductSize.id:', sizeId);
   }
 
   selectImage(idx: number) {
@@ -108,9 +110,43 @@ export class ProductDetailsComponent implements OnInit {
     if (!this.product) return;
 
     this.addedMessage = 'Produit ajouté au panier !';
-    // Ici tu peux appeler le vrai cartService pour ajouter l’article
     // this.cartService.addToCart({...});
     setTimeout(() => (this.addedMessage = ''), 1500);
+  }
+
+  toggleLike() {
+    const customerId = this.authService.getUserId();
+    if (!this.productSize?.id || !customerId) {
+      alert("Utilisateur non connecté");
+      return;
+    }
+
+    if (this.liked) {
+      this.likeService.unlikeProduct(this.productSize.id).subscribe(() => {
+        this.liked = false;
+        this.loadLikesCount();
+      });
+    } else {
+      this.likeService.likeProduct(this.productSize.id).subscribe(() => {
+        this.liked = true;
+        this.loadLikesCount();
+      });
+    }
+  }
+
+  private loadLikesCount() {
+    if (!this.productSize?.prodId) return;
+    this.likeService.countLikesByProduct(this.productSize.id).subscribe(count => {
+      this.likeCount = count;
+    });
+  }
+
+  private checkIfLiked() {
+    const customerId = this.authService.getUserId();
+    if (!this.productSize || !customerId) return;
+    this.likeService.checkCustomerLiked(this.productSize.id, customerId).subscribe(isLiked => {
+      this.liked = isLiked;
+    });
   }
 
   get selectedColorName(): string {

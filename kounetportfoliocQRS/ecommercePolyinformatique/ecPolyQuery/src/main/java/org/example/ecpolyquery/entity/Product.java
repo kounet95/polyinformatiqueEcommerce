@@ -27,6 +27,5 @@ public class Product {
   @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true , fetch=FetchType.LAZY)
   @com.fasterxml.jackson.annotation.JsonIgnore
   private List<ProductSize> productSizes;
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Like> likes;
+
 }
