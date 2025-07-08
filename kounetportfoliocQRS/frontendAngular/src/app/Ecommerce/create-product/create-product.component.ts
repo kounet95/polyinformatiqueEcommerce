@@ -47,7 +47,6 @@ export class CreateProductComponent implements OnInit {
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
       productSizeId: [''],
-      address: this.addressGroup,
       isActive: [true]
     });
 
@@ -140,7 +139,5 @@ export class CreateProductComponent implements OnInit {
         this.loading = false;
       }
     });
-
-     console.log('Form valid → envoi...');
   }
 }
