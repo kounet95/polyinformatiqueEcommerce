@@ -5,10 +5,16 @@ import { CategoryDTO, ProductDTO, ProductSizeDTO, SocialGroupDTO } from '../../m
 import { ProductSizeService } from '../services/product-size.service';
 import { SouscategoriesService } from '../services/souscategories.service';
 import { CartService } from '../services/cartservice';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router, RouterModule } from '@angular/router';
 import { CategoriesocialesService } from '../services/categoriesociales.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.component';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -16,7 +22,18 @@ type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: strin
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,         
+    MatIconModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatExpansionModule,
+    RouterModule,
+    FormsModule,
+    MatListModule,
+    AnnouncementBarComponent
+  ],
 })
 export class CategoryComponent implements OnInit {
   categories: CategoryWithChildren[] = [];
@@ -26,8 +43,9 @@ export class CategoryComponent implements OnInit {
   error: string | null = null;
   showMobileSearch: boolean = false;
   mobileSearch: string = '';
-  productSizes: ProductSizeDTO[] = [];
+  productSizes?: ProductSizeDTO[] = [];
   socialGroups: string[] = [];
+  
   datasource: any;
  page: number = 0;
   size: number = 10;
@@ -89,7 +107,7 @@ export class CategoryComponent implements OnInit {
         next: (response) => {
           const products: ProductDTO[] = response.content || [];
 
-          this.productSizes = sizes.map(size => {
+          this.productSizes =sizes.map(size => {
       const matchedProduct = products.find(p => p.id === size.prodId);
 
       return {
@@ -169,97 +187,49 @@ export class CategoryComponent implements OnInit {
   }
 
   fetchFilteredProductSizes(): void {
-    this.loading = true;
+  this.loading = true;
 
-    let minPromo: number | undefined = undefined;
-    let maxPromo: number | undefined = undefined;
+  let minPromo: number | undefined = undefined;
+  let maxPromo: number | undefined = undefined;
 
-    if (this.filters.selectedPriceRange) {
-      const parts = this.filters.selectedPriceRange.split('-');
-      if (parts.length === 2) {
-        minPromo = parseFloat(parts[0]);
-        maxPromo = parseFloat(parts[1]);
-      } else if (this.filters.selectedPriceRange.endsWith('+')) {
-        minPromo = parseFloat(this.filters.selectedPriceRange.replace('+', ''));
-      }
+  if (this.filters.selectedPriceRange) {
+    const parts = this.filters.selectedPriceRange.split('-');
+    if (parts.length === 2) {
+      minPromo = parseFloat(parts[0]);
+      maxPromo = parseFloat(parts[1]);
+    } else if (this.filters.selectedPriceRange.endsWith('+')) {
+      minPromo = parseFloat(this.filters.selectedPriceRange.replace('+', ''));
     }
-
-    const onSale = this.filters.onSale ? true : undefined;
-
-    // On prend la première sous-catégorie uniquement, sinon undefined
-    const subcategoryId = this.filters.selectedSouscategorie.length > 0 ?
-      this.filters.selectedSouscategorie[0] : undefined;
-      this.productSizeService.searchProductSizes(
-      this.filters.searchKeyword,
-      minPromo,
-      maxPromo,
-      this.filters.selectedProductSize ?? undefined,
-      onSale,
-      undefined,
-      subcategoryId,
-      this.filters.selectedSocialGroup ?? undefined,
-    ).subscribe({
-      next: (sizes: ProductSizeDTO[]) => {
-        // Log the first size object to see its structure
-        if (sizes.length > 0) {
-          console.log('First size object:', sizes[0]);
-        }
-
-        this.productService.getAllProducts().subscribe({
-          next: (response) => {
-            const products: ProductDTO[] = response.content || [];
-
-            // Log the first product to see its structure
-            if (products.length > 0) {
-              console.log('First product object:', products[0]);
-            }
-
-            this.productSizes = sizes.map(size => {
-              // Try to find the product using prodId
-              let matchedProduct = products.find(p => p.id === size.prodId);
-
-              // If no match found and we have products, create a default product
-              if (!matchedProduct && products.length > 0) {
-                matchedProduct = {
-                  id: size.prodId || 'unknown',
-                  name: 'Product ' + (size.id || '').substring(0, 5),
-                  description: 'Product description',
-                  createdAt: new Date().toISOString(),
-                  models: size.frontUrl || '',
-                  subcategoryId: '',
-                  socialGroupId: '',
-                  isActive: true
-                };
-              }
-
-              return {
-                ...size,
-                product: matchedProduct
-              };
-            });
-
-            if (this.filters.sortOption === 'priceAsc') {
-              this.productSizes.sort((a, b) => (a.pricePromo || a.price) - (b.pricePromo || b.price));
-            } else if (this.filters.sortOption === 'priceDesc') {
-              this.productSizes.sort((a, b) => (b.pricePromo || b.price) - (a.pricePromo || a.price));
-            }
-
-            this.datasource = new MatTableDataSource(this.productSizes);
-            this.loading = false;
-            this.updateActiveFilters();
-          },
-          error: () => {
-            this.error = "Erreur lors du chargement des produits.";
-            this.loading = false;
-          }
-        });
-      },
-      error: () => {
-        this.error = "Erreur lors de la recherche des tailles.";
-        this.loading = false;
-      }
-    });
   }
+
+  const onSale = this.filters.onSale ? true : undefined;
+  const subcategoryId = this.filters.selectedSouscategorie.length > 0
+    ? this.filters.selectedSouscategorie[0] : undefined;
+
+  this.productSizeService.searchProductSizes(
+    this.filters.searchKeyword,
+    minPromo,
+    maxPromo,
+    this.filters.selectedProductSize ?? undefined,
+    onSale,
+    undefined, // newSince not used here
+    this.filters.selectedCouleurs,
+    subcategoryId,
+    this.filters.selectedSocialGroup ?? undefined
+  ).subscribe({
+    next: (sizes) => {
+      console.log('Fetched sizes:', sizes);
+      this.productSizes = sizes;
+      this.loading = false;
+      this.updateActiveFilters();
+    },
+    error: () => {
+      this.error = "Erreur lors de la recherche.";
+      this.loading = false;
+    }
+  });
+}
+
 
   updateActiveFilters(): void {
     this.activeFilters = [];

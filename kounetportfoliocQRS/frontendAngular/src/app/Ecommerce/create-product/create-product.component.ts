@@ -17,6 +17,7 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class CreateProductComponent implements OnInit {
   productForm!: FormGroup;
+  addressGroup!: FormGroup;
 
   categories: CategoryDTO[] = [];
   sousCategories: SubcategoryDTO[] = [];
@@ -38,7 +39,6 @@ export class CreateProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-   
 
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -46,7 +46,7 @@ export class CreateProductComponent implements OnInit {
       categoryId: ['', Validators.required],
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
-      productSizeId: ['', Validators.required],
+      productSizeId: [''],
       isActive: [true]
     });
 
@@ -93,18 +93,19 @@ export class CreateProductComponent implements OnInit {
   onSubmit() {
     this.successMessage = undefined;
     this.errorMessage = undefined;
-    
+
     if (this.productForm.invalid) {
-      console.log("TEST");
       this.productForm.markAllAsTouched();
       return;
     }
+
     const raw = this.productForm.value;
     const product: ProductDTO = {
       id: '',
       name: raw.name,
       description: raw.description,
       createdAt: new Date().toISOString(),
+      productSizeId : raw.productSizeId,
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
       models: 'k',
@@ -119,21 +120,24 @@ export class CreateProductComponent implements OnInit {
         this.productForm.reset({
           name: '',
           description: '',
+          categoryId: '',
           subcategoryId: '',
           socialGroupId: '',
           productSizeId: '',
-          models: 'k',
-
+          address: {
+            street: '',
+            city: '',
+            zipCode: '',
+            country: ''
+          },
           isActive: true
         });
         this.selectedFile = null;
       },
       error: () => {
-        this.errorMessage = 'Erreur lors de la création du vêtement.';
+        this.errorMessage = 'Erreur lors de la création du produit.';
         this.loading = false;
       }
     });
-
-     console.log('Form valid → envoi...');
   }
 }

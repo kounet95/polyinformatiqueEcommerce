@@ -104,7 +104,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     HeaderComponent,
     PrincingComponent,
     BoutiqueComponent,
-    AnnouncementBarComponent,
     NewsComponent,
     EventsComponent,
     CommentaireComponent,
@@ -117,7 +116,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateNewsComponent,
     CreateEventComponent,
     ProductDetailsComponent,
-    CategoryComponent,
     CategoryCreateComponent,
     CreateProductComponent,
     SousCategoryCreateComponent,
@@ -132,7 +130,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ProductSizeComponent,
     CheckoutComponent,
     PrivacyComponent,
-    RegisterComponent,
+
     LoginComponent,
     ConditionsComponent
 

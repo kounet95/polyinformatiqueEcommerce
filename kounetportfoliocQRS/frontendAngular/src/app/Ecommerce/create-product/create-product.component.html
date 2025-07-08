@@ -90,16 +90,13 @@
               <input type="file" class="form-control" id="file" (change)="onFileSelected($event)">
             </div>
                         <!-- Bouton -->
-            <div class="d-grid mb-3">
-               <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
-            </div>
-            <!-- Messages -->
             <div *ngIf="successMessage" class="alert alert-success text-center">
-              {{ successMessage }}
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger text-center">
-              {{ errorMessage }}
-            </div>
+  {{ successMessage }}
+</div>
+<div *ngIf="!successMessage && errorMessage" class="alert alert-danger text-center">
+  {{ errorMessage }}
+</div>
+
           </form>
         </div>
       </div>

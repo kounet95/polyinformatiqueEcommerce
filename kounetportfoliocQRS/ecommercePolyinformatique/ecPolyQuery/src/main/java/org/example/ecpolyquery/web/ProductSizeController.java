@@ -112,12 +112,13 @@ public class ProductSizeController {
     @RequestParam(required = false) Double maxPromo,
     @RequestParam(required = false) String size,
     @RequestParam(required = false) Boolean sale,
+    @RequestParam(required = false) List<String> couleurs,
     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime newSince,
     @RequestParam(required = false) String subcategoryId,
     @RequestParam(required = false) String socialGroupId
   ) {
     SearchProductSizesQuery query = new SearchProductSizesQuery(
-      productName, minPromo, maxPromo, size, sale, newSince, subcategoryId, socialGroupId
+      productName, minPromo, maxPromo, size, sale, newSince, couleurs, subcategoryId, socialGroupId
     );
     return productSizesQueryHandler.search(query);
   }

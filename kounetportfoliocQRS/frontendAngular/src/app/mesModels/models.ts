@@ -208,6 +208,7 @@ export interface ProductDTO {
   createdAt: string;
   models: string;
   subcategoryId: string;
+  productSizeId?: string;
   socialGroupId: string;
   isActive: boolean;
 }
