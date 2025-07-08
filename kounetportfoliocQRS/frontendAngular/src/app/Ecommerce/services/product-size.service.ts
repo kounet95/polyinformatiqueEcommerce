@@ -44,13 +44,15 @@ export class ProductSizeService {
     }
 
   /** Recherche avancée sur ProductSize */
-  searchProductSizes(
+ searchProductSizes(
   productName?: string,
   minPromo?: number,
   maxPromo?: number,
   size?: string,
   sale?: boolean,
-  newSince?: string
+  newSince?: string,
+  subcategoryId?: string,
+  socialGroupId?: string
 ): Observable<ProductSizeDTO[]> {
   let params = new HttpParams();
   if (productName) params = params.set('productName', productName);
@@ -59,7 +61,9 @@ export class ProductSizeService {
   if (size) params = params.set('size', size);
   if (sale !== undefined) params = params.set('sale', sale.toString());
   if (newSince) params = params.set('newSince', newSince);
-
+  if (subcategoryId) params = params.set('subcategoryId', subcategoryId);
+  if (socialGroupId) params = params.set('socialGroupId', socialGroupId);
+ 
   return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/search`, { params });
 }
  /** Un ou plusieurs ProductSize liés à un ID */

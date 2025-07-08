@@ -17,7 +17,6 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class CreateProductComponent implements OnInit {
   productForm!: FormGroup;
-  addressGroup!: FormGroup;
 
   categories: CategoryDTO[] = [];
   sousCategories: SubcategoryDTO[] = [];
@@ -39,12 +38,7 @@ export class CreateProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addressGroup = this.fb.group({
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      zipCode: ['', Validators.required],
-      country: ['', Validators.required]
-    });
+   
 
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -53,7 +47,6 @@ export class CreateProductComponent implements OnInit {
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
       productSizeId: ['', Validators.required],
-      address: this.addressGroup,
       isActive: [true]
     });
 
@@ -100,12 +93,12 @@ export class CreateProductComponent implements OnInit {
   onSubmit() {
     this.successMessage = undefined;
     this.errorMessage = undefined;
-
+    
     if (this.productForm.invalid) {
+      console.log("TEST");
       this.productForm.markAllAsTouched();
       return;
     }
-
     const raw = this.productForm.value;
     const product: ProductDTO = {
       id: '',
@@ -126,22 +119,17 @@ export class CreateProductComponent implements OnInit {
         this.productForm.reset({
           name: '',
           description: '',
-          categoryId: '',
           subcategoryId: '',
           socialGroupId: '',
           productSizeId: '',
-          address: {
-            street: '',
-            city: '',
-            zipCode: '',
-            country: ''
-          },
+          models: 'k',
+
           isActive: true
         });
         this.selectedFile = null;
       },
       error: () => {
-        this.errorMessage = 'Erreur lors de la création du produit.';
+        this.errorMessage = 'Erreur lors de la création du vêtement.';
         this.loading = false;
       }
     });

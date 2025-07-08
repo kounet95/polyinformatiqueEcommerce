@@ -189,8 +189,7 @@ export class CategoryComponent implements OnInit {
     // On prend la première sous-catégorie uniquement, sinon undefined
     const subcategoryId = this.filters.selectedSouscategorie.length > 0 ?
       this.filters.selectedSouscategorie[0] : undefined;
-
-    this.productSizeService.searchProductSizes(
+      this.productSizeService.searchProductSizes(
       this.filters.searchKeyword,
       minPromo,
       maxPromo,
