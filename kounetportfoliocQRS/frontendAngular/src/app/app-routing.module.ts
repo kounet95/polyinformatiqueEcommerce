@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'category', component: CategoryComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }  },
+  { path: 'category', component: CategoryComponent },
   { path: 'create-category', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
