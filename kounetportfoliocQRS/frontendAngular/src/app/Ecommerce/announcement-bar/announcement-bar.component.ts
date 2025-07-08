@@ -7,7 +7,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   selector: 'app-announcement-bar',
   templateUrl: './announcement-bar.component.html',
   styleUrls: ['./announcement-bar.component.css'],
-  standalone: false,
+  standalone: true,
    
 })
 export class AnnouncementBarComponent implements OnInit, OnDestroy {

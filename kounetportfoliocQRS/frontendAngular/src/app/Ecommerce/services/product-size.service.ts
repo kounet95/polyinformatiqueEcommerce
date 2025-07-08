@@ -44,22 +44,31 @@ export class ProductSizeService {
     }
 
   /** Recherche avancée sur ProductSize */
-  searchProductSizes(
-  productName?: string,
+ searchProductSizes(
+  keyword: string,
   minPromo?: number,
   maxPromo?: number,
-  size?: string,
-  sale?: boolean,
-  newSince?: string
+  productSize?: string,
+  onSale?: boolean,
+  newSince?: string,
+  couleurs?: string[],
+  sousCategorieId?: string,
+  socialGroupId?: string,
 ): Observable<ProductSizeDTO[]> {
   let params = new HttpParams();
-  if (productName) params = params.set('productName', productName);
+  if (keyword) params = params.set('productName', keyword);
   if (minPromo !== undefined) params = params.set('minPromo', minPromo.toString());
   if (maxPromo !== undefined) params = params.set('maxPromo', maxPromo.toString());
-  if (size) params = params.set('size', size);
-  if (sale !== undefined) params = params.set('sale', sale.toString());
-  if (newSince) params = params.set('newSince', newSince);
-
+  if (productSize) params = params.set('size', productSize);
+  if (onSale !== undefined) params = params.set('sale', onSale.toString());
+  if (newSince) params = params.set('newSince', newSince.toString());
+  if (sousCategorieId) params = params.set('subcategoryId', sousCategorieId);
+  if (socialGroupId) params = params.set('socialGroupId', socialGroupId);
+  if (couleurs && couleurs.length) {
+    couleurs.forEach(c => {
+      params = params.append('couleurs', c);
+    });
+  }
   return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/search`, { params });
 }
  /** Un ou plusieurs ProductSize liés à un ID */

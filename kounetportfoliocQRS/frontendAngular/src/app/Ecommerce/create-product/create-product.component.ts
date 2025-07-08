@@ -39,12 +39,6 @@ export class CreateProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addressGroup = this.fb.group({
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      zipCode: ['', Validators.required],
-      country: ['', Validators.required]
-    });
 
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -52,7 +46,7 @@ export class CreateProductComponent implements OnInit {
       categoryId: ['', Validators.required],
       subcategoryId: ['', Validators.required],
       socialGroupId: ['', Validators.required],
-      productSizeId: ['', Validators.required],
+      productSizeId: [''],
       address: this.addressGroup,
       isActive: [true]
     });
@@ -112,6 +106,7 @@ export class CreateProductComponent implements OnInit {
       name: raw.name,
       description: raw.description,
       createdAt: new Date().toISOString(),
+      productSizeId : raw.productSizeId,
       subcategoryId: raw.subcategoryId,
       socialGroupId: raw.socialGroupId,
       models: 'k',

@@ -105,6 +105,7 @@ data class SearchProductSizesQuery(
   val size: String? = null,
   val sale: Boolean? = null,
   val newSince: LocalDateTime? = null,
+  val couleurs: List<String>? = null,
   val subcategoryId: String? = null,
   val socialGroupId: String? = null
 )
