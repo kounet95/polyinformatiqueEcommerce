@@ -1,38 +1,39 @@
 <!-- Titre de la page -->
-<div class="page-title light-background position-relative">
+<div class="page-title light-background">
   <div class="container">
     <nav class="breadcrumbs">
       <ol>
-        <li><a routerLink="/">Dashboard</a></li>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
         <li class="current">Nouvel approvisionnement de stock</li>
       </ol>
     </nav>
-    <h1>Créer un approvisionnement de stock</h1>
   </div>
 </div>
 
 <!-- Section création Supply -->
-<section id="create-supply" class="section py-5">
+<section class="register section py-5">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-7 col-md-10">
-        <div class="login-form-wrapper bg-white shadow rounded p-4">
-
-          <div class="login-header text-center mb-4">
-            <h2>Créer un </h2>
+      <div class="col-lg-8 col-md-10">
+        <div class="registration-form-wrapper bg-white shadow rounded p-4">
+          
+          <!-- En-tête -->
+          <div class="section-header mb-4 text-center">
+            <h2>Créer un approvisionnement de stock</h2>
             <p>Veuillez remplir les informations suivantes</p>
           </div>
 
+          <!-- Formulaire -->
           <form [formGroup]="form" (ngSubmit)="submit()">
             <!-- Nom du Supply -->
-            <div class="mb-4">
+            <div class="mb-3">
               <label for="name" class="form-label">Nom du Supply</label>
               <input type="text" id="name" formControlName="name" class="form-control" placeholder="Nom du produit ou item" />
             </div>
 
             <!-- Liste des Stocks -->
             <div formArrayName="stocks">
-              <div *ngFor="let stockGroup of stocks.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-3 bg-light">
+              <div *ngFor="let stockGroup of stocks.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-3">
                 <app-stock-form [parentForm]="stockGroup"></app-stock-form>
 
                 <div class="text-end mt-2" *ngIf="stocks.length > 1">
@@ -51,13 +52,19 @@
             </div>
 
             <!-- Bouton Soumission -->
-            <div class="d-grid gap-2 mb-3">
-              <button type="submit" class="btn btn-primary">Créer Supply + Stocks</button>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary">
+                Créer Supply + Stocks
+              </button>
             </div>
 
             <!-- Messages -->
-            <div *ngIf="errorMsg" class="alert alert-danger text-center">{{ errorMsg }}</div>
-            <div *ngIf="successMsg" class="alert alert-success text-center">{{ successMsg }}</div>
+            <div *ngIf="successMsg" class="alert alert-success text-center">
+              {{ successMsg }}
+            </div>
+            <div *ngIf="errorMsg" class="alert alert-danger text-center">
+              {{ errorMsg }}
+            </div>
           </form>
 
         </div>

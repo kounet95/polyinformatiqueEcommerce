@@ -1,0 +1,7 @@
+1- Messages d'erreur sur les formulaires de creation
+2- Afficher clairement un message de réussite si la creation se passe avec success
+3- Donner la possibilité de supprimer 
+4- Proposer une page dashboard pour les administrateur connecte
+5- Lors de la creation d'adresse, lister les ville/province en fonction des pays.
+6- Les moyens de payement incluent : Paypal, Virement et Orange Money
+7- j aimerai quon elabore la page categories en fonction du catalogue en cours.

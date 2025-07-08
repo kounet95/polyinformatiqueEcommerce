@@ -50,28 +50,69 @@
     </div>
 
     <!-- Formulaire de contact -->
-    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form" autocomplete="off">
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <input matInput placeholder="Votre nom" formControlName="name" required>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="form-field">
-          <input matInput placeholder="Votre adresse courriel" formControlName="email" required>
-        </mat-form-field>
+     <section class="register section py-5">
+      <div class="container">
+
+      <div class="registration-form-wrapper bg-white shadow rounded p-4">
+            
+            <!-- En-tête -->
+            <div class="section-header text-center mb-4">
+              <h2>Contactez-nous</h2>
+              <p>Remplissez le formulaire pour nous envoyer un message</p>
+            </div>
+
+            <!-- Formulaire -->
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" autocomplete="off" novalidate>
+              <div class="row">
+                <!-- Nom -->
+                <div class="col-md-6 mb-3">
+                  <label for="name" class="form-label">Votre nom</label>
+                  <input type="text" id="name" class="form-control" formControlName="name" placeholder="Votre nom">
+                  <div class="text-danger small" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+                    Le nom est requis.
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Votre adresse courriel</label>
+                  <input type="email" id="email" class="form-control" formControlName="email" placeholder="exemple@domaine.com">
+                  <div class="text-danger small" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+                    Email valide requis.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Objet -->
+              <div class="mb-3">
+                <label for="subject" class="form-label">Objet</label>
+                <input type="text" id="subject" class="form-control" formControlName="subject" placeholder="Sujet du message">
+                <div class="text-danger small" *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+                  L’objet est requis.
+                </div>
+              </div>
+
+              <!-- Message -->
+              <div class="mb-4">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" rows="5" class="form-control" formControlName="message" placeholder="Votre message ici..."></textarea>
+                <div class="text-danger small" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+                  Le message est requis.
+                </div>
+              </div>
+
+              <!-- Bouton d'envoi -->
+              <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary" [disabled]="!contactForm.valid">
+                  Envoyer le message
+                </button>
+              </div>
+
+            
+            </form>
       </div>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <input matInput placeholder="Objet" formControlName="subject" required>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <textarea matInput placeholder="Message" formControlName="message" rows="5" required></textarea>
-      </mat-form-field>
-
-      <button mat-raised-button color="warn" class="send-btn" type="submit" [disabled]="!contactForm.valid">
-        Envoyer le message
-      </button>
-    </form>
+      </div>
+     </section>
 
   </div>
 </section>

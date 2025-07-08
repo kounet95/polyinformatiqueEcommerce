@@ -37,7 +37,7 @@ import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
-import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
+import { FaqComponent } from './Ecommerce/faq/faq.component';
 
 
 const routes: Routes = [
@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'category', component: CategoryComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }  },
+  { path: 'category', component: CategoryComponent },
   { path: 'create-category', component: CategoryCreateComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
@@ -66,7 +66,7 @@ const routes: Routes = [
   { path: 'create-supply', component: CreatSupplyComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'liker', component: LikeProductComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'faq', component: FaqComponent },
   { path: 'home', component: HomeComponent },
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
