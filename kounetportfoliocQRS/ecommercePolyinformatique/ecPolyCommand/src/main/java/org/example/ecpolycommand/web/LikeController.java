@@ -2,10 +2,12 @@ package org.example.ecpolycommand.web;
 
 import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.example.ecpolycommand.config.JwtAuthConverter;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DelikerProductCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.LikerProductCommand;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -21,9 +23,9 @@ public class LikeController {
   @PostMapping("/{productId}/like")
   public CompletableFuture<ResponseEntity<String>> likeProduct(
     @PathVariable String productId,
-    Principal principal
+    JwtAuthenticationToken jwtAuth
   ) {
-    String customerId = principal.getName();
+    String customerId = jwtAuth.getToken().getClaim("sub");
     String id = UUID.randomUUID().toString();
 
     LikerProductCommand command = new LikerProductCommand(id, customerId, productId);

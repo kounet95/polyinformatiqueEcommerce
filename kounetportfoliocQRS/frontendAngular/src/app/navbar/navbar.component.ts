@@ -53,16 +53,16 @@ export class NavbarComponent  implements OnInit{
   title = 'ecom-app-angular';
   isMenuOpen = false;
   isLoggedIn = false;
-  public profile! : KeycloakProfile;
+public profile: KeycloakProfile | null = null;
   constructor(public keycloakService : KeycloakService) {
   }
 
-  ngOnInit() {
-    if(this.keycloakService.isLoggedIn()){
-      this.keycloakService.loadUserProfile().then(profile=>{
-        this.profile=profile;
-      });
-    }
+    ngOnInit() {
+    this.keycloakService.loadUserProfile().then(profile => {
+      this.profile = profile;
+    }).catch(() => {
+      this.profile = null;
+    });
   }
 
   async handleLogin() {

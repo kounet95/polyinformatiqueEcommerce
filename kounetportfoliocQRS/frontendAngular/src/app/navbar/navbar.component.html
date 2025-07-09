@@ -114,10 +114,18 @@
                 <span>Paramètres</span>
               </a>
             </div>
-            <div class="dropdown-footer">
-              <a href="/signin" class="btn btn-primary w-100 mb-2">Se connecter</a>
-              <a routerLink="/signup" class="btn btn-outline-primary w-100">Créer un compte</a>
-            </div>
+     <div class="dropdown-footer">
+  <ng-container *ngIf="profile; else noProfile">
+    <button (click)="handleLogout()" class="btn btn-danger w-100 mb-2">Se déconnecter</button>
+  </ng-container>
+  <ng-template #noProfile>
+    <button (click)="handleLogin()" class="btn btn-primary w-100 mb-2">Se connecter</button>
+  </ng-template>
+
+  <a routerLink="/signup" class="btn btn-outline-primary w-100">Créer un compte</a>
+</div>
+
+
           </div>
         </div>
 

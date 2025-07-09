@@ -233,6 +233,13 @@
                       title="Ajouter au panier">
                 <mat-icon>add_shopping_cart</mat-icon>
               </button>
+              <!-- Dans ta carte produit, par exemple après le bouton Ajouter au panier -->
+        <button (click)="toggleLike(size)">
+ <mat-icon>{{ likedMap[size.id] ? 'favorite' : 'favorite_border' }}</mat-icon>
+{{ likedMap[size.id] ? 'Je n\'aime plus' : 'J\'aime' }} ({{ likeCountMap[size.id] || 0 }})
+
+</button>
+
             </div>
           </div>
         </div>

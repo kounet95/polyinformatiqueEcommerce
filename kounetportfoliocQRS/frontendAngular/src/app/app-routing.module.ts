@@ -38,11 +38,13 @@ import { ConditionsComponent } from './Ecommerce/conditions/conditions.component
 import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
+import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
 
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
   { path: 'about', component: AboutComponent },
+  { path: 'address-customer', component: CreatCustomerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'account', component: AccountComponent },
   { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },

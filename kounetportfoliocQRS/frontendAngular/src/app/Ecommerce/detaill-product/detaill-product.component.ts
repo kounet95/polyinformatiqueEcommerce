@@ -114,40 +114,51 @@ export class ProductDetailsComponent implements OnInit {
     setTimeout(() => (this.addedMessage = ''), 1500);
   }
 
-  toggleLike() {
-    const customerId = this.authService.getUserId();
-    if (!this.productSize?.id || !customerId) {
-      alert("Utilisateur non connecté");
-      return;
-    }
+ toggleLike() {
+  const customerId = this.authService.getUserId();
+  console.log("Customer ID:", customerId);
 
-    if (this.liked) {
-      this.likeService.unlikeProduct(this.productSize.id).subscribe(() => {
-        this.liked = false;
-        this.loadLikesCount();
-      });
-    } else {
-      this.likeService.likeProduct(this.productSize.id).subscribe(() => {
-        this.liked = true;
-        this.loadLikesCount();
-      });
-    }
+  if (!this.productSize?.id) {
+    alert("Produit non défini !");
+    return;
   }
 
-  private loadLikesCount() {
-    if (!this.productSize?.prodId) return;
-    this.likeService.countLikesByProduct(this.productSize.id).subscribe(count => {
-      this.likeCount = count;
+  if (!customerId) {
+    alert("Utilisateur non connecté !");
+    return;
+  }
+
+  if (this.liked) {
+    this.likeService.unlikeProduct(this.productSize.id).subscribe(() => {
+      this.liked = false;
+      this.loadLikesCount();
+    });
+  } else {
+    this.likeService.likeProduct(this.productSize.id).subscribe(() => {
+      this.liked = true;
+      this.loadLikesCount();
     });
   }
+}
 
-  private checkIfLiked() {
-    const customerId = this.authService.getUserId();
-    if (!this.productSize || !customerId) return;
-    this.likeService.checkCustomerLiked(this.productSize.id, customerId).subscribe(isLiked => {
-      this.liked = isLiked;
-    });
-  }
+private loadLikesCount() {
+  if (!this.productSize?.id) return; 
+  this.likeService.countLikesByProduct(this.productSize.id).subscribe(count => {
+    this.likeCount = count;
+  });
+}
+
+private checkIfLiked() {
+  const customerId = this.authService.getUserId();
+  console.log("Customer ID (check):", customerId);
+
+  if (!this.productSize?.id || !customerId) return;
+
+  this.likeService.checkCustomerLiked(this.productSize.id, customerId).subscribe(isLiked => {
+    this.liked = isLiked;
+  });
+}
+
 
   get selectedColorName(): string {
     const selected = this.colors.find(c => c.selected);
