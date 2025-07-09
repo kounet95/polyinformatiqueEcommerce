@@ -120,11 +120,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductComponent,
     SousCategoryCreateComponent,
     CreatGroupeSocialComponent,
-    AccountComponent,
     OrderSummaryComponentComponent,
     OrderLineComponent,
     OrderStatusComponent,
-    CartComponent,
     OrderCreateComponent,
     CreateProductSizeComponent,
     ProductSizeComponent,
@@ -138,7 +136,6 @@ function initializeKeycloak(keycloak: KeycloakService) {
     
   ],
   imports: [
-  
     BlogComponent,
     CtaSectionComponent,
     NavbarComponent,
@@ -181,17 +178,15 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatFormFieldModule,
     MatSortModule,
     MatIconModule,
-
     MatSelectModule,
     MatOptionModule,
     MatCardModule,
     MatChipsModule,
     MatTabsModule,
     MatCardModule,
-   MatTableModule,
-   MatBadgeModule,
-   
-   
+    MatTableModule,
+    MatBadgeModule,
+    AnnouncementBarComponent
 ],
 
  providers: [

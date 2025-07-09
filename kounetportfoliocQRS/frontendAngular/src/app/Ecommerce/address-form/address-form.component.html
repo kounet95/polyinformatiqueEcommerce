@@ -1,39 +1,58 @@
-<div [formGroup]="parentForm" class="row g-3 p-3 border rounded bg-white shadow-sm">
+ <section id="login" class="login section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10" >
+        <div class="login-form-wrapper p-4 bg-white rounded shadow-sm">
+          <div class="login-header text-center mb-4">
+            <h2>Adresse</h2>
+            <p>Veuillez entrer les informations de livraison</p>
+          </div>
 
-  <!-- Rue -->
-  <div class="col-md-8">
-    <label for="street" class="form-label">Rue</label>
-    <input type="text" id="street" class="form-control" formControlName="street" placeholder="Ex: 123 rue Principale">
+          <form [formGroup]="parentForm" class="row g-3">
+            <!-- Rue -->
+            <div class="col-md-8">
+              <label for="street" class="form-label">Rue</label>
+              <input type="text" id="street" class="form-control" formControlName="street" placeholder="Ex: 123 rue Principale">
+            </div>
+
+            <!-- Appartement -->
+            <div class="col-md-4">
+              <label for="appartment" class="form-label">Appartement</label>
+              <input type="text" id="appartment" class="form-control" formControlName="appartment" placeholder="Ex: Apt 4B">
+            </div>
+
+            <!-- Ville -->
+            <div class="col-md-6">
+              <label for="city" class="form-label">Ville</label>
+              <input type="text" id="city" class="form-control" formControlName="city" placeholder="Ex: Montréal">
+            </div>
+
+            <!-- Province / État -->
+            <div class="col-md-6">
+              <label for="state" class="form-label">Province / État</label>
+              <input type="text" id="state" class="form-control" formControlName="state" placeholder="Ex: Québec">
+            </div>
+
+            <!-- Code postal -->
+            <div class="col-md-6">
+              <label for="zip" class="form-label">Code postal</label>
+              <input type="text" id="zip" class="form-control" formControlName="zip" placeholder="Ex: H2X 3Y7">
+            </div>
+
+            <!-- Pays -->
+            <div class="col-md-6">
+              <label for="country" class="form-label">Pays</label>
+              <input type="text" id="country" class="form-control" formControlName="country" placeholder="Ex: Canada">
+            </div>
+
+            <!-- Bouton -->
+            <div class="col-12 d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-primary">Enregistrer l'adresse</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- Appartement -->
-  <div class="col-md-4">
-    <label for="appartment" class="form-label">Appartement</label>
-    <input type="text" id="appartment" class="form-control" formControlName="appartment" placeholder="Ex: Apt 4B">
-  </div>
-
-  <!-- Ville -->
-  <div class="col-md-6">
-    <label for="city" class="form-label">Ville</label>
-    <input type="text" id="city" class="form-control" formControlName="city" placeholder="Ex: Montréal">
-  </div>
-
-  <!-- Province / État -->
-  <div class="col-md-6">
-    <label for="state" class="form-label">Province / État</label>
-    <input type="text" id="state" class="form-control" formControlName="state" placeholder="Ex: Québec">
-  </div>
-
-  <!-- Code postal -->
-  <div class="col-md-6">
-    <label for="zip" class="form-label">Code postal</label>
-    <input type="text" id="zip" class="form-control" formControlName="zip" placeholder="Ex: H2X 3Y7">
-  </div>
-
-  <!-- Pays -->
-  <div class="col-md-6">
-    <label for="country" class="form-label">Pays</label>
-    <input type="text" id="country" class="form-control" formControlName="country" placeholder="Ex: Canada">
-  </div>
-
-</div>
+</section>

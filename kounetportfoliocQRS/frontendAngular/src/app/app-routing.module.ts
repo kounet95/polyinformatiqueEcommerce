@@ -55,11 +55,11 @@ const routes: Routes = [
   { path: 'commentaire', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'contact', loadComponent: () => import('./contact/contact.component').then(m => m.ContactComponent) },
   { path: 'conditions', component: ConditionsComponent },
-  { path: 'create-address', component: AddressFormComponent },
+  { path: 'create-address', component: AddressFormComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-domain', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-event', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-news', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-  { path: 'create-product', component: CreateProductComponent },
+  { path: 'create-product', component: CreateProductComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'create-product-size', component: CreateProductSizeComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-stock', component: CreatStockComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }},

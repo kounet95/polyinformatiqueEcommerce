@@ -1,13 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cartservice';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartItem } from '../../mesModels/models';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.component';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,         
+    MatIconModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatExpansionModule,
+    RouterModule,
+    FormsModule,
+    MatListModule,
+    AnnouncementBarComponent
+  ],
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
