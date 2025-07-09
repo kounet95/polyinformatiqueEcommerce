@@ -17,6 +17,6 @@ public class Customer {
   private String lastname;
   private String email;
   private String phone;
-  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   private List<LikeProduct>  likes;
 }

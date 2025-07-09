@@ -15,6 +15,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.component';
+import { LikeProductComponent } from '../like-product/like-product.component';
+import { AuthService } from '../../services/AuthService';
+import { LikeService } from '../services/like.service';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -32,7 +35,8 @@ type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: strin
     RouterModule,
     FormsModule,
     MatListModule,
-    AnnouncementBarComponent
+    AnnouncementBarComponent,
+    LikeProductComponent 
   ],
 })
 export class CategoryComponent implements OnInit {
@@ -45,6 +49,9 @@ export class CategoryComponent implements OnInit {
   mobileSearch: string = '';
   productSizes?: ProductSizeDTO[] = [];
   socialGroups: string[] = [];
+  likedMap: Record<string, boolean> = {};
+likeCountMap: Record<string, number> = {};
+
   
   datasource: any;
  page: number = 0;
@@ -74,6 +81,8 @@ export class CategoryComponent implements OnInit {
     private cartService: CartService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private authService: AuthService,
+    private likeService: LikeService,
     private socialGroupService: CategoriesocialesService 
   ) {}
 
@@ -421,4 +430,32 @@ voirDetaille(sizeId: string) {
     });
    
   }
+
+
+  toggleLike(size: ProductSizeDTO) {
+  const customerId = this.authService.getUserId();
+  if (!size.id || !customerId) return;
+
+  const isLiked = this.likedMap[size.id] || false;
+
+  if (isLiked) {
+    this.likeService.unlikeProduct(size.id).subscribe(() => {
+      this.likedMap[size.id] = false;
+      this.loadLikesCount(size);
+    });
+  } else {
+    this.likeService.likeProduct(size.id).subscribe(() => {
+      this.likedMap[size.id] = true;
+      this.loadLikesCount(size);
+    });
+  }
+}
+
+private loadLikesCount(size: ProductSizeDTO) {
+  if (!size.id) return;
+  this.likeService.countLikesByProduct(size.id).subscribe(count => {
+    this.likeCountMap[size.id] = count;
+  });
+}
+
 }

@@ -96,6 +96,10 @@
 <div *ngIf="!successMessage && errorMessage" class="alert alert-danger text-center">
   {{ errorMessage }}
 </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="loading || !productForm.valid">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Envoi...' : 'Créer le produit' }}
+            </button>
 
           </form>
         </div>
