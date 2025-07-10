@@ -42,7 +42,7 @@ export class SouscategoriesService {
   }
 //Service correct pour lister
 getSousCategoriesByCategoryId(categoryId: string): Observable<SubcategoryDTO[]> {
-  return this.http.get<SubcategoryDTO[]>(`/api/souscategories/by-category/${categoryId}`);
+  return this.http.get<SubcategoryDTO[]>(`${ecpolyQuery.backend}/api/subcategories/by-category/${categoryId}`);
 }
 
   /**

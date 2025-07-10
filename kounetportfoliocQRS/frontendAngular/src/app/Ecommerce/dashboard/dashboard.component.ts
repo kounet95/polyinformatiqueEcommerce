@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryDTO } from '../../mesModels/models';
+import { CategoryDTO, SubcategoryDTO } from '../../mesModels/models';
 import { CategoryService } from '../services/category.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SouscategoriesService } from '../services/souscategories.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +19,9 @@ export class DashboardComponent implements OnInit{
   currentEditingCategory?: CategoryDTO;
 
   categories: CategoryDTO[] = [];
+  subCategories : SubcategoryDTO[] = [];
 
-  constructor(private categoryService: CategoryService, private route: Router,  private fb: FormBuilder ){
+  constructor(private categoryService: CategoryService, private subCategoryService: SouscategoriesService, private route: Router,  private fb: FormBuilder ){
       
        this.categoryForm = this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]]
@@ -29,14 +31,36 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadCategories();
+ 
+  
   }
 
-  loadCategories(){
-     this.categoryService.getAllCategories().subscribe({
-      next: cats => this.categories = cats || [],
-      error: () => console.error('Erreur chargement catégories')
-    })
-  }
+ loadCategories() {
+  this.loading = true;
+  this.categoryService.getAllCategories().subscribe({
+    next: (cats: CategoryDTO[]) => {
+      this.subCategoryService.getAllSubcategories().subscribe({
+        next: (sousCats: SubcategoryDTO[]) => {
+          this.categories = cats.map(cat => ({
+            ...cat,
+            children: sousCats
+              .filter((sc: SubcategoryDTO) => sc.categoryId === cat.id)
+              .map((sc: SubcategoryDTO) => ({ id: sc.id, name: sc.name }))
+          }));
+          this.loading = false;
+        },
+        error: () => {
+          this.errorMessage = "Erreur lors du chargement des sous-catégories.";
+          this.loading = false;
+        }
+      });
+    },
+    error: () => {
+      this.errorMessage = "Erreur lors du chargement des catégories.";
+      this.loading = false;
+    }
+  });
+}
 
   update(): void {
   this.successMessage = undefined;
@@ -72,18 +96,23 @@ export class DashboardComponent implements OnInit{
 
  
   editCategory(cat: CategoryDTO) {
-  this.currentEditingCategory = cat;
+    this.currentEditingCategory = cat;
+    // il faut Remplir le formulaire avec les données de la catégorie selectionnee
+    this.categoryForm.patchValue({
+      name: cat.name
+    });
+  }
+  cancelEdit() {
+    this.currentEditingCategory = undefined;
+    this.categoryForm.reset();
+  }
 
-  // il faut Remplir le formulaire avec les données de la catégorie selectionnee
-  this.categoryForm.patchValue({
-    name: cat.name
+  showCategory(cat: CategoryDTO) {
+  this.subCategoryService.getSousCategoriesByCategoryId(cat.id).subscribe({
+    next: sousCats => this.subCategories = sousCats || [],
+    error: err => console.error('Erreur lors du chargement des sous-catégories', err)
   });
 }
- cancelEdit() {
-  this.currentEditingCategory = undefined;
-  this.categoryForm.reset();
-}
 
-  
 
 }

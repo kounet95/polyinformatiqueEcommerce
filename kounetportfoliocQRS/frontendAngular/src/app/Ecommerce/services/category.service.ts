@@ -28,7 +28,7 @@ export class CategoryService {
    */
   /** Command: update d'un categorie */
   updateCatgorie(categorieDTO: CategoryDTO): Observable<string> {
-    return this.http.put<string>(`${ecpolyCommand.backend}/update/${categorieDTO.id}`, categorieDTO);
+    return this.http.put<string>(`${ecpolyCommand.backend}/category/update/${categorieDTO.id}`, categorieDTO);
   }
  
   /**
