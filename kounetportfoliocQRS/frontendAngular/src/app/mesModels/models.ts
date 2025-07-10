@@ -122,6 +122,7 @@ export interface CategoryDTO {
   id: string;
   name: string;
   sousCategories: SubcategoryDTO[];
+  children?: SubcategoryDTO[];
 }
 
 // ===============================
