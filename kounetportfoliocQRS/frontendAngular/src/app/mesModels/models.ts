@@ -129,8 +129,8 @@ export interface CategoryDTO {
 // ===============================
 export interface CustomerEcommerceDTO {
   id?: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   addressId: string;

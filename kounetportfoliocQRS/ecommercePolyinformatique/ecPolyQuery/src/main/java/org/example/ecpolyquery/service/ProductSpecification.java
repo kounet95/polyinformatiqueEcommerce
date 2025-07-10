@@ -44,9 +44,15 @@ public class ProductSpecification {
   }
 
   public static Specification<ProductSize> hasSize(String size) {
-    return (root, query, cb) -> size == null ? null :
-      cb.equal(cb.lower(root.get("sizeProd").as(String.class)), size.toLowerCase());
+    return (root, query, cb) -> {
+      if (size == null) return null;
+      return cb.equal(
+        cb.lower(root.get("size").as(String.class)),
+        size.toLowerCase()
+      );
+    };
   }
+
 
   public static Specification<ProductSize> isOnSale() {
     return (root, query, cb) ->

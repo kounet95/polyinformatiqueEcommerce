@@ -57,8 +57,8 @@ export class CreatCustomerComponent implements OnInit {
           this.customerId = customer.id;
 
           this.form.patchValue({
-            firstname: customer.firstname || '',
-            lastname: customer.lastname || '',
+            firstname: customer.firstName || '',
+            lastname: customer.lastName || '',
             email: customer.email || '',
             phone: customer.phone || ''
           });

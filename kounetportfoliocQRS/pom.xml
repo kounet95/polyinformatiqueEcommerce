@@ -78,9 +78,38 @@
       <artifactId>cloudinary-http44</artifactId>
       <version>1.33.0</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-spring-boot-autoconfigure -->
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-spring-boot-autoconfigure</artifactId>
+      <version>1.0.0-M6</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-client-chat -->
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-client-chat</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-bom</artifactId>
+      <version>${spring-ai.version}</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-server-webmvc -->
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
-
-
+    <!-- https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-starter-mcp-client-webflux -->
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-core</artifactId>

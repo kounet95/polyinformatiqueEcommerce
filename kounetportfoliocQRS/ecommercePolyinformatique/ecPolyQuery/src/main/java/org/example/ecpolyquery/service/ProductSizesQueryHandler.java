@@ -57,17 +57,67 @@ public class ProductSizesQueryHandler {
 
   @QueryHandler
   public List<ProductSize> search(SearchProductSizesQuery query) {
-    Specification<ProductSize> spec = Specification
-      .where(ProductSpecification.hasProductsizeName(query.getProductName()))
-      .and(ProductSpecification.hasSubcategoryId(query.getSubcategoryId()))
-      .and(ProductSpecification.hasSocialGroupId(query.getSocialGroupId()))
-      .and(ProductSpecification.hasPromoPriceBetween(query.getMinPromo(), query.getMaxPromo()))
-      .and(ProductSpecification.hasSize(query.getSize()))
-      .and(Boolean.TRUE.equals(query.getSale()) ? ProductSpecification.isOnSale() : null)
-      .and(ProductSpecification.isNewArrival(query.getNewSince()));
+    List<ProductSize> finalResult;
 
-    return productSizeRepository.findAll(spec);
+    Specification<ProductSize> spec = Specification.where(null);
+
+    if (query.getProductName() != null) {
+      Specification<ProductSize> s = ProductSpecification.hasProductsizeName(query.getProductName());
+      List<ProductSize> byName = productSizeRepository.findAll(s);
+      System.out.println("Filtre productName => " + byName.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (query.getSubcategoryId() != null) {
+      Specification<ProductSize> s = ProductSpecification.hasSubcategoryId(query.getSubcategoryId());
+      List<ProductSize> bySub = productSizeRepository.findAll(s);
+      System.out.println("Filtre subcategoryId => " + bySub.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (query.getSocialGroupId() != null) {
+      Specification<ProductSize> s = ProductSpecification.hasSocialGroupId(query.getSocialGroupId());
+      List<ProductSize> bySocial = productSizeRepository.findAll(s);
+      System.out.println("Filtre socialGroupId => " + bySocial.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (query.getMinPromo() != null || query.getMaxPromo() != null) {
+      Specification<ProductSize> s = ProductSpecification.hasPromoPriceBetween(query.getMinPromo(), query.getMaxPromo());
+      List<ProductSize> byPromo = productSizeRepository.findAll(s);
+      System.out.println("Filtre promoPrice => " + byPromo.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (query.getSize() != null) {
+      Specification<ProductSize> s = ProductSpecification.hasSize(query.getSize());
+      List<ProductSize> bySize = productSizeRepository.findAll(s);
+      System.out.println("Filtre size => " + bySize.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (Boolean.TRUE.equals(query.getSale())) {
+      Specification<ProductSize> s = ProductSpecification.isOnSale();
+      List<ProductSize> bySale = productSizeRepository.findAll(s);
+      System.out.println("Filtre isOnSale => " + bySale.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    if (query.getNewSince() != null) {
+      Specification<ProductSize> s = ProductSpecification.isNewArrival(query.getNewSince());
+      List<ProductSize> byNew = productSizeRepository.findAll(s);
+      System.out.println("Filtre newArrival => " + byNew.size() + " résultats");
+      spec = spec.and(s);
+    }
+
+    // Résultat final avec TOUS les filtres combinés
+    finalResult = productSizeRepository.findAll(spec);
+
+    System.out.println("Résultat FINAL (AND combiné) => " + finalResult.size() + " résultats");
+
+    return finalResult;
   }
+
 
   @QueryHandler
   public List<ProductSize> on(findAllNewsProducts query) {

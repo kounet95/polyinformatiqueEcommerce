@@ -15,8 +15,8 @@ export class LikeProductComponent implements OnInit {
 
   customer: CustomerEcommerceDTO = {
     id: '',
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     addressId: '',

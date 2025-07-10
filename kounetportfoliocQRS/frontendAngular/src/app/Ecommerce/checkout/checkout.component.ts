@@ -13,17 +13,37 @@ import {
   OrderStatus
 } from '../../mesModels/models';
 import { forkJoin } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { RouterModule } from '@angular/router';
+import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.component';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
-  standalone: false,
+   standalone: true,
+  imports: [
+    CommonModule,         
+    MatIconModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatExpansionModule,
+    RouterModule,
+    FormsModule,
+    MatListModule,
+    AnnouncementBarComponent
+  ],
 })
 export class CheckoutComponent implements OnInit {
 
   step = 1;
- clientSecret: string = '';
+  clientSecret: string = '';
   cartItems: CartItem[] = [];
   subtotal = 0;
   shipping = 9.99;
@@ -39,8 +59,8 @@ export class CheckoutComponent implements OnInit {
 
   customer: CustomerEcommerceDTO = {
     id: '',
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     addressId: '',
@@ -73,26 +93,37 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('[Init] Mode:', this.mode);
     this.cartItems = this.cartService.getCart();
     this.calculateTotals();
     this.loadCustomer();
   }
 
-  loadCustomer() {
-    const userId = this.authService.getUserId ? this.authService.getUserId() : null;
-    if (userId) {
-      this.customerService.getCustomerById(userId).subscribe({
-        next: (customer) => {
-          if (customer) {
-            this.customer = customer;
-          }
-        },
-        error: () => {
-          this.message = "Impossible de charger les informations client.";
+loadCustomer() {
+  const userId = this.authService.getUserId ? this.authService.getUserId() : null;
+  if (userId) {
+    this.customerService.getCustomerById(userId).subscribe({
+      next: (customer) => {
+        if (customer) {
+          this.customer = {
+            id: customer.id,
+            firstName: customer.firstName ?? '',
+            lastName: customer.lastName ?? '',
+            email: customer.email ?? '',
+            phone: customer.phone ?? '',
+            addressId: customer.addressId ?? '',
+            createdAt: customer.createdAt ?? ''
+          };
+          console.log('Client chargé :', this.customer);
         }
-      });
-    }
+      },
+      error: () => {
+        this.message = "Impossible de charger les informations client.";
+      }
+    });
   }
+}
+
 
   calculateTotals() {
     this.subtotal = this.cartItems.reduce((sum, item) =>
@@ -141,11 +172,12 @@ export class CheckoutComponent implements OnInit {
       shippingId: this.shippingAddressToString()
     };
 
-    // 1️⃣ Créer la commande
+    console.log('[placeOrder] Order:', order);
+
     this.orderService.createOrder(order).subscribe({
       next: orderId => {
+        console.log('[placeOrder] Order ID:', orderId);
 
-        // 2️⃣ Ajouter les lignes produits
         const orderLineRequests = this.cartItems.map(item => {
           const orderLine: OrderLineDTO = {
             id: '',
@@ -158,12 +190,10 @@ export class CheckoutComponent implements OnInit {
 
         forkJoin(orderLineRequests).subscribe({
           next: () => {
-
-            // 3️⃣ Générer la facture
             const invoice: InvoiceDTO = {
               id: '',
               orderId: orderId,
-              customerId: this.customer.id ? this.customer.id : (this.customer.email ?? ''),
+              customerId: this.customer.id || this.customer.email || '',
               amount: this.total,
               paymentMethod: this.payment.method,
               restMonthlyPayment: 0,
@@ -173,16 +203,10 @@ export class CheckoutComponent implements OnInit {
 
             this.invoiceService.createInvoice(invoice).subscribe({
               next: () => {
-
-                // 4️⃣ Créer le PaymentIntent côté backend pour Stripe
                 this.orderService.createPaymentIntent(order).subscribe({
                   next: (clientSecret) => {
-                    // 👉 Ici tu récupères le clientSecret pour Stripe.js
-                    console.log('Stripe clientSecret:', clientSecret);
-
-                    // 👉 TODO: Tu peux appeler Stripe.js ici :
-                    // this.payWithStripe(clientSecret);
-
+                    console.log('[placeOrder] Stripe clientSecret:', clientSecret);
+                    this.clientSecret = clientSecret;
                     this.message = 'Commande créée ! Paiement en attente...';
                     this.cartService.clearCart();
                     this.cartItems = [];
@@ -194,14 +218,12 @@ export class CheckoutComponent implements OnInit {
                     this.loading = false;
                   }
                 });
-
               },
               error: () => {
                 this.message = 'Erreur lors de la création de la facture.';
                 this.loading = false;
               }
             });
-
           },
           error: () => {
             this.message = "Erreur lors de l'ajout des produits à la commande.";
@@ -217,46 +239,38 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  // Méthode pour intégrer Stripe.js et confirmer le paiement
-async payWithStripe(clientSecret: string) {
-  //   on va faire un Chargement de Stripe.js
-  const stripeJs = await import('@stripe/stripe-js');
-  const stripe = await stripeJs.loadStripe('pk_test_TON_PUBLIC_KEY_STRIPE_ICI');
+  async payWithStripe(clientSecret: string) {
+    const stripeJs = await import('@stripe/stripe-js');
+    const stripe = await stripeJs.loadStripe('pk_test_TON_PUBLIC_KEY_STRIPE_ICI');
 
-  if (!stripe) {
-    this.message = 'Stripe.js non chargé correctement.';
-    return;
-  }
-
-  // Creation dun élément Stripe CardElement ou récupère les infos de ta page
-
-
-  const elements = stripe.elements();
-  const cardElement = elements.create('card');
-  cardElement.mount('#card-element'); // Assure-toi d'avoir <div id="card-element"></div> dans ton HTML
-
-  // Confirme le paiement
-  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-    payment_method: {
-      card: cardElement,
-      billing_details: {
-        name: this.customer.firstname + ' ' + this.customer.lastname,
-        email: this.customer.email
-      }
+    if (!stripe) {
+      this.message = 'Stripe.js non chargé correctement.';
+      return;
     }
-  });
 
-  if (error) {
-    console.error('Stripe Payment Error:', error);
-    this.message = 'Erreur de paiement Stripe : ' + error.message;
-  } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-    this.message = 'Paiement réussi !';
-    console.log('PaymentIntent:', paymentIntent);
-    // ✅ Tu peux rediriger vers une page de confirmation ici
-  } else {
-    this.message = 'Paiement non confirmé.';
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: this.customer.firstName + ' ' + this.customer.lastName,
+          email: this.customer.email
+        }
+      }
+    });
+
+    if (error) {
+      console.error('Stripe Payment Error:', error);
+      this.message = 'Erreur de paiement Stripe : ' + error.message;
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      this.message = 'Paiement réussi !';
+      console.log('PaymentIntent:', paymentIntent);
+    } else {
+      this.message = 'Paiement non confirmé.';
+    }
   }
-}
-
 
 }

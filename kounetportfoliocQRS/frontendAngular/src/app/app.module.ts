@@ -120,15 +120,13 @@ function initializeKeycloak(keycloak: KeycloakService) {
     CreateProductComponent,
     SousCategoryCreateComponent,
     CreatGroupeSocialComponent,
-    AccountComponent,
     OrderSummaryComponentComponent,
     OrderLineComponent,
     OrderStatusComponent,
-    CartComponent,
+
     OrderCreateComponent,
     CreateProductSizeComponent,
     ProductSizeComponent,
-    CheckoutComponent,
     PrivacyComponent,
 
     LoginComponent,
