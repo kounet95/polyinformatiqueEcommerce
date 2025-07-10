@@ -30,6 +30,15 @@
                 </ul>
                
             </div>
+            <div *ngIf="subCategories.length > 0">
+            <h3>Sous-catégories :</h3>
+            <ul class="list-group">
+              <li *ngFor="let sub of subCategories" class="list-group-item">
+                {{ sub.name }}
+              </li>
+              </ul>
+             </div>
+
              <!-- Formulaire -->
         <form *ngIf="currentEditingCategory"
       [formGroup]="categoryForm"

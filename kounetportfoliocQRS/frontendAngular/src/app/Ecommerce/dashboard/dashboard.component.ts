@@ -31,14 +31,36 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadCategories();
+ 
+  
   }
 
-  loadCategories(){
-     this.categoryService.getAllCategories().subscribe({
-      next: cats => this.categories = cats || [],
-      error: () => console.error('Erreur chargement catégories')
-    })
-  }
+ loadCategories() {
+  this.loading = true;
+  this.categoryService.getAllCategories().subscribe({
+    next: (cats: CategoryDTO[]) => {
+      this.subCategoryService.getAllSubcategories().subscribe({
+        next: (sousCats: SubcategoryDTO[]) => {
+          this.categories = cats.map(cat => ({
+            ...cat,
+            children: sousCats
+              .filter((sc: SubcategoryDTO) => sc.categoryId === cat.id)
+              .map((sc: SubcategoryDTO) => ({ id: sc.id, name: sc.name }))
+          }));
+          this.loading = false;
+        },
+        error: () => {
+          this.errorMessage = "Erreur lors du chargement des sous-catégories.";
+          this.loading = false;
+        }
+      });
+    },
+    error: () => {
+      this.errorMessage = "Erreur lors du chargement des catégories.";
+      this.loading = false;
+    }
+  });
+}
 
   update(): void {
   this.successMessage = undefined;
@@ -85,10 +107,12 @@ export class DashboardComponent implements OnInit{
     this.categoryForm.reset();
   }
 
-  showCategory(cat: CategoryDTO){
-    
-     this.subCategories = this.subCategoryService.getSousCategoriesByCategoryId(cat.id);
+  showCategory(cat: CategoryDTO) {
+  this.subCategoryService.getSousCategoriesByCategoryId(cat.id).subscribe({
+    next: sousCats => this.subCategories = sousCats || [],
+    error: err => console.error('Erreur lors du chargement des sous-catégories', err)
+  });
+}
 
-  }
 
 }
