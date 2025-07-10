@@ -2,14 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../services/cartservice';
 import { Router, RouterModule } from '@angular/router';
 import { CartItem } from '../../mesModels/models';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
-import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.component';
 
 @Component({
   selector: 'app-cart',

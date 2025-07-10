@@ -14,121 +14,142 @@
 <app-announcement-bar></app-announcement-bar>
 
 <section id="cart" class="cart section">
-  <div class="cart-container">
+  <div class="container">
+    <div class="row">
+      <!-- Colonne principale du panier -->
+      <div class="col-lg-8 mb-4">
+        <h2 class="mb-4">Panier</h2>
 
-    <!-- Section principale du panier -->
-    <div class="cart-main">
-      <h2>Panier</h2>
-
-      <!-- Tableau du panier -->
-      <div class="cart-table">
-        <div class="cart-table-header">
-          <span class="product-col">Produit</span>
-          <span class="price-col">Prix</span>
-          <span class="qty-col">Quantité</span>
-          <span class="total-col">Total</span>
+        <!-- En-tête du tableau -->
+        <div class="d-none d-lg-flex bg-light py-2 border-bottom fw-semibold">
+          <div class="col-lg-6">Produit</div>
+          <div class="col-lg-2 text-center">Prix</div>
+          <div class="col-lg-2 text-center">Quantité</div>
+          <div class="col-lg-2 text-center">Total</div>
         </div>
 
         <!-- Articles du panier -->
-        <div class="cart-item" *ngFor="let item of cartItems">
-          <div class="product-col">
-            <img [src]="item.productImg" alt="" class="cart-img" />
-            <div class="cart-product-info">
-              <div class="cart-product-title">{{ item.productName }}</div>
-              <div class="cart-product-meta">
-                Taille : {{ item.productSize || '—' }}
-              </div>
-              <div class="cart-product-actions">
-                <button (click)="removeItem(item)" class="remove-btn">
-                  <i class="material-icons">delete</i> Supprimer
+        <div class="border-bottom py-3" *ngFor="let item of cartItems">
+          <div class="row align-items-center">
+            <!-- Produit -->
+            <div class="col-lg-6 d-flex align-items-start">
+              <img [src]="item.productImg" alt="" class="img-fluid me-3 rounded" style="width: 80px; height: auto;" />
+              <div>
+                <h6 class="mb-1">{{ item.productName }}</h6>
+                <small class="d-block mb-2 text-muted">Taille : {{ item.productSize || '—' }}</small>
+                <button (click)="removeItem(item)" class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash"></i> Supprimer
                 </button>
               </div>
             </div>
+
+            <!-- Prix -->
+            <div class="col-lg-2 text-center mt-3 mt-lg-0">
+              <span class="text-dark fw-medium">
+                ${{ (item.pricePromo ?? item.productSizePrice) | number:'1.2-2' }}
+              </span>
+            </div>
+
+            <!-- Quantité -->
+            <div class="col-lg-2 text-center mt-3 mt-lg-0">
+              <div class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-outline-secondary btn-sm me-2" (click)="decrementQty(item)">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <span class="fw-medium">{{ item.qty }}</span>
+                <button class="btn btn-outline-secondary btn-sm ms-2" (click)="incrementQty(item)">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="col-lg-2 text-center mt-3 mt-lg-0 fw-bold">
+              ${{ ((item.pricePromo ?? item.productSizePrice) * item.qty) | number:'1.2-2' }}
+            </div>
           </div>
+        </div>
 
-          <span class="price-col">
-            ${{ (item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo.toFixed(2) : item.productSizePrice.toFixed(2) }}
-          </span>
-
-          <div class="qty-col">
-            <button (click)="decrementQty(item)" class="qty-btn">-</button>
-            <span class="qty-val">{{ item.qty }}</span>
-            <button (click)="incrementQty(item)" class="qty-btn">+</button>
-          </div>
-
-          <span class="total-col">
-            ${{ ((item.pricePromo != null && item.pricePromo !== undefined) ? item.pricePromo : item.productSizePrice) * item.qty | number:'1.2-2' }}
-          </span>
+        <!-- Actions du panier -->
+        <div class="mt-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+         
+          <button class="btn btn-outline-secondary" (click)="updateCart()">
+            <i class="bi bi-arrow-clockwise"></i> Mettre à jour le panier
+          </button>
         </div>
       </div>
 
-      <!-- Actions du panier -->
-      <div class="cart-actions">
-        <input type="text" placeholder="Code promo" [(ngModel)]="couponCode">
-        <button class="apply-coupon-btn" (click)="applyCoupon()">Appliquer le code</button>
-        <button class="update-cart-btn" (click)="updateCart()">Mettre à jour le panier</button>
-      </div>
-    </div>
+      <!-- Colonne résumé de commande -->
+      <div class="col-lg-4">
+        <div class="cart-summary">
+          <h4 class="summary-title">Résumé de la commande</h4>
 
-    <!-- Résumé de commande -->
-    <div class="cart-summary">
-      <h3>Résumé de la commande</h3>
-
-      <div class="summary-row">
-        <span>Sous-total</span>
-        <span>${{ subtotal.toFixed(2) }}</span>
-      </div>
-
-      <div class="summary-row shipping">
-        <span>Livraison</span>
-        <div class="shipping-options">
-          <div>
-            <input type="radio" id="standard" name="shipping" [(ngModel)]="shippingOption" value="standard">
-            <label for="standard">Livraison standard - 4,99 $</label>
+          <div class="summary-item">
+            <span>Sous-total</span>
+            <span>${{ subtotal.toFixed(2) }}</span>
           </div>
-          <div>
-            <input type="radio" id="express" name="shipping" [(ngModel)]="shippingOption" value="express">
-            <label for="express">Livraison express - 12,99 $</label>
+
+          <div class="summary-item shipping-item">
+                <span class="summary-label">Shipping</span>
+                <div class="shipping-options">
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="standard" checked="">
+                    <label class="form-check-label" for="standard">
+                      Standard Delivery - $4.99
+                    </label>
+                  </div>
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="express">
+                    <label class="form-check-label" for="express">
+                      Express Delivery - $12.99
+                    </label>
+                  </div>
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="free">
+                    <label class="form-check-label" for="free">
+                      Free Shipping (Orders over $300)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+          <div class="summary-item">
+            <span>Taxe</span>
+            <span>${{ tax.toFixed(2) }}</span>
           </div>
-          <div>
-            <input type="radio" id="free" name="shipping" [(ngModel)]="shippingOption" value="free">
-            <label for="free">Livraison gratuite (commandes de plus de 300 $)</label>
+          <div class="summary-item discount">
+            <span>Remise</span>
+            <span>- ${{ discount.toFixed(2) }}</span>
+          </div>
+
+          <hr>
+
+          <div class="summary-item ">
+            <span>Total</span>
+            <span>${{ total.toFixed(2) }}</span>
+          </div>
+          <div class="checkout-button ">
+            <button class="btn btn-accent w-100" (click)="proceedToCheckout()">
+              Passer à la caisse <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+          <div class="continue-shopping">
+            <button class="btn btn-link w-100 mt-2 text-decoration-none" (click)="continueShopping()">
+              <i class="bi bi-arrow-left"></i> Continuer vos achats
+            </button>
+          </div>
+
+          <div class="text-center mt-4">
+            <small class="text-muted">Nous acceptons</small>
+            <div class="mt-2 fs-4">
+              <i class="bi bi-credit-card mx-1"></i>
+              <i class="bi bi-paypal mx-1"></i>
+              <i class="bi bi-wallet2 mx-1"></i>
+              <i class="bi bi-bank mx-1"></i>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="summary-row">
-        <span>Taxe</span>
-        <span>${{ tax.toFixed(2) }}</span>
-      </div>
-
-      <div class="summary-row">
-        <span>Remise</span>
-        <span>-${{ discount.toFixed(2) }}</span>
-      </div>
-
-      <hr />
-
-      <div class="summary-row total">
-        <span>Total</span>
-        <span class="total-amount">${{ total.toFixed(2) }}</span>
-      </div>
-
-      <button class="checkout-btn" (click)="proceedToCheckout()">
-        Passer à la caisse &rarr;
-      </button>
-
-      <div class="continue-shopping" (click)="continueShopping()">
-        &larr; Continuer vos achats
-      </div>
-
-      <div class="payment-icons">
-        <i class="material-icons">credit_card</i>
-        <i class="material-icons">payment</i>
-        <i class="material-icons">account_balance</i>
-        <i class="material-icons">account_balance_wallet</i>
-      </div>
     </div>
-
   </div>
 </section>
