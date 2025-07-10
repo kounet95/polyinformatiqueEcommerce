@@ -21,6 +21,7 @@
                 <ul  class="list-group">
                      <li  *ngFor="let cat of categories" class="list-group-item">
                         <h2>{{ cat.name }} </h2>
+                         <a class="btn btn-secondary" (click)="showCategory(cat)">Show</a>
                         <a class="btn btn-warning" (click)="editCategory(cat)">Edit</a>
 
                         

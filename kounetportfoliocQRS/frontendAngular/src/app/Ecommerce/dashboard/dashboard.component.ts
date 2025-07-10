@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoryDTO } from '../../mesModels/models';
+import { CategoryDTO, SubcategoryDTO } from '../../mesModels/models';
 import { CategoryService } from '../services/category.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SouscategoriesService } from '../services/souscategories.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +19,9 @@ export class DashboardComponent implements OnInit{
   currentEditingCategory?: CategoryDTO;
 
   categories: CategoryDTO[] = [];
+  subCategories : SubcategoryDTO[] = [];
 
-  constructor(private categoryService: CategoryService, private route: Router,  private fb: FormBuilder ){
+  constructor(private categoryService: CategoryService, private subCategoryService: SouscategoriesService, private route: Router,  private fb: FormBuilder ){
       
        this.categoryForm = this.fb.group({
         name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]]
@@ -72,18 +74,21 @@ export class DashboardComponent implements OnInit{
 
  
   editCategory(cat: CategoryDTO) {
-  this.currentEditingCategory = cat;
+    this.currentEditingCategory = cat;
+    // il faut Remplir le formulaire avec les données de la catégorie selectionnee
+    this.categoryForm.patchValue({
+      name: cat.name
+    });
+  }
+  cancelEdit() {
+    this.currentEditingCategory = undefined;
+    this.categoryForm.reset();
+  }
 
-  // il faut Remplir le formulaire avec les données de la catégorie selectionnee
-  this.categoryForm.patchValue({
-    name: cat.name
-  });
-}
- cancelEdit() {
-  this.currentEditingCategory = undefined;
-  this.categoryForm.reset();
-}
+  showCategory(cat: CategoryDTO){
+    
+     this.subCategories = this.subCategoryService.getSousCategoriesByCategoryId(cat.id);
 
-  
+  }
 
 }
