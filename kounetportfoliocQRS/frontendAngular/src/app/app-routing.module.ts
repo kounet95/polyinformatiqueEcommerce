@@ -39,6 +39,7 @@ import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.comp
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
 import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
+import { DashboardComponent } from './Ecommerce/dashboard/dashboard.component';
 
 
 const routes: Routes = [
@@ -68,6 +69,8 @@ const routes: Routes = [
   { path: 'create-supply', component: CreatSupplyComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+
   { path: 'faq', component: FaqComponent },
   { path: 'home', component: HomeComponent },
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },

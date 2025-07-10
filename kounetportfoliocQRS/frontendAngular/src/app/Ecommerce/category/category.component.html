@@ -2,296 +2,238 @@
   <div class="container">
     <nav class="breadcrumbs">
       <ol>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/boutique">Boutique</a></li>
-        <li><a class="current">Categories de produits</a></li>
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a class="current">Catégories de produits</a></li>
       </ol>
     </nav>
   </div>
 </div>
+
 <app-announcement-bar></app-announcement-bar>
-<!-- Filtres visibles -->
- <section class="contact-container">
 
-<div class="filter-bar d-flex flex-wrap align-items-center justify-content-between mb-4 p-3 border rounded shadow-sm" style="background: #fff;">
-  <div class="d-flex align-items-center mb-2 mb-md-0">
-    <input type="text" class="form-control me-2" placeholder="Search for products..."
-           [(ngModel)]="filters.searchKeyword" (keydown.enter)="applyFilters()" />
-    <button class="btn btn-danger" (click)="applyFilters()">
-      <mat-icon>search</mat-icon>
-    </button>
-  </div>
-  <div class="form-group me-2">
-    <select class="form-select" [(ngModel)]="filters.selectedPriceRange" (change)="applyFilters()">
-      <option value="">All Prices</option>
-      <option value="0-50">Under $50</option>
-      <option value="50-100">$50 to $100</option>
-      <option value="100-200">$100 to $200</option>
-      <option value="200+">Above $200</option>
-    </select>
-  </div>
-
-  <div class="form-group me-2">
-    <select class="form-select" [(ngModel)]="filters.sortOption" (change)="applyFilters()">
-      <option value="featured">Featured</option>
-      <option value="priceAsc">Price: Low to High</option>
-      <option value="priceDesc">Price: High to Low</option>
-      <option value="name">Name</option>
-    </select>
-  </div>
-
-  <div class="btn-group me-2">
-    <button class="btn" [class.active]="filters.viewMode === 'grid'" (click)="filters.viewMode = 'grid'">
-      <mat-icon>grid_view</mat-icon>
-    </button>
-    <button class="btn" [class.active]="filters.viewMode === 'list'" (click)="filters.viewMode = 'list'">
-      <mat-icon>list</mat-icon>
-    </button>
-  </div>
-
-  <div class="form-group">
-    <select class="form-select" [(ngModel)]="filters.itemsPerPage" (change)="applyFilters()">
-      <option>6</option>
-      <option>12</option>
-      <option>24</option>
-      <option>48</option>
-    </select>
-  </div>
-</div>
-
-<!-- Filtres actifs -->
-<div *ngIf="activeFilters.length > 0" class="mb-3">
-  <strong>Active Filters:</strong>
-  <span *ngFor="let filter of activeFilters" class="badge bg-light text-dark me-2">
-    {{ filter.label }}
-    <button class="btn-close btn-sm ms-1" (click)="removeFilter(filter.key)"></button>
-  </span>
-  <button class="btn btn-outline-danger btn-sm ms-2" (click)="clearAllFilters()">Clear All</button>
-</div>
-
-<!-- Debug : Affichage de tous les filtres -->
-<pre>{{ allFilters | json }}</pre>
-
-<div class="main-layout">
-  <div class="sidebar">
-    <div class="category-card" *ngIf="!loading && !error">
-      <h3 class="widget-title mat-headline">Categories</h3>
-      <mat-accordion displayMode="flat" class="category-accordion">
-        <ng-container *ngFor="let category of categories">
-          <mat-expansion-panel [hideToggle]="!category.children?.length" class="category-panel">
-            <mat-expansion-panel-header (click)="onCategorySelect(category.id)">
-              <span class="category-title"><b>{{ category.name }}</b></span>
-            </mat-expansion-panel-header>
-            <ng-template matExpansionPanelContent>
-              <mat-nav-list *ngIf="category.children?.length">
-                <mat-list-item *ngFor="let sub of category.children" class="subcategory-item"
-                               (click)="onProductSouscategorieChange(sub.id)">
-                  <mat-icon matListIcon color="accent" class="subcategory-dot">
-                    {{ filters.selectedSouscategorie.includes(sub.id) ? 'check_circle' : 'fiber_manual_record' }}
-                  </mat-icon>
-                  <span>{{ sub.name }}</span>
-                </mat-list-item>
-              </mat-nav-list>
-            </ng-template>
-          </mat-expansion-panel>
-        </ng-container>
-      </mat-accordion>
+<section class="contact-container">
+  <div class="filter-bar d-flex flex-wrap align-items-center justify-content-between mb-4 p-3 border rounded shadow-sm" style="background: #fff;">
+    <div class="d-flex align-items-center mb-2 mb-md-0">
+      <input type="text" class="form-control me-2" placeholder="Rechercher un produit..." [(ngModel)]="filters.searchKeyword" (keydown.enter)="applyFilters()" />
+      <button class="btn btn-danger" (click)="applyFilters()">
+        <mat-icon>search</mat-icon>
+      </button>
     </div>
 
-    <!-- Bloc Couleurs -->
-    <div class="couleur-card mb-4">
-      <div class="color-filter-widget widget-item">
-        <h3 class="widget-title">Filter by Color</h3>
-        <div class="color-filter-content">
-          <div class="color-options">
-            <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
-              <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color"
-                [checked]="filters.selectedCouleurs.includes(color)"
-                (change)="onCouleurCheckboxChange(color, $event)">
-              <label class="form-check-label" [for]="'color-' + color">
-                <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
+    <div class="form-group me-2">
+      <select class="form-select" [(ngModel)]="filters.selectedPriceRange" (change)="applyFilters()">
+        <option value="">Tous les prix</option>
+        <option value="0-50">Moins de 50 $</option>
+        <option value="50-100">50 $ à 100 $</option>
+        <option value="100-200">100 $ à 200 $</option>
+        <option value="200+">Plus de 200 $</option>
+      </select>
+    </div>
+
+    <div class="form-group me-2">
+      <select class="form-select" [(ngModel)]="filters.sortOption" (change)="applyFilters()">
+        <option value="featured">En vedette</option>
+        <option value="priceAsc">Prix croissant</option>
+        <option value="priceDesc">Prix décroissant</option>
+        <option value="name">Nom</option>
+      </select>
+    </div>
+
+    <div class="btn-group me-2">
+      <button class="btn" [class.active]="filters.viewMode === 'grid'" (click)="filters.viewMode = 'grid'">
+        <mat-icon>grid_view</mat-icon>
+      </button>
+      <button class="btn" [class.active]="filters.viewMode === 'list'" (click)="filters.viewMode = 'list'">
+        <mat-icon>list</mat-icon>
+      </button>
+    </div>
+
+    <div class="form-group">
+      <select class="form-select" [(ngModel)]="filters.itemsPerPage" (change)="applyFilters()">
+        <option>6</option>
+        <option>12</option>
+        <option>24</option>
+        <option>48</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="activeFilters.length > 0" class="mb-3">
+    <strong>Filtres actifs :</strong>
+    <span *ngFor="let filter of activeFilters" class="badge bg-light text-dark me-2">
+      {{ filter.label }}
+      <button class="btn-close btn-sm ms-1" (click)="removeFilter(filter.key)"></button>
+    </span>
+    <button class="btn btn-outline-danger btn-sm ms-2" (click)="clearAllFilters()">Tout effacer</button>
+  </div>
+
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="category-card" *ngIf="!loading && !error">
+        <h3 class="widget-title mat-headline">Catégories</h3>
+        <mat-accordion displayMode="flat" class="category-accordion">
+          <ng-container *ngFor="let category of categories">
+            <mat-expansion-panel [hideToggle]="!category.children?.length" class="category-panel">
+              <mat-expansion-panel-header (click)="onCategorySelect(category.id)">
+                <span class="category-title"><b>{{ category.name }}</b></span>
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-nav-list *ngIf="category.children?.length">
+                  <mat-list-item *ngFor="let sub of category.children" class="subcategory-item" (click)="onProductSouscategorieChange(sub.id)">
+                    <mat-icon matListIcon color="accent" class="subcategory-dot">
+                      {{ filters.selectedSouscategorie.includes(sub.id) ? 'check_circle' : 'fiber_manual_record' }}
+                    </mat-icon>
+                    <span>{{ sub.name }}</span>
+                  </mat-list-item>
+                </mat-nav-list>
+              </ng-template>
+            </mat-expansion-panel>
+          </ng-container>
+        </mat-accordion>
+      </div>
+
+      <div class="couleur-card mb-4">
+        <div class="color-filter-widget widget-item">
+          <h3 class="widget-title">Filtrer par couleur</h3>
+          <div class="color-filter-content">
+            <div class="color-options">
+              <div class="form-check color-option" *ngFor="let color of ['black','white','red','blue','green','yellow','purple','orange','pink','brown']">
+                <input class="form-check-input" type="checkbox" [value]="color" [id]="'color-' + color" [checked]="filters.selectedCouleurs.includes(color)" (change)="onCouleurCheckboxChange(color, $event)">
+                <label class="form-check-label" [for]="'color-' + color">
+                  <span class="color-swatch" [style.background-color]="color" [title]="color | titlecase"></span>
+                </label>
+              </div>
+            </div>
+            <div class="color-filter-actions mt-3 d-flex gap-2">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Effacer</button>
+              <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Appliquer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="size-card mb-4">
+        <div class="size-filter-widget widget-item">
+          <h3 class="widget-title">Filtrer par taille</h3>
+          <div class="size-filter-content">
+            <div class="size-options d-flex flex-wrap gap-2 mt-2">
+              <button *ngFor="let size of productSizes" (click)="onProductSizeChange(size.sizeProd)">
+                {{ size.sizeProd }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="social-group-card mb-4">
+        <div class="social-group-filter-widget widget-item">
+          <h3 class="widget-title">Filtrer par groupe</h3>
+          <div class="social-group-filter-content">
+            <div class="form-check" *ngFor="let group of socialGroups">
+              <input class="form-check-input" type="radio" [id]="'group-' + group" [value]="group" [checked]="filters.selectedSocialGroup === group" (change)="onSocialGroupChange(group)">
+              <label class="form-check-label" [for]="'group-' + group">
+                {{ group }}
               </label>
             </div>
           </div>
-          <div class="color-filter-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-            <button type="button" class="btn btn-secondary btn-sm" (click)="clearAllColors()">Clear All</button>
-            <button type="button" class="btn btn-primary btn-sm" (click)="applyColorFilters()">Apply</button>
-          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Bloc Tailles -->
-    <div class="size-card mb-4">
-      <div class="size-filter-widget widget-item">
-        <h3 class="widget-title">Filter by Size</h3>
-        <div class="size-filter-content">
-          <div class="size-options d-flex flex-wrap gap-2 mt-2">
-            <button *ngFor="let size of productSizes"
-                   (click)="onProductSizeChange(size.sizeProd)">
-  >
-              {{ size.sizeProd }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bloc Groupe Social -->
-    <div class="social-group-card mb-4">
-      <div class="social-group-filter-widget widget-item">
-        <h3 class="widget-title">Filter by Group</h3>
-        <div class="social-group-filter-content">
-          <div class="form-check" *ngFor="let group of socialGroups">
-            <input class="form-check-input" type="radio"
-                   [id]="'group-' + group"
-                   [value]="group"
-                   [checked]="filters.selectedSocialGroup === group"
-                   (change)="onSocialGroupChange(group)">
-            <label class="form-check-label" [for]="'group-' + group">
-              {{ group }}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bloc Prix -->
-    <div class="price-card mb-4">
-      <div class="price-filter-widget widget-item">
-        <h3 class="widget-title">Filter by Price</h3>
-        <div class="price-filter-content">
-          <div class="form-check" *ngFor="let range of ['0-50', '50-100', '100-200', '200+']">
-            <input class="form-check-input" type="radio"
-                   [id]="'price-' + range"
-                   [value]="range"
-                   [checked]="filters.selectedPriceRange === range"
-                   (change)="filters.selectedPriceRange = range; applyFilters()">
-            <label class="form-check-label" [for]="'price-' + range">
-              {{ range === '0-50' ? 'Under €50' :
-                 range === '50-100' ? '€50 to €100' :
-                 range === '100-200' ? '€100 to €200' :
-                 'Above €200' }}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bloc Soldes -->
-    <div class="sale-card mb-4">
-      <div class="sale-filter-widget widget-item">
-        <h3 class="widget-title">Special Offers</h3>
-        <div class="sale-filter-content">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox"
-                   id="sale-filter"
-                   [checked]="filters.onSale"
-                   (change)="filters.onSale = !filters.onSale; applyFilters()">
-            <label class="form-check-label" for="sale-filter">
-              <span class="badge bg-danger me-1">SALE</span> Items on sale
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Affichage produits filtrés -->
-  <div class="row gy-4 mt-4">
-    <div class="col-md-4 col-lg-3" *ngFor="let size of productSizes">
-      <div class="card h-100 shadow-sm hover-shadow transition-300" style="border: none; overflow: hidden;">
-        <!-- Badges -->
-        <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-1">
-          <span *ngIf="size.pricePromo && size.pricePromo < size.price"
-                class="badge bg-danger text-white">
-            -{{ ((size.price - size.pricePromo) / size.price * 100).toFixed(0) }}%
-          </span>
-          <span *ngIf="filters.onSale && size.pricePromo && size.pricePromo < size.price"
-                class="badge bg-warning text-dark">
-            SALE
-          </span>
-        </div>
-
-        <!-- Image avec overlay -->
-        <div class="position-relative product-image-container">
-          <img [src]="size.product?.models"
-               [alt]="size.product?.name || 'Product'"
-               class="card-img-top"
-               style="height: 220px; object-fit: cover; transition: transform 0.3s ease;"
-               loading="lazy">
-
-          <!-- Quick actions overlay -->
-          <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center product-overlay"
-               style="background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s ease;">
-            <div class="d-flex gap-2">
-              <button class="btn btn-light rounded-circle p-2" (click)="voirDetaille(size.id)"
-                      title="Voir détails">
-                <mat-icon>visibility</mat-icon>
-              </button>
-              <button class="btn btn-primary rounded-circle p-2" (click)="addCart(size)"
-                      title="Ajouter au panier">
-                <mat-icon>add_shopping_cart</mat-icon>
-              </button>
-              <!-- Dans ta carte produit, par exemple après le bouton Ajouter au panier -->
-        <button (click)="toggleLike(size)">
- <mat-icon>{{ likedMap[size.id] ? 'favorite' : 'favorite_border' }}</mat-icon>
-{{ likedMap[size.id] ? 'Je n\'aime plus' : 'J\'aime' }} ({{ likeCountMap[size.id] || 0 }})
-
-</button>
-
+      <div class="price-card mb-4">
+        <div class="price-filter-widget widget-item">
+          <h3 class="widget-title">Filtrer par prix</h3>
+          <div class="price-filter-content">
+            <div class="form-check" *ngFor="let range of ['0-50', '50-100', '100-200', '200+']">
+              <input class="form-check-input" type="radio" [id]="'price-' + range" [value]="range" [checked]="filters.selectedPriceRange === range" (change)="filters.selectedPriceRange = range; applyFilters()">
+              <label class="form-check-label" [for]="'price-' + range">
+                {{ range === '0-50' ? 'Moins de 50 $' : range === '50-100' ? '50 $ à 100 $' : range === '100-200' ? '100 $ à 200 $' : 'Plus de 200 $' }}
+              </label>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Product info -->
-        <div class="card-body d-flex flex-column">
-         <h5 class="card-title text-truncate mb-1">
-          {{ size.product?.name || 'No name' }}
-           </h5>
-          <p class="text-muted small mb-2">Taille: {{ size.sizeProd ? size.sizeProd : 'Standard' }}</p>
-
-          <!-- Prix -->
-          <div class="d-flex align-items-center mb-2">
-            <span *ngIf="size.pricePromo && size.pricePromo < size.price"
-                  class="text-decoration-line-through text-muted me-2">
-              {{ size.price }} €
-            </span>
-            <span class="fw-bold fs-5"
-                  [class.text-danger]="size.pricePromo && size.pricePromo < size.price">
-              {{ (size.pricePromo && size.pricePromo < size.price) ? size.pricePromo : size.price }} €
-            </span>
-          </div>
-
-          <!-- Rating -->
-          <div class="d-flex align-items-center mb-3">
-            <div class="text-warning me-1">
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-fill"></i>
-              <i class="bi bi-star-half"></i>
+      <div class="sale-card mb-4">
+        <div class="sale-filter-widget widget-item">
+          <h3 class="widget-title">Offres spéciales</h3>
+          <div class="sale-filter-content">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="sale-filter" [checked]="filters.onSale" (change)="filters.onSale = !filters.onSale; applyFilters()">
+              <label class="form-check-label" for="sale-filter">
+                <span class="badge bg-danger me-1">SOLDES</span> Articles en promotion
+              </label>
             </div>
-            <span class="ms-1 small text-muted">(4.5)</span>
-          </div>
-
-          <!-- Actions -->
-          <div class="mt-auto">
-            <button class="btn btn-primary w-100" (click)="addCart(size)">
-              Ajouter au panier
-            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Loader et erreur -->
-    <div *ngIf="loading" class="text-center my-4">
-      <span class="spinner-border"></span> Chargement...
-    </div>
-    <div *ngIf="error" class="alert alert-danger">
-      {{ error }}
+    <div class="row gy-4 mt-4">
+      <div class="col-md-4 col-lg-3" *ngFor="let size of productSizes">
+        <div class="card h-100 shadow-sm" style="border: none; overflow: hidden;">
+          <div class="position-absolute top-0 start-0 p-2 d-flex flex-column gap-1">
+            <span *ngIf="size.pricePromo && size.pricePromo < size.price" class="badge bg-danger text-white">
+              -{{ ((size.price - size.pricePromo) / size.price * 100).toFixed(0) }}%
+            </span>
+            <span *ngIf="filters.onSale && size.pricePromo && size.pricePromo < size.price" class="badge bg-warning text-dark">
+              SOLDES
+            </span>
+          </div>
+
+          <div class="position-relative product-image-container">
+            <img [src]="size.product?.models" [alt]="size.product?.name || 'Produit'" class="card-img-top" style="height: 220px; object-fit: cover;">
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center product-overlay" style="background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s ease;">
+              <div class="d-flex gap-2">
+                <button class="btn btn-light rounded-circle p-2" (click)="voirDetaille(size.id)" title="Voir les détails">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button class="btn btn-primary rounded-circle p-2" (click)="addCart(size)" title="Ajouter au panier">
+                  <mat-icon>add_shopping_cart</mat-icon>
+                </button>
+                <button (click)="toggleLike(size)">
+                  <mat-icon>{{ likedMap[size.id] ? 'favorite' : 'favorite_border' }}</mat-icon>
+                  {{ likedMap[size.id] ? 'Je n\'aime plus' : 'J\'aime' }} ({{ likeCountMap[size.id] || 0 }})
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-truncate mb-1">
+              {{ size.product?.name || 'Sans nom' }}
+            </h5>
+            <p class="text-muted small mb-2">Taille : {{ size.sizeProd ? size.sizeProd : 'Standard' }}</p>
+            <div class="d-flex align-items-center mb-2">
+              <span *ngIf="size.pricePromo && size.pricePromo < size.price" class="text-decoration-line-through text-muted me-2">
+                {{ size.price }} $
+              </span>
+              <span class="fw-bold fs-5" [class.text-danger]="size.pricePromo && size.pricePromo < size.price">
+                {{ (size.pricePromo && size.pricePromo < size.price) ? size.pricePromo : size.price }} $
+              </span>
+            </div>
+            <div class="d-flex align-items-center mb-3">
+              <div class="text-warning me-1">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-half"></i>
+              </div>
+              <span class="ms-1 small text-muted">(4.5)</span>
+            </div>
+            <div class="mt-auto">
+              <button class="btn btn-primary w-100" (click)="addCart(size)">Ajouter au panier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="loading" class="text-center my-4">
+        <span class="spinner-border"></span> Chargement...
+      </div>
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
     </div>
   </div>
-</div>
- </section>
+</section>

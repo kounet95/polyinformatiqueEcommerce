@@ -9,8 +9,10 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.CreateCategoryCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.DeleteCategoryCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.UpdateCategoryCommand;
 import org.example.polyinformatiquecoreapi.eventEcommerce.CategoryCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.CategoryDeletedEvent;
+import org.example.polyinformatiquecoreapi.eventEcommerce.CategoryUpdatedEvent;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -28,15 +30,10 @@ public class CategoryAggregate {
     private String name;
 
     public CategoryAggregate() {}
-
-
      @CommandHandler
      public CategoryAggregate(CreateCategoryCommand cmd) {
-
-
          apply(new
            CategoryCreatedEvent(cmd.getId(), cmd.getCategoryDTO()));
-
      }
 
 
@@ -55,4 +52,12 @@ public class CategoryAggregate {
      public void on(CategoryDeletedEvent event) {
          this.name = "[deleted]";
      }
+
+     @CommandHandler
+     public void handle(UpdateCategoryCommand command) { apply(new CategoryUpdatedEvent(command.getId(), command.getCategoryDTO())); }
+
+     @EventSourcingHandler
+     public void on(CategoryUpdatedEvent event){
+      this.name = event.getCategoryDTO().getName();
+    }
  }

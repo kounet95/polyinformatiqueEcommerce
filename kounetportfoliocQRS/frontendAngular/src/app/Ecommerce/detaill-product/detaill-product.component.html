@@ -1,92 +1,64 @@
-  <!-- Fil d'Ariane -->
- <div class="page-title light-background">
-      <div class="container">
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a routerLink="/">Home</a></li>
-            <li class="current">Détails du vêtement</li>
-          </ol>
-        </nav>
-        <h1>Détails du vêtement</h1>
-      </div>
-    </div>
+<!-- Fil d'Ariane -->
+<div class="page-title light-background">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Accueil</a></li>
+        <li class="current">Détails du vêtement</li>
+      </ol>
+    </nav>
+    <h1>Détails du vêtement</h1>
+  </div>
+</div>
 
-  <!-- Titre principal -->
-  <section id="product-details" class="product-details section">
-  <div class="container" >
-
-    <!-- Bloc principal -->
+<!-- Titre principal -->
+<section id="product-details" class="product-details section">
+  <div class="container">
     <div class="row g-5">
-
       <!-- Galerie d'images -->
-      <div class="col-lg-6  d-flex" *ngIf="productSize">
+      <div class="col-lg-6 d-flex" *ngIf="productSize">
         <div class="product-gallery">
-        <!-- Images Miniatures -->
-        <div class="thumbnails-vertical">
-           <div class="thumbnails-container">
-             <div class="thumbnail-item active" [attr.data-image]="productSize.backUrl">
-              <img [src]="productSize.frontUrl"
-                  [class.selected]="selectedImageIndex === 0"
-                  (click)="selectImage(0)"
-                  class="img-fluid"
-                  alt="Vue de face" />
+          <!-- Images Miniatures -->
+          <div class="thumbnails-vertical">
+            <div class="thumbnails-container">
+              <div class="thumbnail-item active" [attr.data-image]="productSize.backUrl">
+                <img [src]="productSize.frontUrl" [class.selected]="selectedImageIndex === 0" (click)="selectImage(0)" class="img-fluid" alt="Vue de face" />
               </div>
-              <div class="thumbnail-item " [attr.data-image]="productSize.backUrl">
-              <img [src]="productSize.backUrl"
-                  [class.selected]="selectedImageIndex === 1"
-                  (click)="selectImage(1)"
-                   class="img-fluid"
-                  alt="Vue de dos" />
+              <div class="thumbnail-item" [attr.data-image]="productSize.backUrl">
+                <img [src]="productSize.backUrl" [class.selected]="selectedImageIndex === 1" (click)="selectImage(1)" class="img-fluid" alt="Vue de dos" />
               </div>
-              <div class="thumbnail-item " [attr.data-image]="productSize.backUrl">
-              <img [src]="productSize.leftUrl"
-                  [class.selected]="selectedImageIndex === 2"
-                  (click)="selectImage(2)"
-                  class="img-fluid"
-                  alt="Vue de gauche" />
+              <div class="thumbnail-item" [attr.data-image]="productSize.backUrl">
+                <img [src]="productSize.leftUrl" [class.selected]="selectedImageIndex === 2" (click)="selectImage(2)" class="img-fluid" alt="Vue de gauche" />
               </div>
-              <div class="thumbnail-item " [attr.data-image]="productSize.backUrl">
-              <img [src]="productSize.rightUrl"
-                  [class.selected]="selectedImageIndex === 3"
-                  (click)="selectImage(3)"
-                  class="img-fluid"
-                  alt="Vue de droite" />
+              <div class="thumbnail-item" [attr.data-image]="productSize.backUrl">
+                <img [src]="productSize.rightUrl" [class.selected]="selectedImageIndex === 3" (click)="selectImage(3)" class="img-fluid" alt="Vue de droite" />
               </div>
             </div>
           </div>
         </div>
         <!-- Image principale -->
-          <div class="main-image-wrapper">
-                <div class="image-zoom-container">
-                  <a [href]="productSize.frontUrl" class="glightbox" data-gallery="product-gallery">
-                    <img [src]="
-                              selectedImageIndex === 0 ? productSize.frontUrl :
-                              selectedImageIndex === 1 ? productSize.backUrl :
-                              selectedImageIndex === 2 ? productSize.leftUrl :
-                              productSize.rightUrl
-                            " 
-                      alt="Image sélectionnée" class="img-fluid main-image drift-zoom" id="main-product-image" [attr.data-zoom]="productSize.frontUrl">
-                    <div class="zoom-overlay">
-                      <i class="bi bi-zoom-in"></i>
-                    </div>
-                  </a>
-                </div>
-                <div class="image-nav">
-                  <button class="image-nav-btn prev-image" (click)="selectImage((selectedImageIndex - 1 + 4) % 4)">
-                    <i class="bi bi-chevron-left"></i>
-                  </button>
-                  <button class="image-nav-btn next-image" (click)="selectImage((selectedImageIndex + 1) % 4)">
-                    <i class="bi bi-chevron-right"></i>
-                  </button>
-                </div>
+        <div class="main-image-wrapper">
+          <div class="image-zoom-container">
+            <a [href]="productSize.frontUrl" class="glightbox" data-gallery="product-gallery">
+              <img [src]="selectedImageIndex === 0 ? productSize.frontUrl : selectedImageIndex === 1 ? productSize.backUrl : selectedImageIndex === 2 ? productSize.leftUrl : productSize.rightUrl" alt="Image sélectionnée" class="img-fluid main-image drift-zoom" id="main-product-image" [attr.data-zoom]="productSize.frontUrl" />
+              <div class="zoom-overlay">
+                <i class="bi bi-zoom-in"></i>
               </div>
-      
+            </a>
+          </div>
+          <div class="image-nav">
+            <button class="image-nav-btn prev-image" (click)="selectImage((selectedImageIndex - 1 + 4) % 4)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="image-nav-btn next-image" (click)="selectImage((selectedImageIndex + 1) % 4)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Informations produit -->
       <div class="col-lg-6 product-info-wrapper shadow-sm p-4 rounded bg-white" *ngIf="product">
-
-        <!-- Sous-catégories -->
         <div class="d-flex justify-content-between align-items-center mb-3" *ngIf="product.subcategoryId.length > 0; else noSubcat">
           <span *ngFor="let sub of product.subcategoryId; let last = last" class="text-muted small">
             {{ sub }}<span *ngIf="!last">, </span>
@@ -95,13 +67,9 @@
         <ng-template #noSubcat>
           <div class="text-muted small">Catégorie inconnue</div>
         </ng-template>
-        
-        <!-- Nom du produit -->
+
         <h2 class="product-title h4 fw-bold mb-3">{{ product.name }}</h2>
 
-
-
-        <!-- Évaluation -->
         <div class="rating-row">
           <span class="stars">
             <ng-container *ngFor="let s of fiveStars; let i = index">
@@ -112,45 +80,33 @@
           <span class="review-count">42 avis</span>
         </div>
 
-        <!-- Prix -->
         <div class="price-card" *ngIf="productSize">
-          <span class="main-price">{{ productSize.price | currency:'EUR' }}</span>
-
+          <span class="main-price">{{ productSize.price | currency:'CAD' }}</span>
           <span class="old-price" *ngIf="productSize.pricePromo != null && productSize.pricePromo < productSize.price">
-            {{ productSize.pricePromo | currency:'EUR' }}
+            {{ productSize.pricePromo | currency:'CAD' }}
           </span>
-
           <div class="discount-badge" *ngIf="productSize.pricePromo != null && productSize.pricePromo < productSize.price">
-            Économisez {{"(((productSize.price ?? 0) - (productSize.pricePromo ?? 0)) / (productSize.price ?? 1) * 100)" | number:'1.0-0'}}%
+            Économisez {{(((productSize.price ?? 0) - (productSize.pricePromo ?? 0)) / (productSize.price ?? 1) * 100) | number:'1.0-0'}}%
           </div>
-
           <div class="stock-info">
             <mat-icon color="success" class="stock-icon">check_circle</mat-icon>
             En stock <span class="stock-count">(24 articles restants)</span>
           </div>
         </div>
 
-        <!-- Description -->
         <div class="desc-text">
           {{ product.description || 'Description non disponible.' }}
         </div>
 
-        <!-- Couleurs -->
-       
-
-        <!-- Tailles -->
         <div class="option-row" *ngIf="productSize">
           <span class="option-label">Taille</span>
           <div class="size-options">
-            <button class="size-btn"
-                    [class.selected]="selectedSize === productSize.sizeProd"
-                    (click)="selectSize(productSize.sizeProd)">
-              {{ productSize.sizeProd }} — {{ productSize.price | currency:'EUR' }}
+            <button class="size-btn" [class.selected]="selectedSize === productSize.sizeProd" (click)="selectSize(productSize.sizeProd)">
+              {{ productSize.sizeProd }} — {{ productSize.price | currency:'CAD' }}
             </button>
           </div>
         </div>
 
-        <!-- Quantité -->
         <div class="option-row">
           <span class="option-label">Quantité</span>
           <div class="qty-control">
@@ -160,139 +116,40 @@
           </div>
         </div>
 
-        <!-- Boutons d'action -->
         <div class="product-actions">
-                <button class="btn btn-primary add-to-cart-btn" (click)="addToCart()">
-                  <i class="bi bi-cart-plus"></i> Add to Cart
-                </button>
-                <button class="btn btn-outline-primary buy-now-btn" >
-                  <i class="bi bi-lightning-fill"></i> Buy Now
-                </button>
-                <button class="btn btn-outline-secondary wishlist-btn" aria-label="Add to wishlist"  (click)="toggleLike()">
-                  <i class="bi bi-heart"></i>  ({{ likeCount }})
-                </button>
+          <button class="btn btn-primary add-to-cart-btn" (click)="addToCart()">
+            <i class="bi bi-cart-plus"></i> Ajouter au panier
+          </button>
+          <button class="btn btn-outline-primary buy-now-btn">
+            <i class="bi bi-lightning-fill"></i> Acheter maintenant
+          </button>
+          <button class="btn btn-outline-secondary wishlist-btn" aria-label="Ajouter à la liste de souhaits" (click)="toggleLike()">
+            <i class="bi bi-heart"></i> ({{ likeCount }})
+          </button>
         </div>
-        
 
-        <!-- Infos livraison, retour, garantie -->
-         <div class="delivery-options">
-                <div class="delivery-option">
-                  <i class="bi bi-truck"></i>
-                  <div>
-                    <h6>Free Shipping</h6>
-                    <p>On orders over $50</p>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <i class="bi bi-arrow-repeat"></i>
-                  <div>
-                    <h6>30-Day Returns</h6>
-                    <p>Hassle-free returns</p>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <i class="bi bi-shield-check"></i>
-                  <div>
-                    <h6>2-Year Warranty</h6>
-                    <p>Full coverage</p>
-                  </div>
-                </div>
-              </div>
+        <div class="delivery-options">
+          <div class="delivery-option">
+            <i class="bi bi-truck"></i>
+            <div>
+              <h6>Livraison en cours</h6>
+              <p>Delais d'une semaine</p>
+            </div>
+          </div>
+         
+          <div class="delivery-option">
+            <i class="bi bi-shield-check"></i>
+            <div>
+              <h6>Garantie 1 mois</h6>
+              <p>Couverture complète</p>
+            </div>
+          </div>
+        </div>
 
-        <!-- Message succès -->
         <div *ngIf="addedMessage" class="alert alert-success mt-2">
           {{ addedMessage }}
         </div>
-
-      </div> <!-- Fin details-info -->
-    
-    </div> <!-- Fin details-flex -->
-
-    <!-- Onglets supplémentaires -->
-    <div class="mt-5">
-      <mat-tab-group>
-        <mat-tab label="Présentation du produit">
-          <div class="mt-3">
-            <h1>{{ product?.name }}</h1>
-            <p>{{ product?.description }}</p>
-          </div>
-        </mat-tab>
-
-        <mat-tab label="Caractéristiques techniques">
-          <div class="mt-3 d-flex flex-wrap gap-4">
-            <div>
-              <table class="table table-bordered">
-                <tr><th>Matière</th><td>Coton biologique, Wax africain</td></tr>
-                <tr><th>Entretien</th><td>Lavable à 30°C</td></tr>
-                <tr><th>Fabrication</th><td>Fait main, Cameroun</td></tr>
-                <tr><th>Poids</th><td>250 g</td></tr>
-              </table>
-            </div>
-            <div>
-              <table class="table table-bordered">
-                <tr><th>Disponible pour</th><td>Hommes et Femmes</td></tr>
-                <tr><th>Tailles</th><td>Du S au XXL</td></tr>
-                <tr><th>Livraison</th><td>5 à 7 jours ouvrables</td></tr>
-              </table>
-            </div>
-          </div>
-        </mat-tab>
-
-        <mat-tab label="Avis (42)">
-          <div class="mt-3">
-            <div class="review-summary mb-4">
-              <span style="font-size: 2.5rem; font-weight: bold;">4.5</span>
-              <span class="text-warning ms-2">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-half"></i>
-              </span>
-              <span class="ms-2">(42 avis)</span>
-            </div>
-
-            <div *ngFor="let review of reviews" class="mb-4 p-3 border rounded shadow-sm">
-              <div>
-                <b>{{review.author}}</b> <span class="text-muted">{{review.date}}</span>
-                <span class="ms-3 text-warning">
-                  <ng-container *ngFor="let star of fiveStars; let i = index">
-                    <i class="bi" [ngClass]="i < review.rating ? 'bi-star-fill' : 'bi-star'"></i>
-                  </ng-container>
-                </span>
-              </div>
-              <div>{{review.text}}</div>
-            </div>
-
-            <div class="mt-4">
-              <h5>Laisser un avis</h5>
-              <form>
-                <div class="mb-2">
-                  <label>Votre note :</label>
-                  <span class="text-warning">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                  </span>
-                </div>
-                <div class="mb-2 d-flex gap-2">
-                  <input type="text" class="form-control" placeholder="Votre nom" />
-                  <input type="email" class="form-control" placeholder="Votre email" />
-                </div>
-                <div class="mb-2">
-                  <input type="text" class="form-control" placeholder="Titre de l’avis" />
-                </div>
-                <div class="mb-2">
-                  <textarea class="form-control" rows="3" placeholder="Votre commentaire"></textarea>
-                </div>
-                <button type="button" class="btn btn-primary">Soumettre l’avis</button>
-              </form>
-            </div>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+      </div>
     </div>
   </div>
-  </section>
+</section>

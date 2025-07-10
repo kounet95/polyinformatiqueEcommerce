@@ -76,6 +76,7 @@ import { RegisterComponent } from './Ecommerce/register/register.component';
 import { LoginComponent } from './Ecommerce/login/login.component';
 import { ConditionsComponent } from './Ecommerce/conditions/conditions.component';
 import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
+import { DashboardComponent } from './Ecommerce/dashboard/dashboard.component';
 
 
 
@@ -130,7 +131,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     PrivacyComponent,
 
     LoginComponent,
-    ConditionsComponent
+    ConditionsComponent,
+    DashboardComponent
 
    
     
