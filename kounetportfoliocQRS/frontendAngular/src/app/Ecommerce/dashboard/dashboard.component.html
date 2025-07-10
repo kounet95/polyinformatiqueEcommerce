@@ -20,13 +20,20 @@
             <div class="categories-list">
                 <ul  class="list-group">
                      <li  *ngFor="let cat of categories" class="list-group-item">
-                        <h2>{{ cat.name }} </h2><a class="btn btn-warning" toggle="edit_cat_form"   >edit</a><button class="btn btn-danger">delete</button>
+                        <h2>{{ cat.name }} </h2>
+                        <a class="btn btn-warning" (click)="editCategory(cat)">Edit</a>
+
+                        
+                        <button class="btn btn-danger">delete</button>
                     </li>
                 </ul>
                
             </div>
              <!-- Formulaire -->
-          <form [formGroup]="categoryForm" (ngSubmit)="update()" novalidate id="edit_cat_form">
+        <form *ngIf="currentEditingCategory"
+      [formGroup]="categoryForm"
+      (ngSubmit)="update()"
+      novalidate>
             <div class="mb-3">
               <label for="name" class="form-label">Nom de la catégorie</label>
               <input
@@ -52,17 +59,11 @@
             </div>
 
             <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-primary" [disabled]="loading">Créer</button>
-            </div>
+    <button type="submit" class="btn btn-primary" [disabled]="loading">Mettre à jour</button>
+  </div>
+  <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Annuler</button>
 
-            <!-- Messages -->
-            <div *ngIf="successMessage" class="alert alert-success text-center">
-              {{ successMessage }}
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger text-center">
-              {{ errorMessage }}
-            </div>
-          </form>
+</form>
       </div><!-- End Section Title -->
 
      

@@ -15,7 +15,8 @@ export class DashboardComponent implements OnInit{
   successMessage?: string;
   errorMessage?: string;
   loading = false;
-  
+  currentEditingCategory?: CategoryDTO;
+
   categories: CategoryDTO[] = [];
 
   constructor(private categoryService: CategoryService, private route: Router,  private fb: FormBuilder ){
@@ -37,37 +38,51 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  update():void {
-     this.successMessage = undefined;
-    this.errorMessage = undefined;
+  update(): void {
+  this.successMessage = undefined;
+  this.errorMessage = undefined;
 
-    if (this.categoryForm.invalid) {
-      this.categoryForm.markAllAsTouched();
-      return;
-    }
-
-    const category: CategoryDTO = {
-      id: '', 
-      name: this.categoryForm.value.name,
-      sousCategories: [] 
-    };
-
-    this.loading = true;
-    this.categoryService.updateCatgorie(category).subscribe({
-      next: () => {
-        this.successMessage = 'Catégorie modifiée avec succès !';
-        this.loading = false; 
-        this.categoryForm.reset();
-      },
-      error: err => {
-        this.errorMessage = "Erreur lors de la modification de la catégorie.";
-        this.loading = false;
-      }
-    });
+  if (this.categoryForm.invalid || !this.currentEditingCategory) {
+    this.categoryForm.markAllAsTouched();
+    return;
   }
 
+  const category: CategoryDTO = {
+    id: this.currentEditingCategory.id, 
+    name: this.categoryForm.value.name,
+    sousCategories: [] 
+  };
+
+  this.loading = true;
+  this.categoryService.updateCatgorie(category).subscribe({
+    next: () => {
+      this.successMessage = 'Catégorie modifiée avec succès !';
+      this.loading = false; 
+      this.categoryForm.reset();
+      this.currentEditingCategory = undefined;
+      this.loadCategories(); 
+    },
+    error: () => {
+      this.errorMessage = "Erreur lors de la modification de la catégorie.";
+      this.loading = false;
+    }
+  });
+}
+
+
  
-  
+  editCategory(cat: CategoryDTO) {
+  this.currentEditingCategory = cat;
+
+  // il faut Remplir le formulaire avec les données de la catégorie selectionnee
+  this.categoryForm.patchValue({
+    name: cat.name
+  });
+}
+ cancelEdit() {
+  this.currentEditingCategory = undefined;
+  this.categoryForm.reset();
+}
 
   
 
