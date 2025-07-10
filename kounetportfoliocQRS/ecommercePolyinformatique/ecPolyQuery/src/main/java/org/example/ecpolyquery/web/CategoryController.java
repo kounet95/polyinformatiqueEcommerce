@@ -24,7 +24,6 @@ public class CategoryController {
     private final QueryGateway queryGateway;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> getAllCategories() {
       try {
         List<Category> categories = queryGateway.query(new GetAllCategoriesQuery(),

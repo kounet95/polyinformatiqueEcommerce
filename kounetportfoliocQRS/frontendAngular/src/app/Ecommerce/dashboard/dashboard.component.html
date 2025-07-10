@@ -1,0 +1,71 @@
+<!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a routerLink="/">Accueil</a></li>
+            <li class="current">Tableau de bord</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Starter Section Section -->
+    <section id="starter-section" class="starter-section section">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Tableau de bord</h2>
+        <h2>Catégories</h2>
+            <div class="categories-list">
+                <ul  class="list-group">
+                     <li  *ngFor="let cat of categories" class="list-group-item">
+                        <h2>{{ cat.name }} </h2>
+                        <a class="btn btn-warning" (click)="editCategory(cat)">Edit</a>
+
+                        
+                        <button class="btn btn-danger">delete</button>
+                    </li>
+                </ul>
+               
+            </div>
+             <!-- Formulaire -->
+        <form *ngIf="currentEditingCategory"
+      [formGroup]="categoryForm"
+      (ngSubmit)="update()"
+      novalidate>
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom de la catégorie</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                formControlName="name"
+                [ngClass]="{'is-invalid': categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched}"
+                placeholder="Saisir un nom (2 à 100 caractères)"
+                autocomplete="off"
+              >
+              <div *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched">
+                <div *ngIf="categoryForm.get('name')?.errors?.['required']" class="text-danger small">
+                  Le nom est requis.
+                </div>
+                <div *ngIf="categoryForm.get('name')?.errors?.['minlength']" class="text-danger small">
+                  Au moins 2 caractères.
+                </div>
+                <div *ngIf="categoryForm.get('name')?.errors?.['maxlength']" class="text-danger small">
+                  Maximum 100 caractères.
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid mb-3">
+    <button type="submit" class="btn btn-primary" [disabled]="loading">Mettre à jour</button>
+  </div>
+  <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Annuler</button>
+
+</form>
+      </div><!-- End Section Title -->
+
+     
+
+    </section><!-- /Starter Section Section -->

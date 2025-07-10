@@ -1,7 +1,16 @@
 1- Messages d'erreur sur les formulaires de creation
 2- Afficher clairement un message de réussite si la creation se passe avec success
-3- Donner la possibilité de supprimer 
-4- Proposer une page dashboard pour les administrateur connecte
+3- Donner la possibilité d'éditer et supprimer les produits, product-size, stock, categories, groupe social, sous-categories
+4- Proposer une page dashboard pour les administrateurs connecte
 5- Lors de la creation d'adresse, lister les ville/province en fonction des pays.
 6- Les moyens de payement incluent : Paypal, Virement et Orange Money
-7- j aimerai quon elabore la page categories en fonction du catalogue en cours.
+7- j aimerai qu'on élabore la page categories en fonction du catalogue en cours.
+8- Dans le formulaire de creation de sous-catégorie, le nom de la sous-catégorie devrait inclure  un groupe social. 
+9- Il n'est pas normal qu'il faille être connecter pour voire la liste des produits et categories.
+10- Mettre les 4 plus recent produits ajoute dans la section nouveauté du menu. 
+11- Il ya désormais les categories et sous-categories, dans le menu Nouveautés. Maintenant, il faut ajouter le lien dans les sous-categories
+de chaque categories, permettant d'ouvrir la page de la sous-categories contenant les listes des produits par groupe sociaux.
+
+
+Question : 
+1- Pkoi dans CategorieController, dans la methode getAllCategories, on ne retourne pas une liste de CategoryDTO

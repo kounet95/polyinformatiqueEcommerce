@@ -22,6 +22,15 @@ export class CategoryService {
     );
   }
 
+    /**
+   * Edition d'une catégorie (Aggregate : CategoryAggregate, Command : UpdateCategoryCommand)
+   * @param categoryId string
+   */
+  /** Command: update d'un categorie */
+  updateCatgorie(categorieDTO: CategoryDTO): Observable<string> {
+    return this.http.put<string>(`${ecpolyCommand.backend}/update/${categorieDTO.id}`, categorieDTO);
+  }
+ 
   /**
    * Suppression d'une catégorie (Aggregate : CategoryAggregate, Command : DeleteCategoryCommand)
    * @param categoryId string
