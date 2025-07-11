@@ -107,14 +107,10 @@ export class DashboardComponent implements OnInit{
     this.categoryForm.reset();
   }
 
- showCategory(cat: CategoryDTO) {
+  showCategory(cat: CategoryDTO) {
   this.subCategoryService.getSousCategoriesByCategoryId(cat.id).subscribe({
-    next: (sousCats: SubcategoryDTO[]) => {
-      cat.children = sousCats;
-    },
-    error: () => {
-      this.errorMessage = "Erreur lors du chargement des sous-catégories.";
-    }
+    next: sousCats => this.subCategories = sousCats || [],
+    error: err => console.error('Erreur lors du chargement des sous-catégories', err)
   });
 }
 

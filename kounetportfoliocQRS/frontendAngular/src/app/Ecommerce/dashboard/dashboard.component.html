@@ -18,21 +18,27 @@
         <h2>Tableau de bord</h2>
         <h2>Catégories</h2>
             <div class="categories-list">
-             <ul class="list-group">
-  <li *ngFor="let cat of categories" class="list-group-item">
-    <h2>{{ cat.name }}</h2>
-    <a class="btn btn-secondary" (click)="showCategory(cat)">Show</a>
-    <a class="btn btn-warning" (click)="editCategory(cat)">Edit</a>
-    <button class="btn btn-danger">Delete</button>
+                <ul  class="list-group">
+                     <li  *ngFor="let cat of categories" class="list-group-item">
+                        <h2>{{ cat.name }} </h2>
+                         <a class="btn btn-secondary" (click)="showCategory(cat)">Show</a>
+                        <a class="btn btn-warning" (click)="editCategory(cat)">Edit</a>
 
-    <!-- La bonne liste locale -->
-    <ul *ngIf="cat.children && cat.children.length > 0" class="list-group mt-2">
-      <li *ngFor="let sc of cat.children" class="list-group-item">
-        {{ sc.name }}
-      </li>
-    </ul>
-  </li>
-</ul>
+                        
+                        <button class="btn btn-danger">delete</button>
+                    </li>
+                </ul>
+               
+            </div>
+            <div *ngIf="subCategories.length > 0">
+            <h3>Sous-catégories :</h3>
+            <ul class="list-group">
+              <li *ngFor="let sub of subCategories" class="list-group-item">
+                {{ sub.name }}
+              </li>
+              </ul>
+             </div>
+
              <!-- Formulaire -->
         <form *ngIf="currentEditingCategory"
       [formGroup]="categoryForm"
