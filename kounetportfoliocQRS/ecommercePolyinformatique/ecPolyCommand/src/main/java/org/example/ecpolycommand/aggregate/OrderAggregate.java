@@ -24,6 +24,7 @@ public class OrderAggregate {
 
   @AggregateIdentifier
   private String orderId;
+
   private String customerId;
   private String supplierId;
   private String createdAt;
@@ -39,66 +40,103 @@ public class OrderAggregate {
 
   private List<OrderLineDTO> orderLines = new ArrayList<>();
 
-  public OrderAggregate() {}
+  public OrderAggregate() {
+  }
 
+  /**
+   * Création de la commande
+   */
   @CommandHandler
   public OrderAggregate(CreateOrderCommand cmd) {
-    /**       annalyse sur la creation dune commande   **/
-    apply(
-      new OrderCreatedEvent(
-        cmd.getId(), cmd.getOrderDTO()));
+    log.info("[AGGREGATE] CreateOrderCommand received: {}", cmd);
+    apply(new OrderCreatedEvent(cmd.getId(), cmd.getOrderDTO()));
   }
 
   @CommandHandler
   public void handle(AddProductToOrderCommand cmd) {
-    apply(
-      new ProductAddedToOrderEvent(cmd.getId(),
-      cmd.getOrderLineDTO()));
+    log.info("[AGGREGATE] AddProductToOrderCommand received: {}", cmd);
+    apply(new ProductAddedToOrderEvent(cmd.getId(), cmd.getOrderLineDTO()));
   }
 
   @CommandHandler
   public void handle(ConfirmOrderCommand cmd) {
-
+    if (this.confirmed) {
+      throw new IllegalStateException("Order is already confirmed.");
+    }
+    if (this.orderLines.isEmpty()) {
+      throw new IllegalStateException("Cannot confirm order without products.");
+    }
+    log.info("[AGGREGATE] ConfirmOrderCommand received: {}", cmd);
     apply(new OrderConfirmedEvent(cmd.getId()));
   }
 
   @CommandHandler
   public void handle(GenerateInvoiceCommand cmd) {
+    if (!this.confirmed) {
+      throw new IllegalStateException("Cannot generate invoice for unconfirmed order.");
+    }
+    if (this.paid) {
+      throw new IllegalStateException("Invoice already paid.");
+    }
+    log.info("[AGGREGATE] GenerateInvoiceCommand received: {}", cmd);
     apply(new InvoiceGeneratedEvent(cmd.getId(), cmd.getInvoiceDTO()));
   }
 
   @CommandHandler
   public void handle(PayInvoiceCommand cmd) {
+    if (!this.confirmed) {
+      throw new IllegalStateException("Cannot pay invoice for unconfirmed order.");
+    }
+    if (this.paid) {
+      throw new IllegalStateException("Invoice already paid.");
+    }
+    log.info("[AGGREGATE] PayInvoiceCommand received: {}", cmd);
     apply(new InvoicePaidEvent(cmd.getId()));
   }
 
   @CommandHandler
   public void handle(StartShippingCommand cmd) {
+    if (!this.paid) {
+      throw new IllegalStateException("Cannot start shipping unpaid order.");
+    }
+    log.info("[AGGREGATE] StartShippingCommand received: {}", cmd);
     apply(new ShippingStartedEvent(cmd.getId()));
   }
 
   @CommandHandler
   public void handle(DeliverOrderCommand cmd) {
+    if (!this.shipped) {
+      throw new IllegalStateException("Cannot deliver order that hasn't been shipped.");
+    }
+    log.info("[AGGREGATE] DeliverOrderCommand received: {}", cmd);
     apply(new OrderDeliveredEvent(cmd.getId()));
   }
 
   @CommandHandler
   public void handle(UpdateOrderStatusCommand cmd) {
+    log.info("[AGGREGATE] UpdateOrderStatusCommand received: {}", cmd);
     apply(new OrderStatusUpdatedEvent(cmd.getId(), cmd.getBarcode(), cmd.getNewStatus()));
   }
 
   @CommandHandler
   public void handle(ScanOrderCommand cmd) {
+    log.info("[AGGREGATE] ScanOrderCommand received: {}", cmd);
     apply(new OrderScannedEvent(cmd.getId(), cmd.getBarcode()));
   }
 
   @CommandHandler
-  public void handle(CancelOrderCommand command) {
+  public void handle(CancelOrderCommand cmd) {
     if (this.delivered) {
-      throw new IllegalStateException("Cannot cancel an order that has already been delivered.");
+      throw new IllegalStateException("Cannot cancel a delivered order.");
     }
-    apply(new OrderCancelledEvent(command.getId(), command.getReason()));
+    if (this.paid) {
+      throw new IllegalStateException("Cannot cancel a paid order.");
+    }
+    log.info("[AGGREGATE] CancelOrderCommand received: {}", cmd);
+    apply(new OrderCancelledEvent(cmd.getId(), cmd.getReason()));
   }
+
+  // ---- Event sourcing ----
 
   @EventSourcingHandler
   public void on(OrderCreatedEvent event) {
@@ -107,72 +145,74 @@ public class OrderAggregate {
     this.customerId = dto.getCustomerId();
     this.supplierId = dto.getSupplierId();
     this.createdAt = dto.getCreatedAt();
-
     this.paymentMethod = dto.getPaymentMethod();
     this.total = dto.getTotal();
+    this.orderStatus = OrderStatus.Inprogress;
     this.confirmed = false;
     this.paid = false;
     this.shipped = false;
     this.delivered = false;
     this.orderLines = new ArrayList<>();
+    log.info("[AGGREGATE] Order created: {}", dto);
   }
 
   @EventSourcingHandler
   public void on(ProductAddedToOrderEvent event) {
     this.orderLines.add(event.getOrderLineDTO());
+    log.info("[AGGREGATE] Product added: {}", event.getOrderLineDTO());
   }
 
   @EventSourcingHandler
   public void on(OrderConfirmedEvent event) {
     this.confirmed = true;
+    this.orderStatus = OrderStatus.Inprogress;
+    log.info("[AGGREGATE] Order confirmed.");
   }
 
   @EventSourcingHandler
   public void on(InvoiceGeneratedEvent event) {
-    // Update the order with invoice information
-    InvoiceDTO invoiceDTO = event.getInvoiceDTO();
-    // We don't update orderId, customerId, or supplierId as they are already set
-    // and shouldn't change when an invoice is generated
-
-    // Update payment-related information
-    this.paymentMethod = invoiceDTO.getMethodePayment();
-    this.total = invoiceDTO.getAmount();
-
-    // Set order status to indicate invoice has been generated
-    this.orderStatus = OrderStatus.Inprogress;
-
-    // Log the invoice generation
-    log.info("Invoice generated for order: {}", this.orderId);
+    this.paymentMethod = event.getInvoiceDTO().getMethodePayment();
+    this.total = event.getInvoiceDTO().getAmount();
+    log.info("[AGGREGATE] Invoice generated: {}", event.getInvoiceDTO());
   }
 
   @EventSourcingHandler
   public void on(InvoicePaidEvent event) {
     this.paid = true;
+    this.orderStatus = OrderStatus.Paid;
+    log.info("[AGGREGATE] Invoice paid.");
   }
 
   @EventSourcingHandler
   public void on(ShippingStartedEvent event) {
     this.shipped = true;
+    this.orderStatus = OrderStatus.Shipped;
+    log.info("[AGGREGATE] Shipping started.");
   }
 
   @EventSourcingHandler
   public void on(OrderDeliveredEvent event) {
     this.delivered = true;
+    this.orderStatus = OrderStatus.Delivered;
+    log.info("[AGGREGATE] Order delivered.");
   }
 
   @EventSourcingHandler
   public void on(OrderStatusUpdatedEvent event) {
     this.orderStatus = event.getNewStatus();
     this.barcode = event.getBarcode();
+    log.info("[AGGREGATE] Order status updated: {}", event.getNewStatus());
   }
 
   @EventSourcingHandler
   public void on(OrderScannedEvent event) {
     this.barcode = event.getBarcode();
+    log.info("[AGGREGATE] Order scanned: {}", event.getBarcode());
   }
 
   @EventSourcingHandler
   public void on(OrderCancelledEvent event) {
     this.orderStatus = OrderStatus.Cancelled;
+    log.info("[AGGREGATE] Order cancelled: {}", event.getReason());
   }
 }

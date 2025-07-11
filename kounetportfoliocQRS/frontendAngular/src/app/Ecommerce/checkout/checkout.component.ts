@@ -23,7 +23,7 @@ import { forkJoin } from 'rxjs';
 export class CheckoutComponent implements OnInit {
 
   step = 1;
- clientSecret: string = '';
+  clientSecret: string = '';
   cartItems: CartItem[] = [];
   subtotal = 0;
   shipping = 9.99;
@@ -177,17 +177,12 @@ export class CheckoutComponent implements OnInit {
                 // 4️⃣ Créer le PaymentIntent côté backend pour Stripe
                 this.orderService.createPaymentIntent(order).subscribe({
                   next: (clientSecret) => {
-                    // 👉 Ici tu récupères le clientSecret pour Stripe.js
                     console.log('Stripe clientSecret:', clientSecret);
+                    this.clientSecret = clientSecret;
 
-                    // 👉 TODO: Tu peux appeler Stripe.js ici :
-                    // this.payWithStripe(clientSecret);
+                    // 👉 Ici on appelle le paiement Stripe :
+                    this.payWithStripe(this.clientSecret);
 
-                    this.message = 'Commande créée ! Paiement en attente...';
-                    this.cartService.clearCart();
-                    this.cartItems = [];
-                    this.loading = false;
-                    this.step = 1;
                   },
                   error: () => {
                     this.message = 'Erreur lors de la création du PaymentIntent Stripe.';
@@ -217,46 +212,90 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  // Méthode pour intégrer Stripe.js et confirmer le paiement
-async payWithStripe(clientSecret: string) {
-  //   on va faire un Chargement de Stripe.js
-  const stripeJs = await import('@stripe/stripe-js');
-  const stripe = await stripeJs.loadStripe('pk_test_TON_PUBLIC_KEY_STRIPE_ICI');
+  async payWithStripe() {
+  try {
+    // 1️⃣ Charge Stripe.js dynamiquement
+    const stripeJs = await import('@stripe/stripe-js');
+    const stripe = await stripeJs.loadStripe('pk_test_TON_PUBLIC_KEY_ICI');
 
-  if (!stripe) {
-    this.message = 'Stripe.js non chargé correctement.';
-    return;
-  }
-
-  // Creation dun élément Stripe CardElement ou récupère les infos de ta page
-
-
-  const elements = stripe.elements();
-  const cardElement = elements.create('card');
-  cardElement.mount('#card-element'); // Assure-toi d'avoir <div id="card-element"></div> dans ton HTML
-
-  // Confirme le paiement
-  const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-    payment_method: {
-      card: cardElement,
-      billing_details: {
-        name: this.customer.firstname + ' ' + this.customer.lastname,
-        email: this.customer.email
-      }
+    if (!stripe) {
+      this.message = 'Stripe n\'a pas pu être chargé.';
+      return;
     }
-  });
 
-  if (error) {
-    console.error('Stripe Payment Error:', error);
-    this.message = 'Erreur de paiement Stripe : ' + error.message;
-  } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-    this.message = 'Paiement réussi !';
-    console.log('PaymentIntent:', paymentIntent);
-    // ✅ Tu peux rediriger vers une page de confirmation ici
-  } else {
-    this.message = 'Paiement non confirmé.';
+    // 2️⃣ Crée les Elements
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    // 👉 ⚠️ Normalement le mount est fait 1 seule fois dans ngAfterViewInit
+    // Ici c'est pour exemple rapide
+
+    // 3️⃣ Confirme le paiement
+    const { error, paymentIntent } = await stripe.confirmCardPayment(this.clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: `${this.customer.firstname} ${this.customer.lastname}`,
+          email: this.customer.email
+        }
+      }
+    });
+
+    if (error) {
+      console.error(error);
+      this.message = `Erreur de paiement Stripe : ${error.message}`;
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      this.message = 'Paiement réussi avec Stripe !';
+      // ✅ Finalise la commande côté backend
+      this.placeOrder();
+    }
+  } catch (err) {
+    console.error(err);
+    this.message = 'Erreur inattendue Stripe.';
   }
 }
+
+
+ launchApplePay() {
+  // ⚡️ Exemple de base pour montrer le flow
+  console.log('Apple Pay...');
+
+  if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+    const request = {
+      countryCode: 'US',
+      currencyCode: 'USD',
+      total: {
+        label: 'Ma Boutique',
+        amount: this.total.toFixed(2)
+      },
+      supportedNetworks: ['visa', 'masterCard', 'amex'],
+      merchantCapabilities: ['supports3DS']
+    };
+
+    const session = new ApplePaySession(3, request);
+
+    session.onvalidatemerchant = async (event) => {
+      console.log('Validation Apple Pay...');
+      // 👉 Tu dois appeler ton backend pour valider le marchand
+      // Exemple fictif :
+      const merchantSession = {}; // Réponse de ton backend
+      session.completeMerchantValidation(merchantSession);
+    };
+
+    session.onpaymentauthorized = (event) => {
+      console.log('Paiement autorisé Apple Pay...');
+      session.completePayment(ApplePaySession.STATUS_SUCCESS);
+      this.message = 'Paiement Apple Pay OK';
+      this.placeOrder();
+    };
+
+    session.begin();
+  } else {
+    this.message = 'Apple Pay non disponible.';
+  }
+}
+
 
 
 }

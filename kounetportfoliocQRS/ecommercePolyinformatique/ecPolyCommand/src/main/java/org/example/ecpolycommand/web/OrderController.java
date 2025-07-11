@@ -20,21 +20,26 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/order/command")
-public class Order {
+public class OrderController { //  Renomme la classe : un nom explicite ! (Order -> OrderController)
 
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
   private final StripeService stripeService;
 
-  public Order(CommandGateway commandGateway, EventStore eventStore, StripeService stripeService) {
+  public OrderController(CommandGateway commandGateway, EventStore eventStore, StripeService stripeService) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
     this.stripeService = stripeService;
   }
 
+  /**
+   *  Crée une nouvelle commande
+   */
   @PostMapping("/create")
   public CompletableFuture<String> createOrder(@Valid @RequestBody OrderDTO order) {
     String orderId = UUID.randomUUID().toString();
+
+    //  Bonne pratique : tu forces l’id côté back
     OrderDTO orderDTO = new OrderDTO(
       orderId,
       order.getCustomerId(),
@@ -44,43 +49,73 @@ public class Order {
       order.getTotal(),
       order.getShippingId()
     );
+
     CreateOrderCommand command = new CreateOrderCommand(orderId, orderDTO);
     return commandGateway.send(command);
   }
 
+  /**
+   *  Ajoute un produit à la commande
+   */
   @PostMapping("/{orderId}/add-product")
   public CompletableFuture<String> addProductToOrder(@PathVariable String orderId, @Valid @RequestBody OrderLineDTO orderLine) {
     String orderLineId = UUID.randomUUID().toString();
-    OrderLineDTO orderLineDTO = new OrderLineDTO(orderLineId, orderId, orderLine.getStockId(), orderLine.getQty());
+
+    OrderLineDTO orderLineDTO = new OrderLineDTO(
+      orderLineId,
+      orderId,
+      orderLine.getStockId(),
+      orderLine.getQty()
+    );
+
     AddProductToOrderCommand command = new AddProductToOrderCommand(orderId, orderLineDTO);
     return commandGateway.send(command);
   }
 
+  /**
+   *  Confirme la commande
+   */
   @PutMapping("/{orderId}/confirm")
   public CompletableFuture<String> confirmOrder(@PathVariable String orderId) {
     return commandGateway.send(new ConfirmOrderCommand(orderId));
   }
 
+  /**
+   *  Génère la facture pour la commande
+   */
   @PostMapping("/{orderId}/generate-invoice")
   public CompletableFuture<String> generateInvoice(@PathVariable String orderId, @Valid @RequestBody InvoiceDTO invoice) {
     return commandGateway.send(new GenerateInvoiceCommand(orderId, invoice));
   }
 
-  @PutMapping("/invoice/{invoiceId}/pay")
-  public CompletableFuture<String> payInvoice(@PathVariable String invoiceId) {
-    return commandGateway.send(new PayInvoiceCommand(invoiceId));
+  /**
+   *  Déclenche le paiement de la facture
+   * Ici attention ! Normalement c’est l’orderId, pas l’invoiceId !
+   */
+  @PutMapping("/{orderId}/pay-invoice")
+  public CompletableFuture<String> payInvoice(@PathVariable String orderId) {
+    return commandGateway.send(new PayInvoiceCommand(orderId));
   }
 
+  /**
+   *  Démarre l’expédition
+   */
   @PutMapping("/{orderId}/start-shipping")
   public CompletableFuture<String> startShipping(@PathVariable String orderId) {
     return commandGateway.send(new StartShippingCommand(orderId));
   }
 
+  /**
+   *  Marque la commande comme livrée
+   */
   @PutMapping("/{orderId}/deliver")
   public CompletableFuture<String> deliverOrder(@PathVariable String orderId) {
     return commandGateway.send(new DeliverOrderCommand(orderId));
   }
 
+  /**
+   *  Crée un PaymentIntent Stripe (à faire côté front ensuite)
+   */
   @PostMapping("/payment-intent")
   public ResponseEntity<String> createPaymentIntent(@RequestBody OrderDTO order) {
     try {
@@ -91,18 +126,28 @@ public class Order {
     }
   }
 
+  /**
+   *  Annule la commande
+   */
   @DeleteMapping("/{orderId}")
-  public CompletableFuture<String> cancelOrder(@PathVariable String orderId, @RequestParam(defaultValue = "Cancelled by user") String reason) {
+  public CompletableFuture<String> cancelOrder(@PathVariable String orderId,
+                                               @RequestParam(defaultValue = "Cancelled by user") String reason) {
     return commandGateway.send(new CancelOrderCommand(orderId, reason));
   }
 
+  /**
+   * Voir l’historique des événements pour debug / audit
+   */
   @GetMapping("/events/{aggregateId}")
   public Stream<?> eventsStream(@PathVariable String aggregateId) {
     return eventStore.readEvents(aggregateId).asStream();
   }
 
+  /**
+   * Gestion d’erreur générique
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<String> exceptionHandler(Exception exception) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("️ Error: " + exception.getMessage());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(" Erreur : " + exception.getMessage());
   }
 }

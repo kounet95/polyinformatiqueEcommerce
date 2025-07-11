@@ -111,6 +111,12 @@ data class SearchProductSizesQuery(
 )
 class GetCategoryByIdQuery(val id: String)
 class GetAddressByIdQuery(val id: String)
+class FindOrderSummaryQuery (val orderId: String)
+data class OrderSummary(
+  var orderId: String = "",
+  var customerId: String = "",
+  var status: String = ""
+)
 
 class GetCustomerByIdQuery(val id: String)
 
