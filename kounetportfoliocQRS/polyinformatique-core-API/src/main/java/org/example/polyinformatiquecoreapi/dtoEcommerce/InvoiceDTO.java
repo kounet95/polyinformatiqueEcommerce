@@ -21,7 +21,7 @@ public class InvoiceDTO {
     private String orderId;
   @NotBlank(message = "Street cannot be blank")
   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
-    private String custumerId;
+    private String custumerEmal;
   @NotBlank(message = "Street cannot be blank")
   @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
     private double amount;

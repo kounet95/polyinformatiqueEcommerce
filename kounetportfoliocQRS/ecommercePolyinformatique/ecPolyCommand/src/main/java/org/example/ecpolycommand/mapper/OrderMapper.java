@@ -10,7 +10,7 @@ public class OrderMapper {
   public InvoiceAggregate toAggregate(InvoiceDTO dto) {
     InvoiceAggregate agg = new InvoiceAggregate();
     agg.setInvoiceId(dto.getId());
-    agg.setCustomerId(dto.getCustumerId());
+    agg.setCustomerId(dto.getCustumerEmal());
     agg.setOrderId(dto.getOrderId());
     agg.setAmount(dto.getAmount());
     agg.setPaymentMethod(dto.getMethodePayment());

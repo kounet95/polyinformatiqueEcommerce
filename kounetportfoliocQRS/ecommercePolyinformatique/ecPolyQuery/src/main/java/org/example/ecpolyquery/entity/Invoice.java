@@ -3,6 +3,8 @@ package org.example.ecpolyquery.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +21,7 @@ public class Invoice {
   @OneToOne
   @JoinColumn(name = "order_id")
   private Orderecommerce orderecommerce;
+  @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<Payment> payments;
+
 }

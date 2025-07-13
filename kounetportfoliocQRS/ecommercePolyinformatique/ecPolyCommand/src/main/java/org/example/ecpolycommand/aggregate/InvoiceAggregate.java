@@ -44,7 +44,7 @@ public class InvoiceAggregate {
     InvoiceDTO dto = event.getInvoiceDTO();
     this.invoiceId = event.getId();
     this.orderId = dto.getOrderId();
-    this.customerId = dto.getCustumerId();
+    this.customerId = dto.getCustumerEmal();
     this.amount = dto.getAmount();
     this.paymentMethod = dto.getMethodePayment();
     this.restMonthlyPayment = dto.getRestMonthlyPayment();

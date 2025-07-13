@@ -25,12 +25,13 @@ public class OrderManagementSaga {
     this.orderId = event.getOrderDTO().getId();
     log.info("[Saga] Order created: {}", orderId);
 
-    // Exemple : confirmer automatiquement la commande
+
+
     commandGateway.send(new ConfirmOrderCommand(orderId));
 
-    // Générer une facture immédiatement (exemple)
+
     InvoiceDTO invoice = new InvoiceDTO(
-      "", // ID généré par CommandHandler ou côté Aggregate
+      "",
       orderId,
       event.getOrderDTO().getCustomerId(),
       event.getOrderDTO().getTotal(),

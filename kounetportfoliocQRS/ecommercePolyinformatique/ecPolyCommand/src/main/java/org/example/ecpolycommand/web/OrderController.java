@@ -3,9 +3,10 @@ package org.example.ecpolycommand.web;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import jakarta.validation.Valid;
+import jakarta.websocket.Session;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.example.ecpolycommand.service.StripeService;
+import org.example.ecpolycommand.service.imple.StockCommandServiceImpl;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.InvoiceDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderDTO;
@@ -24,9 +25,9 @@ public class OrderController { //  Renomme la classe : un nom explicite ! (Order
 
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
-  private final StripeService stripeService;
+  private final StockCommandServiceImpl.StripeService stripeService;
 
-  public OrderController(CommandGateway commandGateway, EventStore eventStore, StripeService stripeService) {
+  public OrderController(CommandGateway commandGateway, EventStore eventStore, StockCommandServiceImpl.StripeService stripeService) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
     this.stripeService = stripeService;
@@ -93,9 +94,15 @@ public class OrderController { //  Renomme la classe : un nom explicite ! (Order
    * Ici attention ! Normalement c’est l’orderId, pas l’invoiceId !
    */
   @PutMapping("/{orderId}/pay-invoice")
-  public CompletableFuture<String> payInvoice(@PathVariable String orderId) {
-    return commandGateway.send(new PayInvoiceCommand(orderId));
+  public CompletableFuture<String> payInvoice(
+    @PathVariable String orderId,
+    @RequestBody InvoiceDTO invoice,
+    @RequestParam String paymentIntentId,
+    @RequestParam String sessionId
+  ) {
+    return commandGateway.send(new PayInvoiceCommand(orderId, invoice, paymentIntentId, sessionId));
   }
+
 
   /**
    *  Démarre l’expédition

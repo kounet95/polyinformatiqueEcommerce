@@ -91,7 +91,8 @@ public class OrderAggregate {
       throw new IllegalStateException("Invoice already paid.");
     }
     log.info("[AGGREGATE] PayInvoiceCommand received: {}", cmd);
-    apply(new InvoicePaidEvent(cmd.getId()));
+    apply(new InvoicePaidEvent(cmd.getId(),
+      cmd.getInvoiceDTO(),cmd.getPaymentIntentId(), cmd.getSessionId()));
   }
 
   @CommandHandler
@@ -165,7 +166,7 @@ public class OrderAggregate {
   @EventSourcingHandler
   public void on(OrderConfirmedEvent event) {
     this.confirmed = true;
-    this.orderStatus = OrderStatus.Inprogress;
+    this.orderStatus = OrderStatus.Confirmed;
     log.info("[AGGREGATE] Order confirmed.");
   }
 

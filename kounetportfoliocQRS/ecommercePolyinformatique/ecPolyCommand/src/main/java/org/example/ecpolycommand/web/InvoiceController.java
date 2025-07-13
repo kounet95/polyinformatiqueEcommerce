@@ -36,7 +36,7 @@ public class InvoiceController {
     InvoiceDTO invoiceDTO = new InvoiceDTO(
       invoiceId,
       invoice.getOrderId(),
-      invoice.getCustumerId(),
+      invoice.getCustumerEmal(),
       invoice.getAmount(),
       invoice.getMethodePayment(),
       invoice.getRestMonthlyPayment(),
