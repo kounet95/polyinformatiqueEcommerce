@@ -22,62 +22,62 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  /** ✅ Command: Création d'une commande */
+  /** Command: Création d'une commande */
   createOrder(order: OrderDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/create`, order);
   }
 
-  /** ✅ Command: Ajout d'un produit */
+  /** Command: Ajout d'un produit */
   addProductToOrder(orderId: string, orderLine: OrderLineDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/${orderId}/add-product`, orderLine);
   }
 
-  /** ✅ Command: Confirmer la commande */
+  /** Command: Confirmer la commande */
   confirmOrder(orderId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/${orderId}/confirm`, {});
   }
 
-  /** ✅ Command: Générer une facture */
+  /** Command: Générer une facture */
   generateInvoice(orderId: string, invoice: InvoiceDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/${orderId}/generate-invoice`, invoice);
   }
 
-  /** ✅ Command: Payer une facture */
+  /**  Command: Payer une facture */
   payInvoice(invoiceId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/invoice/${invoiceId}/pay`, {});
   }
 
-  /** ✅ Command: Lancer la livraison */
+  /** Command: Lancer la livraison */
   startShipping(orderId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/${orderId}/start-shipping`, {});
   }
 
-  /** ✅ Command: Marquer comme livrée */
+  /** Command: Marquer comme livrée */
   deliverOrder(orderId: string): Observable<string> {
     return this.http.put<string>(`${this.commandBase}/${orderId}/deliver`, {});
   }
 
-  /** ✅ Command: Annuler une commande */
+  /** Command: Annuler une commande */
   cancelOrder(orderId: string, reason = 'Cancelled by user'): Observable<string> {
     return this.http.delete<string>(`${this.commandBase}/${orderId}?reason=${encodeURIComponent(reason)}`);
   }
 
-  /** ✅ Command: Générer le PaymentIntent Stripe */
+  /** Command: Générer le PaymentIntent Stripe */
   createPaymentIntent(order: OrderDTO): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/payment-intent`, order);
   }
 
-  /** ✅ Query: Liste des résumés de commandes */
+  /** Query: Liste des résumés de commandes */
   getOrderSummaries(): Observable<OrderSummary[]> {
     return this.http.get<OrderSummary[]>(`${this.queryBase}/orders`);
   }
 
-  /** ✅ Query: Résumé d'une commande par ID */
+  /**  Query: Résumé d'une commande par ID */
   getOrderSummaryById(orderId: string): Observable<OrderSummary> {
     return this.http.get<OrderSummary>(`${this.queryBase}/orders/${orderId}`);
   }
 
-  /** ✅ Events sourcing: Historique des événements */
+  /** Events sourcing: Historique des événements */
   getOrderEvents(aggregateId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.commandBase}/events/${aggregateId}`);
   }

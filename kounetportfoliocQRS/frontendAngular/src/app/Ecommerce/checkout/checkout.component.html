@@ -1,4 +1,4 @@
-<!--  Étapes -->
+<!--  Étapes visuelles -->
 <div class="checkout-steps">
   <div [class.active]="step === 1">1<br />Information</div>
   <div [class.active]="step === 2">2<br />Shipping</div>
@@ -6,7 +6,12 @@
   <div [class.active]="step === 4">4<br />Review</div>
 </div>
 
-<!--  ÉTAPE 1 : Infos client auto-remplies -->
+<!--  Message global -->
+<div *ngIf="message" class="checkout-message">
+  {{ message }}
+</div>
+
+<!--  Étape 1 : Info client -->
 <div *ngIf="step === 1">
   <h2>Customer Information</h2>
   <div><b>First Name:</b> {{ customer.firstname }}</div>
@@ -16,7 +21,7 @@
   <button type="button" (click)="nextStep()">Continue to Shipping</button>
 </div>
 
-<!--  ÉTAPE 2 : Adresse -->
+<!--  Étape 2 : Adresse -->
 <div *ngIf="step === 2">
   <h2>Shipping Address</h2>
   <form>
@@ -29,40 +34,41 @@
 
     <button type="button" (click)="prevStep()">Back to Information</button>
     <button type="button"
-      [disabled]="!shippingAddress.street || !shippingAddress.city || !shippingAddress.zip || !shippingAddress.country"
+      [disabled]="!shippingAddress.street || !shippingAddress.city || !shippingAddress.zip || !shippingAddress.country || loading"
       (click)="nextStep()">Continue to Payment</button>
   </form>
 </div>
 
-<!-- ÉTAPE 3 : Méthode de paiement -->
+<!--  Étape 3 : Méthode de paiement -->
 <div *ngIf="step === 3">
   <h2>Payment Method</h2>
   <form>
     <div>
-      <label><input type="radio" [(ngModel)]="payment.method" value="card" name="paymethod" /> Credit / Debit Card</label>
-      <label><input type="radio" [(ngModel)]="payment.method" value="paypal" name="paymethod" /> PayPal</label>
-      <label><input type="radio" [(ngModel)]="payment.method" value="applepay" name="paymethod" /> Apple Pay</label>
+      <label>
+        <input type="radio" [(ngModel)]="payment.method" value="card" name="paymethod" /> Credit / Debit Card
+      </label>
     </div>
 
-    <!--Zone Stripe Elements -->
+    <!--  Zone Stripe Elements reliée à ViewChild -->
     <div *ngIf="payment.method === 'card'">
-      <div id="card-element"></div>
+      <div #cardElement id="card-element" style="border: 1px solid #ccc; padding: 12px;"></div>
     </div>
 
     <button type="button" (click)="prevStep()">Back to Shipping</button>
-    <button type="button" (click)="nextStep()">Review Order</button>
+    <button type="button" [disabled]="loading" (click)="nextStep()">Review Order</button>
   </form>
 </div>
 
-<!-- ÉTAPE 4 : Review -->
+<!--  Étape 4 : Review -->
 <div *ngIf="step === 4">
   <h2>Review Your Order</h2>
+
   <div>
     <h4>Contact Information</h4>
     <div>{{ customer.firstname }} {{ customer.lastname }}</div>
     <div>{{ customer.email }}</div>
     <div>{{ customer.phone }}</div>
-    <a (click)="step=1">Edit</a>
+    <a (click)="step = 1">Edit</a>
   </div>
 
   <div>
@@ -70,38 +76,35 @@
     <div>{{ shippingAddress.street }} {{ shippingAddress.apartment }}</div>
     <div>{{ shippingAddress.city }}, {{ shippingAddress.state }} {{ shippingAddress.zip }}</div>
     <div>{{ shippingAddress.country }}</div>
-    <a (click)="step=2">Edit</a>
+    <a (click)="step = 2">Edit</a>
   </div>
 
   <div>
     <h4>Payment Method</h4>
-    <div *ngIf="payment.method==='card'">Card Payment</div>
-    <div *ngIf="payment.method==='paypal'">PayPal</div>
-    <div *ngIf="payment.method==='applepay'">Apple Pay</div>
-    <a (click)="step=3">Edit</a>
+    <div>Card Payment</div>
+    <a (click)="step = 3">Edit</a>
   </div>
 
   <button (click)="prevStep()">Back to Payment</button>
-
-  <button *ngIf="payment.method === 'card'" (click)="payWithStripe()">Pay Now</button>
-  <button *ngIf="payment.method === 'paypal'" (click)="launchPayPal()">Pay with PayPal</button>
-  <button *ngIf="payment.method === 'applepay'" (click)="launchApplePay()">Pay with Apple Pay</button>
+  <button [disabled]="loading" (click)="placeOrder()">Pay Now</button>
 </div>
 
-<!--Résumé commande -->
+<!-- Résumé panier -->
 <aside class="order-summary">
   <h3>Order Summary</h3>
   <div *ngFor="let item of cartItems" class="summary-item">
     <img [src]="item.productImg" width="60" height="60" />
     <div>{{ item.productName }}</div>
     <div>Size: {{ item.productSize }}</div>
-    <div>{{ item.qty }} × ${{ item.pricePromo ?? item.productSizePrice | number:'1.2-2' }}</div>
+    <div>{{ item.qty }} × ${{ item.pricePromo ?? item.productSizePrice | number: '1.2-2' }}</div>
   </div>
+
   <hr />
-  <div>Subtotal <span>${{ subtotal | number:'1.2-2' }}</span></div>
-  <div>Shipping <span>${{ shipping | number:'1.2-2' }}</span></div>
-  <div>Tax <span>${{ tax | number:'1.2-2' }}</span></div>
-  <div>Total <span><b>${{ total | number:'1.2-2' }}</b></span></div>
+  <div>Subtotal <span>${{ subtotal | number: '1.2-2' }}</span></div>
+  <div>Shipping <span>${{ shipping | number: '1.2-2' }}</span></div>
+  <div>Tax <span>${{ tax | number: '1.2-2' }}</span></div>
+  <div>Total <span><b>${{ total | number: '1.2-2' }}</b></span></div>
+
   <input placeholder="Promo Code" [(ngModel)]="promoCode" />
-  <button (click)="applyPromo()">Apply</button>
+  <button [disabled]="loading" (click)="applyPromo()">Apply</button>
 </aside>
