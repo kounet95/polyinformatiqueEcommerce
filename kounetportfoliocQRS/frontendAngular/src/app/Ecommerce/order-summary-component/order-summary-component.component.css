@@ -1,0 +1,52 @@
+mat-card {
+  padding: 1.5rem;
+  background: #fafafa;
+  border-radius: 12px;
+}
+
+.totals-section {
+  margin-bottom: 2rem;
+}
+
+.totals-table {
+  width: 100%;
+  border-spacing: 0 10px;
+  font-size: 1.15rem;
+}
+
+.totals-table td {
+  padding: 0.2em 0.5em;
+  vertical-align: middle;
+}
+
+.totals-table .number {
+  text-align: right;
+  font-weight: 500;
+}
+
+.totals-table .total-row td {
+  color: #99004d;
+  font-size: 1.2em;
+}
+
+.totals-table .total {
+  font-weight: bold;
+}
+
+.addresses {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.address-col {
+  flex: 1;
+  min-width: 220px;
+}
+
+.address-col h3 {
+  color: #99004d;
+  margin-bottom: 0.5em;
+  font-size: 1.1em;
+}

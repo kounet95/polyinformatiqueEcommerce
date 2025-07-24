@@ -1,0 +1,111 @@
+<div class="page-title light-background">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li class="current">Créer une taille de produit</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="register section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="registration-form-wrapper p-4 shadow rounded bg-white">
+          <div class="section-header mb-4 text-center">
+            <h2>Ajouter une taille à un produit</h2>
+            <p>Associez une taille, un prix et des images à un produit</p>
+          </div>
+
+          <form [formGroup]="productSizeForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+              <!-- Produit -->
+              <div class="col-md-6 mb-3">
+                <label for="prodId" class="form-label">Produit</label>
+                <select class="form-select" formControlName="prodId">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let p of products" [value]="p.id">{{ p.name }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productSizeForm.get('prodId')?.invalid && productSizeForm.get('prodId')?.touched">
+                  Produit requis.
+                </div>
+              </div>
+
+              <!-- Taille -->
+              <div class="col-md-6 mb-3">
+                <label for="sizeProd" class="form-label">Taille</label>
+                <select class="form-select" formControlName="sizeProd">
+                  <option value="" disabled>Choisir...</option>
+                  <option *ngFor="let s of sizeEnumValues" [value]="s">{{ s }}</option>
+                </select>
+                <div class="text-danger small" *ngIf="productSizeForm.get('sizeProd')?.invalid && productSizeForm.get('sizeProd')?.touched">
+                  Taille requise.
+                </div>
+              </div>
+            </div>
+
+            <!-- Prix -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="price" class="form-label">Prix (€)</label>
+                <input type="number" id="price" class="form-control" formControlName="price" placeholder="Ex: 25">
+                <div class="text-danger small" *ngIf="productSizeForm.get('price')?.invalid && productSizeForm.get('price')?.touched">
+                  Prix requis.
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="pricePromo" class="form-label">Prix promo (€)</label>
+                <input type="number" id="pricePromo" class="form-control" formControlName="pricePromo" placeholder="Ex: 20">
+                <div class="text-danger small" *ngIf="productSizeForm.get('pricePromo')?.invalid && productSizeForm.get('pricePromo')?.touched">
+                  Prix promo requis.
+                </div>
+              </div>
+            </div>
+
+            <!-- Images -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="front" class="form-label">Image Avant</label>
+                <input type="file" id="front" class="form-control" (change)="onFileSelected($event, 'front')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="back" class="form-label">Image Arrière</label>
+                <input type="file" id="back" class="form-control" (change)="onFileSelected($event, 'back')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="left" class="form-label">Image Gauche</label>
+                <input type="file" id="left" class="form-control" (change)="onFileSelected($event, 'left')">
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="right" class="form-label">Image Droite</label>
+                <input type="file" id="right" class="form-control" (change)="onFileSelected($event, 'right')">
+              </div>
+            </div>
+
+            <!-- Bouton -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                {{ loading ? 'Création en cours...' : 'Ajouter la taille' }}
+              </button>
+            </div>
+
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert alert-success text-center">
+              {{ successMessage }}
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger text-center">
+              {{ errorMessage }}
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

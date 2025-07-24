@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="discoveryservice" />
+        <module name="getwayservice" />
+        <module name="configservice" />
+      </profile>
+      <profile name="Annotation profile for kounetportfoliocQRS" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+        </processorPath>
+        <module name="polyinformatique-core-API" />
+        <module name="polyinformatique-common" />
+        <module name="commandeBlog" />
+        <module name="ecPolyQuery" />
+        <module name="ecPolyCommand" />
+        <module name="queryBlog" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="blogCommon" target="21" />
+      <module name="blogService (1)" target="21" />
+      <module name="commandeBlog (1)" target="21" />
+      <module name="customer-common" target="21" />
+      <module name="customerCommands" target="21" />
+      <module name="customerQuery" target="21" />
+      <module name="customerService" target="21" />
+      <module name="polyinformatique-core-API (1)" target="21" />
+      <module name="queryBlog (1)" target="21" />
+      <module name="serviceSuivieNotification" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="blogCommon" options="-parameters -parameters" />
+      <module name="blogService" options="-parameters" />
+      <module name="blogService (1)" options="-parameters -parameters" />
+      <module name="commandeBlog" options="-parameters" />
+      <module name="commandeBlog (1)" options="-parameters -parameters" />
+      <module name="configservice" options="-parameters" />
+      <module name="customer-common" options="-parameters" />
+      <module name="customerCommands" options="-parameters" />
+      <module name="customerQuery" options="-parameters" />
+      <module name="customerService" options="-parameters" />
+      <module name="discoveryservice" options="-parameters" />
+      <module name="ecPolyCommand" options="-parameters" />
+      <module name="ecPolyQuery" options="-parameters" />
+      <module name="ecommercePolyinformatique" options="-parameters" />
+      <module name="getwayservice" options="-parameters" />
+      <module name="polyinformatique" options="-parameters" />
+      <module name="polyinformatique-common" options="-parameters" />
+      <module name="polyinformatique-core-API" options="-parameters" />
+      <module name="polyinformatique-core-API (1)" options="-parameters -parameters" />
+      <module name="queryBlog" options="-parameters" />
+      <module name="queryBlog (1)" options="-parameters -parameters" />
+      <module name="serviceSuivieNotification" options="-parameters" />
+    </option>
+  </component>
+</project>

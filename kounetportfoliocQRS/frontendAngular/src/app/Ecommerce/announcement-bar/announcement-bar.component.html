@@ -1,0 +1,7 @@
+<div class="announcement-bar">
+  <div class="announcement-container" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+    <div class="announcement-item" *ngFor="let ann of announcements">
+      {{ ann }}
+    </div>
+  </div>
+</div>

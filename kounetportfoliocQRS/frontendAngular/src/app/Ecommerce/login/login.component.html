@@ -1,0 +1,60 @@
+<div class="page-title light-background position-relative">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Accueil</a></li>
+        <li class="current">Connexion</li>
+      </ol>
+    </nav>
+    <h1>Connexion</h1>
+  </div>
+</div><!-- Fin du titre de la page -->
+
+<!-- Section Connexion -->
+<section id="login" class="login section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8">
+        <div class="login-form-wrapper">
+          <div class="login-header text-center">
+            <h2>Connexion</h2>
+            <p>Bienvenue ! Veuillez entrer vos informations</p>
+          </div>
+
+          <form>
+            <div class="mb-4">
+              <label for="email" class="form-label">Adresse email</label>
+              <input type="email" class="form-control" id="email" placeholder="Entrez votre adresse email" required="" autocomplete="email">
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <label for="password" class="form-label">Mot de passe</label>
+                <a href="#" class="forgot-link">Mot de passe oublié ?</a>
+              </div>
+              <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe" required="" autocomplete="current-password">
+            </div>
+
+            <div class="mb-4 form-check">
+              <input type="checkbox" class="form-check-input" id="remember">
+              <label class="form-check-label" for="remember">Se souvenir pendant 30 jours</label>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+              <button type="submit" class="btn btn-primary">Se connecter</button>
+              <button type="button" class="btn btn-outline">
+                <i class="bi bi-google me-2"></i>Se connecter avec Google
+              </button>
+            </div>
+
+            <div class="signup-link text-center">
+              <span>Vous n'avez pas de compte ?</span>
+              <a routerLink="/signup">Créer un compte gratuitement</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- /Section Connexion -->

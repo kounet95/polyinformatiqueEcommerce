@@ -1,0 +1,118 @@
+<!-- Titre de la page -->
+<div class="page-title light-background">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a routerLink="/">Accueil</a></li>
+        <li class="current">Contact</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<section class="contact-container">
+  <div class="contact-grid">
+    
+    <!-- Informations de contact -->
+    <div class="contact-infos">
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">location_on</mat-icon>
+        <div>
+          <h2>Adresse</h2>
+          <p>50 Lisgar<br>SUDBURY, Ontario, P3E 3L8</p>
+          <p>1105 Belfry Av.<br>SUDBURY, Ontario, P3A 3M4</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">call</mat-icon>
+        <div>
+          <h2>Appeler</h2>
+          <p>+1 514 999 0594<br>+1 450 626 7192</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">mail</mat-icon>
+        <div>
+          <h2>Courriel</h2>
+          <p>polyinformatique&#64;gmail.com</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="info-card">
+        <mat-icon color="warn" class="info-icon">schedule</mat-icon>
+        <div>
+          <h2>Heures d’ouverture</h2>
+          <p>Lundi - Vendredi<br>09h00 - 17h00</p>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Formulaire de contact -->
+     <section class="register section py-5">
+      <div class="container">
+
+      <div class="registration-form-wrapper bg-white shadow rounded p-4">
+            
+            <!-- En-tête -->
+            <div class="section-header text-center mb-4">
+              <h2>Contactez-nous</h2>
+              <p>Remplissez le formulaire pour nous envoyer un message</p>
+            </div>
+
+            <!-- Formulaire -->
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" autocomplete="off" novalidate>
+              <div class="row">
+                <!-- Nom -->
+                <div class="col-md-6 mb-3">
+                  <label for="name" class="form-label">Votre nom</label>
+                  <input type="text" id="name" class="form-control" formControlName="name" placeholder="Votre nom">
+                  <div class="text-danger small" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+                    Le nom est requis.
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Votre adresse courriel</label>
+                  <input type="email" id="email" class="form-control" formControlName="email" placeholder="exemple@domaine.com">
+                  <div class="text-danger small" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+                    Email valide requis.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Objet -->
+              <div class="mb-3">
+                <label for="subject" class="form-label">Objet</label>
+                <input type="text" id="subject" class="form-control" formControlName="subject" placeholder="Sujet du message">
+                <div class="text-danger small" *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+                  L’objet est requis.
+                </div>
+              </div>
+
+              <!-- Message -->
+              <div class="mb-4">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" rows="5" class="form-control" formControlName="message" placeholder="Votre message ici..."></textarea>
+                <div class="text-danger small" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+                  Le message est requis.
+                </div>
+              </div>
+
+              <!-- Bouton d'envoi -->
+              <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary" [disabled]="!contactForm.valid">
+                  Envoyer le message
+                </button>
+              </div>
+
+            
+            </form>
+      </div>
+      </div>
+     </section>
+
+  </div>
+</section>

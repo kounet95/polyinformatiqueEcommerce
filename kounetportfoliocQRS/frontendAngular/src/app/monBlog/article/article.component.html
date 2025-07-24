@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+  <span>Liste des articles</span>
+  <span class="spacer"></span>
+  <button mat-raised-button color="accent" routerLink="/newsArticle">Créer un article</button>
+</mat-toolbar>
+
+<div class="card-list">
+  <mat-card *ngFor="let article of articles" class="article-card mat-elevation-z2">
+    <mat-card-header>
+      <mat-card-title>{{ article.title }}</mat-card-title>
+      <mat-card-subtitle>Publié le {{ article.createdAt | date:'mediumDate' }}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="article.urlMedia" [alt]="article.title" *ngIf="article.urlMedia">
+    <mat-card-content>
+      <p>{{ article.content | slice:0:200 }}...</p>
+      <div class="tags">
+        <span *ngFor="let tag of article.tagIds" class="tag">{{ tag }}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="accent" (click)="goToDetails(article)">Détails</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

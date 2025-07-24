@@ -1,0 +1,25 @@
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 24px 0;
+  justify-content: flex-start;
+}
+.article-card {
+  width: 320px;
+  min-height: 350px;
+}
+.tags {
+  margin-top: 8px;
+}
+.tag {
+  display: inline-block;
+  background: #e0e0e0;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-right: 4px;
+  font-size: 12px;
+}
+.spacer {
+  flex: 1 1 auto;
+}

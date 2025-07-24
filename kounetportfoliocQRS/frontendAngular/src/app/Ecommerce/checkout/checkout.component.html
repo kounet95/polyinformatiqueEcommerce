@@ -1,0 +1,225 @@
+<!-- Choisir une adresse existante -->
+<div *ngIf="addresses.length > 0">
+  <label for="address-select">Select Address</label>
+ <select id="address-select"
+        [(ngModel)]="selectedAddressId"
+        (change)="onAddressChange()"
+        name="selectedAddress">
+  <option *ngFor="let addr of addresses" [value]="addr.id">
+    {{ addr.street }}, {{ addr.city }}
+  </option>
+</select>
+</div>
+
+<!-- Ensuite le formulaire habituel est rempli automatiquement par shippingAddress -->
+<input class="form-input" placeholder="Street Address" [(ngModel)]="shippingAddress.street" name="street" required />
+<input class="form-input" placeholder="Apartment" [(ngModel)]="shippingAddress.appartment" name="apartment" />
+<!-- etc. -->
+
+<!-- Le container principal de checkout -->
+<div class="checkout-container">
+  <!-- STEPPER -->
+  <div class="checkout-steps">
+    <div class="step" [class.active]="step === 1" [class.completed]="step > 1">
+      <span>1</span>
+      <div>Information</div>
+    </div>
+    <div class="line"></div>
+    <div class="step" [class.active]="step === 2" [class.completed]="step > 2">
+      <span>2</span>
+      <div>Shipping</div>
+    </div>
+    <div class="line"></div>
+    <div class="step" [class.active]="step === 3" [class.completed]="step > 3">
+      <span>3</span>
+      <div>Payment</div>
+    </div>
+    <div class="line"></div>
+    <div class="step" [class.active]="step === 4">
+      <span>4</span>
+      <div>Review</div>
+    </div>
+  </div>
+
+  <div class="checkout-main">
+    <!-- Step 1: Customer Info -->
+    <div *ngIf="step === 1">
+      <h2>Customer Information</h2>
+      <p class="form-desc">Please enter your contact details</p>
+      <form>
+        <div class="form-row">
+          <input class="form-input" placeholder="First Name" [(ngModel)]="customer.firstname" name="firstname" required />
+          <input class="form-input" placeholder="Last Name" [(ngModel)]="customer.lastname" name="lastname" required />
+        </div>
+        <input class="form-input" placeholder="Your Email" [(ngModel)]="customer.email" name="email" required />
+        <input class="form-input" placeholder="Your Phone Number" [(ngModel)]="customer.phone" name="phone" />
+
+        <!-- Mode commande -->
+        <div class="order-mode-select">
+          <label>
+            <input type="radio" name="orderMode" [(ngModel)]="orderMode" value="CART" /> Classic Order
+          </label>
+          <label>
+            <input type="radio" name="orderMode" [(ngModel)]="orderMode" value="CUSTOM" /> Custom Order
+          </label>
+        </div>
+
+        <!-- Champs custom si CUSTOM -->
+        <div *ngIf="orderMode === 'CUSTOM'" class="custom-order-info">
+          <input class="form-input" placeholder="Supplier ID" [(ngModel)]="customSupplierId" name="supplierId" required />
+          <textarea class="form-input" placeholder="Describe your custom order" [(ngModel)]="customDescription" name="description"></textarea>
+        </div>
+
+        <button type="button" class="btn main-btn" (click)="nextStep()"
+          [disabled]="!customer.firstname || !customer.lastname || !customer.email || (orderMode === 'CUSTOM' && !customSupplierId)">
+          Continue to Shipping
+        </button>
+      </form>
+    </div>
+
+    <!-- Step 2: Shipping -->
+    <div *ngIf="step === 2">
+      <h2>Shipping Address</h2>
+      <p class="form-desc">Where should we deliver your order?</p>
+      
+      <!-- Bloc sélection adresse existante -->
+      <div *ngIf="addresses.length > 0" class="existing-address-select">
+        <label for="address-select">Select Address</label>
+        <select id="address-select"
+        [(ngModel)]="selectedAddressId"
+        (change)="onAddressChange()"
+        name="selectedAddress">
+  <option *ngFor="let addr of addresses" [value]="addr.id">
+    {{ addr.street }}, {{ addr.city }}
+  </option>
+</select>
+      </div>
+
+      <form>
+        <input class="form-input" placeholder="Street Address" [(ngModel)]="shippingAddress.street" name="street" required />
+        <input class="form-input" placeholder="Apartment, Suite, etc. (optional)" [(ngModel)]="shippingAddress.appartment" name="apartment" />
+        <div class="form-row">
+          <input class="form-input" placeholder="City" [(ngModel)]="shippingAddress.city" name="city" required />
+          <input class="form-input" placeholder="State" [(ngModel)]="shippingAddress.state" name="state" />
+          <input class="form-input" placeholder="ZIP Code" [(ngModel)]="shippingAddress.zip" name="zip" required />
+        </div>
+        <select class="form-input" [(ngModel)]="shippingAddress.country" name="country" required>
+          <option value="">Select Country</option>
+          <option value="France">France</option>
+          <option value="USA">USA</option>
+          <!-- Ajouter d'autres pays si besoin -->
+        </select>
+        <div class="form-actions">
+          <button type="button" class="btn secondary-btn" (click)="prevStep()">Back to Information</button>
+          <button type="button" class="btn main-btn" (click)="nextStep()"
+            [disabled]="!shippingAddress.street || !shippingAddress.city || !shippingAddress.zip || !shippingAddress.country">
+            Continue to Payment
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 3: Payment -->
+    <div [hidden]="step !== 3">
+      <h2>Payment Method</h2>
+      <p class="form-desc">Choose how you'd like to pay</p>
+      <form>
+        <div class="payment-options">
+          <label>
+            <input type="radio" [(ngModel)]="payment.method" value="card" name="paymethod" /> Credit / Debit Card
+          </label>
+        </div>
+        <div *ngIf="payment.method === 'card'" class="card-form">
+          <input class="form-input" placeholder="Name on Card" [(ngModel)]="payment.name" name="name" />
+
+          <label for="card-element" class="form-label">Card details</label>
+          <div #cardElement class="stripe-card-element" id="card-element"></div>
+
+          <label for="currency" class="form-label">Select Currency</label>
+          <select class="form-input" [(ngModel)]="currency" name="currency" id="currency">
+            <option value="eur">EUR (€)</option>
+            <option value="usd">USD ($)</option>
+            <option value="gbp">GBP (£)</option>
+          </select>
+
+          <div *ngIf="message" class="error-message">{{ message }}</div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn secondary-btn" (click)="prevStep()">Back to Shipping</button>
+          <button type="button" class="btn main-btn" (click)="step=4" [disabled]="payment.method === 'card' && !payment.name">
+            Review Order
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 4: Review & Place Order -->
+    <div *ngIf="step === 4">
+      <h2>Review Your Order</h2>
+      <p class="form-desc">Please review your information before placing your order</p>
+      <div class="review-block">
+        <div class="review-section">
+          <h4>Contact Information <a (click)="step=1" style="cursor:pointer;">Edit</a></h4>
+          <input class="form-input" placeholder="First Name" [(ngModel)]="customer.firstname" name="firstname" required />
+          <input class="form-input" placeholder="Last Name" [(ngModel)]="customer.lastname" name="lastname" required />
+          <input class="form-input" placeholder="Your Email" [(ngModel)]="customer.email" name="email" required />
+          <input class="form-input" placeholder="Your Phone Number" [(ngModel)]="customer.phone" name="phone" />
+        </div>
+        <div class="review-section">
+          <h4>Shipping Address <a (click)="step=2" style="cursor:pointer;">Edit</a></h4>
+          <div>{{ shippingAddress.street }} {{ shippingAddress.appartment }}</div>
+          <div>{{ shippingAddress.city }}, {{ shippingAddress.state }} {{ shippingAddress.zip }}</div>
+          <div>{{ shippingAddress.country }}</div>
+        </div>
+        <div class="review-section">
+          <h4>Payment Method <a (click)="step=3" style="cursor:pointer;">Edit</a></h4>
+          <div *ngIf="payment.method==='card'">Card (Stripe)</div>
+          <div>Currency: {{ currency | uppercase }}</div>
+        </div>
+        <div *ngIf="orderMode === 'CUSTOM'" class="review-section">
+          <h4>Custom Order Details</h4>
+          <div>Supplier ID: {{ customSupplierId }}</div>
+          <div>Description: {{ customDescription }}</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn secondary-btn" (click)="prevStep()">Back to Payment</button>
+        <button type="button" class="btn main-btn" (click)="payer()" [disabled]="loading">
+          {{ loading ? 'Processing...' : 'Place Order' }}
+        </button>
+      </div>
+      <div *ngIf="message" class="alert alert-success mt-3">{{ message }}</div>
+    </div>
+  </div>
+
+  <!-- ORDER SUMMARY AREA -->
+  <aside class="order-summary" *ngIf="orderMode !== 'CUSTOM'">
+    <h3>Order Summary</h3>
+    <div *ngFor="let item of cartItems" class="summary-item">
+      <img [src]="item.productImg" width="60" height="60" />
+      <div class="summary-details">
+        <div class="summary-title">{{ item.productName }}</div>
+        <div class="summary-meta">Size: {{ item.productSize }}</div>
+        <div class="summary-meta">{{ item.qty }} × ${{ item.pricePromo ?? item.productSizePrice | number: '1.2-2' }}</div>
+      </div>
+    </div>
+    <hr />
+    <div class="summary-row"><span>Subtotal</span><span>${{ subtotal | number: '1.2-2' }}</span></div>
+    <div class="summary-row"><span>Shipping</span><span>${{ shipping | number: '1.2-2' }}</span></div>
+    <div class="summary-row"><span>Tax</span><span>${{ tax | number: '1.2-2' }}</span></div>
+    <div class="summary-row total"><span>Total</span><span>${{ total | number: '1.2-2' }}</span></div>
+    <div class="promo-row">
+      <input class="promo-input" placeholder="Promo Code" [(ngModel)]="promoCode" />
+      <button class="btn promo-btn" (click)="applyPromo()">Apply</button>
+    </div>
+    <div class="secure-checkout">
+      <span class="secure-icon">🔐</span> Secure Checkout
+      <div class="payment-icons">
+        <i class="material-icons">credit_card</i>
+        <i class="material-icons">payment</i>
+        <i class="material-icons">account_balance</i>
+        <i class="material-icons">account_balance_wallet</i>
+      </div>
+    </div>
+  </aside>
+</div>

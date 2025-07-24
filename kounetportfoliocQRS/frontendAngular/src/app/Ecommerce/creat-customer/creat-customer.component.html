@@ -1,0 +1,11 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input formControlName="firstname" placeholder="First name">
+  <input formControlName="lastname" placeholder="Last name">
+  <input formControlName="email" placeholder="Email">
+  <input formControlName="phone" placeholder="Phone">
+
+  <h4>Adresse</h4>
+  <app-address-form [formGroup]="addressGroup"></app-address-form>
+
+  <button type="submit">Créer le client</button>
+</form>

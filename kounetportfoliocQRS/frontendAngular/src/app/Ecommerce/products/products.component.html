@@ -1,0 +1,52 @@
+<!-- Barre d'annonces -->
+<div class="announcement-bar">
+  <p>{{ announcements?.[currentIndex] }}</p>
+</div>
+
+<!-- Barre de recherche mobile -->
+<div *ngIf="showMobileSearch" class="mobile-search">
+  <input
+    type="text"
+    [(ngModel)]="mobileSearch"
+    placeholder="Rechercher un produit..."
+  />
+  <button (click)="onMobileSearch()">Rechercher</button>
+</div>
+
+<button (click)="toggleMobileSearch()">
+  {{ showMobileSearch ? 'Fermer la recherche' : 'Rechercher un produit' }}
+</button>
+
+<!-- État de chargement -->
+<div *ngIf="loading" class="loading">
+  <p>Chargement des produits...</p>
+</div>
+
+<!-- Message d'erreur -->
+<div *ngIf="error" class="error">
+  <p>{{ error }}</p>
+</div>
+
+<!-- Liste des produits -->
+<div *ngIf="(products?.length ?? 0) > 0" class="product-list">
+  <div class="product-card" *ngFor="let product of products ?? []">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    
+  
+    <img *ngIf="product.models" [src]="product.models" [alt]="product.name" />
+  </div>
+</div>
+
+<!-- Aucun produit -->
+<div *ngIf="!loading && (products?.length ?? 0) === 0 && !error" class="no-products">
+  <p>Aucun produit trouvé.</p>
+</div>
+
+<!-- Contrôles de pagination -->
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="page === 0">Précédent</button>
+  <span>Page {{ page + 1 }} sur <span>Page {{ page + 1 }} sur {{ totalPages }}</span>
+</span>
+  <button (click)="nextPage()" [disabled]="(page + 1) * size >= totalElements">Suivant</button>
+</div>
