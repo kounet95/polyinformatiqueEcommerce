@@ -8,6 +8,7 @@ import org.example.ecpolyquery.entity.Customer;
 import org.example.ecpolyquery.query.GetAllCategoriesQuery;
 import org.example.ecpolyquery.query.GetCategoryByIdQuery;
 import org.example.ecpolyquery.query.GetCustomerByEmailQuery;
+import org.example.ecpolyquery.query.GetCustomerByIdQuery;
 import org.example.ecpolyquery.repos.CategoryRepository;
 import org.example.ecpolyquery.repos.CustomerRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.AddressLinkDTO;
@@ -57,5 +58,21 @@ public class CustomerQueryHandler {
       .phone(customer.getPhone())
       .build();
   }
+  @QueryHandler
+  public CustomerEcommerceDTO handle(GetCustomerByIdQuery query) {
+    Customer customer = customerRepository.findById(query.getId())
+      .orElseThrow(() -> new RuntimeException("Customer not found"));
 
+    // Chargement des proxys si besoin
+    customer.getAddressLinks().forEach(link -> link.getAddress().getId());
+    customer.getLikes().size();
+
+    return CustomerEcommerceDTO.builder()
+      .id(customer.getId())
+      .firstname(customer.getFirstname())
+      .lastname(customer.getLastname())
+      .email(customer.getEmail())
+      .phone(customer.getPhone())
+      .build();
+  }
 }

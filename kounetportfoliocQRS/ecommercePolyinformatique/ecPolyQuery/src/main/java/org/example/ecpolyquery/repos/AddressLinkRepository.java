@@ -5,7 +5,7 @@ import org.example.ecpolyquery.entity.AddressLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface AddressLinkRepository extends JpaRepository<AddressLink, String> {
+public interface AddressLinkRepository extends JpaRepository<AddressLink, Long> {
   /**
    * Récupère tous les liens pour un targetType + targetId.
    * Exemple : targetType="CUSTOMER", targetId="123"

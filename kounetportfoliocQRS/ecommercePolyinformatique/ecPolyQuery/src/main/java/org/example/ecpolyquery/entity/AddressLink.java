@@ -12,7 +12,7 @@ import lombok.*;
 public class AddressLink {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String id;
+  private Long id;
 
   private String targetType; // "CUSTOMER", "SUPPLIER", "STOCK", "SHIPPING"
   private String targetId;   // id de l'entité cible pour nous permettre de savoir quel entite on utilise

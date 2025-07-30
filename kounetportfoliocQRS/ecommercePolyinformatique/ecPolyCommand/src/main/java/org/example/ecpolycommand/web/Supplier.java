@@ -46,7 +46,7 @@ public class Supplier {
     @Valid @RequestBody CreateSupplierWithAddressDTO input,
     JwtAuthenticationToken jwtAuth) {
 
-    //  ID unique pour l’adresse
+    //ID unique pour l’adresse
     String addressId = UUID.randomUUID().toString();
 
     // ID unique pour le stock

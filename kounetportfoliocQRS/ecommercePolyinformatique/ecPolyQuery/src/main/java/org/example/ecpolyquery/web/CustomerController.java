@@ -40,8 +40,10 @@ public class CustomerController {
 
 
   @GetMapping("/{id}")
-    public CompletableFuture<Customer> getCustomerById(@PathVariable String id) {
-        return queryGateway.query(new GetCustomerByIdQuery(id),
-                ResponseTypes.instanceOf(Customer.class));
-    }
+  public CompletableFuture<CustomerEcommerceDTO> getCustomerById(@PathVariable String id) {
+    return queryGateway.query(
+      new GetCustomerByIdQuery(id),
+      ResponseTypes.instanceOf(CustomerEcommerceDTO.class)
+    );
+  }
 }

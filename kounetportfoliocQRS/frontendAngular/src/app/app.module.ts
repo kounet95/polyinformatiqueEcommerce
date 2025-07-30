@@ -78,6 +78,7 @@ import { ConditionsComponent } from './Ecommerce/conditions/conditions.component
 import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
 import { DashboardComponent } from './Ecommerce/dashboard/dashboard.component';
 import { TeststripComponent } from './ecommerce/teststrip/teststrip.component';
+import { CustomerFormComponent } from './Ecommerce/customer-form/customer-form.component';
 
 
 
@@ -133,6 +134,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     LoginComponent,
     ConditionsComponent,
     DashboardComponent,
+    CustomerFormComponent,
   
 
    
