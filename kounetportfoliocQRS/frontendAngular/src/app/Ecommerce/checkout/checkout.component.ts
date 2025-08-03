@@ -110,7 +110,7 @@ export class CheckoutComponent implements OnInit {
     this.cartItems = this.cartService.getCart();
     this.calculateTotals();
     this.loadCustomer();
-    this.stripe = await loadStripe('pk_test_...');
+    this.stripe = await loadStripe('pk_test_51RjaG74EMj4mRh4Ig9G6XBkhmBu7e3fsqGmKkrZZ3WVQA3t9AvkP4zZuy4FQJBS6yfxzH7pi03K9N4beuis76nrn004vakKS5x');
     this.setupStripeCard();
     this.loadAddresses();
   }

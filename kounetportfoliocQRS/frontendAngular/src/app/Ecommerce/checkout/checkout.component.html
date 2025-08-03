@@ -1,4 +1,4 @@
-<!-- Choisir une adresse existante -->
+<!-- Choisir une adresse existant
 <div *ngIf="addresses.length > 0">
   <label for="address-select">Select Address</label>
  <select id="address-select"
@@ -11,10 +11,10 @@
 </select>
 </div>
 
-<!-- Ensuite le formulaire habituel est rempli automatiquement par shippingAddress -->
+
 <input class="form-input" placeholder="Street Address" [(ngModel)]="shippingAddress.street" name="street" required />
 <input class="form-input" placeholder="Apartment" [(ngModel)]="shippingAddress.appartment" name="apartment" />
-<!-- etc. -->
+etc. -->
 
 <!-- Le container principal de checkout -->
 <div class="checkout-container">
