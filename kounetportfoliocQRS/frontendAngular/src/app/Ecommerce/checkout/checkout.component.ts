@@ -10,10 +10,9 @@ import {
   CustomerEcommerceDTO,
   InvoiceDTO,
   OrderDTO,
-  OrderLineDTO,
   OrderStatus
 } from '../../mesModels/models';
-import { forkJoin, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { loadStripe, Stripe, StripeCardElement } from '@stripe/stripe-js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -72,10 +71,8 @@ export class CheckoutComponent implements OnInit {
     createdAt: ''
   };
 
-  // Gestion des adresses
   addresses: AddressDTO[] = [];
   selectedAddressId?: string = '';
-
   shippingAddress: Partial<AddressDTO> = {
     street: '',
     appartment: '',
@@ -92,11 +89,11 @@ export class CheckoutComponent implements OnInit {
 
   orderMode: 'CART' | 'CUSTOM' = 'CART';
   customSupplierId: string = '';
-
   currency: string = 'eur';
 
   private stripe!: Stripe | null;
-  private card!: StripeCardElement;
+  private card?: StripeCardElement;
+  private lastOrderId = '';
 
   constructor(
     private cartService: CartService,
@@ -111,15 +108,18 @@ export class CheckoutComponent implements OnInit {
     this.calculateTotals();
     this.loadCustomer();
     this.stripe = await loadStripe('pk_test_51RjaG74EMj4mRh4Ig9G6XBkhmBu7e3fsqGmKkrZZ3WVQA3t9AvkP4zZuy4FQJBS6yfxzH7pi03K9N4beuis76nrn004vakKS5x');
-    this.setupStripeCard();
     this.loadAddresses();
+    // NE PAS monter la carte ici, on le fait à l'étape 3
   }
 
   setupStripeCard() {
     if (this.stripe && this.cardElementRef) {
-      const elements = this.stripe.elements();
-      this.card = elements.create('card');
-      this.card.mount(this.cardElementRef.nativeElement);
+      if (!this.card) {
+        const elements = this.stripe.elements();
+        this.card = elements.create('card');
+        this.card.mount(this.cardElementRef.nativeElement);
+        // console.log('Stripe card mounted !');
+      }
     }
   }
 
@@ -170,15 +170,15 @@ export class CheckoutComponent implements OnInit {
       });
     }
   }
-onAddressChange() {
-  const address = this.addresses.find(a => a.id === this.selectedAddressId);
-  if (address) {
-    this.setShippingAddress(address);
-  } else {
-    // cas où aucune adresse n’est trouvée (optionnel)
-    console.warn('Adresse non trouvée pour id:', this.selectedAddressId);
+
+  onAddressChange() {
+    const address = this.addresses.find(a => a.id === this.selectedAddressId);
+    if (address) {
+      this.setShippingAddress(address);
+    } else {
+      console.warn('Adresse non trouvée pour id:', this.selectedAddressId);
+    }
   }
-}
 
   setShippingAddress(address: AddressDTO) {
     this.shippingAddress = { ...address };
@@ -204,71 +204,83 @@ onAddressChange() {
 
   nextStep() {
     this.step++;
+    if (this.step === 3) {
+      setTimeout(() => this.setupStripeCard(), 0);
+    }
   }
 
   prevStep() {
     this.step--;
   }
 
-  async payer() {
-    this.loading = true;
-    this.message = '';
+  /** Paiement Stripe déclenché à l’étape 4 (Review & Place Order) */
+async payer() {
+  this.loading = true;
+  this.message = '';
 
-    if (!this.customer.email) {
-      this.message = "Informations client manquantes.";
-      this.loading = false;
-      return;
-    }
-
-    const order: OrderDTO = {
-      id: '',
-      customerEmail: this.customer.email,
-      supplierId: this.orderMode === 'CUSTOM' ? this.customSupplierId.trim() : '',
-      createdAt: new Date().toISOString(),
-      orderStatus: OrderStatus.Inprogress,
-      paymentMethod: this.payment.method,
-      total: this.total,
-      barcode: '',
-      currency: this.currency,
-      shippingId: this.shippingAddressToString(),
-      description: this.orderMode === 'CUSTOM' ? this.customDescription : undefined,
-    };
-
-    try {
-      const orderId = await firstValueFrom(
-        this.orderService.createOrder(order, this.orderMode === 'CUSTOM')
-      );
-
-      const invoice: InvoiceDTO = {
-        id: '',
-        orderId,
-        customerEmail: this.customer.id || '',
-        amount: this.total,
-        paymentMethod: this.payment.method,
-        restMonthlyPayment: 0,
-        paymentStatus: 'WAITING',
-        supplierId: this.orderMode === 'CUSTOM' ? this.customSupplierId.trim() : ''
-      };
-
-      await firstValueFrom(this.invoiceService.createInvoice(invoice));
-      const paymentIntentResponse = await firstValueFrom(this.orderService.createPaymentIntent(order));
-      this.clientSecret = paymentIntentResponse.client_secret;
-      await this.confirmPayment();
-
-    } catch (err) {
-      this.message = "Erreur lors du traitement de la commande.";
-      this.loading = false;
-    }
+  // Validation des informations client
+  if (!this.customer?.email || !this.customer?.firstname || !this.customer?.lastname) {
+    this.message = "Informations client incomplètes.";
+    this.loading = false;
+    return;
   }
 
-  async confirmPayment() {
-    if (!this.stripe || !this.card || !this.clientSecret) {
-      this.message = 'Erreur de configuration Stripe.';
+  // Création de la commande
+  const order: OrderDTO = {
+    id: '',
+    customerEmail: this.customer.email,
+    supplierId: this.orderMode === 'CUSTOM' ? this.customSupplierId.trim() : '',
+    createdAt: new Date().toISOString(),
+    orderStatus: OrderStatus.Inprogress,
+    paymentMethod: this.payment.method,
+    total: this.total,
+    barcode: '',
+    currency: this.currency,
+    shippingId: this.shippingAddressToString(),
+    description: this.orderMode === 'CUSTOM' ? this.customDescription : undefined,
+  };
+
+  try {
+    // Étape 1 : créer la commande
+    const orderId = await firstValueFrom(
+      this.orderService.createOrder(order, this.orderMode === 'CUSTOM')
+    );
+    this.lastOrderId = orderId;
+
+    // Étape 2 : créer la facture
+    const invoice: InvoiceDTO = {
+      id: '',
+      orderId,
+      customerEmail: this.customer.id || '',
+      amount: this.total,
+      paymentMethod: this.payment.method,
+      restMonthlyPayment: 0,
+      paymentStatus: 'WAITING',
+      supplierId: this.orderMode === 'CUSTOM' ? this.customSupplierId.trim() : ''
+    };
+
+    await firstValueFrom(this.invoiceService.createInvoice(invoice));
+
+    // Étape 3 : créer le PaymentIntent Stripe
+    const paymentIntentResponse = await firstValueFrom(
+      this.orderService.createPaymentIntent(order)
+    );
+
+    if (!paymentIntentResponse?.client_secret) {
+      this.message = "Client secret non reçu de Stripe.";
       this.loading = false;
       return;
     }
 
-    this.loading = true;
+    this.clientSecret = paymentIntentResponse.client_secret;
+
+    // Étape 4 : confirmer le paiement avec Stripe
+    if (!this.stripe || !this.card) {
+      this.message = "Stripe ou carte non initialisée.";
+      this.loading = false;
+      return;
+    }
+
     const { error, paymentIntent } = await this.stripe.confirmCardPayment(this.clientSecret, {
       payment_method: {
         card: this.card,
@@ -280,20 +292,45 @@ onAddressChange() {
     });
 
     if (error) {
+      console.error("Erreur Stripe:", error);
       this.message = `Erreur de paiement Stripe : ${error.message}`;
       this.loading = false;
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      this.message = 'Paiement réussi !';
-      this.orderService.confirmOrder(paymentIntent.id).subscribe({
-        next: () => {
-          this.loading = false;
-          this.cartService.clearCart();
-        },
-        error: () => {
-          this.message = 'Erreur lors de la confirmation de la commande.';
-          this.loading = false;
-        }
-      });
+      return;
     }
+
+    if (paymentIntent && paymentIntent.status === 'succeeded') {
+      this.message = 'Paiement réussi !';
+      this.step = 5; // Étape confirmation
+    } else {
+      this.message = "Paiement non confirmé.";
+    }
+
+  } catch (err: any) {
+    console.error("Erreur dans payer():", err);
+    this.message = "Erreur lors du traitement de la commande.";
+  } finally {
+    this.loading = false;
+  }
+}
+
+
+  /** Méthode confirmOrder appelée à l’étape 5 */
+  confirmOrder() {
+    if (!this.lastOrderId) {
+      this.message = "Erreur : commande introuvable.";
+      return;
+    }
+    this.loading = true;
+    this.orderService.confirmOrder(this.lastOrderId).subscribe({
+      next: () => {
+        this.cartService.clearCart();
+        this.message = 'Commande confirmée !';
+        this.loading = false;
+      },
+      error: () => {
+        this.message = 'Erreur lors de la confirmation de la commande.';
+        this.loading = false;
+      }
+    });
   }
 }

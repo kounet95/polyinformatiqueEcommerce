@@ -100,7 +100,7 @@ public class OrderController {
 
   /**
    *  Déclenche le paiement de la facture
-   * Ici attention ! Normalement c’est l’orderId, pas l’invoiceId !
+   * Ici attention ! Normalement, c'est l’orderId, pas l’invoiceId !
    */
   @PutMapping("/{orderId}/pay-invoice")
   public CompletableFuture<String> payInvoice(

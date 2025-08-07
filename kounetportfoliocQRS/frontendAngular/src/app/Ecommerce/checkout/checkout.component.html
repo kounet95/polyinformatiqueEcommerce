@@ -1,20 +1,3 @@
-<!-- Choisir une adresse existant
-<div *ngIf="addresses.length > 0">
-  <label for="address-select">Select Address</label>
- <select id="address-select"
-        [(ngModel)]="selectedAddressId"
-        (change)="onAddressChange()"
-        name="selectedAddress">
-  <option *ngFor="let addr of addresses" [value]="addr.id">
-    {{ addr.street }}, {{ addr.city }}
-  </option>
-</select>
-</div>
-
-
-<input class="form-input" placeholder="Street Address" [(ngModel)]="shippingAddress.street" name="street" required />
-<input class="form-input" placeholder="Apartment" [(ngModel)]="shippingAddress.appartment" name="apartment" />
-etc. -->
 
 <!-- Le container principal de checkout -->
 <div class="checkout-container">

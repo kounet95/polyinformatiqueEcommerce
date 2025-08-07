@@ -266,6 +266,21 @@ services:
       - polyinfDb-net
     restart: always
 
+  stripe:
+    image: stripe/stripe-cli:latest
+    container_name: stripe
+    environment:
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    ports:
+      - "8089:8080"
+    command: ["listen", "--forward-to", "host.docker.internal:8080/webhook"]
+    depends_on:
+      - vault
+
+
+
 volumes:
   polyinfDb_data:
   axonserver_data:

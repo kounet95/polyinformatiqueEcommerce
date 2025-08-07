@@ -5,7 +5,7 @@ import { OrderDTO, OrderLineDTO, InvoiceDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
 
-// 👉 Nouveau type pour le résumé côté Front
+//Nouveau type pour le résumé côté Front
 export interface OrderSummary {
   orderId: string;
   customerId: string;
@@ -79,6 +79,7 @@ createOrder(order: OrderDTO, custom: boolean): Observable<string> {
 
 /** Crée un PaymentIntent pour Stripe Elements avec OrderDTO complet */
 createPaymentIntent(order: OrderDTO): Observable<{ client_secret: string }> {
+  console.log('Appel à createPaymentIntent avec', order);
   return this.http.post<{ client_secret: string }>(
     `${this.commandBase}/payment-intent`,
     order
