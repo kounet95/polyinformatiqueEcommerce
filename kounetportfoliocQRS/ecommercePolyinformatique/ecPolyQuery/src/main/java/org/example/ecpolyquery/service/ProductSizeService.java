@@ -5,14 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
-import org.example.ecpolyquery.entity.Subcategory;
+import org.example.ecpolyquery.entity.Stock;
 import org.example.ecpolyquery.repos.ProductRepository;
 import org.example.ecpolyquery.repos.ProductSizeRepository;
+import org.example.ecpolyquery.repos.StockRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductSizeCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductSizeDeletedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductSizeUpdatedEvent;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -21,51 +25,60 @@ public class ProductSizeService {
 
   private final ProductSizeRepository productSizeRepository;
   private final ProductRepository productRepository;
+  private final StockRepository stockRepository;
 
   @EventHandler
   public void on(ProductSizeCreatedEvent event) {
     log.info("Product size created event received: {}", event.getId());
 
     ProductSizeDTO productSizeDTO = event.getProductSizeDTO();
+
     Product product = null;
     if (productSizeDTO.getProdId() != null) {
       product = productRepository.findById(productSizeDTO.getProdId())
-        .orElseThrow(() -> new RuntimeException("Subcategory not found with id: " + productSizeDTO.getProdId()));
+        .orElseThrow(() -> new RuntimeException("Product not found with id: " + productSizeDTO.getProdId()));
+    }
+
+    List<Stock> stocks = Collections.emptyList();
+    if (productSizeDTO.getStockId() != null && !productSizeDTO.getStockId().isEmpty()) {
+      stocks = stockRepository.findAllById(productSizeDTO.getStockId());
     }
     ProductSize productSize = ProductSize.builder()
       .id(event.getId())
-      .size(event.getProductSizeDTO().getSizeProd())
+      .size(productSizeDTO.getSizeProd())
+      .stocks(stocks)
       .productId(product)
-      .price(event.getProductSizeDTO().getPrice())
-      .promoPrice(event.getProductSizeDTO().getPricePromo())
-      .frontImage(event.getProductSizeDTO().getFrontUrl())
-      .backImage(event.getProductSizeDTO().getBackUrl())
-      .leftImage(event.getProductSizeDTO().getLeftUrl())
-      .rightmage(event.getProductSizeDTO().getRightUrl())
+      .price(productSizeDTO.getPrice())
+      .promoPrice(productSizeDTO.getPricePromo())
+      .frontImage(productSizeDTO.getFrontUrl())
+      .backImage(productSizeDTO.getBackUrl())
+      .leftImage(productSizeDTO.getLeftUrl())
+      .rightmage(productSizeDTO.getRightUrl())
       .build();
     productSizeRepository.save(productSize);
-    log.info("Product size saved event received: {}", productSize.getId());
+    log.info("Product size saved with ID: {}", productSize.getId());
   }
 
   @EventHandler
   public void on(ProductSizeDeletedEvent event) {
-
     log.info("Product size deleted event received: {}", event.getId());
     productSizeRepository.findById(event.getId()).ifPresent(productSize -> {
       productSizeRepository.delete(productSize);
-      log.info("Product size deleted event received: {}", event.getId());
+      log.info("Product size deleted with ID: {}", event.getId());
     });
   }
 
+  @EventHandler
   public void on(ProductSizeUpdatedEvent event) {
-
     log.info("Product size updated event received: {}", event.getId());
 
     ProductSizeDTO productSizeDTO = event.getProductSizeDTO();
+
     productSizeRepository.findById(event.getId()).ifPresent(productSize -> {
       if (productSizeDTO.getProdId() != null) {
         Product product = productRepository.findById(productSizeDTO.getProdId())
-          .orElseThrow(()->new RuntimeException("Product not found with id:"+ productSizeDTO.getProdId()));
+          .orElseThrow(() -> new RuntimeException("Product not found with id: " + productSizeDTO.getProdId()));
+        productSize.setProductId(product);
       }
 
       productSize.setSize(productSizeDTO.getSizeProd());
@@ -75,9 +88,9 @@ public class ProductSizeService {
       productSize.setBackImage(productSizeDTO.getBackUrl());
       productSize.setLeftImage(productSizeDTO.getLeftUrl());
       productSize.setRightmage(productSizeDTO.getRightUrl());
-      productSizeRepository.save(productSize);
-      log.info("Product size saved event received: {}", productSize.getId());
 
+      productSizeRepository.save(productSize);
+      log.info("Product size updated with ID: {}", productSize.getId());
     });
   }
 

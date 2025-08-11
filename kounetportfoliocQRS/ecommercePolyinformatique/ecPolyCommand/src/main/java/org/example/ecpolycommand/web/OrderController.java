@@ -1,15 +1,11 @@
 package org.example.ecpolycommand.web;
 
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import jakarta.validation.Valid;
-import jakarta.websocket.Session;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.example.ecpolycommand.config.StripeConfigProperties;
-import org.example.ecpolycommand.service.StripeService;
-import org.example.ecpolycommand.service.imple.StockCommandServiceImpl;
 import org.example.ecpolycommand.service.imple.StripeServiceImpl;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.CreateOrderRequest;
@@ -19,7 +15,6 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -47,21 +42,21 @@ public class OrderController {
   }
 
   /**
-   *  Crée une nouvelle commande
+   * Crée une nouvelle commande et envoie ensuite la confirmation
    */
   @PostMapping("/create")
   public CompletableFuture<String> createOrder(@Valid @RequestBody CreateOrderRequest request) {
-    System.out.println("=== RECU ===");
-    System.out.println(request.getOrderDTO());
-    System.out.println("custom = " + request.isCustom());
-    String orderId = UUID.randomUUID().toString();
-
-    // Forcer l’id
     OrderDTO orderDTO = request.getOrderDTO();
-    orderDTO.setId(orderId);
+    orderDTO.setId(UUID.randomUUID().toString());
 
-    CreateOrderCommand command = new CreateOrderCommand(orderId, orderDTO, request.isCustom());
-    return commandGateway.send(command);
+
+    for (OrderLineDTO line : orderDTO.getOrderLines()) {
+      if (line.getStockId() == null || line.getStockId().isEmpty()) {
+        throw new IllegalArgumentException("Chaque ligne de commande doit avoir un stockId non nul");
+      }
+    }
+
+    return commandGateway.send(new CreateOrderCommand(orderDTO.getId(), orderDTO, request.isCustom()));
   }
 
   /**
@@ -181,7 +176,7 @@ public class OrderController {
   @DeleteMapping("/{orderId}")
   public CompletableFuture<String> cancelOrder(@PathVariable String orderId,
                                                @RequestParam(defaultValue = "Cancelled by user") String reason) {
-    return commandGateway.send(new CancelOrderCommand(orderId, reason));
+    return commandGateway.send(new CancelOrderCommand(orderId));
   }
 
   /**

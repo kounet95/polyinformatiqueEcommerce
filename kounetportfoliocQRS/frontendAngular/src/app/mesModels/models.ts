@@ -143,23 +143,34 @@ export interface CustomerEcommerceDTO {
 // ===============================
 export interface InvoiceDTO {
   id: string;
-  orderId: string;
+  orderId?:  OrderLineDTO[];
   customerEmail: string;
   amount: number;
   paymentMethod: string;
   restMonthlyPayment: number;
   paymentStatus: string;
   supplierId: string;
+  
 }
-
+export interface cartItemsAi {
+    productId: string;      // ID du produit
+  productName: string;    // Nom du produit
+  productImg: string;     // URL de l’image
+  qty: number;
+  productSizeId: string;  // ID de la taille choisie
+  productSize: string;    // Valeur de la taille
+  productSizePrice: number;
+  pricePromo: number;
+  stockIds?: string[];   // ID du stock pour la taille choisie
+}
 // ===============================
 // ========== OrderDTO ==========
 // ===============================
 export interface OrderDTO {
-  id: string;
+
   customerEmail: string;
   supplierId: string;
-  currency?: string; // Ajoutons de la devise pour donne de la flexibilité
+  currency?: string; 
   createdAt: string; 
   orderStatus: OrderStatus;
   paymentMethod: string;
@@ -167,6 +178,7 @@ export interface OrderDTO {
   barcode: string;
   shippingId: string;
   description?: string;  // Pour les commandes personnalisées
+  orderLines: OrderLineDTO[];
 }
 
 // ===============================
@@ -175,7 +187,7 @@ export interface OrderDTO {
 export interface OrderLineDTO {
   id: string;
   orderId: string;
-  stockId: string;
+  stockId: string[];
   qty: number;
 }
 
@@ -238,6 +250,7 @@ export interface ProductSizeDTO {
   backUrl: string;
   leftUrl: string;
   rightUrl: string;
+  stockIds?: string[];
 }
 export interface Page<T> {
   content: T[];
@@ -325,6 +338,7 @@ export interface CartItem {
   productSize: string;    // Valeur de la taille
   productSizePrice: number;
   pricePromo: number;
+  stockIds: string[];   
 }
 
 

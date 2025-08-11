@@ -1,9 +1,9 @@
 package org.example.polyinformatiquecoreapi.commandEcommerce;
 
 public class CancelOrderCommand extends BaseCommand<String> {
-    private final String reason;
+    private String reason = "";
 
-    public CancelOrderCommand(String id, String reason) {
+    public CancelOrderCommand(String id) {
         super(id);
         this.reason = reason;
     }

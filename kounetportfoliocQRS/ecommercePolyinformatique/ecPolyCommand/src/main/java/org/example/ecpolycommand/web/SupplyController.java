@@ -52,7 +52,7 @@ public class SupplyController {
       if (stockInput.getPromoPrice() == null) {
         throw new IllegalArgumentException("promoPrice must not be null");
       }
-      if (stockInput.getQuantity() == null) {
+      if (stockInput.getQuantity() == 0) {
         throw new IllegalArgumentException("quantity must not be null");
       }
 

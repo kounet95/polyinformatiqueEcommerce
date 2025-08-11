@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, String> {
 
@@ -19,4 +20,7 @@ public interface StockRepository extends JpaRepository<Stock, String> {
   // On récupère les stocks dont le prix promo est inférieur au prix normal (donc en promo)
   @Query("SELECT s FROM Stock s WHERE s.promoPrice > 0 AND s.promoPrice < s.purchasePrice")
   List<Stock> findOnSale();
+
+  Optional<Stock> findByProductSize_Id(String productSizeId);
+
 }

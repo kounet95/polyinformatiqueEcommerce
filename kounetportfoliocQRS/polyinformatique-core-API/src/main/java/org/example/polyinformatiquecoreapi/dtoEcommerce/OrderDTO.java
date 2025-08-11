@@ -7,13 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 public class OrderDTO {
   private String id;
 
@@ -42,4 +41,7 @@ public class OrderDTO {
   @NotBlank(message = "Shipping ID cannot be blank")
   @Size(min = 2, max = 255, message = "Shipping ID must be between 2 and 255 characters")
   private String shippingId;
+
+  // Liste des lignes de commande
+  private List<OrderLineDTO> orderLines;
 }

@@ -5,7 +5,7 @@ import { OrderDTO, OrderLineDTO, InvoiceDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
 
-//Nouveau type pour le résumé côté Front
+// Nouveau type pour résumé côté Front
 export interface OrderSummary {
   orderId: string;
   customerId: string;
@@ -22,15 +22,14 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
- /** Command: Création d'une commande */
-createOrder(order: OrderDTO, custom: boolean): Observable<string> {
-  const payload = {
-    orderDTO: order,
-    custom: custom
-  };
-  return this.http.post<string>(`${this.commandBase}/create`, payload);
-}
-
+  /** Command: Création d'une commande */
+  createOrder(order: OrderDTO, custom: boolean): Observable<string> {
+    const payload = {
+      orderDTO: order,
+      custom: custom
+    };
+    return this.http.post<string>(`${this.commandBase}/create`, payload);
+  }
 
   /** Command: Ajout d'un produit */
   addProductToOrder(orderId: string, orderLine: OrderLineDTO): Observable<string> {
@@ -47,9 +46,13 @@ createOrder(order: OrderDTO, custom: boolean): Observable<string> {
     return this.http.post<string>(`${this.commandBase}/${orderId}/generate-invoice`, invoice);
   }
 
-  /**  Command: Payer une facture */
-  payInvoice(invoiceId: string): Observable<string> {
-    return this.http.put<string>(`${this.commandBase}/invoice/${invoiceId}/pay`, {});
+  /** Command: Payer une facture */
+  payInvoice(orderId: string, invoice: InvoiceDTO, paymentIntentId: string, sessionId: string): Observable<string> {
+    // Note: Adapté au controller backend (ordreId et invoice dans body, paiement via params)
+    return this.http.put<string>(
+      `${this.commandBase}/${orderId}/pay-invoice?paymentIntentId=${encodeURIComponent(paymentIntentId)}&sessionId=${encodeURIComponent(sessionId)}`,
+      invoice
+    );
   }
 
   /** Command: Lancer la livraison */
@@ -67,27 +70,21 @@ createOrder(order: OrderDTO, custom: boolean): Observable<string> {
     return this.http.delete<string>(`${this.commandBase}/${orderId}?reason=${encodeURIComponent(reason)}`);
   }
 
-  /** Command: Générer le PaymentIntent Stripe 
-  createPaymentIntent(order: OrderDTO): Observable<string> {
-    return this.http.post<string>(`${this.commandBase}/payment-intent`, order);
-  }*/
+  /** Command: Créer un PaymentIntent Stripe */
+  createPaymentIntent(order: OrderDTO): Observable<{ client_secret: string }> {
+    console.log('Appel à createPaymentIntent avec', order);
+    return this.http.post<{ client_secret: string }>(
+      `${this.commandBase}/payment-intent`,
+      order
+    );
+  }
 
   /** Query: Liste des résumés de commandes */
   getOrderSummaries(): Observable<OrderSummary[]> {
     return this.http.get<OrderSummary[]>(`${this.queryBase}/orders`);
   }
 
-/** Crée un PaymentIntent pour Stripe Elements avec OrderDTO complet */
-createPaymentIntent(order: OrderDTO): Observable<{ client_secret: string }> {
-  console.log('Appel à createPaymentIntent avec', order);
-  return this.http.post<{ client_secret: string }>(
-    `${this.commandBase}/payment-intent`,
-    order
-  );
-}
-
-
-  /**  Query: Résumé d'une commande par ID */
+  /** Query: Résumé d'une commande par ID */
   getOrderSummaryById(orderId: string): Observable<OrderSummary> {
     return this.http.get<OrderSummary>(`${this.queryBase}/orders/${orderId}`);
   }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Stock;
-import org.example.ecpolyquery.query.GetAllStocksQuery;
-import org.example.ecpolyquery.query.GetNewArrivalsStockQuery;
-import org.example.ecpolyquery.query.GetOnSaleStockQuery;
-import org.example.ecpolyquery.query.GetStockByIdQuery;
+import org.example.ecpolyquery.query.*;
 import org.example.ecpolyquery.repos.StockRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +42,11 @@ public class StockQueryHandler {
   public List<Stock> on(GetOnSaleStockQuery query) {
     log.debug("Handling GetOnSaleStockQuery");
     return stockRepository.findOnSale();
+  }
+  @QueryHandler
+  public Stock handle(GetStockByProductSizeIdQuery query) {
+    return stockRepository.findByProductSize_Id(query.getId())
+      .orElseThrow(() -> new RuntimeException("Stock not found for productSizeId " + query.getId()));
   }
 
 }

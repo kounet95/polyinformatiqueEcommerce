@@ -2,28 +2,64 @@ import { Component } from '@angular/core';
 import { CartService } from '../services/cartservice';
 import { OrderService } from '../services/order.service';
 import { InvoiceService } from '../services/invoice.service';
-import { OrderDTO, OrderLineDTO, InvoiceDTO, OrderStatus,CartItem } from '../../mesModels/models';
+import { OrderDTO, OrderLineDTO, InvoiceDTO, OrderStatus, cartItemsAi } from '../../mesModels/models';
 import { forkJoin } from 'rxjs';
+
+export const cartFixti: cartItemsAi[] = [
+  {
+    productId: '4b624571-6347-4e94-a606-7fc91fd7f5b2',
+    productName: 'T-shirt coton bio',
+    productImg: 'https://picsum.photos/200/200?random=1',
+    qty: 2,
+    productSizeId: 'size-s',
+    productSize: 'S',
+    productSizePrice: 15,
+    pricePromo: 12,
+    stockIds: ['stock-101', 'stock-104', 'stock-105', 'stock-106']
+  },
+  {
+    productId: 'e283b90e-b530-4507-a221-f87f2579eab2',
+    productName: 'Pantalon slim',
+    productImg: 'https://picsum.photos/200/200?random=2',
+    qty: 1,
+    productSizeId: 'size-m',
+    productSize: 'M',
+    productSizePrice: 40,
+    pricePromo: 35,
+    stockIds: ['stock-101', 'stock-104', 'stock-105', 'stock-106']
+  },
+  {
+    productId: '5887f8cc-7319-4ea7-a000-e5b5e8e43ddc',
+    productName: 'Chaussures running',
+    productImg: 'https://picsum.photos/200/200?random=3',
+    qty: 1,
+    productSizeId: 'size-42',
+    productSize: '42',
+    productSizePrice: 60,
+    pricePromo: 50,
+    stockIds: ['stock-101', 'stock-104', 'stock-105', 'stock-106']
+  }
+];
 
 @Component({
   selector: 'app-order-create',
   templateUrl: './order-create.component.html',
-  standalone:false
+  standalone: false
 })
 export class OrderCreateComponent {
-  customerEmail: string = '';
-  supplierId: string = '';
-  paymentMethod: string = '';
-  shippingId: string = '';
-  cartItems: CartItem[] = [];
-  total: number = 0;
-  message: string = '';
-  loading: boolean = false;
+  customerEmail = '';
+  supplierId = '';
+  paymentMethod = '';
+  shippingId = '';
+  cartItems: cartItemsAi[] = [];
+  total = 0;
+  message = '';
+  loading = false;
 
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
-    private invoiceService: InvoiceService 
+    private invoiceService: InvoiceService
   ) {
     this.cartItems = this.cartService.getCart();
     this.total = this.cartItems.reduce(
@@ -39,9 +75,8 @@ export class OrderCreateComponent {
     }
     this.loading = true;
 
-    // 1. Création commande
+    // 1. Création de la commande (sans orderLines d’abord)
     const order: OrderDTO = {
-      id: '',
       customerEmail: this.customerEmail,
       supplierId: this.supplierId,
       createdAt: new Date().toISOString(),
@@ -49,29 +84,31 @@ export class OrderCreateComponent {
       paymentMethod: this.paymentMethod,
       total: this.total,
       barcode: '',
-      shippingId: this.shippingId
+      shippingId: this.shippingId,
+      orderLines: [] // on ajoutera après via l’API
     };
 
-    this.orderService.createOrder(order,false ).subscribe({
-      next: orderId => {
-        // 2. Ajout des produits (OrderLineDTO)
-        const orderLineRequests = this.cartItems.map(item => {
-          const orderLine: OrderLineDTO = {
-            id: '',
-            orderId: orderId,
-            stockId: item.productSizeId,
-            qty: item.qty
-          };
-          return this.orderService.addProductToOrder(orderId, orderLine);
-        });
+    this.orderService.createOrder(order, false).subscribe({
+      next: (orderId: string) => {
+        // 2. Ajout des lignes de commande
+        const orderLineRequests = this.cartItems.flatMap(item =>
+          (item.stockIds ?? []).map(stockId => {
+            const orderLine: OrderLineDTO = {
+              id: '',
+              orderId,
+              stockId: [stockId], // ✅ tableau
+              qty: item.qty
+            };
+            return this.orderService.addProductToOrder(orderId, orderLine);
+          })
+        );
 
-        // 3. Attendre tous les ajouts de produits
         forkJoin(orderLineRequests).subscribe({
           next: () => {
-            // 4. Générer la facture
+            // 3. Création de la facture (juste avec l’ID de la commande)
             const invoice: InvoiceDTO = {
               id: '',
-              orderId: orderId,
+              orderId: orderId as any, // ⚠️ à corriger si tu changes le modèle pour string
               customerEmail: this.customerEmail,
               amount: this.total,
               paymentMethod: this.paymentMethod,
@@ -79,6 +116,7 @@ export class OrderCreateComponent {
               paymentStatus: 'WAITING',
               supplierId: this.supplierId
             };
+
             this.invoiceService.createInvoice(invoice).subscribe({
               next: () => {
                 this.message = 'Commande et facture créées avec succès !';
@@ -98,7 +136,7 @@ export class OrderCreateComponent {
         });
       },
       error: () => {
-        this.message = 'Erreur lors de la commande';
+        this.message = 'Erreur lors de la commande.';
         this.loading = false;
       }
     });

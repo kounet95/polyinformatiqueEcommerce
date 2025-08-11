@@ -78,6 +78,10 @@ data class GetAllProductSizesByQuery(
   val id: String,
 )
 
+data class GetStockByProductSizeIdQuery(
+  val id: String,
+)
+
 public class GetAllShippingsQuery {
 }
 

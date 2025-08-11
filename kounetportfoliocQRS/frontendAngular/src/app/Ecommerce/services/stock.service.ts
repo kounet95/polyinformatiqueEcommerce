@@ -76,5 +76,12 @@ export class StockService {
       `${ecpolyCommand.backend}/stock/command/events/${stockId}`
     );
   }
-
+/**
+   * Récupère un stock par l'id du ProductSize (Query)
+   */
+  getStockByProductSizeId(productSizeId: string): Observable<StockDTO> {
+    return this.http.get<StockDTO>(
+      `${ecpolyQuery.backend}/api/stocks/by-product-size/${productSizeId}`
+    );
+  }
 }

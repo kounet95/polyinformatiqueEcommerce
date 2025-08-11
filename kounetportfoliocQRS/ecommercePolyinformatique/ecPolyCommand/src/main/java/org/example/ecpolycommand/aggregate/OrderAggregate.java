@@ -1,5 +1,7 @@
 package org.example.ecpolycommand.aggregate;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +11,12 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
+import org.example.ecpolycommand.service.imple.StripeServiceImpl;
 import org.example.polyinformatiquecoreapi.commandEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.*;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderStatus;
 import org.example.polyinformatiquecoreapi.eventEcommerce.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +48,8 @@ public class OrderAggregate {
   private boolean delivered;
 
   private List<OrderLineDTO> orderLines = new ArrayList<>();
-
+  @Autowired
+  private StripeServiceImpl stripeService;
   public OrderAggregate() {
     // Constructeur vide requis par Axon
   }
@@ -58,7 +63,7 @@ public class OrderAggregate {
     if (cmd.isCustom() && (cmd.getOrderDTO().getSupplierId() == null || cmd.getOrderDTO().getSupplierId().isBlank())) {
       throw new IllegalArgumentException("Supplier ID must be provided for custom orders");
     }
-
+    this.orderLines = cmd.getOrderDTO().getOrderLines();
     apply(new OrderCreatedEvent(cmd.getId(), cmd.getOrderDTO()));
   }
 
@@ -71,10 +76,11 @@ public class OrderAggregate {
   @CommandHandler
   public void handle(ConfirmOrderCommand cmd) {
     if (this.confirmed) throw new IllegalStateException("Order is already confirmed.");
-    if (this.orderLines.isEmpty()) throw new IllegalStateException("Cannot confirm order without products.");
-
+    if (this.orderLines == null || this.orderLines.isEmpty()) {
+      throw new IllegalStateException("Cannot confirm order without products.");
+    }
     log.info("[AGGREGATE] ConfirmOrderCommand received: {}", cmd);
-    apply(new OrderConfirmedEvent(cmd.getId()));
+    apply(new OrderConfirmedEvent(cmd.getId(),this.toOrderDTO()));
   }
 
   @CommandHandler
@@ -149,7 +155,9 @@ public class OrderAggregate {
     this.paid = false;
     this.shipped = false;
     this.delivered = false;
-    this.orderLines = new ArrayList<>();
+
+    // IMPORTANT : restaurer la liste des produits
+    this.orderLines = new ArrayList<>(dto.getOrderLines());
 
     log.info("[AGGREGATE] Order created: {}", dto);
   }
@@ -213,4 +221,26 @@ public class OrderAggregate {
     this.orderStatus = OrderStatus.Cancelled;
     log.info("[AGGREGATE] Order cancelled: {}", event.getReason());
   }
+  @CommandHandler
+  public PaymentIntentCreatedEvent handle(CreatePaymentIntentCommand cmd) throws StripeException {
+    PaymentIntent paymentIntent = stripeService.createPaymentIntent(cmd.getAmountInCents(), cmd.getCurrency());
+    return new PaymentIntentCreatedEvent(cmd.getOrderId(), paymentIntent.getClientSecret());
+  }
+
+  private OrderDTO toOrderDTO() {
+    OrderDTO dto = new OrderDTO();
+    dto.setId(this.orderId);
+    dto.setCustomerEmail(this.customerEmail);
+    dto.setSupplierId(this.supplierId);
+    dto.setCurrency(this.currency);
+    dto.setCreatedAt(this.createdAt);
+    dto.setPaymentMethod(this.paymentMethod);
+    dto.setTotal(this.total);
+    dto.setShippingId(""); // ou la valeur adéquate si tu la gères
+
+    dto.setOrderLines(this.orderLines); // ici tu passes ta liste d’OrderLineDTO
+
+    return dto;
+  }
+
 }

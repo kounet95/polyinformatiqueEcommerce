@@ -13,6 +13,8 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductSizeCreatedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.ProductSizeDeletedEvent;
 
+import java.util.List;
+
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 /**
@@ -27,6 +29,7 @@ public class ProductSizeAggregate {
   @AggregateIdentifier
   private String id;
   private String prodId;
+  private List<String> stockId;
   private String frontUrl;
   private String backUrl;
   private String leftUrl;
@@ -49,6 +52,7 @@ public class ProductSizeAggregate {
     ProductSizeDTO dto = event.getProductSizeDTO();
     this.id = event.getId();
     this.prodId = dto.getProdId();
+     this.stockId=dto.getStockId();
     this.frontUrl = dto.getFrontUrl();
     this.backUrl = dto.getBackUrl();
     this.leftUrl = dto.getLeftUrl();

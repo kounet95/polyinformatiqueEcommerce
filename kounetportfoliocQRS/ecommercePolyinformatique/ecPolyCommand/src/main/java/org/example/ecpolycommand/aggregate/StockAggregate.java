@@ -9,13 +9,13 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.example.polyinformatiquecoreapi.commandEcommerce.AddStockCommand;
+import org.example.polyinformatiquecoreapi.commandEcommerce.DecreaseStockCommand;
 import org.example.polyinformatiquecoreapi.commandEcommerce.LinkAddressCommand;
 import org.example.polyinformatiquecoreapi.eventEcommerce.AddressLinkedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.StockDecreasedEvent;
 import org.example.polyinformatiquecoreapi.eventEcommerce.StockIncreasedEvent;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
-
 @Aggregate
 @Slf4j
 @Getter
@@ -30,6 +30,7 @@ public class StockAggregate {
   private Double promoPrice;
   private double quantity;
   private String supplyId;
+
   public StockAggregate() {}
 
   @CommandHandler
@@ -46,13 +47,18 @@ public class StockAggregate {
     this.promoPrice = event.getStockDTO().getPromoPrice();
     this.quantity += event.getStockDTO().getQuantity();
     this.supplyId = event.getStockDTO().getSupplyId();
+  }
 
+  @CommandHandler
+  public void handle(DecreaseStockCommand cmd) {
+    if (this.quantity < cmd.getQuantity()) {
+      throw new IllegalStateException("Not enough stock for productSizeId=" + this.productSizeId);
+    }
+    apply(new StockDecreasedEvent(cmd.getStockId(), cmd.getQuantity()));
   }
 
   @EventSourcingHandler
   public void on(StockDecreasedEvent event) {
-    this.quantity -= event.getStockDTO().getQuantity();
+    this.quantity -= event.getQuantity();
   }
-
-
 }

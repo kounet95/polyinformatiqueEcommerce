@@ -48,13 +48,13 @@
         </div>
 
         <!-- Champs custom si CUSTOM -->
-        <div *ngIf="orderMode === 'CUSTOM'" class="custom-order-info">
+        <div *ngIf="orderMode === 'CUSTOMER'" class="custom-order-info">
           <input class="form-input" placeholder="Supplier ID" [(ngModel)]="customSupplierId" name="supplierId" required />
           <textarea class="form-input" placeholder="Describe your custom order" [(ngModel)]="customDescription" name="description"></textarea>
         </div>
 
         <button type="button" class="btn main-btn" (click)="nextStep()"
-          [disabled]="!customer.firstname || !customer.lastname || !customer.email || (orderMode === 'CUSTOM' && !customSupplierId)">
+          [disabled]="!customer.firstname || !customer.lastname || !customer.email || (orderMode === 'CUSTOMER' && !customSupplierId)">
           Continue to Shipping
         </button>
       </form>
@@ -159,7 +159,7 @@
           <div *ngIf="payment.method==='card'">Card (Stripe)</div>
           <div>Currency: {{ currency | uppercase }}</div>
         </div>
-        <div *ngIf="orderMode === 'CUSTOM'" class="review-section">
+        <div *ngIf="orderMode === 'CUSTOMER'" class="review-section">
           <h4>Custom Order Details</h4>
           <div>Supplier ID: {{ customSupplierId }}</div>
           <div>Description: {{ customDescription }}</div>
@@ -176,7 +176,7 @@
   </div>
 
   <!-- ORDER SUMMARY AREA -->
-  <aside class="order-summary" *ngIf="orderMode !== 'CUSTOM'">
+  <aside class="order-summary" *ngIf="orderMode !== 'CUSTOMER'">
     <h3>Order Summary</h3>
     <div *ngFor="let item of cartItems" class="summary-item">
       <img [src]="item.productImg" width="60" height="60" />

@@ -5,10 +5,7 @@ import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.entity.Stock;
-import org.example.ecpolyquery.query.GetAllStocksQuery;
-import org.example.ecpolyquery.query.GetNewArrivalsStockQuery;
-import org.example.ecpolyquery.query.GetOnSaleStockQuery;
-import org.example.ecpolyquery.query.GetStockByIdQuery;
+import org.example.ecpolyquery.query.*;
 import org.example.ecpolyquery.repos.StockRepository;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.ProductSizeDTO;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,6 +43,13 @@ public class StockController {
       new GetNewArrivalsStockQuery(since),
       ResponseTypes.multipleInstancesOf(Stock.class)
     ).thenApply(stocks -> stocks.stream().map(this::toProductSizeDTO).collect(Collectors.toList()));
+  }
+  @GetMapping("/by-product-size/{productSizeId}")
+  public CompletableFuture<Stock> getStockByProductSizeId(@PathVariable String productSizeId) {
+    return queryGateway.query(
+      new GetStockByProductSizeIdQuery(productSizeId),
+      ResponseTypes.instanceOf(Stock.class)
+    );
   }
 
   @GetMapping("/on-sale")

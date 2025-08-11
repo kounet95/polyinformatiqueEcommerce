@@ -19,6 +19,7 @@ public class AxonConfig {
                 "org.example.polyinformatiquecoreapi.dtoEcommerce.**",
                 "org.example.ecpolyquery.query.**",
                 "org.example.ecpolyquery.entity.**",
+                "org.example.ecpolycommand.saga.**",
                 "org.example.ecpolyquery.dto.**"
         });
         return xStream;

@@ -1,17 +1,20 @@
 package org.example.polyinformatiquecoreapi.eventEcommerce;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
 import org.example.polyinformatiquecoreapi.event.BaseEvent;
-
+@Getter
 public class StockDecreasedEvent extends BaseEvent<String> {
-    private final StockDTO stockDTO;
+    private double quantity;
 
-    public StockDecreasedEvent(String id, StockDTO stockDTO) {
+    public StockDecreasedEvent(String id, double quantity) {
         super(id);
-        this.stockDTO = stockDTO;
+        this.quantity = quantity;
     }
 
-    public StockDTO getStockDTO() {
-        return stockDTO;
+    public double getStockDTO() {
+        return quantity;
     }
 }

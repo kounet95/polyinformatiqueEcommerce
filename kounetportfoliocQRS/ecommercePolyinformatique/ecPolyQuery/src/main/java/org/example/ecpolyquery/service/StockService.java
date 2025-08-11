@@ -27,13 +27,14 @@ public class StockService {
   private final ProductSizeRepository productSizeRepository;
   private final AddressRepository addressRepository;
   private final SupplyRepository supplyRepository;
+
   @EventHandler
   public void on(StockIncreasedEvent event) {
     log.debug("Handling StockIncreasedEvent: {}", event.getId());
     StockDTO dto = event.getStockDTO();
 
     try {
-      // Get or create placeholder Supply
+      // Récupération ou création du Supply placeholder
       Supply supply = supplyRepository.findById(dto.getSupplyId())
         .orElseGet(() -> {
           log.warn("Supply not found yet: {}, creating placeholder", dto.getSupplyId());
@@ -44,53 +45,46 @@ public class StockService {
           return supplyRepository.save(placeholderSupply);
         });
 
-      // Get ProductSize safely
       ProductSize productSize = productSizeRepository.findById(dto.getProductSizeId())
         .orElseThrow(() -> new IllegalStateException("ProductSize not found, will retry later"));
 
-      // Get Supplier safely
       Supplier supplier = supplierRepository.findById(dto.getSupplierId())
         .orElseThrow(() -> new IllegalStateException("Supplier not found, will retry later"));
 
-      // All required entities exist, proceed with stock creation
       Stock stock = Stock.builder()
         .id(event.getId())
         .purchasePrice(dto.getPurchasePrice())
-        .supply(supply) // <- always not null now
         .promoPrice(dto.getPromoPrice())
         .quantity(dto.getQuantity())
         .createdDate(LocalDateTime.now())
         .productSize(productSize)
+        .supply(supply)
         .supplier(supplier)
         .build();
 
       stockRepository.save(stock);
-      log.info(" Stock increased and saved with ID: {}", event.getId());
+      log.info("Stock increased and saved with ID: {}", event.getId());
 
     } catch (Exception e) {
       log.error("Error processing StockIncreasedEvent for stock ID {}: {}", event.getId(), e.getMessage(), e);
-      // Let the event be retried by not acknowledging it
-      throw e;
+      throw e;  // pour permettre la reprise
     }
   }
-
 
   @EventHandler
   public void on(StockDecreasedEvent event) {
     log.debug("Handling StockDecreasedEvent: {}", event.getId());
-    StockDTO dto = event.getStockDTO();
 
     try {
       Optional<Stock> stockOpt = stockRepository.findById(event.getId());
-      if (!stockOpt.isPresent()) {
+      if (stockOpt.isEmpty()) {
         log.warn("Stock with ID {} not found for quantity update! Will retry later.", event.getId());
-        return; // Exit and let the event be retried later
+        return;
       }
 
       Stock stock = stockOpt.get();
-      stock.setQuantity(stock.getQuantity() - dto.getQuantity()); // Subtract the quantity instead of setting it directly
+      stock.setQuantity(stock.getQuantity() - event.getQuantity());
 
-      // Ensure quantity doesn't go below zero
       if (stock.getQuantity() < 0) {
         log.warn("Stock quantity would go below zero for ID {}. Setting to 0.", event.getId());
         stock.setQuantity(0);
@@ -98,9 +92,9 @@ public class StockService {
 
       stockRepository.save(stock);
       log.info("Stock decreased and updated for ID: {}", event.getId());
+
     } catch (Exception e) {
       log.error("Error processing StockDecreasedEvent for stock ID {}: {}", event.getId(), e.getMessage(), e);
-      // Let the event be retried by not acknowledging it
       throw e;
     }
   }

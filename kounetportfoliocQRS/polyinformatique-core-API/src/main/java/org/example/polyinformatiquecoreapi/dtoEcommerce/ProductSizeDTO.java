@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.*;
 @Builder
 public class ProductSizeDTO {
   private String id;
-
+  private List<String> stockId;
   private SizeProd sizeProd;
   private String prodId;
   @NotNull(message = "Le prix est obligatoire")
