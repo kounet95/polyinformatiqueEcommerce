@@ -30,7 +30,7 @@ public class OrderProcessingSaga {
 
     log.info("🚀 [Saga] Start for Order {}", orderId);
 
-    // 1️⃣ Confirmer la commande
+    //Confirmer la commande
     commandGateway.send(new ConfirmOrderCommand(orderId));
 
 

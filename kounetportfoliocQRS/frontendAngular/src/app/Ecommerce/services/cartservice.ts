@@ -104,4 +104,10 @@ export class CartService implements OnInit {
     this.items = [];
     this.saveCart();
   }
+
+  // Pour récupérer tous les stockIds du panier :
+  getAllStockIds() {
+    return this.getCart()
+      .flatMap(item => item.stockIds); // ou .map(...).flat() selon ta version de JS
+  }
 }

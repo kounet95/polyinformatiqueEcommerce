@@ -105,6 +105,9 @@ export class CheckoutComponent implements OnInit {
 
   async ngOnInit() {
     this.cartItems = this.cartService.getCart();
+    for (const item of this.cartItems) {
+      console.log('ProductSize:', item.productSizeId, 'StockIds:', item.stockIds);
+    }
     this.calculateTotals();
     this.loadCustomer();
     this.stripe = await loadStripe('pk_test_51RjaG74EMj4mRh4Ig9G6XBkhmBu7e3fsqGmKkrZZ3WVQA3t9AvkP4zZuy4FQJBS6yfxzH7pi03K9N4beuis76nrn004vakKS5x');
@@ -230,7 +233,7 @@ console.log('Contenu des cartItems avec stockId:', this.cartItems.map(item => ({
 })));
   // Prépare la commande
   const order: OrderDTO = {
-    customerEmail: this.customer.email,
+    customerEmail: this.customer.email, 
     supplierId: this.orderMode === 'CUSTOMER' ? this.customSupplierId.trim() : '',
     createdAt: new Date().toISOString(),
     orderStatus: OrderStatus.Inprogress,
@@ -242,7 +245,7 @@ console.log('Contenu des cartItems avec stockId:', this.cartItems.map(item => ({
     description: this.orderMode === 'CUSTOMER' ? this.customDescription : undefined,
     orderLines: this.cartItems.map(item => ({
       id: '',
-      orderId: '', // Laisse vide, backend va gérer ça
+      orderId: '', 
       stockId: item.stockIds ?? [],
       productId: item.productId,
       qty: item.qty,
