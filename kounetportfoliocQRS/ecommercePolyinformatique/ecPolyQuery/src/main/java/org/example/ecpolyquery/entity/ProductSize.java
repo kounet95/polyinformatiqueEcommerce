@@ -30,6 +30,4 @@ public class ProductSize {
   private Product productId;
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<LikeProduct> likes;
-  @OneToMany(mappedBy = "productSize", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Stock> stocks;
 }

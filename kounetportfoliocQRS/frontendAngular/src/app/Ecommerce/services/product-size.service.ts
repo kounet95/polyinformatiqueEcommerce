@@ -119,4 +119,12 @@ getProductSizeById(id: string): Observable<ProductSizeDTO> {
   getSaleProducts(): Observable<ProductSizeDTO[]> {
     return this.http.get<ProductSizeDTO[]>(`${ecpolyQuery.backend}/api/productsizes/sale`);
   }
+
+  /** Récupérer les stockIds d’un ProductSize */
+getStockIdsByProductSize(productSizeId: string): Observable<string[]> {
+  return this.http.get<string[]>(
+    `${ecpolyQuery.backend}/api/productsizes/${productSizeId}/stocks`
+  );
+}
+
 }

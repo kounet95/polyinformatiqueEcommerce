@@ -330,16 +330,19 @@ export interface SupplierDTO {
 }
 
 export interface CartItem {
-  productId: string;      // ID du produit
-  productName: string;    // Nom du produit
-  productImg: string;     // URL de l’image
+  productId: string;
+  productName: string;
+  productImg: string;
   qty: number;
-  productSizeId: string;  // ID de la taille choisie
-  productSize: string;    // Valeur de la taille
+  productSizeId: string;
+  productSize: string;
   productSizePrice: number;
   pricePromo: number;
-  stockIds: string[];   
+  stockIds: string[];
+  availableQuantities?: { stockId: string; quantity: number }[];
+  availableQuantity?: number;
 }
+
 
 
 interface CreateSupplierPayload {

@@ -93,8 +93,12 @@ public class GetAllSocialGroupsQuery (
 
 
 
-public class GetAllStocksQuery {
-}
+class GetAllStocksQuery (
+     var page: Int = 0,
+     var size: Int = 10
+)
+
+
 
 public class GetAllSubcategoriesQuery {
 }
@@ -121,7 +125,9 @@ data class OrderSummary(
   var customerId: String = "",
   var status: String = ""
 )
-
+class GetStockIdsByProductSizeIdQuery(
+  var productSizeId: String? = "",
+)
 class GetCustomerByIdQuery(val id: String)
 
 class GetInvoiceByIdQuery(val id: String)

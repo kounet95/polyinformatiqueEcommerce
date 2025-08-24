@@ -205,6 +205,9 @@ services:
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
       - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 10s
@@ -275,9 +278,11 @@ services:
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     ports:
       - "8089:8080"
-    command: ["listen", "--forward-to", "host.docker.internal:8080/webhook"]
+    command: listen --forward-to host.docker.internal:8083/stripe/webhook
     depends_on:
       - vault
+      - ecPolyCommand
+    restart: unless-stopped
 
 
 

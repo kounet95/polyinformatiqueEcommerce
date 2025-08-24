@@ -7,9 +7,9 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
 import org.example.polyinformatiquecoreapi.event.BaseEvent;
 @Getter
 public class StockDecreasedEvent extends BaseEvent<String> {
-    private double quantity;
+    private int quantity;
 
-    public StockDecreasedEvent(String id, double quantity) {
+    public StockDecreasedEvent(String id, int quantity) {
         super(id);
         this.quantity = quantity;
     }

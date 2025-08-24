@@ -6,6 +6,10 @@ import org.axonframework.queryhandling.QueryHandler;
 import org.example.ecpolyquery.entity.Stock;
 import org.example.ecpolyquery.query.*;
 import org.example.ecpolyquery.repos.StockRepository;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.StockDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +23,25 @@ public class StockQueryHandler {
   private final StockRepository stockRepository;
 
   @QueryHandler
-  public List<Stock> on(GetAllStocksQuery query) {
-    log.debug("Handling GetAllStocksQuery");
-    return stockRepository.findAll();
+  public Page<StockDTO> on(GetAllStocksQuery query) {
+    Pageable pageable = PageRequest.of(query.getPage(), query.getSize());
+    Page<Stock> stocks = stockRepository.findAll(pageable);
+
+    return stocks.map(this::toDto); // map chaque entité en DTO
   }
+
+  private StockDTO toDto(Stock entity) {
+    if (entity == null) return null;
+    StockDTO dto = new StockDTO();
+    dto.setId(entity.getId());
+    dto.setQuantity(entity.getQuantity());
+    dto.setProductSizeId(entity.getProductSize() != null ? entity.getProductSize().getId() : null);
+    dto.setSupplierId(entity.getSupplier() != null ? entity.getSupplier().getId() : null);
+    dto.setPromoPrice(entity.getPromoPrice());
+    dto.setSupplyId(entity.getSupply() != null ? entity.getSupply().getId() : null);
+    return dto;
+  }
+
 
   @QueryHandler
   public Stock on(GetStockByIdQuery query) {

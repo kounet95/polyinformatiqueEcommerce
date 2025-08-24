@@ -109,7 +109,7 @@ export class CheckoutComponent implements OnInit {
     this.loadCustomer();
     this.stripe = await loadStripe('pk_test_51RjaG74EMj4mRh4Ig9G6XBkhmBu7e3fsqGmKkrZZ3WVQA3t9AvkP4zZuy4FQJBS6yfxzH7pi03K9N4beuis76nrn004vakKS5x');
     this.loadAddresses();
-    // NE PAS monter la carte ici, on le fait à l'étape 3
+    
   }
 
   setupStripeCard() {

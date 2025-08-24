@@ -39,14 +39,16 @@ public class ProductSizeService {
         .orElseThrow(() -> new RuntimeException("Product not found with id: " + productSizeDTO.getProdId()));
     }
 
-    List<Stock> stocks = Collections.emptyList();
-    if (productSizeDTO.getStockId() != null && !productSizeDTO.getStockId().isEmpty()) {
-      stocks = stockRepository.findAllById(productSizeDTO.getStockId());
+
+    List<Stock> stockIds = null;
+
+    if (productSizeDTO.getStockIds() != null && !productSizeDTO.getStockIds().isEmpty()) {
+      stockIds = stockRepository.findAllById(productSizeDTO.getStockIds());
     }
+
     ProductSize productSize = ProductSize.builder()
       .id(event.getId())
       .size(productSizeDTO.getSizeProd())
-      .stocks(stocks)
       .productId(product)
       .price(productSizeDTO.getPrice())
       .promoPrice(productSizeDTO.getPricePromo())
@@ -54,7 +56,9 @@ public class ProductSizeService {
       .backImage(productSizeDTO.getBackUrl())
       .leftImage(productSizeDTO.getLeftUrl())
       .rightmage(productSizeDTO.getRightUrl())
+
       .build();
+
     productSizeRepository.save(productSize);
     log.info("Product size saved with ID: {}", productSize.getId());
   }

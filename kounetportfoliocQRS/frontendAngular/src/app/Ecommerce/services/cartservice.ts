@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ProductSizeDTO, CartItem, StockDTO } from '../../mesModels/models';
 import { StockService } from './stock.service';
-import { Observable } from 'rxjs';
 
 const CART_KEY = 'cart_items';
 
@@ -11,43 +11,30 @@ const CART_KEY = 'cart_items';
 export class CartService implements OnInit {
   private items: CartItem[] = [];
 
+
+  // 🔔 Observables
+  private cartCountSubject = new BehaviorSubject<number>(0);
+  cartCount$ = this.cartCountSubject.asObservable();
+
+  private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
+  cartItems$ = this.cartItemsSubject.asObservable();
+
   constructor(private stockService: StockService) {
     this.loadCart();
+    this.updateCartCount();
+    this.updateCartItems(); // init liste
   }
 
-  ngOnInit(): void {
-    // Ne pas throw d'erreur ici
-    this.loadStockedCart();
+  ngOnInit(): void {}
+  /** pour mettre à jour le compteur */
+  private updateCartCount(): void {
+    const count = this.items.reduce((sum, item) => sum + item.qty, 0);
+    this.cartCountSubject.next(count);
   }
 
-  // Charge le panier depuis localStorage et récupère les stocks associés
-  loadStockedCart(): void {
-    this.loadCart();
-
-    this.items.forEach(item => {
-      if (item.stockIds && item.stockIds.length > 0) {
-        // Initialise un tableau pour stocker les quantités disponibles
-        (item as any).availableQuantities = [];
-
-        item.stockIds.forEach(stockId => {
-          // Récupère le stock par stockId
-          this.stockService.getStockById(stockId).subscribe(stock => {
-            console.log(`Stock réel pour ${stockId}:`, stock);
-
-            // Stocke la quantité disponible par stockId
-            (item as any).availableQuantities.push({
-              stockId: stock.id,
-              quantity: stock.quantity
-            });
-
-            // Optionnel : calculer la quantité disponible minimale parmi les stocks liés
-            (item as any).availableQuantity = Math.min(
-              ...( (item as any).availableQuantities.map((s: any) => s.quantity) )
-            );
-          });
-        });
-      }
-    });
+  /** pour mettre à jour les articles */
+  private updateCartItems(): void {
+    this.cartItemsSubject.next(this.items);
   }
 
   private loadCart(): void {
@@ -57,10 +44,11 @@ export class CartService implements OnInit {
 
   private saveCart(): void {
     localStorage.setItem(CART_KEY, JSON.stringify(this.items));
+    this.updateCartCount(); 
   }
 
   getCart(): CartItem[] {
-    this.loadCart(); // Toujours recharger pour avoir la dernière version
+    this.loadCart();
     return this.items;
   }
 
@@ -70,38 +58,41 @@ export class CartService implements OnInit {
   }
 
   addToCart(productSize: ProductSizeDTO, qty: number = 1): void {
-  this.loadCart();
+    this.loadCart();
 
-  if (!productSize.product) {
-    console.error('ProductDTO manquant sur ProductSizeDTO !');
-    return;
+    const existing = this.items.find(
+      item => item.productSizeId === productSize.id && item.productId === productSize.product?.id
+    );
+
+    if (existing) {
+      existing.qty += qty;
+      this.saveCart();
+    } else {
+      this.stockService.getStocksByProductSizeId(productSize.id).subscribe((stocks: StockDTO[]) => {
+        const stockIds = stocks.map(s => s.id);
+
+        const newItem: CartItem = {
+          productId: productSize.product?.id || '',
+          productName: productSize.product?.name || '',
+          productImg: productSize.frontUrl || '',
+          qty,
+          productSizeId: productSize.id,
+          productSize: productSize.sizeProd,
+          productSizePrice: productSize.price,
+          pricePromo: productSize.pricePromo,
+          stockIds,
+          availableQuantities: stocks.map(s => ({
+            stockId: s.id,
+            quantity: s.quantity
+          })),
+          availableQuantity: Math.min(...stocks.map(s => s.quantity))
+        };
+
+        this.items.push(newItem);
+        this.saveCart();
+      });
+    }
   }
-
-  const existing = this.items.find(
-    item =>
-      item.productSizeId === productSize.id &&
-      item.productId === productSize.product!.id
-  );
-
-  if (existing) {
-    existing.qty += qty;
-  } else {
-    this.items.push({
-      productId: productSize.product.id,
-      productName: productSize.product.name,
-      productImg: productSize.frontUrl || '',
-      qty,
-      productSizeId: productSize.id,
-      productSize: productSize.sizeProd,
-      productSizePrice: productSize.price,
-      pricePromo: productSize.pricePromo,
-      stockIds: productSize.stockIds && productSize.stockIds.length > 0 ? productSize.stockIds : [],  
-    });
-  }
-
-  this.saveCart();
-}
-
 
   removeFromCart(productSizeId: string): void {
     this.loadCart();

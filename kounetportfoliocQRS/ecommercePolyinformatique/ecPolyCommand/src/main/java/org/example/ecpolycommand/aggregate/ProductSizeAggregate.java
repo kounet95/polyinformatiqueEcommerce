@@ -52,7 +52,7 @@ public class ProductSizeAggregate {
     ProductSizeDTO dto = event.getProductSizeDTO();
     this.id = event.getId();
     this.prodId = dto.getProdId();
-     this.stockId=dto.getStockId();
+     this.stockId=dto.getStockIds();
     this.frontUrl = dto.getFrontUrl();
     this.backUrl = dto.getBackUrl();
     this.leftUrl = dto.getLeftUrl();

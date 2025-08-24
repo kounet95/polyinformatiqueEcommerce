@@ -86,6 +86,7 @@ public class ProductSizeController {
   }
 
 
+
   @GetMapping("/all")
   public CompletableFuture<List<ProductSizeDTO>> getAllProductsise(
     @RequestParam(defaultValue = "0") int page,
@@ -130,7 +131,13 @@ public class ProductSizeController {
   }
 
 
-
+  @GetMapping("/{id}/stockIds")
+  public CompletableFuture<List<String>> getStockIdsByProductSize(@PathVariable String id) {
+    return queryGateway.query(
+      new GetStockIdsByProductSizeIdQuery(id),
+      ResponseTypes.multipleInstancesOf(String.class)
+    );
+  }
 
 
 }

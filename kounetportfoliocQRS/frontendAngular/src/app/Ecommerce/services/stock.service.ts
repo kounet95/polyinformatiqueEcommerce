@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StockDTO, ProductSizeDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
+import { PageResponse } from '../../mesModels/page-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,14 @@ export class StockService {
   }
 
   /**
-   * Récupère tous les stocks (Query)
+   * Récupère tous les stocks (Query) avec pagination
+   * @param page numéro de page (0-based)
+   * @param size taille de la page
    */
-  getAllStocks(): Observable<StockDTO[]> {
-    return this.http.get<StockDTO[]>(
-      `${ecpolyQuery.backend}/api/stocks`
+  getAllStocks(page: number = 0, size: number = 10): Observable<PageResponse< StockDTO>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<PageResponse<StockDTO>>(
+      `${ecpolyQuery.backend}/api/stocks`, { params }
     );
   }
 
@@ -77,11 +81,11 @@ export class StockService {
     );
   }
 /**
-   * Récupère un stock par l'id du ProductSize (Query)
+   * Récupérer les stocks liés à un ProductSize 
    */
-  getStockByProductSizeId(productSizeId: string): Observable<StockDTO> {
-    return this.http.get<StockDTO>(
-      `${ecpolyQuery.backend}/api/stocks/by-product-size/${productSizeId}`
-    );
+
+  getStocksByProductSizeId(productSizeId: string): Observable<StockDTO[]> {
+    return this.http.get<StockDTO[]>(`${ecpolyQuery.backend}/api/stocks/productsize/${productSizeId}`);
   }
+
 }

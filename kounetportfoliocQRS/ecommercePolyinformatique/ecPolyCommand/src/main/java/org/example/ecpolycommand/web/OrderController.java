@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
+import java.util.List;
+import java.util.ArrayList;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequestMapping("/order/command")
@@ -31,14 +35,21 @@ public class OrderController {
   private final EventStore eventStore;
   private final StripeServiceImpl stripeService;
   private final StripeConfigProperties config;
+  private final RestTemplate restTemplate;
+
+  @Value("${ecpolyquery.service.url:http://localhost:8082}")
+  private String queryServiceUrl;
+
   public OrderController(CommandGateway commandGateway,
                          EventStore eventStore,
                          StripeServiceImpl stripeService,
-                         StripeConfigProperties config) {
+                         StripeConfigProperties config,
+                         RestTemplate restTemplate) {
     this.commandGateway = commandGateway;
     this.eventStore = eventStore;
     this.stripeService = stripeService;
     this.config = config;
+    this.restTemplate = restTemplate;
   }
 
   /**
@@ -49,14 +60,49 @@ public class OrderController {
     OrderDTO orderDTO = request.getOrderDTO();
     orderDTO.setId(UUID.randomUUID().toString());
 
-
+    // Validation des stockIds
     for (OrderLineDTO line : orderDTO.getOrderLines()) {
       if (line.getStockId() == null || line.getStockId().isEmpty()) {
         throw new IllegalArgumentException("Chaque ligne de commande doit avoir un stockId non nul");
       }
     }
 
+    // Validation de la disponibilité des stocks
+    List<StockValidationRequest> stockValidationRequests = new ArrayList<>();
+    for (OrderLineDTO line : orderDTO.getOrderLines()) {
+      stockValidationRequests.add(new StockValidationRequest(line.getStockId(), line.getQty()));
+    }
+
+    try {
+      String validationUrl = queryServiceUrl + "/api/stocks/validate-availability";
+      Boolean stockAvailable = restTemplate.postForObject(validationUrl, stockValidationRequests, Boolean.class);
+
+      if (stockAvailable == null || !stockAvailable) {
+        throw new IllegalArgumentException("Stock insuffisant pour une ou plusieurs lignes de commande");
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Erreur lors de la validation du stock: " + e.getMessage());
+    }
+
     return commandGateway.send(new CreateOrderCommand(orderDTO.getId(), orderDTO, request.isCustom()));
+  }
+
+  // Classe interne pour la validation des stocks
+  public static class StockValidationRequest {
+    private String stockId;
+    private int requestedQuantity;
+
+    public StockValidationRequest() {}
+
+    public StockValidationRequest(String stockId, int requestedQuantity) {
+      this.stockId = stockId;
+      this.requestedQuantity = requestedQuantity;
+    }
+
+    public String getStockId() { return stockId; }
+    public void setStockId(String stockId) { this.stockId = stockId; }
+    public int getRequestedQuantity() { return requestedQuantity; }
+    public void setRequestedQuantity(int requestedQuantity) { this.requestedQuantity = requestedQuantity; }
   }
 
   /**

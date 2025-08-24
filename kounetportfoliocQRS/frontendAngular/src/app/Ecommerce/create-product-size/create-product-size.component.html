@@ -87,6 +87,18 @@
                 <input type="file" id="right" class="form-control" (change)="onFileSelected($event, 'right')">
               </div>
             </div>
+           <!-- Stocks -->
+<div class="col-md-12 mb-3">
+  <label for="stockids" class="form-label">Stocks disponibles</label>
+  <select class="form-select" formControlName="stockids" multiple>
+    <option *ngFor="let stock of stockIds" [value]="stock.id">
+      {{ stock.addressId }} - Qté: {{ stock.quantity }}
+    </option>
+  </select>
+  <div class="text-danger small" *ngIf="productSizeForm.get('stockids')?.invalid && productSizeForm.get('stockids')?.touched">
+    Au moins un stock doit être sélectionné.
+  </div>
+</div>
 
             <!-- Bouton -->
             <div class="d-grid mb-3">

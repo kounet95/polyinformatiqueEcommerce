@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductDTO, ProductSizeDTO, SizeProd } from '../../mesModels/models';
+import { ProductDTO, ProductSizeDTO, SizeProd, StockDTO } from '../../mesModels/models';
 import { ProductSizeService } from '../services/product-size.service';
 import { ProductService } from '../services/produit.service';
+import { StockService } from '../services/stock.service';
 
 @Component({
   selector: 'app-create-product-size',
@@ -13,6 +14,7 @@ import { ProductService } from '../services/produit.service';
 export class CreateProductSizeComponent implements OnInit {
   productSizeForm: FormGroup;
   products: ProductDTO[] = [];
+  stockIds: StockDTO[] = [];
   sizeEnumValues = Object.values(SizeProd);
   loading = false;
   successMessage?: string;
@@ -29,18 +31,21 @@ export class CreateProductSizeComponent implements OnInit {
   constructor(
     private productSizeService: ProductSizeService,
     private fb: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private stockService: StockService
   ) {
     this.productSizeForm = this.fb.group({
       sizeProd: ['', [Validators.required]],
       prodId: ['', [Validators.required]],
       price: ['', [Validators.required]],
-      pricePromo: ['', [Validators.required]]
+      pricePromo: ['', [Validators.required]],
+      stockids: ['', [Validators.required]]
     });
   }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadStocks();
   }
 
   loadProducts(): void {
@@ -49,6 +54,14 @@ export class CreateProductSizeComponent implements OnInit {
         this.products = Array.isArray(data) ? data : (data.content || []);
       },
       error: () => this.errorMessage = "Impossible de charger les produits."
+    });
+  }
+  loadStocks(): void {
+    this.stockService.getAllStocks().subscribe({
+      next: data => { 
+        this.stockIds = Array.isArray(data) ? data : (data.content || []);
+      },
+      error: () => this.errorMessage = "Impossible de charger les stocks."
     });
   }
 
@@ -83,7 +96,8 @@ export class CreateProductSizeComponent implements OnInit {
       frontUrl: '',
       backUrl: '',
       leftUrl: '',
-      rightUrl: ''
+      rightUrl: '',
+      stockIds: raw.stockids || [] 
     };
 
     this.loading = true;

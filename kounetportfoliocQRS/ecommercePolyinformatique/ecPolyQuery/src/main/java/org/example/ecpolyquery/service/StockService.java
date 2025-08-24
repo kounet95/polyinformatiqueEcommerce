@@ -108,4 +108,18 @@ public class StockService {
   public Stock handle(GetStockByIdQuery query) {
     return stockRepository.findById(query.getId()).orElse(null);
   }
+
+  // --- MÉTHODE AJOUTÉE ---
+  /**
+   * Vérifie si la quantité demandée est disponible pour un ProductSize donné.
+   * @param productSizeId l'identifiant du ProductSize
+   * @param quantityDemanded la quantité voulue par le client
+   * @return true si disponible, false sinon
+   */
+  public boolean isStockAvailable(String productSizeId, int quantityDemanded) {
+    // Suppose que le StockRepository a une méthode findByProductSizeId
+    List<Stock> stocks = stockRepository.findByProductSizeId(productSizeId);
+    int totalAvailable = stocks.stream().mapToInt(Stock::getQuantity).sum();
+    return totalAvailable >= quantityDemanded;
+  }
 }

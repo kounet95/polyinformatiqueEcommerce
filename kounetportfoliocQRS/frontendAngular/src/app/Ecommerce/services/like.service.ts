@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { LikeDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
@@ -38,5 +38,23 @@ export class LikeService {
   /** Query: Vérifier si un utilisateur a liké ce produit */
   checkCustomerLiked(productId: string, customerId: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.queryBase}/${productId}/likes/exists?customerId=${customerId}`);
+  }
+
+  private likeCountSubject = new BehaviorSubject<number>(0);
+  likeCount$ = this.likeCountSubject.asObservable();
+
+  private likedItemsSubject = new BehaviorSubject<any[]>([]);
+  likedItems$ = this.likedItemsSubject.asObservable();
+
+  /** Appelle cette méthode après chaque ajout/suppression de like */
+  refreshLikes() {
+    // Ici, tu dois récupérer la liste des produits likés pour l'utilisateur courant
+    // Remplace 'customerId' par la vraie valeur
+    const customerId = 'CURRENT_CUSTOMER_ID';
+    this.http.get<any[]>(`${this.queryBase}/customer/${customerId}/likes`)
+      .subscribe(items => {
+        this.likedItemsSubject.next(items);
+        this.likeCountSubject.next(items.length);
+      });
   }
 }

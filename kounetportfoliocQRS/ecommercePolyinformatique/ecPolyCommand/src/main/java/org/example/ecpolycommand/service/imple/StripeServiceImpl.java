@@ -91,5 +91,13 @@ public class StripeServiceImpl implements StripeService {
       (config.getApi() == null || config.getApi().getKey() == null ? "<null>" : config.getApi().getKey().substring(0, 6) + "********"));
     System.out.println("Stripe Webhook secret loaded: " +
       (config.getWebhook() == null || config.getWebhook().getSecret() == null ? "<null>" : config.getWebhook().getSecret().substring(0, 6) + "********"));
+
+    // Validate configuration
+    if (config.getApi() == null || config.getApi().getKey() == null || config.getApi().getKey().isEmpty()) {
+      System.err.println("WARNING: Stripe API key is not configured! Please set stripe.api.key property.");
+    }
+    if (config.getWebhook() == null || config.getWebhook().getSecret() == null || config.getWebhook().getSecret().isEmpty()) {
+      System.err.println("WARNING: Stripe webhook secret is not configured! Please set stripe.webhook.secret property.");
+    }
   }
 }

@@ -4,6 +4,7 @@ import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
 import org.example.ecpolyquery.entity.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface StockRepository extends JpaRepository<Stock, String> {
+public interface StockRepository extends JpaRepository<Stock, String> , JpaSpecificationExecutor<Stock> {
 
 
     List<Stock> findByCreatedDateAfter(LocalDateTime date);
@@ -22,5 +23,6 @@ public interface StockRepository extends JpaRepository<Stock, String> {
   List<Stock> findOnSale();
 
   Optional<Stock> findByProductSize_Id(String productSizeId);
+  List<Stock> findByProductSizeId(String productSizeId);
 
 }

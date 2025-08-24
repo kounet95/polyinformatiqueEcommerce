@@ -26,7 +26,7 @@ public class StockDTO {
 
   @NotNull(message = "Quantity must not be null")
   @Min(value = 0, message = "Quantity must be zero or positive")
-  private double quantity;
+  private int quantity;
 
   private String supplyId;
 }

@@ -28,7 +28,7 @@ public class StockAggregate {
   private String supplierId;
   private Double purchasePrice;
   private Double promoPrice;
-  private double quantity;
+  private int quantity;
   private String supplyId;
 
   public StockAggregate() {}

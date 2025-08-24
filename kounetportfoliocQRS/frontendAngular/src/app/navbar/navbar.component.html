@@ -1,499 +1,491 @@
-
 <header id="header" class="header position-relative">
-    <!-- Barre supérieure -->
-<div class="top-bar py-2 d-none d-lg-block">
-  <div class="container-fluid container-xl">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <div class="d-flex align-items-center">
-          <div class="top-bar-item me-4">
-            <i class="bi bi-telephone-fill me-2"></i>
-            <span>Service client : </span>
-            <a href="tel:+1234567890">+1 (234) 567-890</a>
-          </div>
-          <div class="top-bar-item">
-            <i class="bi bi-envelope-fill me-2"></i>
-            <a href="mailto:support@example.com">support</a>
+
+  <!-- ===== Barre supérieure ===== -->
+  <div class="top-bar py-2 d-none d-lg-block">
+    <div class="container-fluid container-xl">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="d-flex align-items-center">
+            <div class="top-bar-item me-4">
+              <i class="bi bi-telephone-fill me-2"></i>
+              <span>Service client : </span>
+              <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
+            <div class="top-bar-item">
+              <i class="bi bi-envelope-fill me-2"></i>
+              <a href="mailto:support@example.com">support</a>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-lg-6">
-        <div class="d-flex justify-content-end">
-          <div class="top-bar-item me-4">
-            <a href="track-order.html">
-              <i class="bi bi-truck me-2"></i>Suivre ma commande
-            </a>
-          </div>
-          <div class="top-bar-item dropdown me-4">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-              <i class="bi bi-translate me-2"></i>Français
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>Français</a></li>
-              <li><a class="dropdown-item" href="#">English</a></li>
-            </ul>
-          </div>
-          <div class="top-bar-item dropdown">
-            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-              <i class="bi bi-currency-dollar me-2"></i>EUR
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>EUR</a></li>
-              <li><a class="dropdown-item" href="#">USD</a></li>
-              <li><a class="dropdown-item" href="#">GBP</a></li>
-            </ul>
+        <div class="col-lg-6">
+          <div class="d-flex justify-content-end">
+            <div class="top-bar-item me-4">
+              <a href="track-order.html">
+                <i class="bi bi-truck me-2"></i>Suivre ma commande
+              </a>
+            </div>
+            <div class="top-bar-item dropdown me-4">
+              <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="bi bi-translate me-2"></i>Français
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>Français</a></li>
+                <li><a class="dropdown-item" href="#">English</a></li>
+              </ul>
+            </div>
+            <div class="top-bar-item dropdown">
+              <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="bi bi-currency-dollar me-2"></i>EUR
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>EUR</a></li>
+                <li><a class="dropdown-item" href="#">USD</a></li>
+                <li><a class="dropdown-item" href="#">GBP</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- En-tête principal -->
-<div class="main-header">
-  <div class="container-fluid container-xl">
-    <div class="d-flex py-3 align-items-center justify-content-between">
+  <!-- ===== En-tête principal ===== -->
+  <div class="main-header">
+    <div class="container-fluid container-xl">
+      <div class="d-flex py-3 align-items-center justify-content-between">
 
-      <!-- Logo -->
-      <a href="index.html" class="logo d-flex align-items-center">
-        <h1 class="sitename">Le<span>Continent.ca</span></h1>
-      </a>
-
-      <!-- Barre de recherche -->
-      <form class="search-form desktop-search-form">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Rechercher des produits...">
-          <button class="btn search-btn" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
-      </form>
-
-      <!-- Actions utilisateur -->
-      <div class="header-actions d-flex align-items-center justify-content-end">
-
-        <!-- Recherche mobile -->
-        <button class="header-action-btn mobile-search-toggle d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileSearch" aria-expanded="false" aria-controls="mobileSearch">
-          <i class="bi bi-search"></i>
-        </button>
-
-        <!-- Compte -->
-       <div class="dropdown account-dropdown">
-  <button class="header-action-btn" data-bs-toggle="dropdown">
-    <i class="bi bi-person"></i>
-    <span *ngIf="profile; else noProfile">{{ profile.firstName }} {{ profile.lastName }}</span>
-    <ng-template #noProfile>
-      <span class="action-text d-none d-md-inline-block">Mon compte</span>
-    </ng-template>
-  </button>
-          <div class="dropdown-menu">
-            <div class="dropdown-header">
-              <h6>Bienvenue sur <span class="sitename">LeContinent</span></h6>
-              <p class="mb-0">Accédez à votre compte et gérez vos commandes</p>
-            </div>
-            <div class="dropdown-body">
-              <a class="dropdown-item d-flex align-items-center" routerLink="/account">
-                <i class="bi bi-person-circle me-2"></i>
-                <span>Mon profil</span>
-              </a>
-              <a class="dropdown-item d-flex align-items-center" routerLink="/account">
-                <i class="bi bi-bag-check me-2"></i>
-                <span>Mes commandes</span>
-              </a>
-              <a class="dropdown-item d-flex align-items-center" href="wishlist.html">
-                <i class="bi bi-heart me-2"></i>
-                <span>Ma liste d'envies</span>
-              </a>
-              <a class="dropdown-item d-flex align-items-center" href="returns.html">
-                <i class="bi bi-arrow-return-left me-2"></i>
-                <span>Retours &amp; Remboursements</span>
-              </a>
-              <a class="dropdown-item d-flex align-items-center" href="settings.html">
-                <i class="bi bi-gear me-2"></i>
-                <span>Paramètres</span>
-              </a>
-            </div>
-     <div class="dropdown-footer">
-  <ng-container *ngIf="profile; else noProfile">
-    <button (click)="handleLogout()" class="btn btn-danger w-100 mb-2">Se déconnecter</button>
-  </ng-container>
-  <ng-template #noProfile>
-    <button (click)="handleLogin()" class="btn btn-primary w-100 mb-2">Se connecter</button>
-  </ng-template>
-
-  <a routerLink="/signup" class="btn btn-outline-primary w-100">Créer un compte</a>
-</div>
-
-
-          </div>
-        </div>
-
-        <!-- Liste d'envies -->
-        <a href="wishlist.html" class="header-action-btn d-none d-md-flex">
-          <i class="bi bi-heart"></i>
-          <span class="action-text d-none d-md-inline-block">Favoris</span>
-          <span class="badge">0</span>
+        <!-- Logo -->
+        <a href="index.html" class="logo d-flex align-items-center">
+          <h1 class="sitename">Le<span>Continent.ca</span></h1>
         </a>
 
-        <!-- Panier -->
-        <div class="dropdown cart-dropdown">
-          <button class="header-action-btn" data-bs-toggle="dropdown">
-            <i class="bi bi-cart3"></i>
-            <span class="action-text d-none d-md-inline-block">Panier</span>
-            <span class="badge">3</span>
+        <!-- Barre de recherche -->
+        <form class="search-form desktop-search-form">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Rechercher des produits...">
+            <button class="btn search-btn" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Actions utilisateur -->
+        <div class="header-actions d-flex align-items-center justify-content-end">
+
+          <!-- Recherche mobile -->
+          <button class="header-action-btn mobile-search-toggle d-xl-none"
+            type="button" data-bs-toggle="collapse" data-bs-target="#mobileSearch"
+             aria-expanded="false"
+            aria-controls="mobileSearch">
+            <i class="bi bi-search"></i>
           </button>
-          <div class="dropdown-menu cart-dropdown-menu">
-            <div class="dropdown-header">
-              <h6>Panier (3)</h6>
-            </div>
-            <div class="dropdown-body">
-              <div class="cart-items">
-                <!-- Produit 1 -->
-                <div class="cart-item">
-                  <div class="cart-item-image">
-                    <img src="assets/img/product/product-1.webp" alt="Produit" class="img-fluid">
-                  </div>
-                  <div class="cart-item-content">
-                    <h6 class="cart-item-title">Casque sans fil</h6>
-                    <div class="cart-item-meta">1 × 89,99 €</div>
-                  </div>
-                  <button class="cart-item-remove">
-                    <i class="bi bi-x"></i>
-                  </button>
-                </div>
 
-                <!-- Produit 2 -->
-                <div class="cart-item">
-                  <div class="cart-item-image">
-                    <img src="assets/img/product/product-2.webp" alt="Produit" class="img-fluid">
-                  </div>
-                  <div class="cart-item-content">
-                    <h6 class="cart-item-title">Montre connectée</h6>
-                    <div class="cart-item-meta">1 × 129,99 €</div>
-                  </div>
-                  <button class="cart-item-remove">
-                    <i class="bi bi-x"></i>
-                  </button>
-                </div>
 
-                <!-- Produit 3 -->
-                <div class="cart-item">
-                  <div class="cart-item-image">
-                    <img src="assets/img/product/product-3.webp" alt="Produit" class="img-fluid">
+          <!-- Like -->
+          <div class="dropdown like-dropdown">
+            <button class="header-action-btn" data-bs-toggle="dropdown">
+              <i class="bi bi-heart fs-4"></i>
+              <span class="action-text d-none d-md-inline-block">like</span>
+              <span class="badge bg-danger">{{ likeCount }}</span>
+            </button>
+            <div class="dropdown-menu like-dropdown-menu">
+              <div class="dropdown-header">
+                <h6>Mes articles aimés ({{ likeCount }})</h6>
+              </div>
+              <div class="dropdown-body">
+                <div class="cart-items">
+                  <div class="cart-item" *ngFor="let item of likedItems">
+                    <div class="cart-item-image">
+                      <img [src]="item.imageUrl" alt="Produit" class="img-fluid">
+                    </div>
+                    <div class="cart-item-content">
+                      <h6 class="cart-item-title">{{ item.name }}</h6>
+                      <div class="cart-item-meta">{{ item.price | currency:'EUR' }}</div>
+                    </div>
+                    <button class="cart-item-remove" (click)="removeFromLikes(item.productId)">
+                      <i class="bi bi-x"></i>
+                    </button>
                   </div>
-                  <div class="cart-item-content">
-                    <h6 class="cart-item-title">Haut-parleur Bluetooth</h6>
-                    <div class="cart-item-meta">1 × 59,99 €</div>
-                  </div>
-                  <button class="cart-item-remove">
-                    <i class="bi bi-x"></i>
-                  </button>
                 </div>
               </div>
-            </div>
-            <div class="dropdown-footer">
-              <div class="cart-total">
-                <span>Total :</span>
-                <span class="cart-total-price">279,97 €</span>
-              </div>
-              <div class="cart-actions">
-                <a routerLink="/cart" class="btn btn-outline-primary">Voir le panier</a>
-                <a routerLink="/checkout" class="btn btn-primary">Commander</a>
+              <div class="dropdown-footer">
+                <a routerLink="/likes" class="btn btn-outline-primary">Voir mes likes</a>
               </div>
             </div>
           </div>
+
+          <!-- Compte -->
+          <div class="dropdown account-dropdown">
+            <button class="header-action-btn" data-bs-toggle="dropdown">
+              <i class="bi bi-person"></i>
+              <span *ngIf="profile; else noProfile">{{ profile.firstName }} {{ profile.lastName }}</span>
+              <ng-template #noProfile>
+                <span class="action-text d-none d-md-inline-block">Mon compte</span>
+              </ng-template>
+            </button>
+            <div class="dropdown-menu">
+              <div class="dropdown-header">
+                <h6>Bienvenue sur <span class="sitename">LeContinent</span></h6>
+                <p class="mb-0">Accédez à votre compte et gérez vos commandes</p>
+              </div>
+              <div class="dropdown-body">
+                <a class="dropdown-item d-flex align-items-center" routerLink="/account">
+                  <i class="bi bi-person-circle me-2"></i>
+                  <span>Mon profil</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" routerLink="/account">
+                  <i class="bi bi-bag-check me-2"></i>
+                  <span>Mes commandes</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="wishlist.html">
+                  <i class="bi bi-heart me-2"></i>
+                  <span>Ma liste d'envies</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="returns.html">
+                  <i class="bi bi-arrow-return-left me-2"></i>
+                  <span>Retours &amp; Remboursements</span>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="settings.html">
+                  <i class="bi bi-gear me-2"></i>
+                  <span>Paramètres</span>
+                </a>
+              </div>
+              <div class="dropdown-footer">
+                <ng-container *ngIf="profile; else noProfile">
+                  <button (click)="handleLogout()" class="btn btn-danger w-100 mb-2">Se déconnecter</button>
+                </ng-container>
+                <ng-template #noProfile>
+                  <button (click)="handleLogin()" class="btn btn-primary w-100 mb-2">Se connecter</button>
+                </ng-template>
+                <a routerLink="/signup" class="btn btn-outline-primary w-100">Créer un compte</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panier -->
+          <div class="dropdown cart-dropdown">
+            <button class="header-action-btn" data-bs-toggle="dropdown">
+              <i class="bi bi-cart3 fs-4"></i>
+              <span class="action-text d-none d-md-inline-block">Panier</span>
+              <span class="badge bg-danger">{{ cartCount }}</span>
+            </button>
+            <div class="dropdown-menu cart-dropdown-menu">
+              <div class="dropdown-header">
+                <h6>Panier ({{ cartCount }})</h6>
+              </div>
+              <div class="dropdown-body">
+                <div class="cart-items">
+                  <div class="cart-item" *ngFor="let item of cartItems">
+                    <div class="cart-item-image">
+                      <img [src]="item.imageUrl" alt="Produit" class="img-fluid">
+                    </div>
+                    <div class="cart-item-content">
+                      <h6 class="cart-item-title">{{ item.name }}</h6>
+                      <div class="cart-item-meta">{{ item.quantity }} × {{ item.price | currency:'EUR' }}</div>
+                    </div>
+                    <button class="cart-item-remove" (click)="removeFromCart(item)">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-footer">
+                <div class="cart-total">
+                  <span>Total :</span>
+                  <span class="cart-total-price">{{ cartTotal | currency:'EUR' }}</span>
+                </div>
+                <div class="cart-actions">
+                  <a routerLink="/cart" class="btn btn-outline-primary">Voir le panier</a>
+                  <a routerLink="/checkout" class="btn btn-primary">Commander</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Icône panier mobile (simplifiée) -->
+          <a routerLink="/cart" class="position-relative d-xl-none ms-3">
+            <i class="bi bi-cart fs-4"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ cartCount }}
+            </span>
+          </a>
         </div>
-
-        <!-- Menu mobile -->
-        <i class="mobile-nav-toggle d-xl-none bi bi-list me-0"></i>
-
       </div>
     </div>
   </div>
-</div>
 
-<!-- Navigation -->
-<div class="header-nav">
-  <div class="container-fluid container-xl position-relative">
-    <nav id="navmenu" class="navmenu">
-      <ul>
-        <li><a routerLink="/category">Catégories</a></li>
-        <li><a routerLink="/product">Voir un vêtement</a></li>
-        <li><a routerLink="/create-address">Créer une adresse</a></li>
+  <!-- ===== Navigation (en bas du header) ===== -->
+  <div class="header-nav">
+    <div class="container-fluid container-xl position-relative">
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a routerLink="/category">Catégories</a></li>
+          <li><a routerLink="/product">Voir un vêtement</a></li>
+          <li><a routerLink="/create-address">Créer une adresse</a></li>
 
-        <li class="dropdown">
-          <a routerLink="/"><span>Polyinformatique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-          <ul>
-            <li><a routerLink="/home">Accueil</a></li>
-            <li><a routerLink="/about">À propos</a></li>
-            <li><a routerLink="/portfolio">Portfolio</a></li>
-            <li><a routerLink="/services">Services</a></li>
-            <li><a routerLink="/get-started">Salon Virtuel</a></li>
-          </ul>
-        </li>
+          <li class="dropdown">
+            <a routerLink="/"><span>Polyinformatique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a routerLink="/home">Accueil</a></li>
+              <li><a routerLink="/about">À propos</a></li>
+              <li><a routerLink="/portfolio">Portfolio</a></li>
+              <li><a routerLink="/services">Services</a></li>
+              <li><a routerLink="/get-started">Salon Virtuel</a></li>
+            </ul>
+          </li>
 
-        <li class="dropdown">
-          <a href="#"><span>Gestion</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-          <ul>
-            <li class="dropdown">
-              <a href="#"><span>du Catalogue</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                
-                <li><a routerLink="/create-product-size">Ajouter une taille à un vetement</a></li>
-                <li><a routerLink="/category">Catégories</a></li>
-                <li><a routerLink="/create-category">Créer une catégorie</a></li>
-                <li><a routerLink="/sous-categorie">Créer une sous-catégories</a></li>
-                <li><a routerLink="/create-social-groupe">Créer un groupe social</a></li>
-                <li><a routerLink="/create-supplier">Créer un fournisseur</a></li>
-                <li><a routerLink="/address-customer">add-customer-addresse</a></li>
-                <li><a routerLink="/create-supply">Créer un approvisionnement</a></li>
-                <li><a routerLink="/create-product">Créer un vêtement</a></li>
-                <li><a routerLink="/promos">Promotions</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#"><span>Communauté</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a routerLink="/temoiage">Témoignages</a></li>
-                <li><a routerLink="/team">Équipe</a></li>
-                <li><a routerLink="/faq">FAQ</a></li>
-                <li><a routerLink="/privacy">Politique de confidentialité</a></li>
-                <li><a routerLink="/conditions">Conditions générales d'utilisation</a></li>
-                <li><a class="nav-link" routerLink="/blog">Blog</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
+          <li class="dropdown">
+            <a href="#"><span>Gestion</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li class="dropdown">
+                <a href="#"><span>du Catalogue</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a routerLink="/create-product-size">Ajouter une taille à un vetement</a></li>
+                  <li><a routerLink="/category">Catégories</a></li>
+                  <li><a routerLink="/create-category">Créer une catégorie</a></li>
+                  <li><a routerLink="/sous-categorie">Créer une sous-catégories</a></li>
+                  <li><a routerLink="/create-social-groupe">Créer un groupe social</a></li>
+                  <li><a routerLink="/create-supplier">Créer un fournisseur</a></li>
+                  <li><a routerLink="/address-customer">add-customer-addresse</a></li>
+                  <li><a routerLink="/create-supply">Créer un approvisionnement</a></li>
+                  <li><a routerLink="/create-product">Créer un vêtement</a></li>
+                  <li><a routerLink="/promos">Promotions</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#"><span>Communauté</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a routerLink="/temoiage">Témoignages</a></li>
+                  <li><a routerLink="/team">Équipe</a></li>
+                  <li><a routerLink="/faq">FAQ</a></li>
+                  <li><a routerLink="/privacy">Politique de confidentialité</a></li>
+                  <li><a routerLink="/conditions">Conditions générales d'utilisation</a></li>
+                  <li><a class="nav-link" routerLink="/blog">Blog</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
 
-        <li class="products-megamenu-1"><a href="#"><span>Nouveautés</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li class="products-megamenu-1"><a href="#"><span>Nouveautés</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
 
-              <!-- Products Mega Menu 1 Mobile View -->
-              <ul class="mobile-megamenu">
+            <!-- Products Mega Menu 1 Mobile View -->
+            <ul class="mobile-megamenu">
 
-                <li><a href="#">Featured Products</a></li>
-                <li><a href="#">Sale Items</a></li>
+              <li><a href="#">Featured Products</a></li>
+              <li><a href="#">Sale Items</a></li>
 
-                <li class="dropdown"><a href="#"><span>Clothing</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Men's Wear</a></li>
-                    <li><a href="#">Women's Wear</a></li>
-                    <li><a href="#">Kids Collection</a></li>
-                    <li><a href="#">Sportswear</a></li>
-                    <li><a href="#">Accessories</a></li>
-                  </ul>
-                </li>
+              <li class="dropdown"><a href="#"><span>Clothing</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Men's Wear</a></li>
+                  <li><a href="#">Women's Wear</a></li>
+                  <li><a href="#">Kids Collection</a></li>
+                  <li><a href="#">Sportswear</a></li>
+                  <li><a href="#">Accessories</a></li>
+                </ul>
+              </li>
 
-                <li class="dropdown"><a href="#"><span>Electronics</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Laptops</a></li>
-                    <li><a href="#">Audio Devices</a></li>
-                    <li><a href="#">Smart Home</a></li>
-                    <li><a href="#">Accessories</a></li>
-                  </ul>
-                </li>
+              <li class="dropdown"><a href="#"><span>Electronics</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Smartphones</a></li>
+                  <li><a href="#">Laptops</a></li>
+                  <li><a href="#">Audio Devices</a></li>
+                  <li><a href="#">Smart Home</a></li>
+                  <li><a href="#">Accessories</a></li>
+                </ul>
+              </li>
 
-                <li class="dropdown"><a href="#"><span>Home &amp; Living</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Furniture</a></li>
-                    <li><a href="#">Decor</a></li>
-                    <li><a href="#">Kitchen</a></li>
-                    <li><a href="#">Bedding</a></li>
-                    <li><a href="#">Lighting</a></li>
-                  </ul>
-                </li>
+              <li class="dropdown"><a href="#"><span>Home &amp; Living</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Furniture</a></li>
+                  <li><a href="#">Decor</a></li>
+                  <li><a href="#">Kitchen</a></li>
+                  <li><a href="#">Bedding</a></li>
+                  <li><a href="#">Lighting</a></li>
+                </ul>
+              </li>
 
-                <li class="dropdown"><a href="#"><span>Beauty</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Skincare</a></li>
-                    <li><a href="#">Makeup</a></li>
-                    <li><a href="#">Haircare</a></li>
-                    <li><a href="#">Fragrances</a></li>
-                    <li><a href="#">Personal Care</a></li>
-                  </ul>
-                </li>
+              <li class="dropdown"><a href="#"><span>Beauty</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Skincare</a></li>
+                  <li><a href="#">Makeup</a></li>
+                  <li><a href="#">Haircare</a></li>
+                  <li><a href="#">Fragrances</a></li>
+                  <li><a href="#">Personal Care</a></li>
+                </ul>
+              </li>
 
-              </ul><!-- End Products Mega Menu 1 Mobile View -->
+            </ul><!-- End Products Mega Menu 1 Mobile View -->
 
-              <!-- Products Mega Menu 1 Desktop View -->
-              <div class="desktop-megamenu">
+            <!-- Products Mega Menu 1 Desktop View -->
+            <div class="desktop-megamenu">
 
-                <div class="megamenu-tabs">
-                  <ul class="nav nav-tabs" id="productMegaMenuTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link active" id="featured-tab" data-bs-toggle="tab" data-bs-target="#featured-content-1862" type="button" aria-selected="true" role="tab">Nouveautés</button>
-                    </li>
-                 
-                 
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category-content-1862" type="button" aria-selected="false" tabindex="-1" role="tab">Catégories</button>
-                    </li>
-                  </ul>
+              <div class="megamenu-tabs">
+                <ul class="nav nav-tabs" id="productMegaMenuTabs" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="featured-tab" data-bs-toggle="tab" data-bs-target="#featured-content-1862" type="button" aria-selected="true" role="tab">Nouveautés</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category-content-1862" type="button" aria-selected="false" tabindex="-1" role="tab">Catégories</button>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Tabs Content -->
+              <div class="megamenu-content tab-content">
+
+                <!-- Featured Tab -->
+                <div class="tab-pane fade show active" id="featured-content-1862" role="tabpanel" aria-labelledby="featured-tab">
+                  <div class="product-grid">
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-1.webp" alt="Featured Product" loading="lazy">
+                      </div>
+                      <div class="product-info">
+                        <h5>Premium Headphones</h5>
+                        <p class="price">$129.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-2.webp" alt="Featured Product" loading="lazy">
+                      </div>
+                      <div class="product-info">
+                        <h5>Smart Watch</h5>
+                        <p class="price">$199.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-3.webp" alt="Featured Product" loading="lazy">
+                      </div>
+                      <div class="product-info">
+                        <h5>Wireless Earbuds</h5>
+                        <p class="price">$89.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-4.webp" alt="Featured Product" loading="lazy">
+                      </div>
+                      <div class="product-info">
+                        <h5>Bluetooth Speaker</h5>
+                        <p class="price">$79.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Tabs Content -->
-                <div class="megamenu-content tab-content">
-
-                  <!-- Featured Tab -->
-                  <div class="tab-pane fade show active" id="featured-content-1862" role="tabpanel" aria-labelledby="featured-tab">
-                    <div class="product-grid">
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-1.webp" alt="Featured Product" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                          <h5>Premium Headphones</h5>
-                          <p class="price">$129.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
+                <!-- New Arrivals Tab -->
+                <div class="tab-pane fade" id="new-content-1862" role="tabpanel" aria-labelledby="new-tab">
+                  <div class="product-grid">
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-5.webp" alt="New Arrival" loading="lazy">
+                        <span class="badge-new">New</span>
                       </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-2.webp" alt="Featured Product" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                          <h5>Smart Watch</h5>
-                          <p class="price">$199.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
+                      <div class="product-info">
+                        <h5>Fitness Tracker</h5>
+                        <p class="price">$69.99</p>
+                        <a href="#" class="btn-view">View Product</a>
                       </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-3.webp" alt="Featured Product" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                          <h5>Wireless Earbuds</h5>
-                          <p class="price">$89.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-6.webp" alt="New Arrival" loading="lazy">
+                        <span class="badge-new">New</span>
                       </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-4.webp" alt="Featured Product" loading="lazy">
-                        </div>
-                        <div class="product-info">
-                          <h5>Bluetooth Speaker</h5>
-                          <p class="price">$79.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
+                      <div class="product-info">
+                        <h5>Wireless Charger</h5>
+                        <p class="price">$39.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-7.webp" alt="New Arrival" loading="lazy">
+                        <span class="badge-new">New</span>
+                      </div>
+                      <div class="product-info">
+                        <h5>Smart Bulb Set</h5>
+                        <p class="price">$49.99</p>
+                        <a href="#" class="btn-view">View Product</a>
+                      </div>
+                    </div>
+                    <div class="product-card">
+                      <div class="product-image">
+                        <img src="assets/img/product/product-8.webp" alt="New Arrival" loading="lazy">
+                        <span class="badge-new">New</span>
+                      </div>
+                      <div class="product-info">
+                        <h5>Portable Power Bank</h5>
+                        <p class="price">$59.99</p>
+                        <a href="#" class="btn-view">View Product</a>
                       </div>
                     </div>
                   </div>
-
-                  <!-- New Arrivals Tab -->
-                  <div class="tab-pane fade" id="new-content-1862" role="tabpanel" aria-labelledby="new-tab">
-                    <div class="product-grid">
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-5.webp" alt="New Arrival" loading="lazy">
-                          <span class="badge-new">New</span>
-                        </div>
-                        <div class="product-info">
-                          <h5>Fitness Tracker</h5>
-                          <p class="price">$69.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
-                      </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-6.webp" alt="New Arrival" loading="lazy">
-                          <span class="badge-new">New</span>
-                        </div>
-                        <div class="product-info">
-                          <h5>Wireless Charger</h5>
-                          <p class="price">$39.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
-                      </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-7.webp" alt="New Arrival" loading="lazy">
-                          <span class="badge-new">New</span>
-                        </div>
-                        <div class="product-info">
-                          <h5>Smart Bulb Set</h5>
-                          <p class="price">$49.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
-                      </div>
-                      <div class="product-card">
-                        <div class="product-image">
-                          <img src="assets/img/product/product-8.webp" alt="New Arrival" loading="lazy">
-                          <span class="badge-new">New</span>
-                        </div>
-                        <div class="product-info">
-                          <h5>Portable Power Bank</h5>
-                          <p class="price">$59.99</p>
-                          <a href="#" class="btn-view">View Product</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-               
-                  <!-- Categories Tab -->
-                  <div class="tab-pane fade" id="category-content-1862" role="tabpanel" aria-labelledby="category-tab">
-                    <div class="category-grid">
-                      <div class="category-column">
-                        <h4>Enfants</h4>
-                        <ul>
-                          <li><a href="#">Men's Wear</a></li>
-                          <li><a href="#">Women's Wear</a></li>
-                          <li><a href="#">Kids Collection</a></li>
-                          <li><a href="#">Sportswear</a></li>
-                          <li><a href="#">Accessories</a></li>
-                        </ul>
-                      </div>
-                      <div class="category-column">
-                        <h4>Femmes</h4>
-                        <ul>
-                          <li><a href="#">Smartphones</a></li>
-                          <li><a href="#">Laptops</a></li>
-                          <li><a href="#">Audio Devices</a></li>
-                          <li><a href="#">Smart Home</a></li>
-                          <li><a href="#">Accessories</a></li>
-                        </ul>
-                      </div>
-                      <div class="category-column">
-                        <h4>Hommes</h4>
-                        <ul>
-                          <li><a href="#">Furniture</a></li>
-                          <li><a href="#">Decor</a></li>
-                          <li><a href="#">Kitchen</a></li>
-                          <li><a href="#">Bedding</a></li>
-                          <li><a href="#">Lighting</a></li>
-                        </ul>
-                      </div>
-                      <div class="category-column">
-                        <h4>Accessoires</h4>
-                        <ul>
-                          <li><a href="#">Skincare</a></li>
-                          <li><a href="#">Makeup</a></li>
-                          <li><a href="#">Haircare</a></li>
-                          <li><a href="#">Fragrances</a></li>
-                          <li><a href="#">Personal Care</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
 
-              </div><!-- End Products Mega Menu 1 Desktop View -->
+                <!-- Categories Tab -->
+                <div class="tab-pane fade" id="category-content-1862" role="tabpanel" aria-labelledby="category-tab">
+                  <div class="category-grid">
+                    <div class="category-column">
+                      <h4>Enfants</h4>
+                      <ul>
+                        <li><a href="#">Men's Wear</a></li>
+                        <li><a href="#">Women's Wear</a></li>
+                        <li><a href="#">Kids Collection</a></li>
+                        <li><a href="#">Sportswear</a></li>
+                        <li><a href="#">Accessories</a></li>
+                      </ul>
+                    </div>
+                    <div class="category-column">
+                      <h4>Femmes</h4>
+                      <ul>
+                        <li><a href="#">Smartphones</a></li>
+                        <li><a href="#">Laptops</a></li>
+                        <li><a href="#">Audio Devices</a></li>
+                        <li><a href="#">Smart Home</a></li>
+                        <li><a href="#">Accessories</a></li>
+                      </ul>
+                    </div>
+                    <div class="category-column">
+                      <h4>Hommes</h4>
+                      <ul>
+                        <li><a href="#">Furniture</a></li>
+                        <li><a href="#">Decor</a></li>
+                        <li><a href="#">Kitchen</a></li>
+                        <li><a href="#">Bedding</a></li>
+                        <li><a href="#">Lighting</a></li>
+                      </ul>
+                    </div>
+                    <div class="category-column">
+                      <h4>Accessoires</h4>
+                      <ul>
+                        <li><a href="#">Skincare</a></li>
+                        <li><a href="#">Makeup</a></li>
+                        <li><a href="#">Haircare</a></li>
+                        <li><a href="#">Fragrances</a></li>
+                        <li><a href="#">Personal Care</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
 
-            </li>
+              </div>
 
-       
+            </div><!-- End Products Mega Menu 1 Desktop View -->
 
-       
-        <li><a routerLink="/dashboard">Tableau de bord</a></li>
-        <li><a routerLink="/contact">Contact</a></li>
-      </ul>
-    </nav>
+          </li>
+
+          <li><a routerLink="/dashboard">Tableau de bord</a></li>
+          <li><a routerLink="/contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </div>
-</div>
 
-   
-
-  </header>
+</header>

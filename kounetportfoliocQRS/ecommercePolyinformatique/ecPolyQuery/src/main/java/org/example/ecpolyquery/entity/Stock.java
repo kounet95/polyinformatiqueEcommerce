@@ -17,7 +17,7 @@ public class Stock {
   private String id;
   private Double purchasePrice;
   private Double promoPrice;
-  private double quantity;
+  private int quantity;
   private LocalDateTime createdDate;
   private LocalDateTime closedDate;
   @ManyToOne(fetch = FetchType.LAZY)
