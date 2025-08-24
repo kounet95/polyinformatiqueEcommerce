@@ -60,14 +60,13 @@ export class NavbarComponent implements OnInit {
   likeCount = 0;
   likedItems: any[] = [];
 
-  constructor(
+constructor(
     private keycloakService: KeycloakService, 
     private cartService: CartService,
     private likeService: LikeService
   ) {}
 
   async ngOnInit() {
-    // Vérifier si l’utilisateur est déjà connecté
     this.isLoggedIn = await this.keycloakService.isLoggedIn();
 
     if (this.isLoggedIn) {
@@ -76,31 +75,34 @@ export class NavbarComponent implements OnInit {
         .catch(() => this.profile = null);
     }
 
-    // Suivi du compteur
     this.cartService.cartCount$.subscribe(count => {
       this.cartCount = count;
     });
 
-    // Suivi des articles
     this.cartService.cartItems$.subscribe(items => {
       this.cartItems = items;
       this.cartTotal = this.cartItems.reduce(
         (total, item) => total + (item.productSizePrice * item.qty), 0
       );
+      // Rafraîchir les likes pour tous les produits du panier
+      this.cartItems.forEach(item => {
+        this.likeService.refreshLikes(item.productId);
+      });
     });
 
-    // Suivi du compteur de likes
     this.likeService.likeCount$.subscribe(count => {
       this.likeCount = count;
     });
 
-    // Suivi des articles likés
     this.likeService.likedItems$.subscribe(items => {
       this.likedItems = items;
     });
 
-    // Rafraîchir les likes au démarrage
-    this.likeService.refreshLikes();
+    // Rafraîchir les likes pour un produit par défaut (ex: premier produit du panier si présent)
+    if (this.cartItems.length > 0) {
+      this.likeService.refreshLikes(this.cartItems[0].productId);
+    }
+    // Sinon, ne rien faire
   }
 
   removeFromCart(productSizeId: string) {

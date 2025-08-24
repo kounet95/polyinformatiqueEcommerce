@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.LikeProduct;
 import org.example.ecpolyquery.query.CountLikesByProductQuery;
+import org.example.ecpolyquery.query.GetLikesByCustomerQuery;
 import org.example.ecpolyquery.query.GetLikesByProductQuery;
 import org.example.ecpolyquery.query.CheckCustomerLikedProductQuery;
 
@@ -48,5 +49,12 @@ public class LikeController {
     CheckCustomerLikedProductQuery query = new CheckCustomerLikedProductQuery(customerId, productId);
     return queryGateway.query(query, Boolean.class)
       .thenApply(ResponseEntity::ok);
+  }
+
+  @GetMapping("/customer/{customerId}/likes")
+  public CompletableFuture<List<LikeProduct>> getLikesByCustomer(@PathVariable String customerId) {
+    GetLikesByCustomerQuery query = new GetLikesByCustomerQuery(customerId);
+    return queryGateway.query(query,
+      org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf(LikeProduct.class));
   }
 }

@@ -12,7 +12,7 @@ export class CartService implements OnInit {
   private items: CartItem[] = [];
 
 
-  // 🔔 Observables
+  //Observables
   private cartCountSubject = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSubject.asObservable();
 

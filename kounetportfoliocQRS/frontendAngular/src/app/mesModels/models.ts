@@ -250,7 +250,6 @@ export interface ProductSizeDTO {
   backUrl: string;
   leftUrl: string;
   rightUrl: string;
-  stockIds?: string[];
 }
 export interface Page<T> {
   content: T[];

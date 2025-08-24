@@ -128,6 +128,9 @@ data class OrderSummary(
 class GetStockIdsByProductSizeIdQuery(
   var productSizeId: String? = "",
 )
+class GetLikesByCustomerQuery(
+  var customerId: String = "",
+)
 class GetCustomerByIdQuery(val id: String)
 
 class GetInvoiceByIdQuery(val id: String)

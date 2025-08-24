@@ -14,7 +14,6 @@ import { StockService } from '../services/stock.service';
 export class CreateProductSizeComponent implements OnInit {
   productSizeForm: FormGroup;
   products: ProductDTO[] = [];
-  stockIds: StockDTO[] = [];
   sizeEnumValues = Object.values(SizeProd);
   loading = false;
   successMessage?: string;
@@ -32,20 +31,19 @@ export class CreateProductSizeComponent implements OnInit {
     private productSizeService: ProductSizeService,
     private fb: FormBuilder,
     private productService: ProductService,
-    private stockService: StockService
   ) {
     this.productSizeForm = this.fb.group({
       sizeProd: ['', [Validators.required]],
       prodId: ['', [Validators.required]],
       price: ['', [Validators.required]],
       pricePromo: ['', [Validators.required]],
-      stockids: ['', [Validators.required]]
+     
     });
   }
 
   ngOnInit(): void {
     this.loadProducts();
-    this.loadStocks();
+
   }
 
   loadProducts(): void {
@@ -56,14 +54,7 @@ export class CreateProductSizeComponent implements OnInit {
       error: () => this.errorMessage = "Impossible de charger les produits."
     });
   }
-  loadStocks(): void {
-    this.stockService.getAllStocks().subscribe({
-      next: data => { 
-        this.stockIds = Array.isArray(data) ? data : (data.content || []);
-      },
-      error: () => this.errorMessage = "Impossible de charger les stocks."
-    });
-  }
+
 
   /** Gestion pour les images */
   onFileSelected(event: Event, side: 'front' | 'back' | 'left' | 'right') {
@@ -97,7 +88,7 @@ export class CreateProductSizeComponent implements OnInit {
       backUrl: '',
       leftUrl: '',
       rightUrl: '',
-      stockIds: raw.stockids || [] 
+     
     };
 
     this.loading = true;

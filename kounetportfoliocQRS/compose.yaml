@@ -270,20 +270,19 @@ services:
     restart: always
 
   stripe:
-    image: stripe/stripe-cli:latest
+    build: ./stripe
     container_name: stripe
     environment:
-      - STRIPE_API_KEY=${STRIPE_API_KEY}
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+        VAULT_ADDR: http://vault:8200
+        VAULT_TOKEN: root
     ports:
-      - "8089:8080"
-    command: listen --forward-to host.docker.internal:8083/stripe/webhook
+        - "8089:8080"
     depends_on:
-      - vault
-      - ecPolyCommand
+        - vault
+        - ecPolyCommand
+    networks:
+        - polyinfDb-net
     restart: unless-stopped
-
 
 
 volumes:
