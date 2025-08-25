@@ -16,7 +16,6 @@ public class StripeWebhookController {
 
   private final ApplicationEventPublisher eventPublisher;
   private final StripeService stripeService;
-
   public StripeWebhookController(ApplicationEventPublisher eventPublisher, StripeService stripeService) {
     this.eventPublisher = eventPublisher;
     this.stripeService = stripeService;

@@ -11,8 +11,6 @@ const CART_KEY = 'cart_items';
 export class CartService implements OnInit {
   private items: CartItem[] = [];
 
-
-  //Observables
   private cartCountSubject = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSubject.asObservable();
 
@@ -22,17 +20,16 @@ export class CartService implements OnInit {
   constructor(private stockService: StockService) {
     this.loadCart();
     this.updateCartCount();
-    this.updateCartItems(); // init liste
+    this.updateCartItems();
   }
 
   ngOnInit(): void {}
-  /** pour mettre à jour le compteur */
+
   private updateCartCount(): void {
     const count = this.items.reduce((sum, item) => sum + item.qty, 0);
     this.cartCountSubject.next(count);
   }
 
-  /** pour mettre à jour les articles */
   private updateCartItems(): void {
     this.cartItemsSubject.next(this.items);
   }
@@ -45,6 +42,7 @@ export class CartService implements OnInit {
   private saveCart(): void {
     localStorage.setItem(CART_KEY, JSON.stringify(this.items));
     this.updateCartCount(); 
+    this.updateCartItems();
   }
 
   getCart(): CartItem[] {
@@ -58,40 +56,31 @@ export class CartService implements OnInit {
   }
 
   addToCart(productSize: ProductSizeDTO, qty: number = 1): void {
-    this.loadCart();
-
-    const existing = this.items.find(
-      item => item.productSizeId === productSize.id && item.productId === productSize.product?.id
-    );
-
-    if (existing) {
-      existing.qty += qty;
+    // Récupère les stocks pour ce productSize
+    this.stockService.getStocksByProductSizeId(productSize.id).subscribe(stocks => {
+      const stockIds = stocks.map(s => s.id);
+      if (stockIds.length === 0) {
+        // Ne pas ajouter au panier si aucun stock
+        alert("Ce produit n'est pas disponible en stock.");
+        return;
+      }
+      const cartItem: CartItem = {
+        productId: productSize.prodId,
+        productName: productSize.product?.name ?? '',
+        productImg: productSize.frontUrl,
+        qty,
+        productSizeId: productSize.id,
+        productSize: productSize.sizeProd,
+        productSizePrice: productSize.price,
+        pricePromo: productSize.pricePromo,
+        stockIds, // tableau de string
+        availableQuantities: stocks.map(s => ({ stockId: s.id, quantity: s.quantity })),
+        availableQuantity: stocks.reduce((sum, s) => sum + s.quantity, 0)
+      };
+      // Ajoute au panier
+      this.items.push(cartItem);
       this.saveCart();
-    } else {
-      this.stockService.getStocksByProductSizeId(productSize.id).subscribe((stocks: StockDTO[]) => {
-        const stockIds = stocks.map(s => s.id);
-
-        const newItem: CartItem = {
-          productId: productSize.product?.id || '',
-          productName: productSize.product?.name || '',
-          productImg: productSize.frontUrl || '',
-          qty,
-          productSizeId: productSize.id,
-          productSize: productSize.sizeProd,
-          productSizePrice: productSize.price,
-          pricePromo: productSize.pricePromo,
-          stockIds,
-          availableQuantities: stocks.map(s => ({
-            stockId: s.id,
-            quantity: s.quantity
-          })),
-          availableQuantity: Math.min(...stocks.map(s => s.quantity))
-        };
-
-        this.items.push(newItem);
-        this.saveCart();
-      });
-    }
+    });
   }
 
   removeFromCart(productSizeId: string): void {
@@ -106,8 +95,9 @@ export class CartService implements OnInit {
   }
 
   // Pour récupérer tous les stockIds du panier :
-  getAllStockIds() {
+  getAllStockIds(): string[] {
     return this.getCart()
-      .flatMap(item => item.stockIds); // ou .map(...).flat() selon ta version de JS
+      .map(item => item.stockIds)
+      .flat();
   }
 }

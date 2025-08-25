@@ -4,6 +4,7 @@ import { OrderService } from '../services/order.service';
 import { InvoiceService } from '../services/invoice.service';
 import { CustomerService } from '../services/customer.service';
 import { AuthService } from '../../services/AuthService';
+import { StockService } from '../services/stock.service'; 
 import {
   AddressDTO,
   CartItem,
@@ -100,7 +101,8 @@ export class CheckoutComponent implements OnInit {
     private orderService: OrderService,
     private invoiceService: InvoiceService,
     private customerService: CustomerService,
-    private authService: AuthService
+    private authService: AuthService,
+    private stockService: StockService 
   ) {}
 
   async ngOnInit() {
@@ -112,7 +114,7 @@ export class CheckoutComponent implements OnInit {
     this.loadCustomer();
     this.stripe = await loadStripe('pk_test_51RjaG74EMj4mRh4Ig9G6XBkhmBu7e3fsqGmKkrZZ3WVQA3t9AvkP4zZuy4FQJBS6yfxzH7pi03K9N4beuis76nrn004vakKS5x');
     this.loadAddresses();
-    // NE PAS monter la carte ici, on le fait à l'étape 3
+    
   }
 
   setupStripeCard() {
@@ -121,7 +123,7 @@ export class CheckoutComponent implements OnInit {
         const elements = this.stripe.elements();
         this.card = elements.create('card');
         this.card.mount(this.cardElementRef.nativeElement);
-        // console.log('Stripe card mounted !');
+        
       }
     }
   }
@@ -202,7 +204,9 @@ export class CheckoutComponent implements OnInit {
   }
 
   shippingAddressToString(): string {
-    return `${this.shippingAddress.street} ${this.shippingAddress.appartment ?? ''}, ${this.shippingAddress.city}, ${this.shippingAddress.state} ${this.shippingAddress.zip}, ${this.shippingAddress.country}`;
+    return `${this.shippingAddress.street} ${this.shippingAddress.appartment ?? ''},
+     ${this.shippingAddress.city}, ${this.shippingAddress.state} ${this.shippingAddress.zip},
+      ${this.shippingAddress.country}`;
   }
 
   nextStep() {
@@ -221,56 +225,66 @@ async payer() {
   this.loading = true;
   this.message = '';
 
+  // Vérification des stocks
+  const missingStock = this.cartItems.some(item => !item.stockIds || item.stockIds.length === 0);
+  if (missingStock) {
+    this.message = "Erreur : Certains produits du panier n'ont pas de stock disponible.";
+    this.loading = false;
+    return;
+  }
+
   if (!this.customer?.email || !this.customer?.firstname || !this.customer?.lastname) {
     this.message = "Informations client incomplètes.";
     this.loading = false;
     return;
   }
-console.log('Contenu des cartItems avec stockId:', this.cartItems.map(item => ({
-  productId: item.productId,
-   stockIds: item.stockIds ?? [],
-  qty: item.qty
-})));
-  // Prépare la commande
-  const order: OrderDTO = {
-    customerEmail: this.customer.email, 
-    supplierId: this.orderMode === 'CUSTOMER' ? this.customSupplierId.trim() : '',
-    createdAt: new Date().toISOString(),
-    orderStatus: OrderStatus.Inprogress,
-    paymentMethod: this.payment.method,
-    total: this.total,
-    barcode: '',
-    currency: this.currency,
-    shippingId: this.shippingAddressToString(),
-    description: this.orderMode === 'CUSTOMER' ? this.customDescription : undefined,
-    orderLines: this.cartItems.map(item => ({
-      id: '',
-      orderId: '', 
-      stockId: item.stockIds ?? [],
-      productId: item.productId,
-      qty: item.qty,
-      unitPrice: item.pricePromo ?? item.productSizePrice
-    }))
-  };
+
+  // Prépare la requête de validation de stock
+  const requests = this.cartItems.map(item => ({
+    stockId: item.stockIds[0], // ou choisis le stockId approprié
+    requestedQuantity: item.qty
+  }));
 
   try {
-    // 1. Création de la commande => on récupère l’ID généré (string)
+    // 1. Vérification de la disponibilité des stocks AVANT la commande
+    const isAvailable = await firstValueFrom(this.stockService.validateStockAvailability(requests));
+    if (!isAvailable) {
+      this.message = "Stock insuffisant pour un ou plusieurs produits.";
+      this.loading = false;
+      return;
+    }
+
+    // 2. Création de la commande
+    const order: OrderDTO = {
+      customerEmail: this.customer.email,
+      supplierId: this.orderMode === 'CUSTOMER' ? this.customSupplierId.trim() : '',
+      createdAt: new Date().toISOString(),
+      orderStatus: OrderStatus.Inprogress,
+      paymentMethod: this.payment.method,
+      total: this.total,
+      barcode: '',
+      currency: this.currency,
+      shippingId: this.shippingAddressToString(),
+      description: this.orderMode === 'CUSTOMER' ? this.customDescription : undefined,
+      orderLines: this.cartItems.map(item => ({
+        id: '',
+        orderId: '',
+        stockId: item.stockIds[0],
+        productId: item.productId,
+        qty: item.qty,
+        unitPrice: item.pricePromo ?? item.productSizePrice
+      }))
+    };
+
     const createdOrderId = await firstValueFrom(
       this.orderService.createOrder(order, this.orderMode === 'CUSTOMER')
     );
     this.lastOrderId = createdOrderId;
 
-    // 2. Création de la facture avec orderId (string) et non tableau
+    // 3. Création de la facture
     const invoice: InvoiceDTO = {
       id: '',
-     orderId: this.cartItems.map(item => ({
-  id: '',               // ou génère un id temporaire ou laisse vide si backend le crée
-  orderId: '',          // idem, si backend l'assigne
-  stockId: item.stockIds, // à adapter selon ton CartItem
-  productId: item.productId,
-  qty: item.qty,
-  unitPrice: item.pricePromo ?? item.productSizePrice
-})),
+      orderId: createdOrderId,
       customerEmail: this.customer.email || '',
       paymentMethod: this.payment.method,
       restMonthlyPayment: 0,

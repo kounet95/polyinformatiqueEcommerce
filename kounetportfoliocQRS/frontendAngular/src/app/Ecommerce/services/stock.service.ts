@@ -12,7 +12,7 @@ import { PageResponse } from '../../mesModels/page-response.model';
 export class StockService {
 
   constructor(private http: HttpClient) {}
-
+   
   /**
    * Crée un nouveau stock (Aggregate : StockAggregate, Command : AddStockCommand)
    * @param stock StockDTO
@@ -88,4 +88,13 @@ export class StockService {
     return this.http.get<StockDTO[]>(`${ecpolyQuery.backend}/api/stocks/productsize/${productSizeId}`);
   }
 
+  /**
+   * Valider la disponibilité des stocks
+   */
+  validateStockAvailability(requests: { stockId: string; requestedQuantity: number }[]): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${ecpolyQuery.backend}/api/stocks/validate-availability`,
+      requests
+    );
+  }
 }

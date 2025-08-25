@@ -14,13 +14,15 @@ import lombok.Setter;
 @Setter
 public class OrderLineDTO {
     private String id;
-  @NotBlank(message = "Street cannot be blank")
-  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
+
+    @NotBlank(message = "Order ID cannot be blank")
+    @Size(min = 2, max = 255, message = "Order ID must be between 2 and 255 characters")
     private String orderId;
-  @NotBlank(message = "Street cannot be blank")
-  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
+
+    @NotBlank(message = "Stock ID cannot be blank")
+    @Size(min = 2, max = 255, message = "Stock ID must be between 2 and 255 characters")
     private String stockId;
-  @NotBlank(message = "Street cannot be blank")
-  @Size(min = 2, max = 255, message = "Street must be between 2 and 255 characters")
+
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int qty;
 }

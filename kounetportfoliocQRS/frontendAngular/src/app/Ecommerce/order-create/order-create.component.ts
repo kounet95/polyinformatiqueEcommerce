@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CartService } from '../services/cartservice';
 import { OrderService } from '../services/order.service';
 import { InvoiceService } from '../services/invoice.service';
-import { OrderDTO, OrderLineDTO, InvoiceDTO, OrderStatus, cartItemsAi } from '../../mesModels/models';
+import { OrderDTO, OrderLineDTO, InvoiceDTO, OrderStatus, CartItem } from '../../mesModels/models';
 import { forkJoin } from 'rxjs';
 
-export const cartFixti: cartItemsAi[] = [
+export const cartFixti: CartItem[] = [
   {
     productId: '4b624571-6347-4e94-a606-7fc91fd7f5b2',
     productName: 'T-shirt coton bio',
@@ -51,7 +51,7 @@ export class OrderCreateComponent {
   supplierId = '';
   paymentMethod = '';
   shippingId = '';
-  cartItems: cartItemsAi[] = [];
+  cartItems: CartItem[] = [];
   total = 0;
   message = '';
   loading = false;
@@ -96,7 +96,7 @@ export class OrderCreateComponent {
             const orderLine: OrderLineDTO = {
               id: '',
               orderId,
-              stockId: [stockId], // ✅ tableau
+              stockId: stockId, // ✅ single string
               qty: item.qty
             };
             return this.orderService.addProductToOrder(orderId, orderLine);

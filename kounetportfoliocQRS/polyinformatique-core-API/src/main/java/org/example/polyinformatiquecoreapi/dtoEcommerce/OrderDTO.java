@@ -3,6 +3,7 @@ package org.example.polyinformatiquecoreapi.dtoEcommerce;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +44,6 @@ public class OrderDTO {
   private String shippingId;
 
   // Liste des lignes de commande
+  @Valid
   private List<OrderLineDTO> orderLines;
 }

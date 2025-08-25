@@ -143,7 +143,7 @@ public class OrderAggregate {
   @EventSourcingHandler
   public void on(OrderCreatedEvent event) {
     OrderDTO dto = event.getOrderDTO();
-    this.orderId = dto.getId();
+    this.orderId = event.getId();
     this.customerEmail = dto.getCustomerEmail();
     this.supplierId = dto.getSupplierId();
     this.currency = dto.getCurrency();

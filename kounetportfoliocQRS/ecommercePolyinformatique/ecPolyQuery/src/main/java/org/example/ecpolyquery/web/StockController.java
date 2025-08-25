@@ -102,7 +102,8 @@ public class StockController {
   }
 
   @PostMapping("/validate-availability")
-  public CompletableFuture<Boolean> validateStockAvailability(@RequestBody List<StockValidationRequest> requests) {
+  public CompletableFuture<Boolean> validateStockAvailability(
+    @RequestBody List<StockValidationRequest> requests) {
     return CompletableFuture.supplyAsync(() -> {
       for (StockValidationRequest request : requests) {
         Stock stock = stockRepository.findById(request.getStockId()).orElse(null);

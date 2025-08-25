@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { RouterModule } from '@angular/router';
@@ -42,7 +41,6 @@ import { LikeService } from '../Ecommerce/services/like.service';
     MatPaginatorModule,
     MatSortModule,
     MatTabsModule,
-    BrowserAnimationsModule,
     KeycloakAngularModule,
     CarouselModule,
     RouterModule,
@@ -51,8 +49,8 @@ import { LikeService } from '../Ecommerce/services/like.service';
 })
 export class NavbarComponent implements OnInit {
   cartCount = 0;
-  cartItems: any[] = [];   
-  cartTotal = 0;           
+  cartItems: any[] = [];
+  cartTotal = 0;
   title = 'ecom-app-angular';
   isMenuOpen = false;
   isLoggedIn = false;
@@ -61,7 +59,7 @@ export class NavbarComponent implements OnInit {
   likedItems: any[] = [];
 
 constructor(
-    private keycloakService: KeycloakService, 
+    private keycloakService: KeycloakService,
     private cartService: CartService,
     private likeService: LikeService
   ) {}

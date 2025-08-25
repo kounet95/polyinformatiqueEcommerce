@@ -7,7 +7,7 @@ export interface ArticleModel {
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string; 
+  createdAt: string;
   authorId: string;
   domainId: string;
   tagIds: string[];
@@ -21,7 +21,7 @@ export interface ArticleModel {
 export interface CommentModel {
   id: string;
   contenu: string;
-  createdAt: string; 
+  createdAt: string;
   authorId: string;
   itemId: string;
 }
@@ -33,7 +33,7 @@ export interface CommentModel {
 export interface DomainModel {
   id: string;
   name: string;
-  articles: string[]; 
+  articles: string[];
 }
 
 // ===============================
@@ -43,12 +43,12 @@ export interface DomainModel {
 export interface EventModel {
   id: string;
   location: string;
-  begin: string;      
-  end: string;        
+  begin: string;
+  end: string;
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;  
+  createdAt: string;
   authorId: string;
   domainId: string;
   tagIds: string[];
@@ -64,11 +64,11 @@ export interface ItemModel {
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;      
+  createdAt: string;
   authorId: string;
-  mediaIds: string[];    
-  commentIds: string[];   
-  tagIds: string[];       
+  mediaIds: string[];
+  commentIds: string[];
+  tagIds: string[];
 }
 
 // ===============================
@@ -81,7 +81,7 @@ export interface NewsModel {
   content: string;
   urlMedia: string;
   title: string;
-  createdAt: string;   
+  createdAt: string;
   authorId: string;
   domainId: string;
   tagIds: string[];
@@ -108,7 +108,7 @@ export interface AddressDTO {
   state: string;
   zip: string;
   country: string;
-  appartment?: number | string; 
+  appartment?: number | string;
   customer?: string;
   store?: string;
   supplier?: string;
@@ -135,7 +135,7 @@ export interface CustomerEcommerceDTO {
   email: string;
   phone: string;
   addressId: string;
-  createdAt?: string; 
+  createdAt?: string;
 }
 
 // ===============================
@@ -143,14 +143,14 @@ export interface CustomerEcommerceDTO {
 // ===============================
 export interface InvoiceDTO {
   id: string;
-  orderId?:  OrderLineDTO[];
+  orderId?: string;
   customerEmail: string;
   amount: number;
   paymentMethod: string;
   restMonthlyPayment: number;
   paymentStatus: string;
   supplierId: string;
-  
+
 }
 export interface cartItemsAi {
     productId: string;      // ID du produit
@@ -170,8 +170,8 @@ export interface OrderDTO {
 
   customerEmail: string;
   supplierId: string;
-  currency?: string; 
-  createdAt: string; 
+  currency?: string;
+  createdAt: string;
   orderStatus: OrderStatus;
   paymentMethod: string;
   total: number;
@@ -187,7 +187,7 @@ export interface OrderDTO {
 export interface OrderLineDTO {
   id: string;
   orderId: string;
-  stockId: string[];
+  stockId: string;
   qty: number;
 }
 
@@ -232,9 +232,9 @@ export interface ProductDTO {
 // ========== LikeDTO ==========
 // ===============================
 export interface LikeDTO {
-  id: string; 
-  userId: string; 
-  productId: string;  
+  id: string;
+  userId: string;
+  productId: string;
 }
 // ===============================
 // ========== ProductSizeDTO ==========
@@ -242,8 +242,8 @@ export interface LikeDTO {
 export interface ProductSizeDTO {
   id: string;
   sizeProd: SizeProd;
-  prodId: string; 
-  product?: ProductDTO; 
+  prodId: string;
+  product?: ProductDTO;
   price: number;
   pricePromo: number;
   frontUrl: string;
@@ -256,7 +256,7 @@ export interface Page<T> {
   totalElements: number;
   totalPages: number;
   number: number;
-  size: number;  
+  size: number;
 }
 
 // ===============================
