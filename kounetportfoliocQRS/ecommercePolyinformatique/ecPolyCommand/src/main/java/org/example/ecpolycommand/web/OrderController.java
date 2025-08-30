@@ -37,7 +37,7 @@ public class OrderController {
   private final StripeConfigProperties config;
   private final RestTemplate restTemplate;
 
-  @Value("${ecpolyquery.service.url:http://localhost:8082}")
+  @Value("${ecpolyquery.service.url:http://localhost:8888/ecpolyquery/api/stocks/validate-availability}")
   private String queryServiceUrl;
 
   public OrderController(CommandGateway commandGateway,
@@ -74,7 +74,7 @@ public class OrderController {
     }
 
     try {
-      String validationUrl = queryServiceUrl + "/api/stocks/validate-availability";
+      String validationUrl = queryServiceUrl ;
       Boolean stockAvailable = restTemplate.postForObject(validationUrl, stockValidationRequests, Boolean.class);
 
       if (stockAvailable == null || !stockAvailable) {
