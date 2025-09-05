@@ -1,6 +1,5 @@
 package org.example.ecpolycommand.config;
 
-import com.google.api.client.util.Value;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,7 +17,6 @@ public class StripeConfigProperties {
     private String key;
     private String secretKey;
   }
-
   @Getter @Setter
   public static class Webhook {
     private String secret;

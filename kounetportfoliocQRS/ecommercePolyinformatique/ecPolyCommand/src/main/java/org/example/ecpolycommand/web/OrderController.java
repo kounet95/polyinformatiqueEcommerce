@@ -12,9 +12,9 @@ import org.example.polyinformatiquecoreapi.dtoEcommerce.CreateOrderRequest;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.InvoiceDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderDTO;
 import org.example.polyinformatiquecoreapi.dtoEcommerce.OrderLineDTO;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -29,7 +29,6 @@ import org.springframework.beans.factory.annotation.Value;
 @RestController
 @RequestMapping("/order/command")
 public class OrderController {
-  //  Renomme la classe : un nom explicite ! (Order -> OrderController)
 
   private final CommandGateway commandGateway;
   private final EventStore eventStore;
@@ -37,10 +36,13 @@ public class OrderController {
   private final StripeConfigProperties config;
   private final RestTemplate restTemplate;
 
-  @Value("${ecpolyquery.service.url:http://localhost:8888/ecpolyquery/api/stocks/validate-availability}")
+  @Value("""
+    ${ecpolyquery.service.url:http://ecPolyQuery:8084/api/stocks/validate-availability}
+    """)
   private String queryServiceUrl;
 
-  public OrderController(CommandGateway commandGateway,
+  public OrderController(
+                         CommandGateway commandGateway,
                          EventStore eventStore,
                          StripeServiceImpl stripeService,
                          StripeConfigProperties config,
@@ -74,8 +76,21 @@ public class OrderController {
     }
 
     try {
-      String validationUrl = queryServiceUrl ;
-      Boolean stockAvailable = restTemplate.postForObject(validationUrl, stockValidationRequests, Boolean.class);
+      // Récuperation du token JWT du contexte de sécurité courant
+      String token = null;
+      if (SecurityContextHolder.getContext().getAuthentication() instanceof JwtAuthenticationToken jwtAuth) {
+        token = jwtAuth.getToken().getTokenValue();
+      }
+
+      HttpHeaders headers = new HttpHeaders();
+      if (token != null) {
+        headers.setBearerAuth(token);
+      }
+      headers.setContentType(MediaType.APPLICATION_JSON);
+
+      HttpEntity<List<StockValidationRequest>> entity = new HttpEntity<>(stockValidationRequests, headers);
+
+      Boolean stockAvailable = restTemplate.postForObject(queryServiceUrl, entity, Boolean.class);
 
       if (stockAvailable == null || !stockAvailable) {
         throw new IllegalArgumentException("Stock insuffisant pour une ou plusieurs lignes de commande");
@@ -87,18 +102,22 @@ public class OrderController {
     return commandGateway.send(new CreateOrderCommand(orderDTO.getId(), orderDTO, request.isCustom()));
   }
 
+
   // Classe interne pour la validation des stocks
   public static class StockValidationRequest {
     private String stockId;
     private int requestedQuantity;
 
-    public StockValidationRequest() {}
+    public StockValidationRequest() {
 
-    public StockValidationRequest(String stockId, int requestedQuantity) {
+    }
+
+    public StockValidationRequest(
+      String stockId,
+      int requestedQuantity) {
       this.stockId = stockId;
       this.requestedQuantity = requestedQuantity;
     }
-
     public String getStockId() { return stockId; }
     public void setStockId(String stockId) { this.stockId = stockId; }
     public int getRequestedQuantity() { return requestedQuantity; }

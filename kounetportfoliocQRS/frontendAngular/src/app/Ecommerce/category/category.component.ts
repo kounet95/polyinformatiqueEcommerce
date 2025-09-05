@@ -18,6 +18,7 @@ import { AnnouncementBarComponent } from '../announcement-bar/announcement-bar.c
 import { LikeProductComponent } from '../like-product/like-product.component';
 import { AuthService } from '../../services/AuthService';
 import { LikeService } from '../services/like.service';
+import { StockService } from '../services/stock.service';
 
 type CategoryWithChildren = CategoryDTO & { children?: { id: string; name: string }[] };
 
@@ -52,6 +53,9 @@ export class CategoryComponent implements OnInit {
   likedMap: Record<string, boolean> = {};
 likeCountMap: Record<string, number> = {};
 
+// Ajoute une propriété pour stocker les quantités
+stockMap: Record<string, number> = {};
+
   
   datasource: any;
  page: number = 0;
@@ -83,7 +87,8 @@ likeCountMap: Record<string, number> = {};
     private router: Router,
     private authService: AuthService,
     private likeService: LikeService,
-    private socialGroupService: CategoriesocialesService 
+    private socialGroupService: CategoriesocialesService,
+     private stockService: StockService 
   ) {}
 
   ngOnInit(): void {
@@ -195,6 +200,17 @@ likeCountMap: Record<string, number> = {};
     });
   }
 
+  fetchStockForProductSizes() {
+  if (!this.productSizes) return;
+  this.productSizes.forEach(size => {
+    this.stockService.getStocksByProductSizeId(size.id).subscribe(stocks => {
+      // Additionne les quantités de tous les stocks liés à ce ProductSize
+      const totalQty = stocks.reduce((sum, stock) => sum + (stock.quantity ?? 0), 0);
+      this.stockMap[size.id] = totalQty;
+    });
+  });
+}
+
   fetchFilteredProductSizes(): void {
   this.loading = true;
 
@@ -231,6 +247,7 @@ likeCountMap: Record<string, number> = {};
       this.productSizes = sizes;
       this.loading = false;
       this.updateActiveFilters();
+      this.fetchStockForProductSizes(); // <-- Ajout ici
     },
     error: () => {
       this.error = "Erreur lors de la recherche.";

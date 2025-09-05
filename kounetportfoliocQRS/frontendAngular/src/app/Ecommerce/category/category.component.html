@@ -237,3 +237,12 @@
     </div>
   </div>
 </section>
+
+<div *ngFor="let size of productSizes">
+  <div>
+    {{ size.product?.name }} - Taille: {{ size.sizeProd }}
+    <span *ngIf="stockMap[size.id] !== undefined">
+      | Stock disponible: {{ stockMap[size.id] }}
+    </span>
+  </div>
+</div>

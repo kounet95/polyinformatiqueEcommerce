@@ -12,7 +12,7 @@ public class AxonConfig {
     @Bean
     public XStream xStream() {
         XStream xStream = new XStream();
-        // Autorise les classe
+
         xStream.allowTypesByWildcard(new String[] {
                 "org.example.polyinformatiquecoreapi.commandEcommerce.**",
                 "org.example.polyinformatiquecoreapi.eventEcommerce.**",
@@ -20,7 +20,9 @@ public class AxonConfig {
                 "org.example.ecpolyquery.query.**",
                 "org.example.ecpolyquery.entity.**",
                 "org.example.ecpolycommand.saga.**",
-                "org.example.ecpolyquery.dto.**"
+                "org.example.ecpolyquery.dto.**",
+                "package org.example.ecpolycommand.config.**",
+                "org.example.ecpolycommand.service.imple.**"
         });
         return xStream;
     }
