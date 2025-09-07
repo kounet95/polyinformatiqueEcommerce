@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommentModel, ProductDTO, ProductSizeDTO } from '../../../app/mesModels/models';
+import { ProductDTO, ProductSizeDTO } from '../../../app/mesModels/models';
 import { ProductService } from '../../../app/Ecommerce/services/produit.service';
-import { CartService } from '../../../app/Ecommerce/services/cartservice';
 import { ProductSizeService } from '../services/product-size.service';
-import { CommentService } from '../services/commentaire.service';
+import { CartService } from '../services/cartservice';
 import { LikeService } from '../services/like.service';
 import { AuthService } from '../../services/AuthService';
+import { StockService } from '../services/stock.service';
 
 @Component({
   selector: 'app-product-details',
@@ -15,81 +15,83 @@ import { AuthService } from '../../services/AuthService';
   standalone: false,
 })
 export class ProductDetailsComponent implements OnInit {
-
   product: ProductDTO | null = null;
   productSize: ProductSizeDTO | null = null;
-  commentaire: CommentModel[] = [];
-
   quantity = 1;
   addedMessage = '';
-
   selectedImageIndex = 0;
-
-  colors = [
-    { value: 'black', name: 'Noir', selected: true },
-    { value: 'gray', name: 'Gris', selected: false },
-    { value: 'blue', name: 'Bleu', selected: false },
-    { value: 'pink', name: 'Rose', selected: false }
-  ];
-
-  selectedSize = ''; 
-
+  selectedSize = '';
   likeCount = 0;
   liked = false;
+  stockCount: number | null = null;
 
   reviews = [
-    { author: 'John Doe', date: '21/04/2024', rating: 5, text: 'Exceptional sound quality and comfort.' },
-    { author: 'Jane Smith', date: '19/04/2024', rating: 4, text: 'Great headphones, battery could be better.' },
-    { author: 'Michael Johnson', date: '12/04/2024', rating: 5, text: 'Impressive noise cancellation.' }
+    {
+      avatar: 'assets/img/person/person-m-1.webp',
+      name: 'John Doe',
+      date: '03/15/2024',
+      rating: 5,
+      title: 'Super qualité',
+      content: 'Produit conforme, très confortable et livraison rapide.'
+    },
+    // ...autres avis...
   ];
+
+  newReview = {
+    rating: 5,
+    name: '',
+    email: '',
+    title: '',
+    content: ''
+  };
+
+  reviewMessage = '';
+
+  // Pour la galerie d'images
+  get images(): string[] {
+    if (!this.productSize) return [];
+    return [
+      this.productSize.frontUrl,
+      this.productSize.backUrl,
+      this.productSize.leftUrl,
+      this.productSize.rightUrl
+    ].filter(Boolean);
+  }
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
     private productSizeService: ProductSizeService,
-    private commentaireService: CommentService,
     private cartService: CartService,
     private likeService: LikeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private stockService: StockService
   ) {}
 
-ngOnInit(): void {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.productSizeService.getProductSizeById(id).subscribe(size => {
         this.productSize = size;
-        console.log('ProductSize:', size);
-
         this.selectedSize = size.sizeProd;
-
-        const prodIdToUse = size.prodId || '4b624571-6347-4e94-a606-7fc91fd7f5b2';
-        if (prodIdToUse) {
-          this.productService.getProductById(prodIdToUse).subscribe(prod => {
+        if (size.prodId) {
+          this.productService.getProductById(size.prodId).subscribe(prod => {
             this.product = prod;
-            console.log('Product:', prod);
-
             this.loadLikesCount();
             this.checkIfLiked();
           });
-        } else {
-          console.warn('prodId is null, cannot load product');
+        }
+        if (this.productSize?.id) {
+          this.stockService.getStocksByProductSizeId(this.productSize.id).subscribe(stocks => {
+            this.stockCount = stocks.reduce((sum, stock) => sum + (stock.quantity ?? 0), 0);
+          });
         }
       });
-
-    } else {
-      alert('Vous devez sélectionner un produit');
     }
-
-    const sizeId = this.route.snapshot.paramMap.get('id');
-    console.log('ProductSize.id:', sizeId);
   }
 
   selectImage(idx: number) {
     this.selectedImageIndex = idx;
-  }
-
-  selectColor(idx: number) {
-    this.colors.forEach((c, i) => c.selected = i === idx);
   }
 
   selectSize(size: string) {
@@ -101,71 +103,56 @@ ngOnInit(): void {
   }
 
   decrementQty() {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
+    if (this.quantity > 1) this.quantity--;
   }
 
   addToCart() {
-    if (!this.product) return;
-
+    if (!this.productSize) return;
+    this.cartService.addToCart(this.productSize, this.quantity);
     this.addedMessage = 'Produit ajouté au panier !';
-    // this.cartService.addToCart({...});
     setTimeout(() => (this.addedMessage = ''), 1500);
   }
 
- toggleLike() {
-  const customerId = this.authService.getUserId();
-  console.log("Customer ID:", customerId);
-
-  if (!this.productSize?.id) {
-    alert("Produit non défini !");
-    return;
+  toggleLike() {
+    const customerId = this.authService.getUserId();
+    if (!this.productSize?.id || !customerId) return;
+    if (this.liked) {
+      this.likeService.unlikeProduct(this.productSize.id).subscribe(() => {
+        this.liked = false;
+        this.loadLikesCount();
+      });
+    } else {
+      this.likeService.likeProduct(this.productSize.id).subscribe(() => {
+        this.liked = true;
+        this.loadLikesCount();
+      });
+    }
   }
 
-  if (!customerId) {
-    alert("Utilisateur non connecté !");
-    return;
-  }
-
-  if (this.liked) {
-    this.likeService.unlikeProduct(this.productSize.id).subscribe(() => {
-      this.liked = false;
-      this.loadLikesCount();
-    });
-  } else {
-    this.likeService.likeProduct(this.productSize.id).subscribe(() => {
-      this.liked = true;
-      this.loadLikesCount();
+  private loadLikesCount() {
+    if (!this.productSize?.id) return;
+    this.likeService.countLikesByProduct(this.productSize.id).subscribe(count => {
+      this.likeCount = count;
     });
   }
-}
 
-private loadLikesCount() {
-  if (!this.productSize?.id) return; 
-  this.likeService.countLikesByProduct(this.productSize.id).subscribe(count => {
-    this.likeCount = count;
-  });
-}
-
-private checkIfLiked() {
-  const customerId = this.authService.getUserId();
-  console.log("Customer ID (check):", customerId);
-
-  if (!this.productSize?.id || !customerId) return;
-
-  this.likeService.checkCustomerLiked(this.productSize.id, customerId).subscribe(isLiked => {
-    this.liked = isLiked;
-  });
-}
-
-
-  get selectedColorName(): string {
-    const selected = this.colors.find(c => c.selected);
-    return selected ? selected.name : '';
+  private checkIfLiked() {
+    const customerId = this.authService.getUserId();
+    if (!this.productSize?.id || !customerId) return;
+    this.likeService.checkCustomerLiked(this.productSize.id, customerId).subscribe(isLiked => {
+      this.liked = isLiked;
+    });
   }
 
   get fiveStars() {
     return [1, 2, 3, 4, 5];
+  }
+
+  submitReview() {
+    // Ici tu peux envoyer l'avis au backend ou juste l'ajouter localement
+    this.reviews.unshift({ ...this.newReview, date: new Date().toLocaleDateString(), avatar: 'assets/img/person/person-m-1.webp' });
+    this.reviewMessage = "Merci pour votre avis !";
+    this.newReview = { rating: 5, name: '', email: '', title: '', content: '' };
+    setTimeout(() => this.reviewMessage = '', 3000);
   }
 }
