@@ -1,4 +1,4 @@
-FROM stripe/stripe-cli:v1.30.0
+FROM stripe/stripe-cli:latest
 
 USER root
 RUN apk add --no-cache curl jq

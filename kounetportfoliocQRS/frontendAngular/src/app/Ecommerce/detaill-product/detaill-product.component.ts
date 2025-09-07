@@ -32,7 +32,7 @@ export class ProductDetailsComponent implements OnInit {
     { value: 'pink', name: 'Rose', selected: false }
   ];
 
-  selectedSize = ''; // taille dynamique
+  selectedSize = ''; 
 
   likeCount = 0;
   liked = false;
@@ -53,7 +53,7 @@ export class ProductDetailsComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.productSizeService.getProductSizeById(id).subscribe(size => {

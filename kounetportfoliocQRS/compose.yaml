@@ -205,9 +205,6 @@ services:
       - CONFIG_SERVICE_URL=http://configservice:9999
       - AXON_AXONSERVER_SERVERS=axonserver:8124
       - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/polyinformatiqueEcommerce
-      - STRIPE_API_KEY=${STRIPE_API_KEY}
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
       interval: 10s

@@ -68,20 +68,20 @@ public class OrderProcessingSaga {
   public void on(PaymentIntentCreatedEvent event) {
     log.info(" [Saga] PaymentIntent created for order {} with clientSecret={}",
       event.getOrderId(), event.getClientSecret());
-    // TODO : notifier le frontend avec le clientSecret si nécessaire
+
   }
 
   @SagaEventHandler(associationProperty = "orderId")
   public void on(PaymentCompletedEvent event) {
     log.info("[Saga] Payment completed for order {}", event.getOrderId());
     commandGateway.send(new CompleteOrderCommand(event.getOrderId()));
-    SagaLifecycle.end(); // Termine la saga proprement
+    SagaLifecycle.end();
   }
 
   @SagaEventHandler(associationProperty = "orderId")
   public void on(PaymentFailedEvent event) {
     log.warn(" [Saga] Payment failed for order {}", event.getOrderId());
     commandGateway.send(new CancelOrderCommand(event.getOrderId()));
-    SagaLifecycle.end(); // Termine la saga proprement
+    SagaLifecycle.end();
   }
 }
