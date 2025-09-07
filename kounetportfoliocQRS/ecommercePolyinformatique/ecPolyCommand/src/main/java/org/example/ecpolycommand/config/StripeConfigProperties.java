@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 public class StripeConfigProperties {
   private Api api;
   private Webhook webhook;
-
   @Getter @Setter
   public static class Api {
     private String key;

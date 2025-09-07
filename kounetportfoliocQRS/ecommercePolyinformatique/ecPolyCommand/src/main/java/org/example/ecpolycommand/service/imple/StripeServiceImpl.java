@@ -87,8 +87,8 @@ public class StripeServiceImpl implements StripeService {
 
   @PostConstruct
   public void logStripeKey() {
-    System.out.println("Stripe API Key loaded from config: " +
-      (config.getApi() == null || config.getApi().getKey() == null ? "<null>" : config.getApi().getKey().substring(0, 6) + "********"));
+    System.out.println("Stripe API Key from config.getApi().getKey(): " + config.getApi().getKey());
+
     System.out.println("Stripe Webhook secret loaded: " +
       (config.getWebhook() == null || config.getWebhook().getSecret() == null ? "<null>" : config.getWebhook().getSecret().substring(0, 6) + "********"));
 
