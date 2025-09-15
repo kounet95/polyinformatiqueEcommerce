@@ -5,6 +5,8 @@ import { KeycloakService } from 'keycloak-angular';
   providedIn: 'root'
 })
 export class AuthService {
+  errorMsg: string | null = null;
+
   constructor(private keycloak: KeycloakService) {}
 
   getUserId(): string | null {
@@ -21,5 +23,14 @@ export class AuthService {
       email: tokenParsed.email || '',
       phone: tokenParsed.phone_number || ''
     };
+  }
+
+  checkUserAuthentication() {
+    const userId = this.getUserId();
+    if (!userId) {
+      this.errorMsg = 'Utilisateur non authentifié.';
+      return;
+    }
+    this.errorMsg = null;
   }
 }

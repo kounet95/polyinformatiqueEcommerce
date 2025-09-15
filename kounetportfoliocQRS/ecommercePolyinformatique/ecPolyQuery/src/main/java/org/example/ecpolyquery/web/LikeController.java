@@ -42,7 +42,7 @@ public class LikeController {
   /**
    * Vérifier si un utilisateur a liké un produit.
    */
-  @GetMapping("/{productId}/likes/exists")
+  @GetMapping("/{productSizeId}/likes/exists")
   public CompletableFuture<ResponseEntity<Boolean>> checkIfCustomerLiked(
     @PathVariable String productId,
     @RequestParam String customerId) {

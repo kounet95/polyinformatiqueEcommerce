@@ -3,9 +3,11 @@
   <input formControlName="lastname" placeholder="Last name">
   <input formControlName="email" placeholder="Email">
   <input formControlName="phone" placeholder="Phone">
-
-  <h4>Adresse</h4>
+<h4>Adresse</h4>
   <app-address-form [parentForm]="addressGroup"></app-address-form>
+
 
   <button type="submit">Créer le client</button>
 </form>
+<div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+<div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>

@@ -52,7 +52,7 @@ export class CategoryComponent implements OnInit {
   socialGroups: string[] = [];
   likedMap: Record<string, boolean> = {};
 likeCountMap: Record<string, number> = {};
-
+likedProductSizeIds: string[] = [];
 // Ajoute une propriété pour stocker les quantités
 stockMap: Record<string, number> = {};
 
@@ -97,6 +97,8 @@ stockMap: Record<string, number> = {};
     this.datasource = new MatTableDataSource();
     this.loadProductSizes();
     this.loadingSocialGroups();
+    this.loadLikedProductSizeIds();
+    console.log('Liked Product Size IDs:', this.likedProductSizeIds);
   }
 
 
@@ -237,7 +239,7 @@ stockMap: Record<string, number> = {};
     maxPromo,
     this.filters.selectedProductSize ?? undefined,
     onSale,
-    undefined, // newSince not used here
+    undefined, 
     this.filters.selectedCouleurs,
     subcategoryId,
     this.filters.selectedSocialGroup ?? undefined
@@ -247,7 +249,7 @@ stockMap: Record<string, number> = {};
       this.productSizes = sizes;
       this.loading = false;
       this.updateActiveFilters();
-      this.fetchStockForProductSizes(); // <-- Ajout ici
+      this.fetchStockForProductSizes(); 
     },
     error: () => {
       this.error = "Erreur lors de la recherche.";
@@ -449,24 +451,40 @@ voirDetaille(sizeId: string) {
   }
 
 
-  toggleLike(size: ProductSizeDTO) {
-  const customerId = this.authService.getUserId();
-  if (!size.id || !customerId) return;
-
-  const isLiked = this.likedMap[size.id] || false;
-
-  if (isLiked) {
-    this.likeService.unlikeProduct(size.id).subscribe(() => {
-      this.likedMap[size.id] = false;
-      this.loadLikesCount(size);
-    });
-  } else {
-    this.likeService.likeProduct(size.id).subscribe(() => {
-      this.likedMap[size.id] = true;
-      this.loadLikesCount(size);
-    });
+   private loadLikedProductSizeIds() {
+    const customerId = this.authService.getUserId();
+    if (customerId) {
+      this.likeService.getLikesByCustomer(customerId).subscribe(likes => {
+        // Correction : on récupère l'id du ProductSize, pas le champ product
+        const productSizeIds = likes
+          .map(like => like.id) // <-- 'id' doit être l'id du ProductSize dans la réponse
+          .filter((id, index, self) => !!id && self.indexOf(id) === index);
+        this.likedProductSizeIds = productSizeIds;
+        // Tu peux aussi remplir likedMap si besoin :
+        this.likedMap = {};
+        productSizeIds.forEach(id => this.likedMap[id] = true);
+      });
+    }
   }
-}
+
+  toggleLike(size: ProductSizeDTO) {
+    const customerId = this.authService.getUserId();
+    if (!size.id || !customerId) return;
+
+    const isLiked = this.likedMap[size.id] || false;
+
+    if (isLiked) {
+      this.likeService.unlikeProduct(size.id).subscribe(() => {
+        this.likedMap[size.id] = false;
+        this.loadLikesCount(size);
+      });
+    } else {
+      this.likeService.likeProduct(size.id).subscribe(() => {
+        this.likedMap[size.id] = true;
+        this.loadLikesCount(size);
+      });
+    }
+  }
 
 private loadLikesCount(size: ProductSizeDTO) {
   if (!size.id) return;

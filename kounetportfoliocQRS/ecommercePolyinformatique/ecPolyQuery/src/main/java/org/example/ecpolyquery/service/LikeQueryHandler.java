@@ -7,6 +7,7 @@ import org.example.ecpolyquery.entity.Customer;
 import org.example.ecpolyquery.entity.LikeProduct;
 import org.example.ecpolyquery.entity.Product;
 import org.example.ecpolyquery.entity.ProductSize;
+import org.example.ecpolyquery.query.GetLikesByCustomerQuery;
 import org.example.ecpolyquery.query.GetLikesByProductQuery;
 import org.example.ecpolyquery.query.CountLikesByProductQuery;
 import org.example.ecpolyquery.query.CheckCustomerLikedProductQuery;
@@ -71,5 +72,18 @@ public class LikeQueryHandler {
 
     return likeRepository.existsByCustomerAndProduct(customer, product);
   }
+  /**
+   * Récupérer tous les likes pour un client donné
+   */
+  @QueryHandler
+  public List<LikeProduct> handle(GetLikesByCustomerQuery query) {
+    log.debug("Handling GetLikesByCustomerQuery for customerId: {}", query.getCustomerId());
 
+    Customer customer = customerRepository.findById(query.getCustomerId())
+      .orElseThrow(() -> new RuntimeException("Customer not found with id: " + query.getCustomerId()));
+
+    return likeRepository.findAll().stream()
+      .filter(like -> like.getCustomer().getId().equals(customer.getId()))
+      .toList();
+  }
 }

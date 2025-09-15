@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
- 
+
 @Component({
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
@@ -9,8 +9,8 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class AddressFormComponent {
- @Input() parentForm!: FormGroup;
- 
+  @Input() parentForm!: FormGroup;
+
   static buildAddressForm(fb: FormBuilder) {
     return fb.group({
       street: ['', Validators.required],

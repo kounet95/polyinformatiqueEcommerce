@@ -16,8 +16,8 @@ import { AddressFormComponent } from '../address-form/address-form.component';
     AddressFormComponent
   ]
 })
-export class CreatCustomerComponent implements OnInit {
-  form: FormGroup;
+export class CreateCustomerComponent implements OnInit {
+  form!: FormGroup;
   customerId?: string;
   errorMsg = '';
   successMsg = '';
@@ -27,17 +27,17 @@ export class CreatCustomerComponent implements OnInit {
     private fb: FormBuilder,
     private customerService: CustomerService,
     private authService: AuthService
-  ) {
-    this.form = this.fb.group({
+  ) {this.form = this.fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       address: AddressFormComponent.buildAddressForm(this.fb)
-    });
-  }
+    });}
 
   ngOnInit(): void {
+    
+
     this.loadUserData();
   }
 
@@ -88,51 +88,46 @@ export class CreatCustomerComponent implements OnInit {
     });
   }
 
-submit() {
-  if (this.form.valid) {
-    const address = this.form.value.address;
+  submit() {
+    if (this.form.valid) {
+      const address = this.form.value.address;
 
-    const payload = {
-      firstname: this.form.value.firstname,
-      lastname: this.form.value.lastname,
-      email: this.form.value.email,
-      phone: this.form.value.phone,
+      const payload = {
+        id: this.customerId ?? '',
+        firstname: this.form.value.firstname,
+        lastname: this.form.value.lastname,
+        email: this.form.value.email,
+        phone: this.form.value.phone,
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zip: address.zip,
+        country: address.country,
+        appartment: address.appartment,
+        links: [
+          {
+            targetType: 'CUSTOMER',
+            targetId: this.customerId ?? '', 
+            addressId: '' 
+          }
+        ]
+      };
 
-      //Ici on "déplie" l'objet adresse
-      street: address.street,
-      city: address.city,
-      state: address.state,
-      zip: address.zip,
-      country: address.country,
-      appartment: address.appartment,
+      console.log('Payload envoyé :', payload);
 
-      // Optionnel : tu peux passer links si tu veux gérer ça côté front
-      links: [
-        {
-          targetType: 'CUSTOMER',
-          targetId: this.customerId ?? '', // ou autre ID
-          addressId: '' // laissé vide, c'est ton aggregate qui lie tout
+      this.customerService.createCustomerWithAddress(payload).subscribe({
+        next: () => {
+          this.successMsg = 'Client et adresse créés et liés avec succès !';
+        },
+        error: () => {
+          this.errorMsg = 'Une erreur est survenue lors de la sauvegarde.';
         }
-      ]
-    };
-
-    console.log('Payload envoyé :', payload);
-
-    this.customerService.createCustomerWithAddress(payload).subscribe({
-      next: () => {
-        this.successMsg = 'Client et adresse créés et liés avec succès !';
-      },
-      error: () => {
-        this.errorMsg = 'Une erreur est survenue lors de la sauvegarde.';
-      }
-    });
+      });
+    }
   }
-}
 
 
-
-  get addressGroup(): FormGroup {
+   get addressGroup(): FormGroup {
     return this.form.get('address') as FormGroup;
   }
-
 }

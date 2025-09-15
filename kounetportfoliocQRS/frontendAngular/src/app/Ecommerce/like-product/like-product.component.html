@@ -3,3 +3,10 @@
   <button *ngIf="isLiked" (click)="unlike()">👎 Unlike</button>
   <span>{{ likeCount }} Likes</span>
 </div>
+<div *ngIf="likedProducts.length === 0">Aucun produit liké.</div>
+<div *ngFor="let like of likedProducts">
+  <div>
+    Produit liké ID : {{ like.productId }}
+    <button (click)="unlike()">Unliker</button>
+  </div>
+</div>

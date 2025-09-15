@@ -29,7 +29,7 @@ public class LikeProductAggregate {
   // Constructeur vide pour Axon
   public LikeProductAggregate() {}
 
-  // ✅ Le "create" doit être un constructeur CommandHandler
+  //Le "create" doit être un constructeur CommandHandler
   @CommandHandler
   public LikeProductAggregate(LikerProductCommand cmd) {
     log.info("Handling Like Command for product {} by user {}", cmd.getProduct(), cmd.getUser());

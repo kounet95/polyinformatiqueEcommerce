@@ -40,9 +40,6 @@ public class CustomerAggregate {
   @CommandHandler
   public CustomerAggregate(CreateCustomerCommand cmd) {
     String id = cmd.getAuthor().getId();
-    if (id == null || id.isEmpty()) {
-      id = UUID.randomUUID().toString();
-    }
 
     CustomerEcommerceDTO authorWithId = new CustomerEcommerceDTO(
       id,

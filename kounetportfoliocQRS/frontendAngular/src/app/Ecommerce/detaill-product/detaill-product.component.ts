@@ -88,6 +88,11 @@ export class ProductDetailsComponent implements OnInit {
         }
       });
     }
+    const productId = '896517ad-ed86-42f5-b5a9-44dc1fa6ee13';
+    this.likeService.getLikesByProduct(productId).subscribe(likes => {
+      console.log('Likes for product:', likes);
+      
+    });
   }
 
   selectImage(idx: number) {
@@ -149,7 +154,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   submitReview() {
-    // Ici tu peux envoyer l'avis au backend ou juste l'ajouter localement
+   
     this.reviews.unshift({ ...this.newReview, date: new Date().toLocaleDateString(), avatar: 'assets/img/person/person-m-1.webp' });
     this.reviewMessage = "Merci pour votre avis !";
     this.newReview = { rating: 5, name: '', email: '', title: '', content: '' };

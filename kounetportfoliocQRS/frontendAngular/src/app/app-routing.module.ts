@@ -38,15 +38,16 @@ import { ConditionsComponent } from './Ecommerce/conditions/conditions.component
 import { CreatSupplyComponent } from './Ecommerce/creat-supply/creat-supply.component';
 import { ProductSizeComponent } from './Ecommerce/product-size/product-size.component';
 import { FaqComponent } from './Ecommerce/faq/faq.component';
-import { CreatCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
+import {  CreateCustomerComponent } from './Ecommerce/creat-customer/creat-customer.component';
 import { DashboardComponent } from './Ecommerce/dashboard/dashboard.component';
 import { TeststripComponent } from './ecommerce/teststrip/teststrip.component';
+import { LikeProductComponent } from './Ecommerce/like-product/like-product.component';
 
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('./acceuil/acceuil.component').then(m => m.AcceuilComponent) },
   { path: 'about', component: AboutComponent },
-  { path: 'address-customer', component: CreatCustomerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
+  { path: 'address-customer', component: CreateCustomerComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'account', component: AccountComponent },
   { path: 'articles', component: ArticleComponent },
   { path: 'blog', component: BlogComponent },
@@ -77,6 +78,7 @@ const routes: Routes = [
   { path: 'news-article', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 
   { path: 'order', component: OrderCreateComponent },
+  { path: 'likes', component: LikeProductComponent, canActivate: [AuthGuard], data: { roles: ['USER'] } },
   { path: 'create-order', component: OrderCreateComponent },
   { path: 'order-summary', component: OrderSummaryComponentComponent },
 

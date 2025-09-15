@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { LikeDTO } from '../../mesModels/models';
+import { LikeDTO, ProductSizeDTO } from '../../mesModels/models';
 import { ecpolyCommand } from '../../../mesApi/ecpolyCommand';
 import { ecpolyQuery } from '../../../mesApi/ecpolyQuery';
 import { KeycloakService } from 'keycloak-angular';
@@ -29,29 +29,34 @@ export class LikeService implements OnInit {
     }
   }
 
-  /** Command: Liker un produit */
-  likeProduct(productId: string): Observable<string> {
-    return this.http.post<string>(`${this.commandBase}/${productId}/like`, {});
+  /** Command: Liker un produit (par ProductSizeId) */
+  likeProduct(productSizeId: string): Observable<string> {
+    return this.http.post<string>(`${this.commandBase}/${productSizeId}/like`, {});
   }
 
-  /** Command: Retirer un like d’un produit */
-  unlikeProduct(productId: string): Observable<string> {
-    return this.http.post<string>(`${this.commandBase}/${productId}/unlike`, {});
+  /** Command: Retirer un like d’un produit (par ProductSizeId) */
+  unlikeProduct(productSizeId: string): Observable<string> {
+    return this.http.post<string>(`${this.commandBase}/${productSizeId}/unlike`, {});
   }
 
-  /** Query: Compter les likes d’un produit */
-  countLikesByProduct(productId: string): Observable<number> {
-    return this.http.get<number>(`${this.queryBase}/${productId}/likes/count`);
+  /** Query: Compter les likes d’un produit (par ProductSizeId) */
+  countLikesByProduct(productSizeId: string): Observable<number> {
+    return this.http.get<number>(`${this.queryBase}/${productSizeId}/likes/count`);
   }
 
-  /** Query: Obtenir la liste des likes pour un produit */
-  getLikesByProduct(productId: string): Observable<LikeDTO[]> {
-    return this.http.get<LikeDTO[]>(`${this.queryBase}/${productId}/likes`);
+  /** Query: Obtenir la liste des likes pour un produit (par ProductSizeId) */
+  getLikesByProduct(productSizeId: string): Observable<LikeDTO[]> {
+    return this.http.get<LikeDTO[]>(`${this.queryBase}/${productSizeId}/likes`);
   }
 
-  /** Query: Vérifier si un utilisateur a liké ce produit */
-  checkCustomerLiked(productId: string, customerId: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.queryBase}/${productId}/likes/exists?customerId=${customerId}`);
+  /** Query: Vérifier si un utilisateur a liké ce produit (ProductSizeId + customerId) */
+  checkCustomerLiked(productSizeId: string, customerId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.queryBase}/${productSizeId}/likes/exists?customerId=${customerId}`);
+  }
+
+  /** Query: Obtenir la liste des likes pour un client */
+  getLikesByCustomer(customerId: string): Observable<LikeDTO[]> {
+   return this.http.get<LikeDTO[]>(`${ecpolyQuery.backend}/api/like/customer/${customerId}/likes`);
   }
 
   private likeCountSubject = new BehaviorSubject<number>(0);
@@ -61,13 +66,14 @@ export class LikeService implements OnInit {
   likedItems$ = this.likedItemsSubject.asObservable();
 
   /**
-   * Rafraîchir les likes pour un produit (pour l'utilisateur connecté)
-   * Tu dois passer le productId ici, car le backend ne supporte pas la liste des likes par client !
+   * Rafraîchir les likes pour un produitSize (et non productId)
    */
-  refreshLikes(productId: string) {
-    this.getLikesByProduct(productId).subscribe(items => {
+  refreshLikes(productSizeId: string) {
+    this.getLikesByProduct(productSizeId).subscribe(items => {
       this.likedItemsSubject.next(items);
       this.likeCountSubject.next(items.length);
     });
   }
+
+ 
 }
