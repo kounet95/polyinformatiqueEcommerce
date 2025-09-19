@@ -21,6 +21,8 @@ public class AxonConfig {
       "org.example.ecpolyquery.query.**",
       "org.example.ecpolyquery.entity.**",
       "org.example.ecpolycommand.saga.**",
+      "org.example.ecpolyquery.service.**",
+      "org.example.ecpolyquery.web.**",
       "org.example.ecpolyquery.dto.**"
     });
     return xStream;

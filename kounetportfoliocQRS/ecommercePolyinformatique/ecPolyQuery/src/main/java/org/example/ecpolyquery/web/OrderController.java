@@ -5,6 +5,7 @@ import org.axonframework.messaging.responsetypes.ResponseTypes;
 
 import org.axonframework.queryhandling.QueryGateway;
 import org.example.ecpolyquery.entity.Orderecommerce;
+import org.example.ecpolyquery.query.CustomerOrder;
 import org.example.ecpolyquery.query.GetAllOrdersQuery;
 import org.example.ecpolyquery.query.GetOrderByIdQuery;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,23 @@ public class OrderController {
 
     @GetMapping
     public CompletableFuture<List<Orderecommerce>> getAllOrders() {
-        return queryGateway.query(new GetAllOrdersQuery(), 
+        return queryGateway.query(new GetAllOrdersQuery(),
                 ResponseTypes.multipleInstancesOf(Orderecommerce.class));
     }
 
     @GetMapping("/{id}")
     public CompletableFuture<Orderecommerce> getOrderById(@PathVariable String id) {
-        return queryGateway.query(new GetOrderByIdQuery(id), 
+        return queryGateway.query(new GetOrderByIdQuery(id),
                 ResponseTypes.instanceOf(Orderecommerce.class));
     }
+
+  @GetMapping("/customerorder/{id}")
+  public CompletableFuture<List<Orderecommerce>> getOrdersByCustomerId(@PathVariable String id) {
+
+    return queryGateway.query(
+      new CustomerOrder(id), ResponseTypes.multipleInstancesOf(Orderecommerce.class)
+    );
+  }
+
+
 }

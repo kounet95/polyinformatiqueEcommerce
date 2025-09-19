@@ -1,9 +1,8 @@
 package org.example.ecpolyquery.query
 
-import org.example.ecpolyquery.entity.ProductSize
+
 import org.example.polyinformatiquecoreapi.dtoEcommerce.SizeProd
 import org.springframework.data.domain.Sort
-import org.springframework.data.jpa.domain.Specification
 import java.time.LocalDateTime
 import java.util.*
 
@@ -81,7 +80,9 @@ data class GetAllProductSizesByQuery(
 data class GetStockByProductSizeIdQuery(
   val id: String,
 )
-
+data class  CustomerOrder(
+  val customerId: String,
+)
 public class GetAllShippingsQuery {
 }
 

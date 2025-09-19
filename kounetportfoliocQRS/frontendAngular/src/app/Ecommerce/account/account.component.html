@@ -22,7 +22,13 @@
         <!-- Mobile Sidebar Toggle Button -->
         <div class="sidebar-toggle d-lg-none mb-3">
           <button class="btn btn-toggle" type="button"  aria-expanded="false" aria-controls="profileSidebar">
-            <i class="bi bi-list me-2"></i> Profile Menu
+            
+
+            <i class="bi bi-person"></i>
+              <span *ngIf="profile; else noProfile">{{ profile.firstName }} {{ profile.lastName }}</span>
+              <ng-template #noProfile>
+                <i class="bi bi-list me-2"></i> Profile Menu
+              </ng-template>
           </button>
         </div>
 
@@ -31,10 +37,15 @@
           <div class="col-lg-3 profile-sidebar collapse d-lg-block" id="profileSidebar" >
             <div class="profile-header">
               <div class="profile-avatar">
-                <span>S</span>
+                <span>{{ laLettre }}</span>
+            
               </div>
               <div class="profile-info">
-                <h4>Sarah Anderson</h4>
+                
+              <span *ngIf="profile; else noProfile">{{ profile.firstName }} {{ profile.lastName }}</span>
+              <ng-template #noProfile>
+                <i class="bi bi-list me-2"></i> Profile Menu
+              </ng-template>
                 <div class="profile-bonus">
                   <i class="bi bi-gift"></i>
                   <span>100 bonuses available</span>

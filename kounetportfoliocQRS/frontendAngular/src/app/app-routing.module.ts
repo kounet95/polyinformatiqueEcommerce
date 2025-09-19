@@ -63,13 +63,11 @@ const routes: Routes = [
   { path: 'create-event', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-news', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-product', component: CreateProductComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-
   { path: 'create-product-size', component: CreateProductSizeComponent , canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-stock', component: CreatStockComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] }},
   { path: 'create-social-groupe', component: CreatGroupeSocialComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-supplier', component: CreateSupplierComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'create-supply', component: CreatSupplyComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
-
   { path: 'create-tag', component: NewsArticleComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: ['ADMIN'] } },
 

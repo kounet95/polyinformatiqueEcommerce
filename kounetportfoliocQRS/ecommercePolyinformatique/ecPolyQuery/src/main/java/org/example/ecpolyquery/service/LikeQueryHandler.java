@@ -15,9 +15,11 @@ import org.example.ecpolyquery.repos.CustomerRepository;
 import org.example.ecpolyquery.repos.LikeRepository;
 import org.example.ecpolyquery.repos.ProductRepository;
 import org.example.ecpolyquery.repos.ProductSizeRepository;
+import org.example.polyinformatiquecoreapi.dtoEcommerce.LikeDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -62,28 +64,31 @@ public class LikeQueryHandler {
    */
   @QueryHandler
   public boolean handle(CheckCustomerLikedProductQuery query) {
-    log.debug("Handling CheckCustomerLikedProductQuery for customerId: {} and productId: {}", query.getCustomerId(), query.getProductId());
+    log.debug("Handling CheckCustomerLikedProductQuery for customerId: {} and productId: {}",
+      query.getCustomerId(), query.getProductId());
 
-    Customer customer = customerRepository.findById(query.getCustomerId())
-      .orElseThrow(() -> new RuntimeException("Customer not found with id: " + query.getCustomerId()));
-
-    ProductSize product = productSizeRepository.findById(query.getProductId())
-      .orElseThrow(() -> new RuntimeException("Product not found with id: " + query.getProductId()));
-
-    return likeRepository.existsByCustomerAndProduct(customer, product);
+    return likeRepository.existsByCustomer_IdAndProduct_Id(
+      query.getCustomerId(), query.getProductId()
+    );
   }
+
   /**
    * Récupérer tous les likes pour un client donné
    */
   @QueryHandler
-  public List<LikeProduct> handle(GetLikesByCustomerQuery query) {
-    log.debug("Handling GetLikesByCustomerQuery for customerId: {}", query.getCustomerId());
-
+  public List<LikeDTO> handle(GetLikesByCustomerQuery query) {
     Customer customer = customerRepository.findById(query.getCustomerId())
-      .orElseThrow(() -> new RuntimeException("Customer not found with id: " + query.getCustomerId()));
+      .orElseThrow(() -> new RuntimeException("Customer not found: " + query.getCustomerId()));
 
     return likeRepository.findAll().stream()
       .filter(like -> like.getCustomer().getId().equals(customer.getId()))
+      .map(like -> new LikeDTO(
+        like.getId(),
+        like.getCustomer().getId(),
+        like.getProduct().getId()
+      ))
       .toList();
   }
+
+
 }

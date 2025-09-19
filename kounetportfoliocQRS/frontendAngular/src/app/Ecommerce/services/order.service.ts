@@ -93,5 +93,12 @@ export class OrderService {
   getOrderEvents(aggregateId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.commandBase}/events/${aggregateId}`);
   }
+/** Query: Commandes par CustomerId */
+/** Query: Commandes par CustomerId */
+getCustomerOrders(customerId: string): Observable<OrderDTO[]> {
+  return this.http.get<OrderDTO[]>(`${this.queryBase}/orders/customerorder/${customerId}`);
+}
 
+
+  
 }

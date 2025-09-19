@@ -44,7 +44,6 @@ import { LikeService } from '../Ecommerce/services/like.service';
     KeycloakAngularModule,
     CarouselModule,
     RouterModule,
-    LikeProductComponent
   ]
 })
 export class NavbarComponent implements OnInit {

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
@@ -142,8 +143,9 @@ public class OrderAggregate {
 
   @EventSourcingHandler
   public void on(OrderCreatedEvent event) {
+    String id= UUID.randomUUID().toString();
     OrderDTO dto = event.getOrderDTO();
-    this.orderId = event.getId();
+    this.orderId = id;
     this.customerEmail = dto.getCustomerEmail();
     this.supplierId = dto.getSupplierId();
     this.currency = dto.getCurrency();
