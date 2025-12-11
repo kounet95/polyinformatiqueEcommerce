@@ -42,7 +42,7 @@ public class OrderService {
     Customer customer = customerRepository.findByEmail(orderDTO.getCustomerEmail())
       .orElse(null);
     if (customer == null) {
-      log.error("❌ Customer not found: {}", orderDTO.getCustomerEmail());
+      log.error("Customer not found: {}", orderDTO.getCustomerEmail());
       return;
     }
 
@@ -52,12 +52,12 @@ public class OrderService {
       supplier = supplierRepository.findById(orderDTO.getSupplierId())
         .orElse(null);
       if (supplier == null) {
-        log.warn("⚠️ Supplier not found, ignored: {}", orderDTO.getSupplierId());
+        log.warn("Supplier not found, ignored: {}", orderDTO.getSupplierId());
       }
     }
 
     Orderecommerce order = Orderecommerce.builder()
-      .id(orderDTO.getId())
+      .id(event.getId())
       .createdAt(LocalDateTime.parse(orderDTO.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME))
       .paymentMethod(orderDTO.getPaymentMethod())
       .orderStatus(OrderStatus.Inprogress)

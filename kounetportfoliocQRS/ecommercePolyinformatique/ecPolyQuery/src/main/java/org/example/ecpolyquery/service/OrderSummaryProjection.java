@@ -22,7 +22,7 @@ public class OrderSummaryProjection {
   @EventHandler
   public void on(OrderCreatedEvent event) {
     OrderSummary summary = new OrderSummary();
-    summary.setOrderId(event.getOrderDTO().getId());
+    summary.setOrderId(event.getId());
     summary.setCustomerId(event.getOrderDTO().getCustomerEmail());
     summary.setStatus("CREATED");
     store.put(summary.getOrderId(), summary);

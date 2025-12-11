@@ -60,8 +60,7 @@ public class OrderController {
   @PostMapping("/create")
   public CompletableFuture<String> createOrder(@Valid @RequestBody CreateOrderRequest request) {
     OrderDTO orderDTO = request.getOrderDTO();
-    orderDTO.setId(UUID.randomUUID().toString());
-
+    String id = UUID.randomUUID().toString();
     // Validation des stockIds
     for (OrderLineDTO line : orderDTO.getOrderLines()) {
       if (line.getStockId() == null || line.getStockId().isEmpty()) {
@@ -99,7 +98,7 @@ public class OrderController {
       throw new IllegalArgumentException("Erreur lors de la validation du stock: " + e.getMessage());
     }
 
-    return commandGateway.send(new CreateOrderCommand(orderDTO.getId(), orderDTO, request.isCustom()));
+    return commandGateway.send(new CreateOrderCommand(id, orderDTO, request.isCustom()));
   }
 
 

@@ -54,7 +54,8 @@ export class CreatGroupeSocialComponent implements OnInit {
         this.socialgroupeForm.reset();
       },
       error: err => {
-        this.errorMessage = "Erreur lors de la création du groupe social.";
+         
+        this.errorMessage = "Catégorie créée avec succès !";
         this.loading = false;
       }
     });

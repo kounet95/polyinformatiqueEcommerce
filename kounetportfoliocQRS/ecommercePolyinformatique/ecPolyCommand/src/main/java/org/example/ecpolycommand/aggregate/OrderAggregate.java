@@ -64,8 +64,18 @@ public class OrderAggregate {
     if (cmd.isCustom() && (cmd.getOrderDTO().getSupplierId() == null || cmd.getOrderDTO().getSupplierId().isBlank())) {
       throw new IllegalArgumentException("Supplier ID must be provided for custom orders");
     }
+
+    // Ensure we have a valid aggregate identifier
+    String aggregateId = cmd.getId();
+    if (aggregateId == null || aggregateId.isEmpty()) {
+      aggregateId = UUID.randomUUID().toString();
+    }
+
+    // Set the aggregate identifier immediately before applying the event
+    this.orderId = aggregateId;
+
     this.orderLines = cmd.getOrderDTO().getOrderLines();
-    apply(new OrderCreatedEvent(cmd.getId(), cmd.getOrderDTO()));
+    apply(new OrderCreatedEvent(aggregateId, cmd.getOrderDTO()));
   }
 
   @CommandHandler
@@ -143,9 +153,8 @@ public class OrderAggregate {
 
   @EventSourcingHandler
   public void on(OrderCreatedEvent event) {
-    String id= UUID.randomUUID().toString();
     OrderDTO dto = event.getOrderDTO();
-    this.orderId = id;
+    this.orderId = event.getId();
     this.customerEmail = dto.getCustomerEmail();
     this.supplierId = dto.getSupplierId();
     this.currency = dto.getCurrency();
@@ -226,7 +235,7 @@ public class OrderAggregate {
   @CommandHandler
   public PaymentIntentCreatedEvent handle(CreatePaymentIntentCommand cmd) throws StripeException {
     PaymentIntent paymentIntent = stripeService.createPaymentIntent(cmd.getAmountInCents(), cmd.getCurrency());
-    return new PaymentIntentCreatedEvent(cmd.getOrderId(), paymentIntent.getClientSecret());
+    return new PaymentIntentCreatedEvent(cmd.getId(), paymentIntent.getClientSecret());
   }
 
   private OrderDTO toOrderDTO() {
@@ -238,9 +247,9 @@ public class OrderAggregate {
     dto.setCreatedAt(this.createdAt);
     dto.setPaymentMethod(this.paymentMethod);
     dto.setTotal(this.total);
-    dto.setShippingId(""); // ou la valeur adéquate si tu la gères
+    dto.setShippingId("");
 
-    dto.setOrderLines(this.orderLines); // ici tu passes ta liste d’OrderLineDTO
+    dto.setOrderLines(this.orderLines);
 
     return dto;
   }
